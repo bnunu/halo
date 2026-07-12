@@ -81,6 +81,12 @@ typedef struct {
   char unk_0[104];
 } game_variant_t;
 
+/// current game engine function table; only evidenced fields are named
+typedef struct {
+  char unk_0[8];         ///< offset=0x00
+  void (*dispose)(void); ///< offset=0x08
+} game_engine_interface_t;
+
 /// size=0x20
 typedef struct {
   bool     initialized; ///< offset=0x00

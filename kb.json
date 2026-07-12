@@ -57,8 +57,12 @@
           "addr": "0x46e8c6"
         },
         {
-          "decl": "void * game_engine_globals;",
+          "decl": "game_engine_interface_t * game_engine_globals;",
           "addr": "0x456b60"
+        },
+        {
+          "decl": "scenario_t * global_scenario;",
+          "addr": "0x5064e4"
         },
         {
           "decl": "data_t * particle_data;",
