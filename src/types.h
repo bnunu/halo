@@ -626,7 +626,9 @@ typedef struct {
 
 /// size=0xb0
 typedef struct {
-  char    unk_0[0x24];             ///< offset=0x00
+  datum_handle_t unk_0;            ///< offset=0x00
+  datum_handle_t local_players[4]; ///< offset=0x04
+  char    unk_14[0x10];            ///< offset=0x14
   int16_t local_player_count;      ///< offset=0x24
   char    unk_26[0xb0 - 0x26];     ///< offset=0x26
 } players_globals_t;
