@@ -447,6 +447,10 @@
           "addr": "0x1193f0"
         },
         {
+          "decl": "void data_dispose(data_t *data);",
+          "addr": "0x119520"
+        },
+        {
           "decl": "void data_make_invalid(data_t *data);",
           "addr": "0x119550"
         },
@@ -457,6 +461,15 @@
         {
           "decl": "void *data_iterator_next(data_iter_t *iterator);",
           "addr": "0x119810"
+        }
+      ]
+    },
+    {
+      "name": "debug_memory.obj",
+      "functions": [
+        {
+          "decl": "void debug_free(void *pointer, const char *filename, int lineno);",
+          "addr": "0x8ef70"
         }
       ]
     },

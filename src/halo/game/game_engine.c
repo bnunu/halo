@@ -14,6 +14,13 @@ void game_engine_dispose(void)
   }
 }
 
+void game_engine_dispose_from_old_map(void)
+{
+  if (game_engine_globals && game_engine_globals->dispose_from_old_map) {
+    game_engine_globals->dispose_from_old_map();
+  }
+}
+
 bool game_engine_force_single_screen(void)
 {
   if (!game_engine_globals) {

@@ -83,8 +83,10 @@ typedef struct {
 
 /// current game engine function table; only evidenced fields are named
 typedef struct {
-  char unk_0[8];         ///< offset=0x00
-  void (*dispose)(void); ///< offset=0x08
+  char unk_0[8];                      ///< offset=0x00
+  void (*dispose)(void);              ///< offset=0x08
+  char unk_c[4];                      ///< offset=0x0c
+  void (*dispose_from_old_map)(void); ///< offset=0x10
 } game_engine_interface_t;
 
 /// size=0x20

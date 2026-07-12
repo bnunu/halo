@@ -20,6 +20,13 @@ void data_initialize(data_t *data, char *name, __int16 maximum_count,
   data->valid = 0;
 }
 
+void data_dispose(data_t *data)
+{
+  data_verify(data);
+  csmemset(data, 0, sizeof(*data));
+  debug_free(data, __FILE__, __LINE__);
+}
+
 void data_make_invalid(data_t *data)
 {
   data_verify(data);
