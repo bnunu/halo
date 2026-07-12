@@ -27,6 +27,7 @@ target_sources(halo PRIVATE
 	halo/game/player_rumble.c
 	halo/game/shell_stubs.c
 	halo/interface/progress_bar.c
+	halo/interface/terminal.c
 	halo/main/console.c
 	halo/main/debug_keys.c
 	halo/game/player_queues_new.c

@@ -181,6 +181,18 @@
           "addr": "0x46cc20"
         },
         {
+          "decl": "void * dword_46c414;",
+          "addr": "0x46c414"
+        },
+        {
+          "decl": "char byte_46cf60;",
+          "addr": "0x46cf60"
+        },
+        {
+          "decl": "char byte_46cf64;",
+          "addr": "0x46cf64"
+        },
+        {
           "decl": "data_t * effect_data;",
           "addr": "0x5aa8b0"
         },
@@ -1933,6 +1945,10 @@
       "name": "terminal.obj",
       "source": "interface/terminal.c",
       "functions": [
+        {
+          "decl": "void terminal_gets_end(void *state);",
+          "addr": "0xe3560"
+        },
         {
           "decl": "void terminal_update(void);",
           "addr": "0xe39e0"
