@@ -161,6 +161,26 @@
           "addr": "0x5a80e0"
         },
         {
+          "decl": "__int16 word_448dda;",
+          "addr": "0x448dda"
+        },
+        {
+          "decl": "unsigned int dword_449c68;",
+          "addr": "0x449c68"
+        },
+        {
+          "decl": "unsigned int dword_449c6c;",
+          "addr": "0x449c6c"
+        },
+        {
+          "decl": "ui_widget_globals_t * ui_widget_globals;",
+          "addr": "0x31e04c"
+        },
+        {
+          "decl": "char byte_46cc20[0x68];",
+          "addr": "0x46cc20"
+        },
+        {
           "decl": "data_t * effect_data;",
           "addr": "0x5aa8b0"
         },

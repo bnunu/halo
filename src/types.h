@@ -671,6 +671,14 @@ typedef struct {
   uint32_t unk_4; ///< offset=0x04
 } game_sound_globals_t;
 
+/// ui_widget globals (pointed to from 0x31e04c); partial layout, only
+/// evidenced fields are typed
+typedef struct {
+  char  unk_0[4]; ///< offset=0x00
+  void *unk_4;    ///< offset=0x04
+  void *unk_8;    ///< offset=0x08
+} ui_widget_globals_t;
+
 /// size=0x3ec
 typedef struct {
   char     unk_0[0x3c0];  ///< offset=0x00

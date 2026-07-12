@@ -526,3 +526,22 @@ void main_loop(void)
   debug_keys_dispose();
   console_dispose();
 }
+
+int sort_desired_local_player_controllers(const void *a1, const void *a2)
+{
+  __int16 x = *(const __int16 *)a1;
+  __int16 y = *(const __int16 *)a2;
+  if (x == -1) {
+    if (y == x) {
+      return 0;
+    }
+    return 1;
+  }
+  if (y == -1) {
+    return -1;
+  }
+  if (x > y) {
+    return 1;
+  }
+  return (x >= y) - 1;
+}
