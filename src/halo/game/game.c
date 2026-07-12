@@ -230,7 +230,7 @@ void game_initialize_for_new_map(void)
 bool game_map_loading_in_progress(float *progress)
 {
   if (progress) {
-    *progress = *(float *)((char *)game_globals + 4);
+    *progress = game_globals->map_loading_progress;
   }
-  return *(bool *)((char *)game_globals + 3);
+  return game_globals->map_loading_in_progress;
 }

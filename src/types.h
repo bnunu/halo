@@ -68,10 +68,12 @@ typedef struct {
 
 /// size=0x114
 typedef struct {
-  bool           map_loaded;   ///< offset=0x00
-  bool           active;       ///< offset=0x01
-  char           unk_2[6];     ///< offset=0x02
-  game_options_t game_options; ///< offset=0x08
+  bool           map_loaded;              ///< offset=0x00
+  bool           active;                  ///< offset=0x01
+  bool           unk_2;                   ///< offset=0x02
+  bool           map_loading_in_progress; ///< offset=0x03
+  float          map_loading_progress;    ///< offset=0x04
+  game_options_t game_options;            ///< offset=0x08
 } game_globals_t;
 
 /// size=0x68
@@ -618,7 +620,9 @@ typedef struct {
 
 /// size=0xb0
 typedef struct {
-  char unk_0[0xb0];
+  char    unk_0[0x24];             ///< offset=0x00
+  int16_t local_player_count;      ///< offset=0x24
+  char    unk_26[0xb0 - 0x26];     ///< offset=0x26
 } players_globals_t;
 
 /// size=0x110

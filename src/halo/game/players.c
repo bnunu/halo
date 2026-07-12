@@ -6,7 +6,7 @@ void players_initialize(void)
     "players globals", NULL, sizeof(players_globals_t));
   csmemset(&players_globals->unk_0[4], -1, 0x10u);
   *(_DWORD *)players_globals->unk_0 = -1;
-  *(_WORD *)&players_globals->unk_0[36] = 0;
+  players_globals->local_player_count = 0;
   player_control_globals = (player_control_globals_t *)game_state_malloc(
     "player control globals", 0, sizeof(player_control_globals_t));
 }
@@ -19,5 +19,5 @@ void players_dispose_from_old_map(void)
 
 __int16 local_player_count(void)
 {
-  return *(__int16 *)((char *)players_globals + 0x24);
+  return players_globals->local_player_count;
 }
