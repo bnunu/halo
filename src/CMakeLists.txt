@@ -37,6 +37,7 @@ target_sources(halo PRIVATE
 	halo/game/game_statistics.c
 	halo/networking/network_game_globals.c
 	halo/effects/particles.c
+	halo/cutscene/cinematics.c
 	halo/cutscene/recorded_animations.c
 	halo/sound/game_sound.c
 	halo/effects/weather_particle_systems.c

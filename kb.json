@@ -41,6 +41,10 @@
           "addr": "0x46e3f0"
         },
         {
+          "decl": "int global_random_seed;",
+          "addr": "0x46e3f4"
+        },
+        {
           "decl": "char byte_457060;",
           "addr": "0x457060"
         },
