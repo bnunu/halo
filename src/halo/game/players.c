@@ -10,3 +10,14 @@ void players_initialize(void)
   player_control_globals = (player_control_globals_t *)game_state_malloc(
     "player control globals", 0, sizeof(player_control_globals_t));
 }
+
+void players_dispose_from_old_map(void)
+{
+  data_make_invalid(player_data);
+  data_make_invalid(team_data);
+}
+
+__int16 local_player_count(void)
+{
+  return *(__int16 *)((char *)players_globals + 0x24);
+}

@@ -7,3 +7,8 @@ void input_flush(void)
   word_46BC0A = 0;
   csmemset(dword_46BC0C, 0, 0x100u);
 }
+
+void input_frame_end(void)
+{
+  byte_46bb2d = 0;
+}

@@ -8,3 +8,7 @@ data_t *game_state_data_new(char *name, __int16 maximum_count, __int16 size)
   data_initialize(data, name, maximum_count, size);
   return data;
 }
+
+void game_state_dispose_from_old_map(void)
+{
+}

@@ -57,3 +57,15 @@ void game_time_start(void)
     return;
   }
 }
+
+void game_time_dispose(void)
+{
+}
+
+void game_time_dispose_from_old_map(void)
+{
+  if (game_time_globals) {
+    game_time_globals->initialized = 0;
+    game_time_globals->active = 0;
+  }
+}

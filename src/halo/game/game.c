@@ -226,3 +226,11 @@ void game_initialize_for_new_map(void)
   }
   ui_widgets_safe_to_load(1);
 }
+
+bool game_map_loading_in_progress(float *progress)
+{
+  if (progress) {
+    *progress = *(float *)((char *)game_globals + 4);
+  }
+  return *(bool *)((char *)game_globals + 3);
+}

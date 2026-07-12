@@ -5,6 +5,7 @@ target_sources(halo PRIVATE
 	halo/game/game.c
 	halo/game/game_engine.c
 	halo/game/game_time.c
+	halo/game/editor.c
 	halo/game/players.c
 	halo/input/input_xbox.c
 	halo/interface/hud.c
@@ -16,4 +17,32 @@ target_sources(halo PRIVATE
 	halo/render/render.c
 	halo/saved_games/game_state.c
 	halo/shell_xbox.c
+	halo/camera/director.c
+	halo/camera/observer.c
+	halo/effects/particle_systems.c
+	halo/effects/player_effects.c
+	halo/game/cheats.c
+	halo/game/game_allegiance.c
+	halo/game/player_rumble.c
+	halo/game/shell_stubs.c
+	halo/interface/progress_bar.c
+	halo/main/console.c
+	halo/math/random_math.c
+	halo/physics/breakable_surfaces.c
+	halo/physics/point_physics.c
+	halo/sound/sound_classes.c
+	halo/sound/sound_manager.c
+	halo/cache/cache_files_windows.c
+	halo/shell.c
+	halo/game/game_statistics.c
+	halo/networking/network_game_globals.c
+	halo/effects/particles.c
+	halo/cutscene/recorded_animations.c
+	halo/sound/game_sound.c
+	halo/effects/weather_particle_systems.c
+	halo/effects/contrails.c
+	halo/effects/effects.c
+	halo/interface/event_manager.c
+	halo/input/input_abstraction.c
+	halo/scenario/scenario.c
 	)

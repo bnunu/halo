@@ -27,6 +27,110 @@
         {
           "decl": "data_t * object_header_data;",
           "addr": "0x5abc10"
+        },
+        {
+          "decl": "bool precache_in_progress;",
+          "addr": "0x4e9220"
+        },
+        {
+          "decl": "bool application_paused;",
+          "addr": "0x4d8a84"
+        },
+        {
+          "decl": "int dword_46e3f0;",
+          "addr": "0x46e3f0"
+        },
+        {
+          "decl": "char byte_457060;",
+          "addr": "0x457060"
+        },
+        {
+          "decl": "char byte_46bb2d;",
+          "addr": "0x46bb2d"
+        },
+        {
+          "decl": "int dword_50548c;",
+          "addr": "0x50548c"
+        },
+        {
+          "decl": "char byte_46e8c6;",
+          "addr": "0x46e8c6"
+        },
+        {
+          "decl": "void * game_engine_globals;",
+          "addr": "0x456b60"
+        },
+        {
+          "decl": "data_t * particle_data;",
+          "addr": "0x5aa8a0"
+        },
+        {
+          "decl": "data_t * recorded_animation_data;",
+          "addr": "0x44df04"
+        },
+        {
+          "decl": "void * game_sound_globals;",
+          "addr": "0x5054e4"
+        },
+        {
+          "decl": "data_t * weather_particle_data;",
+          "addr": "0x5aa89c"
+        },
+        {
+          "decl": "char cheat_globals[0xc80];",
+          "addr": "0x455a68"
+        },
+        {
+          "decl": "data_t * contrail_data;",
+          "addr": "0x5aa8bc"
+        },
+        {
+          "decl": "data_t * contrail_data2;",
+          "addr": "0x5aa8c0"
+        },
+        {
+          "decl": "data_t * effect_data;",
+          "addr": "0x5aa8b0"
+        },
+        {
+          "decl": "data_t * effect_data2;",
+          "addr": "0x5aa8ac"
+        },
+        {
+          "decl": "char event_manager_globals[0x108];",
+          "addr": "0x46bd40"
+        },
+        {
+          "decl": "char input_abstraction_globals[0xdc];",
+          "addr": "0x46b820"
+        },
+        {
+          "decl": "char player_ui_globals[0x230];",
+          "addr": "0x46bee0"
+        },
+        {
+          "decl": "int16_t word_46cc48;",
+          "addr": "0x46cc48"
+        },
+        {
+          "decl": "int dword_5aa730;",
+          "addr": "0x5aa730"
+        },
+        {
+          "decl": "void * director_globals;",
+          "addr": "0x5ab200"
+        },
+        {
+          "decl": "void * rumble_globals;",
+          "addr": "0x46b664"
+        },
+        {
+          "decl": "void * scenario_globals;",
+          "addr": "0x5064d0"
+        },
+        {
+          "decl": "void * game_allegiance_globals;",
+          "addr": "0x4566f0"
         }
       ]
     },

@@ -1,0 +1,6 @@
+/* re-implemented from cachebeta.xbe disassembly */
+
+void scenario_initialize(void)
+{
+  scenario_globals = game_state_malloc("scenario globals", NULL, 0x100);
+}
