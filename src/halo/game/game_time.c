@@ -58,6 +58,18 @@ void game_time_start(void)
   }
 }
 
+int game_time_get(void)
+{
+  assert_halt(game_time_globals && game_time_globals->initialized);
+  return game_time_globals->local_time;
+}
+
+int16_t game_time_get_elapsed(void)
+{
+  assert_halt(game_time_globals && game_time_globals->initialized);
+  return game_time_globals->elapsed;
+}
+
 void game_time_dispose(void)
 {
 }
