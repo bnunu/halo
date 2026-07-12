@@ -9,6 +9,12 @@ void effects_initialize(void)
   }
 }
 
+void effects_initialize_for_new_map(void)
+{
+  data_make_valid(effect_data);
+  data_make_valid(effect_location_data);
+}
+
 void effects_dispose_from_old_map(void)
 {
   data_make_invalid(effect_data);

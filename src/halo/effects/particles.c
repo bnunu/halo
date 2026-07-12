@@ -8,6 +8,11 @@ void particles_initialize(void)
   }
 }
 
+void particles_initialize_for_new_map(void)
+{
+  data_make_valid(particle_data);
+}
+
 void particles_dispose_from_old_map(void)
 {
   data_make_invalid(particle_data);

@@ -97,7 +97,7 @@
           "addr": "0x46d928"
         },
         {
-          "decl": "void * dword_44df0c;",
+          "decl": "void * animation_threads_debug;",
           "addr": "0x44df0c"
         },
         {

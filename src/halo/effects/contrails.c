@@ -11,6 +11,12 @@ void contrails_initialize(void)
   }
 }
 
+void contrails_initialize_for_new_map(void)
+{
+  data_make_valid(contrail_data);
+  data_make_valid(contrail_point_data);
+}
+
 void contrails_dispose_from_old_map(void)
 {
   data_make_invalid(contrail_point_data);

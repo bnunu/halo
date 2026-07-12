@@ -7,6 +7,12 @@ void particle_systems_initialize(void)
     game_state_data_new("particle system particles", 0x200, 0x80);
 }
 
+void particle_systems_initialize_for_new_map(void)
+{
+  data_make_valid(particle_system_data);
+  data_make_valid(particle_system_particle_data);
+}
+
 void particle_systems_dispose(void)
 {
 }
