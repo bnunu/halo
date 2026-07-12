@@ -31,6 +31,7 @@ target_sources(halo PRIVATE
 	halo/game/player_queues_new.c
 	halo/math/random_math.c
 	halo/physics/breakable_surfaces.c
+	halo/physics/collision_usage.c
 	halo/physics/point_physics.c
 	halo/sound/sound_classes.c
 	halo/sound/sound_manager.c

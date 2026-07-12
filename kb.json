@@ -89,7 +89,7 @@
           "addr": "0x5054e4"
         },
         {
-          "decl": "void * game_sound_globals;",
+          "decl": "game_sound_globals_t * game_sound_globals;",
           "addr": "0x5054e0"
         },
         {
@@ -129,12 +129,36 @@
           "addr": "0x455a68"
         },
         {
-          "decl": "data_t * contrail_data;",
+          "decl": "data_t * contrail_point_data;",
           "addr": "0x5aa8bc"
         },
         {
-          "decl": "data_t * contrail_data2;",
+          "decl": "data_t * contrail_data;",
           "addr": "0x5aa8c0"
+        },
+        {
+          "decl": "void * breakable_surface_globals;",
+          "addr": "0x46f08c"
+        },
+        {
+          "decl": "__int16 collision_usage_current_period;",
+          "addr": "0x325058"
+        },
+        {
+          "decl": "__int16 global_current_collision_user_depth;",
+          "addr": "0x4761d8"
+        },
+        {
+          "decl": "__int16 word_5a8c80[32];",
+          "addr": "0x5a8c80"
+        },
+        {
+          "decl": "char collision_log_periods[3][0xb88];",
+          "addr": "0x5a5e40"
+        },
+        {
+          "decl": "char collision_log_current[0xb88];",
+          "addr": "0x5a80e0"
         },
         {
           "decl": "data_t * effect_data;",
@@ -501,6 +525,14 @@
         {
           "decl": "void data_make_invalid(data_t *data);",
           "addr": "0x119550"
+        },
+        {
+          "decl": "void data_delete_all(data_t *data);",
+          "addr": "0x119720"
+        },
+        {
+          "decl": "void data_make_valid(data_t *data);",
+          "addr": "0x119b20"
         },
         {
           "decl": "void data_iterator_new(data_iter_t *iter, data_t *data);",

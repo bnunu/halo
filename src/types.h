@@ -665,6 +665,12 @@ typedef struct {
   uint32_t cookie;       ///< offset=0x0c
 } data_iter_t;
 
+/// size=0x8
+typedef struct {
+  uint32_t unk_0; ///< offset=0x00
+  uint32_t unk_4; ///< offset=0x04
+} game_sound_globals_t;
+
 /// size=0x3ec
 typedef struct {
   char     unk_0[0x3c0];  ///< offset=0x00

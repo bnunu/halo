@@ -7,6 +7,15 @@ void game_sound_initialize(void)
   game_sound_globals = game_state_malloc("game sound globals", NULL, 8);
 }
 
+void game_sound_initialize_for_new_map(void)
+{
+  if (object_looping_sound_data) {
+    data_make_valid(object_looping_sound_data);
+    game_sound_globals->unk_4 = 0xffffffff;
+    game_sound_globals->unk_0 = 0;
+  }
+}
+
 void game_sound_dispose(void)
 {
   if (object_looping_sound_data) {

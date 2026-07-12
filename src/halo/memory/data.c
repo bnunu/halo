@@ -43,6 +43,13 @@ void data_make_invalid(data_t *data)
   data->valid = 0;
 }
 
+void data_make_valid(data_t *data)
+{
+  data_verify(data);
+  data->valid = 1;
+  data_delete_all(data);
+}
+
 void data_iterator_new(data_iter_t *iter, data_t *data)
 {
   data_verify(data);
