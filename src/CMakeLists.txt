@@ -27,6 +27,8 @@ target_sources(halo PRIVATE
 	halo/game/shell_stubs.c
 	halo/interface/progress_bar.c
 	halo/main/console.c
+	halo/main/debug_keys.c
+	halo/game/player_queues_new.c
 	halo/math/random_math.c
 	halo/physics/breakable_surfaces.c
 	halo/physics/point_physics.c

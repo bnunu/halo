@@ -77,8 +77,40 @@
           "addr": "0x44df04"
         },
         {
-          "decl": "void * game_sound_globals;",
+          "decl": "data_t * object_looping_sound_data;",
           "addr": "0x5054e4"
+        },
+        {
+          "decl": "void * game_sound_globals;",
+          "addr": "0x5054e0"
+        },
+        {
+          "decl": "void * dword_46d928;",
+          "addr": "0x46d928"
+        },
+        {
+          "decl": "void * dword_44df0c;",
+          "addr": "0x44df0c"
+        },
+        {
+          "decl": "update_server_globals_t update_server_globals;",
+          "addr": "0x4570c0"
+        },
+        {
+          "decl": "data_t * dword_45b260;",
+          "addr": "0x45b260"
+        },
+        {
+          "decl": "char byte_45b1d0;",
+          "addr": "0x45b1d0"
+        },
+        {
+          "decl": "int dword_45b1d4;",
+          "addr": "0x45b1d4"
+        },
+        {
+          "decl": "int dword_45b1d8;",
+          "addr": "0x45b1d8"
         },
         {
           "decl": "data_t * weather_particle_data;",
@@ -447,6 +479,10 @@
           "addr": "0x1193f0"
         },
         {
+          "decl": "data_t *data_new(char *name, __int16 maximum_count, __int16 size);",
+          "addr": "0x1194d0"
+        },
+        {
           "decl": "void data_dispose(data_t *data);",
           "addr": "0x119520"
         },
@@ -467,6 +503,10 @@
     {
       "name": "debug_memory.obj",
       "functions": [
+        {
+          "decl": "void *debug_malloc(size_t size, int clear, const char *filename, int lineno);",
+          "addr": "0x8ee60"
+        },
         {
           "decl": "void debug_free(void *pointer, const char *filename, int lineno);",
           "addr": "0x8ef70"

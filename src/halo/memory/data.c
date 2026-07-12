@@ -20,6 +20,16 @@ void data_initialize(data_t *data, char *name, __int16 maximum_count,
   data->valid = 0;
 }
 
+data_t *data_new(char *name, __int16 maximum_count, __int16 size)
+{
+  data_t *data =
+    debug_malloc(size * maximum_count + sizeof(data_t), 0, __FILE__, __LINE__);
+  if (data) {
+    data_initialize(data, name, maximum_count, size);
+  }
+  return data;
+}
+
 void data_dispose(data_t *data)
 {
   data_verify(data);
