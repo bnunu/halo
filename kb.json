@@ -73,6 +73,14 @@
           "addr": "0x5aa8a0"
         },
         {
+          "decl": "data_t * particle_system_data;",
+          "addr": "0x5aa8a8"
+        },
+        {
+          "decl": "data_t * particle_system_particle_data;",
+          "addr": "0x5aa8a4"
+        },
+        {
           "decl": "data_t * recorded_animation_data;",
           "addr": "0x44df04"
         },

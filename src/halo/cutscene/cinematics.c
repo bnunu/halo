@@ -1,3 +1,10 @@
+void cinematic_initialize(void)
+{
+  cinematic_globals = game_state_malloc("cinematic globals", NULL,
+                                        sizeof(cinematic_globals_t));
+  assert_halt(cinematic_globals);
+}
+
 bool cinematic_can_be_skipped(void)
 {
   return cinematic_globals->can_be_skipped;
