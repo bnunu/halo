@@ -23,15 +23,18 @@ The target executable is the **Halo Xbox debug build 2276** ("cachebeta"):
 
 ## Current state (keep this updated)
 
-- **118 / 325** declared functions implemented (patched redirects counted from the build log).
+- **148 / 331** declared functions implemented (patched redirects counted from the build log).
   Note: the earlier "106" figure over-counted — `cutscene/cinematics.c` existed but was
   missing from `src/CMakeLists.txt` and silently never compiled (fixed).
-- **34** data globals declared in `kb.json` `<common>`; new function decls added:
-  `data_dispose` (0x119520), `debug_free` (0x8ef70, new `debug_memory.obj`).
+- **~55** data globals declared in `kb.json` `<common>`. Key identifications this session:
+  the full `data.c` API (`data_new` 0x1194d0, `data_dispose` 0x119520, `data_delete_all`
+  0x119720, `data_make_valid` 0x119b20), `debug_malloc`/`debug_free` (0x8ee60/0x8ef70,
+  new `debug_memory.obj`), `terminal_gets_end` (0xe3560), `update_server_globals`
+  (0x4570c0, source `game/player_queues_new.c`).
 - Build is **green** on Windows (LLVM 22 + CMake + Ninja via winget; see below).
-- **Git is set up**: branch `decomp-batch-1` on top of `upstream/main`
-  (remote `upstream` = github.com/halo-re/halo). Fork + PR still pending GitHub auth
-  (`gh auth login` device flow needs the user).
+- **Git + fork are live**: branch `decomp-batch-1` on top of `upstream/main`, pushed to
+  fork `origin` = github.com/bnunu/halo (`upstream` = github.com/halo-re/halo). gh CLI
+  authenticated as bnunu. PRs not yet opened — coordinate scope with the maintainers first.
 
 ## Key files
 
