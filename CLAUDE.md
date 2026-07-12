@@ -23,10 +23,15 @@ The target executable is the **Halo Xbox debug build 2276** ("cachebeta"):
 
 ## Current state (keep this updated)
 
-- **106 / 323** declared functions implemented (was 40 before this work).
-- **32** data globals declared in `kb.json` `<common>`.
-- Build is **green** (compiles, links, patches to `halo-patched/default.xbe`).
-- **No git yet** — this tree came from a source ZIP. Init git + fork before opening PRs.
+- **118 / 325** declared functions implemented (patched redirects counted from the build log).
+  Note: the earlier "106" figure over-counted — `cutscene/cinematics.c` existed but was
+  missing from `src/CMakeLists.txt` and silently never compiled (fixed).
+- **34** data globals declared in `kb.json` `<common>`; new function decls added:
+  `data_dispose` (0x119520), `debug_free` (0x8ef70, new `debug_memory.obj`).
+- Build is **green** on Windows (LLVM 22 + CMake + Ninja via winget; see below).
+- **Git is set up**: branch `decomp-batch-1` on top of `upstream/main`
+  (remote `upstream` = github.com/halo-re/halo). Fork + PR still pending GitHub auth
+  (`gh auth login` device flow needs the user).
 
 ## Key files
 
@@ -53,10 +58,24 @@ cmake --build build
 Success looks like `Patching "<fn>" ... redirect to re-implementation` lines and
 `Build complete`, producing `halo-patched/default.xbe`.
 
-### On Windows (this machine)
-Use Visual Studio + CMake, or install LLVM and use the toolchain file above.
-The project also supports MSVC via `cmake -AWin32 -Bbuild -S .` then `cmake --build build`.
-Install Python deps: `pip install -r requirements.txt`.
+### On Windows (this machine — verified working)
+Installed via winget: `LLVM.LLVM` (22.1.8), `Kitware.CMake` (4.4), `Python.Python.3.12`,
+`Ninja-build.Ninja`, `GitHub.cli`. None are on PATH in fresh shells; prepend:
+`C:\Program Files\LLVM\bin`, `C:\Program Files\CMake\bin`,
+`C:\Users\isabe\AppData\Local\Programs\Python\Python312`.
+Python deps: `pip install -r requirements.txt` plus `setuptools<81` (newer setuptools
+removed `pkg_resources`, which `tools/check_requirements.py` imports) and `capstone`
+(for analysis scripts). Configure (note the extra flags — no MSVC CRT is installed, so
+CMake's compiler test must build a static lib, and ninja isn't on PATH):
+```
+cmake -B build -S . -G Ninja -DCMAKE_TOOLCHAIN_FILE=toolchains/llvm.cmake \
+  -DCMAKE_MAKE_PROGRAM=C:/Users/isabe/AppData/Local/Microsoft/WinGet/Packages/Ninja-build.Ninja_Microsoft.Winget.Source_8wekyb3d8bbwe/ninja.exe \
+  -DPython3_EXECUTABLE=C:/Users/isabe/AppData/Local/Programs/Python/Python312/python.exe \
+  -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY
+cmake --build build
+```
+The built exe is `build/halo` (no extension). The project also supports MSVC via
+`cmake -AWin32 -Bbuild -S .` if Visual Studio is ever installed.
 
 ### On Linux WITHOUT root (verified working — this is how it was built during handoff)
 `apt` needs root, but `apt-get download` does not. Bootstrap a user-space toolchain:
