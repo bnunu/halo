@@ -665,6 +665,14 @@ typedef struct {
   uint32_t cookie;       ///< offset=0x0c
 } data_iter_t;
 
+/// size=0x3ec
+typedef struct {
+  char     unk_0[0x3c0];  ///< offset=0x00
+  int16_t  unk_3c0;       ///< offset=0x3c0
+  char     unk_3c2[0x26]; ///< offset=0x3c2
+  uint32_t unk_3e8;       ///< offset=0x3e8
+} player_effect_globals_t;
+
 /// static globals block at 0x4570c0; layout evidenced by
 /// update_server_new/update_server_delete (source game/player_queues_new.c)
 /// size=0x410c

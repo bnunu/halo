@@ -141,8 +141,12 @@
           "addr": "0x5aa8b0"
         },
         {
-          "decl": "data_t * effect_data2;",
+          "decl": "data_t * effect_location_data;",
           "addr": "0x5aa8ac"
+        },
+        {
+          "decl": "player_effect_globals_t * player_effect_globals;",
+          "addr": "0x4557ec"
         },
         {
           "decl": "char event_manager_globals[0x108];",

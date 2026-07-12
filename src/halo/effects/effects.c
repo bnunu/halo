@@ -1,9 +1,18 @@
 /* re-implemented from cachebeta.xbe disassembly */
 
+void effects_initialize(void)
+{
+  effect_data = game_state_data_new("effect", 0x100, 0xfc);
+  effect_location_data = game_state_data_new("effect location", 0x200, 0x3c);
+  if (!effect_data || !effect_location_data) {
+    error(0, "couldn't allocate effect globals");
+  }
+}
+
 void effects_dispose_from_old_map(void)
 {
   data_make_invalid(effect_data);
-  data_make_invalid(effect_data2);
+  data_make_invalid(effect_location_data);
 }
 
 void effects_dispose(void)
@@ -11,7 +20,7 @@ void effects_dispose(void)
   if (effect_data) {
     effect_data = NULL;
   }
-  if (effect_data2) {
-    effect_data2 = NULL;
+  if (effect_location_data) {
+    effect_location_data = NULL;
   }
 }
