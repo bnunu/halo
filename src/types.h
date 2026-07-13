@@ -137,9 +137,9 @@ typedef struct {
   uint32_t flags;           ///< offset=0x04  .text:00095B7B                 mov     [esi+4], ecx
   uint32_t unk_8;           ///< offset=0x08  .text:0013EC41                 mov     edx, [esi+8] compared against global object marker
   vector3_t unk_12;         ///< offset=0x0C
-  vector3_t unk_24;         ///< offset=0x18
-  vector3_t unk_36;         ///< offset=0x24
-  vector3_t unk_48;         ///< offset=0x30
+  vector3_t translational_velocity; ///< offset=0x18  assert projectiles.c:1011 "&projectile->object.translational_velocity" (.text:000F8F69 lea edi,[esi+18h])
+  vector3_t forward;        ///< offset=0x24  assert "&object->object.forward"; teleport picks forward vs up on |forward.z| .text:000BB750
+  vector3_t up;             ///< offset=0x30  assert "&object->object.up"
   vector3_t unk_60;         ///< offset=0x3C
   object_location_t location; ///< offset=0x48  assert objects.c:2279 "parent_object->object.location.cluster_index..."
 
@@ -147,7 +147,7 @@ typedef struct {
   float unk_84;             ///< offset=0x54  .text:0009D167                 fsub    dword ptr [ebx+54h]
   float unk_88;             ///< offset=0x58  .text:0009D16D                 fsub    dword ptr [ebx+58h]
   float unk_92;             ///< offset=0x5C  .text:0009D155                 fld     dword ptr [ebx+5Ch]
-  float unk_96;             ///< offset=0x60  .text:00141E5B                 fld     dword ptr [esi+60h]
+  float scale;              ///< offset=0x60  assert game_engine.c:1984 "(item->object.scale >= 0.5f) && (item->object.scale <= 3.f)" (.text:000A88CE fst [esi+60h])
   int16_t type;             ///< offset=0x64  .text:0013D811                 movsx   ecx, word ptr [esi+64h] type enum
   int16_t unk_102;          ///< offset=0x66
   int16_t owner_team_index; ///< offset=0x68  assert game_engine_ctf.c:527 "weapon->object.owner_team_index != player->team_index" (.text:000B0B5C); set from player team_index on spawn .text:000BBF16
@@ -220,8 +220,8 @@ typedef struct {
   object_data_t object;               ///< offset=0x000
   datum_handle_t actor_index;         ///< offset=0x1A4 .text:0003EB73                 cmp     dword ptr [edi+1A4h], 0FFFFFFFFh
   datum_handle_t swarm_actor_index;   ///< offset=0x1A8 .text:0003EB9C                 cmp     dword ptr [edi+1A8h], 0FFFFFFFFh
-  datum_handle_t unk_428;             ///< offset=0x1AC .text:00031492                 mov     eax, [eax+1ACh]
-  datum_handle_t unk_432;             ///< offset=0x1B0 .text:0003AF89                 mov     eax, [esi+1B0h]   datum index?
+  datum_handle_t swarm_next_unit_index; ///< offset=0x1AC swarm doubly-linked list insert .text:0003D855 (new->next = first)
+  datum_handle_t swarm_prev_unit_index; ///< offset=0x1B0 assert actors.c:1316 "swarm_first_unit->unit.swarm_prev_unit_index == NONE" (.text:0003D880); set .text:0003D8B1
   uint32_t unk_436;                   ///< offset=0x1B4 .text:001A80D0                 test    dword ptr [esi+1B4h], 400000h   flags
   uint32_t unk_440;                   ///< offset=0x1B8 .text:000D93E7                 mov     ecx, [eax+1B8h] flags
   uint16_t unk_444;                   ///< offset=0x1BC .text:001B3701                 inc     word ptr [ebx+1BCh]
@@ -233,12 +233,12 @@ typedef struct {
   uint16_t unk_460;                   ///< offset=0x1CC .text:0004091B                 cmp     bx, [esi+1CCh]
   uint16_t unk_462;                   ///< offset=0x1CE .text:001A9B5E                 mov     [esi+1CEh], ax
   uint32_t unk_464;                   ///< offset=0x1D0 .text:00040924                 mov     ecx, [esi+1D0h] game time related
-  vector3_t unk_468;                  ///< offset=0x1D4 .text:001AF62B                 lea     ecx, [esi+1D4h]
-  vector3_t unk_480;                  ///< offset=0x1E0 .text:001AF63E                 lea     edx, [esi+1E0h]
-  vector3_t unk_492;                  ///< offset=0x1EC .text:001AF678                 lea     eax, [esi+1ECh]
+  vector3_t desired_facing_vector;    ///< offset=0x1D4 assert units.c:696 "&driver_unit->unit.desired_facing_vector" (.text:001B391F)
+  vector3_t desired_aiming_vector;    ///< offset=0x1E0 assert units.c:993 "&unit->unit.desired_aiming_vector" (.text:001B3FD6)
+  vector3_t aiming_vector;            ///< offset=0x1EC assert units.c:1648 "&unit->unit.aiming_vector" (.text:001B0045)
   vector3_t unk_504;                  ///< offset=0x1F8 .text:001AF7E5                 fld     dword ptr [esi+1F8h]
   vector3_t unk_516;                  ///< offset=0x204 .text:001AF651                 lea     eax, [esi+204h]
-  vector3_t unk_528;                  ///< offset=0x210 .text:001AF68B                 add     esi, 210h
+  vector3_t looking_vector;           ///< offset=0x210 assert units.c:1076 "&unit->unit.looking_vector" (.text:001B437C)
   vector3_t unk_540;                  ///< offset=0x21C .text:001AF82F                 fld     dword ptr [esi+21Ch]
   vector3_t unk_552;                  ///< offset=0x228 .text:001B39A3                 lea     edx, [ebx+228h]
   float unk_564;                      ///< offset=0x234 .text:001B387D                 mov     dword ptr [ebx+234h], 3F800000h
@@ -325,9 +325,9 @@ typedef struct {
   float unk_812;                      ///< offset=0x32C .text:0013B79C                 fld     dword ptr [edi+32Ch]
   float unk_816;                      ///< offset=0x330 .text:0003CA20                 fstp    dword ptr [eax+330h]
   uint32_t unk_820;                   ///< offset=0x334 .text:001A698A                 mov     eax, [ecx+334h]  tag index
-  uint16_t unk_824;                   ///< offset=0x338 .text:001A6BD3                 cmp     [eax+338h], cx  command type?, also see action_obey_command_perform
+  uint16_t speech_current_priority;   ///< offset=0x338 assert units.c:366 "unit->unit.speech.current.priority > _unit_speech_none" (.text:001A7082 cmp word ptr [ebx+338h], 0)
   uint16_t unk_826;                   ///< offset=0x33A .text:001A6D9A                 mov     ax, [edi+33Ah]
-  uint32_t unk_828;                   ///< offset=0x33C .text:001A6D4B                 mov     eax, [edi+33Ch]  tag index
+  uint32_t speech_current_sound_definition_index; ///< offset=0x33C assert units.c:406 "unit->unit.speech.current.sound_definition_index == sound_definition_index" (.text:001A7155)
   uint16_t unk_832;                   ///< offset=0x340 .text:001A6FB3                 mov     ax, [ebx+340h]
   uint16_t unk_834;                   ///< offset=0x342 .text:001A6FC1                 mov     dx, [ebx+342h]
   uint16_t unk_836;                   ///< offset=0x344 .text:001A6FBA                 mov     cx, [ebx+344h]
@@ -491,10 +491,10 @@ typedef struct
 /// size=0x27C
 typedef struct {
   item_data_t item;                 ///< offset=0x000
-  uint32_t unk_476;                 ///< offset=0x1DC .text:000A87F0                 mov     ecx, [eax+1DCh]
+  uint32_t flags;                   ///< offset=0x1DC assert game_engine.c:3794 "...TEST_FLAG(weapon->weapon.flags, _weapon_must_be_readied_bit)..." (bit 3, .text:000A914E test byte ptr [esi+1DCh], 8)
   uint8_t unk_480;                  ///< offset=0x1E0 .text:000FDA9E                 test    byte ptr [ebx+1E0h], 40h
   char unk_481[3];                  ///< offset=0x1E1
-  float unk_484;                    ///< offset=0x1E4 .text:000D1375                 fld     dword ptr [esi+1E4h]
+  float primary_trigger;            ///< offset=0x1E4 assert weapons.c:1199 "weapon->weapon.primary_trigger" (.text:000FC501)
   uint8_t unk_488;                  ///< offset=0x1E8 .text:000FD158                 mov     al, [eax+1E8h]   state related?
   uint8_t unk_489;                  ///< offset=0x1E9
   uint16_t unk_490;                 ///< offset=0x1EA .text:000FD343                 mov     [edi+1EAh], ax
