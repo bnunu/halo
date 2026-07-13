@@ -44,6 +44,7 @@ target_sources(halo PRIVATE
 	halo/shell.c
 	halo/game/game_statistics.c
 	halo/networking/network_game_globals.c
+	halo/networking/telnet_console.c
 	halo/effects/particles.c
 	halo/cutscene/cinematics.c
 	halo/cutscene/recorded_animations.c

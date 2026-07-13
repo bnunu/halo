@@ -213,6 +213,14 @@
           "addr": "0x46bd18"
         },
         {
+          "decl": "telnet_console_globals_t telnet_console_globals;",
+          "addr": "0x46eee0"
+        },
+        {
+          "decl": "char transport_initialized;",
+          "addr": "0x335090"
+        },
+        {
           "decl": "char byte_46cf60;",
           "addr": "0x46cf60"
         },
@@ -2019,6 +2027,16 @@
         {
           "decl": "const char *tiff_export(file_ref_t *info, __int16 *bitmap);",
           "addr": "0x7f5e0"
+        }
+      ]
+    },
+    {
+      "name": "transport_endpoint_winsock.obj",
+      "source": "bungie_net/network/transport_endpoint_winsock.c",
+      "functions": [
+        {
+          "decl": "void transport_endpoint_delete(void *endpoint);",
+          "addr": "0x848c0"
         }
       ]
     },

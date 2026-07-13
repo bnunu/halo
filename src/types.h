@@ -689,6 +689,16 @@ typedef struct {
   hud_player_messaging_t players[4]; ///< offset=0x00
 } hud_messaging_state_t;
 
+/// static telnet console globals block at 0x46eee0
+/// size=0x8c
+typedef struct {
+  void *unk_0;       ///< offset=0x00
+  void *unk_4;       ///< offset=0x04
+  char  unk_8[0x80]; ///< offset=0x08
+  bool  initialized; ///< offset=0x88
+  char  unk_89[3];   ///< offset=0x89
+} telnet_console_globals_t;
+
 /// hud globals ('hudg' tag data); partial layout, only evidenced fields
 typedef struct {
   char           unk_0[0xa0];      ///< offset=0x00
