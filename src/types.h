@@ -81,12 +81,47 @@ typedef struct {
   char unk_0[104];
 } game_variant_t;
 
-/// current game engine function table; only evidenced fields are named
+/// game engine (multiplayer game type) interface. Static const tables in
+/// rdata: ctf 0x2efe88, king 0x2eff10, oddball 0x2effe8, race 0x2f0070,
+/// slayer 0x2f00f8 (ctf and king are 0x88 apart -> struct size). The current
+/// engine is game_engine_globals (0x456b60); dispatchers null-check each slot
+/// before calling. Unnamed slots list their dispatcher call sites.
+/// size=0x88
 typedef struct {
-  char unk_0[8];                      ///< offset=0x00
+  char    *name;                      ///< offset=0x00  "ctf"/"slayer"/"oddball"/"king"/"race"
+  int32_t  type;                      ///< offset=0x04  game engine enum: ctf=1 slayer=2 oddball=3 king=4 race=5
   void (*dispose)(void);              ///< offset=0x08
-  char unk_c[4];                      ///< offset=0x0c
+  bool (*initialize_for_new_map)(void); ///< offset=0x0c  .text:000AE7A7; on false "failed to initialize custome game engine for new map, reverting to default game engine"
   void (*dispose_from_old_map)(void); ///< offset=0x10
+  void (*player_added)(int player_index); ///< offset=0x14  tail of game_engine_player_added .text:000AE90D
+  void *unk_18;                       ///< offset=0x18
+  void (*game_starting)(void);        ///< offset=0x1c  called by game_engine_game_starting .text:000A8390
+  void *unk_20;                       ///< offset=0x20
+  void *unk_24;                       ///< offset=0x24
+  void *unk_28;                       ///< offset=0x28
+  void *unk_2c;                       ///< offset=0x2c
+  void *unk_30;                       ///< offset=0x30
+  void *unk_34;                       ///< offset=0x34  .text:000AF47D (game-engine per-tick update fn 0xaf370)
+  void *unk_38;                       ///< offset=0x38  .text:000A894D (item spawn/scale dispatcher 0xa8820)
+  void *unk_3c;                       ///< offset=0x3c  .text:000A9142
+  void *unk_40;                       ///< offset=0x40  .text:000A8811/.text:000A910E (flag-weapon dispatcher, asserts "weapon_is_flag(weapon_index)")
+  void *unk_44;                       ///< offset=0x44  .text:000AF4A2 (end of update fn)
+  void *unk_48;                       ///< offset=0x48  .text:000A8188/000A9E6B/000A9ECF/000ABDFF/000ABE42/000AC57B
+  void *unk_4c;                       ///< offset=0x4c  .text:000AEB5B/000AF037/000AFBCA (score "title_string" builder 0xae920)
+  void *unk_50;                       ///< offset=0x50  .text:000AEDB2/000AFADD
+  void *unk_54;                       ///< offset=0x54  .text:000AEAB7/000AEAC6/000AED72
+  void *unk_58;                       ///< offset=0x58
+  void *unk_5c;                       ///< offset=0x5c  .text:000A8B94 (fn 0xa8b50, assert "dead_player_index != NONE")
+  void *unk_60;                       ///< offset=0x60  .text:000AF6D3 (fn 0xaf660, assert "dead_player_index != NONE")
+  void *unk_64;                       ///< offset=0x64  .text:000ACED0/000ACF34/000AE1D6
+  void *unk_68;                       ///< offset=0x68
+  void *unk_6c;                       ///< offset=0x6c
+  void *unk_70;                       ///< offset=0x70  .text:000AD3FE
+  void *unk_74;                       ///< offset=0x74
+  void *unk_78;                       ///< offset=0x78  .text:000A91BE
+  void *unk_7c;                       ///< offset=0x7c  .text:000AC515/000ADC6D
+  void *unk_80;                       ///< offset=0x80  .text:000ACD96/000AD5E0/000AF434 (called per player in the update loop)
+  void *unk_84;                       ///< offset=0x84  .text:000AE39E/000AE9F9
 } game_engine_interface_t;
 
 /// size=0x20
