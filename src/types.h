@@ -698,6 +698,37 @@ typedef struct {
   char unk_1185;                     ///< offset=0x1185
 } hud_messaging_state_t;
 
+/// saved-game state header (0x14c block pointed to by xbox_game_state_globals)
+/// size=0x14c
+typedef struct {
+  int     unk_0;               ///< offset=0x000
+  char    map_path[0x100];     ///< offset=0x004
+  char    build_version[0x20]; ///< offset=0x104
+  int16_t player_spawn_count;  ///< offset=0x124
+  int16_t difficulty;          ///< offset=0x126
+  int     unk_128;             ///< offset=0x128
+  char    unk_12c[0x20];       ///< offset=0x12c
+} game_state_header_t;
+
+/// static block at 0x4ea9a0 (saved games\game_state_xbox.c); field names
+/// buffer_allocated/file_open/file_valid_for_read from the target's asserts
+typedef struct {
+  uint32_t unk_0;                ///< offset=0x00
+  bool     unk_4;                ///< offset=0x04
+  bool     unk_5;                ///< offset=0x05
+  char     unk_6[2];             ///< offset=0x06
+  uint32_t unk_8;                ///< offset=0x08
+  game_state_header_t *header;   ///< offset=0x0c
+  bool     buffer_allocated;     ///< offset=0x10
+  char     unk_11[3];            ///< offset=0x11
+  uint32_t unk_14;               ///< offset=0x14
+  uint32_t unk_18;               ///< offset=0x18
+  bool     file_open;            ///< offset=0x1c
+  bool     file_valid_for_read;  ///< offset=0x1d
+  char     unk_1e[2];            ///< offset=0x1e
+  void    *unk_20;               ///< offset=0x20
+} xbox_game_state_globals_t;
+
 /// static bink playback globals at 0x4ead58; partial layout
 /// size=0xd8
 typedef struct {

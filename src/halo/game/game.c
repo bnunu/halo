@@ -234,3 +234,8 @@ bool game_map_loading_in_progress(float *progress)
   }
   return game_globals->map_loading_in_progress;
 }
+
+__int16 game_difficulty_level(void)
+{
+  return game_globals->game_options.difficulty;
+}

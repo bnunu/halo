@@ -297,6 +297,18 @@
           "addr": "0x4ead58"
         },
         {
+          "decl": "int dword_326a08;",
+          "addr": "0x326a08"
+        },
+        {
+          "decl": "int dword_4e4d68;",
+          "addr": "0x4e4d68"
+        },
+        {
+          "decl": "xbox_game_state_globals_t xbox_game_state_globals;",
+          "addr": "0x4ea9a0"
+        },
+        {
           "decl": "data_t * effect_data;",
           "addr": "0x5aa8b0"
         },
@@ -497,6 +509,14 @@
       "name": "cache_files.obj",
       "source": "cache/cache_files.c",
       "functions": [
+        {
+          "decl": "unsigned int cache_file_get_checksum(void);",
+          "addr": "0x1b9920"
+        },
+        {
+          "decl": "char *tag_get_name(int tag_handle);",
+          "addr": "0x1ba1f0"
+        },
         {
           "decl": "void *tag_get(unsigned int group_tag, int tag_handle);",
           "addr": "0x1ba140"
@@ -962,6 +982,10 @@
       "name": "game.obj",
       "source": "game/game.c",
       "functions": [
+        {
+          "decl": "__int16 game_difficulty_level(void);",
+          "addr": "0xa7460"
+        },
         {
           "decl": "void game_initialize(void);",
           "addr": "0xa6bf0"
