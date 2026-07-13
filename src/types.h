@@ -122,6 +122,15 @@ typedef struct {
 #define NUMBER_OF_OUTGOING_OBJECT_FUNCTIONS 4
 #define MAXIMUM_REGIONS_PER_OBJECT 8
 
+/// object location within the structure bsp (named by assert objects.c:2279
+/// "parent_object->object.location.cluster_index>=0 && ...<global_structure_bsp_get()->clusters.count")
+/// size=0x8
+typedef struct {
+  int32_t leaf_index;     ///< offset=0x00  .text:00140149 mov edx, [ecx+48h]
+  int16_t cluster_index;  ///< offset=0x04  .text:00034D1F movsx eax, word ptr [eax+4Ch]
+  int16_t unk_6;          ///< offset=0x06
+} object_location_t;
+
 /// size=0x1A4
 typedef struct {
   uint32_t tag_index;       ///< offset=0x00
@@ -132,11 +141,7 @@ typedef struct {
   vector3_t unk_36;         ///< offset=0x24
   vector3_t unk_48;         ///< offset=0x30
   vector3_t unk_60;         ///< offset=0x3C
-  uint32_t unk_72;          ///< offset=0x48  .text:00140149                 mov     edx, [ecx+48h] location.???, leaf index?
-
-  // .text:00031FEE                 mov     edx, [eax+4Ch]  
-  // .text:00034D1F                 movsx   eax, word ptr [eax+4Ch] object.location.cluster_index
-  datum_handle_t unk_76;    ///< offset=0x4C
+  object_location_t location; ///< offset=0x48  assert objects.c:2279 "parent_object->object.location.cluster_index..."
 
   float unk_80;             ///< offset=0x50  .text:0009D161                 fsub    dword ptr [ebx+50h]
   float unk_84;             ///< offset=0x54  .text:0009D167                 fsub    dword ptr [ebx+54h]
@@ -145,7 +150,7 @@ typedef struct {
   float unk_96;             ///< offset=0x60  .text:00141E5B                 fld     dword ptr [esi+60h]
   int16_t type;             ///< offset=0x64  .text:0013D811                 movsx   ecx, word ptr [esi+64h] type enum
   int16_t unk_102;          ///< offset=0x66
-  int16_t unk_104;          ///< offset=0x68  .text:00032344                 movsx   eax, word ptr [eax+68h] team-related index
+  int16_t owner_team_index; ///< offset=0x68  assert game_engine_ctf.c:527 "weapon->object.owner_team_index != player->team_index" (.text:000B0B5C); set from player team_index on spawn .text:000BBF16
   int16_t unk_106;          ///< offset=0x6A
   int16_t unk_108;          ///< offset=0x6C  .text:000A8741                 cmp     [eax+6Ch], si
   int16_t unk_110;          ///< offset=0x6E  .text:0003EC0B                 cmp     word ptr [edi+6Eh], 64h
@@ -224,7 +229,7 @@ typedef struct {
   uint8_t unk_447;                    ///< offset=0x1BF .text:001AE773                 mov     [esi+1BFh], al    seat index
   uint32_t unk_448;                   ///< offset=0x1C0 .text:001A81DA                 mov     [esi+1C0h], ecx
   uint32_t persistent_control_flags;  ///< offset=0x1C4 .text:001A81D3                 mov     [esi+1C4h], edi
-  datum_handle_t unk_456;             ///< offset=0x1C8 .text:00030656                 cmp     dword ptr [ebx+1C8h], 0FFFFFFFFh
+  datum_handle_t player_index;        ///< offset=0x1C8 owning player datum handle: stored on spawn .text:000BBF20 / .text:000BA673, cleared when the player detaches .text:000BA63D/.text:000BA91E, checked .text:000BB43A and .text:00030656
   uint16_t unk_460;                   ///< offset=0x1CC .text:0004091B                 cmp     bx, [esi+1CCh]
   uint16_t unk_462;                   ///< offset=0x1CE .text:001A9B5E                 mov     [esi+1CEh], ax
   uint32_t unk_464;                   ///< offset=0x1D0 .text:00040924                 mov     ecx, [esi+1D0h] game time related
@@ -294,7 +299,7 @@ typedef struct {
   datum_handle_t unk_712;             ///< offset=0x2C8 .text:001AA97E                 mov     eax, [eax+2C8h] current equipment
   uint8_t current_grenade_index;      ///< offset=0x2CC .text:001AAEF1                 mov     al, [esi+2CCh] unit->unit.current_grenade_index
   uint8_t unk_717;                    ///< offset=0x2CD .text:000B7087                 movsx   cx, byte ptr [ebx+2CDh]
-  uint8_t unk_718[NUMBER_OF_UNIT_GRENADE_TYPES];  ///< offset=0x2CE .text:001A99E3                 cmp     byte ptr [ecx+ebx+2CEh], 0   grenade counts
+  uint8_t grenade_counts[NUMBER_OF_UNIT_GRENADE_TYPES];  ///< offset=0x2CE assert units.c:7967 "unit->unit.grenade_counts[unit->unit.current_grenade_index]>0"; .text:001A99E3
   uint8_t zoom_level;                 ///< offset=0x2D0 .text:001A869E                 movsx   ax, byte ptr [eax+2D0h]
   uint8_t unk_721;                    ///< offset=0x2D1 .text:000B7093                 movsx   dx, byte ptr [ebx+2D1h]
   uint8_t unk_722;                    ///< offset=0x2D2
