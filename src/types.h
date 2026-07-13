@@ -689,6 +689,32 @@ typedef struct {
   hud_player_messaging_t players[4]; ///< offset=0x00
 } hud_messaging_state_t;
 
+/// per-local-player weather particle system state
+/// size=0x9c
+typedef struct {
+  datum_handle_t unk_0; ///< offset=0x00
+  char unk_4[0x98];     ///< offset=0x04
+} weather_player_state_t;
+
+/// static weather globals block at 0x4557f0
+/// size=0x274
+typedef struct {
+  int16_t unk_0;                    ///< offset=0x00
+  char    unk_2[2];                 ///< offset=0x02
+  weather_player_state_t players[4]; ///< offset=0x04
+} weather_particle_systems_globals_t;
+
+/// per-local-player director state (static array at 0x3352b8)
+/// size=0xf8
+typedef struct {
+  uint32_t unk_0;    ///< offset=0x00
+  char unk_4[0xb4];  ///< offset=0x04
+  bool unk_b8;       ///< offset=0xb8
+  char unk_b9[3];    ///< offset=0xb9
+  float unk_bc;      ///< offset=0xbc
+  char unk_c0[0x38]; ///< offset=0xc0
+} director_player_t;
+
 /// static telnet console globals block at 0x46eee0
 /// size=0x8c
 typedef struct {

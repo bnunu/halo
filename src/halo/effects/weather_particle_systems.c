@@ -8,6 +8,21 @@ void weather_particle_systems_initialize(void)
   }
 }
 
+void weather_particle_systems_initialize_for_new_map(void)
+{
+  for (__int16 local_player_index = 0;
+       local_player_index < MAXIMUM_NUMBER_OF_LOCAL_PLAYERS;
+       local_player_index++) {
+    assert_halt_msg(local_player_index >= 0 &&
+                      local_player_index < MAXIMUM_NUMBER_OF_LOCAL_PLAYERS,
+                    "local_player_index>=0 && "
+                    "local_player_index<MAXIMUM_NUMBER_OF_LOCAL_PLAYERS");
+    weather_globals.players[local_player_index].unk_0.value = -1;
+  }
+  weather_globals.unk_0 = 0;
+  data_make_valid(weather_particle_data);
+}
+
 void weather_particle_systems_dispose(void)
 {
   if (weather_particle_data) {

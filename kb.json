@@ -229,6 +229,14 @@
           "addr": "0x331f5c"
         },
         {
+          "decl": "weather_particle_systems_globals_t weather_globals;",
+          "addr": "0x4557f0"
+        },
+        {
+          "decl": "director_player_t director_players[4];",
+          "addr": "0x3352b8"
+        },
+        {
           "decl": "char byte_46cf60;",
           "addr": "0x46cf60"
         },
