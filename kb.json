@@ -343,6 +343,14 @@
         {
           "decl": "game_allegiance_globals_t * game_allegiance_globals;",
           "addr": "0x4566f0"
+        },
+        {
+          "decl": "data_t * prop_data;",
+          "addr": "0x5ab23c"
+        },
+        {
+          "decl": "ai_profile_globals_t ai_profile_globals;",
+          "addr": "0x5abaa0"
         }
       ]
     },
@@ -442,6 +450,10 @@
       "source": "ai/ai_profile.c",
       "functions": [
         {
+          "decl": "void ai_profile_initialize(void);",
+          "addr": "0x53620"
+        },
+        {
           "decl": "void ai_profile_dispose(void);",
           "addr": "0x53640"
         }
@@ -451,6 +463,10 @@
       "name": "ai_script.obj",
       "source": "ai/ai_script.c",
       "functions": [
+        {
+          "decl": "void ai_script_initialize(void);",
+          "addr": "0x540b0"
+        },
         {
           "decl": "void ai_script_dispose(void);",
           "addr": "0x540c0"
@@ -1690,6 +1706,10 @@
       "source": "ai/path.c",
       "functions": [
         {
+          "decl": "void path_initialize(void);",
+          "addr": "0x5df80"
+        },
+        {
           "decl": "void path_dispose(void);",
           "addr": "0x5df90"
         }
@@ -1920,6 +1940,10 @@
       "name": "props.obj",
       "source": "ai/props.c",
       "functions": [
+        {
+          "decl": "void props_initialize(void);",
+          "addr": "0x64100"
+        },
         {
           "decl": "void props_dispose(void);",
           "addr": "0x64140"

@@ -918,4 +918,12 @@ typedef struct
   char unk_11[17];     ///< offset=0x0B
 } cinematic_globals_t;
 
+/// size=0xEEC
+typedef struct
+{
+  int  unk_0;          ///< offset=0x00
+  bool unk_4;          ///< offset=0x04, set to true by ai_profile_initialize
+  char unk_5[0xee7];   ///< offset=0x05
+} ai_profile_globals_t;
+
 #pragma pack()
