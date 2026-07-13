@@ -59,4 +59,5 @@ target_sources(halo PRIVATE
 	halo/interface/event_manager.c
 	halo/input/input_abstraction.c
 	halo/scenario/scenario.c
+	halo/text/international_strings.c
 	)

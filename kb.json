@@ -2167,6 +2167,15 @@
       ]
     },
     {
+      "name": "tag_groups.obj",
+      "functions": [
+        {
+          "decl": "void *tag_block_get_element(void *block, int element_index, int element_size);",
+          "addr": "0x19b210"
+        }
+      ]
+    },
+    {
       "name": "telnet_console.obj",
       "functions": [
         {
