@@ -419,6 +419,10 @@
         {
           "decl": "ai_globals_t * ai_globals;",
           "addr": "0x632574"
+        },
+        {
+          "decl": "actor_type_definition_t * actor_type_definitions[16];",
+          "addr": "0x2c86a8"
         }
       ]
     },

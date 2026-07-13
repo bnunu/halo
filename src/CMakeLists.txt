@@ -67,4 +67,5 @@ target_sources(halo PRIVATE
 	halo/ai/encounters.c
 	halo/ai/path.c
 	halo/ai/props.c
+	halo/ai/actor_types.c
 	)

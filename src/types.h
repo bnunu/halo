@@ -972,6 +972,19 @@ typedef struct
   int32_t unk_4; ///< offset=0x04, -1 at map init
 } dialogue_status_t;
 
+/// actor type definition (referenced via the 16-pointer table @ 0x2C86A8);
+/// total size unknown -- only the fields verified by actor_type_definition_get
+typedef struct
+{
+  char *  name;                     ///< offset=0x00
+  char    unk_4[2];                 ///< offset=0x04
+  int16_t when_to_search_at_target; ///< offset=0x06, < NUMBER_OF_ACTOR_PURSUIT_SETTINGS
+  int16_t when_to_pursue;           ///< offset=0x08
+  int16_t when_to_search_pursuit;   ///< offset=0x0A
+  char    unk_c[8];                 ///< offset=0x0C
+  void *  decide_action;            ///< offset=0x14
+} actor_type_definition_t;
+
 /// size=0x28; const table @ 0x257e48, terminated by unk_0 == -1
 typedef struct
 {
