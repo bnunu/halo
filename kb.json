@@ -325,6 +325,14 @@
           "addr": "0x5054e8"
         },
         {
+          "decl": "int dword_325670;",
+          "addr": "0x325670"
+        },
+        {
+          "decl": "volatile int64_t qword_325680;",
+          "addr": "0x325680"
+        },
+        {
           "decl": "data_t * effect_data;",
           "addr": "0x5aa8b0"
         },
@@ -1341,6 +1349,10 @@
       "name": "input_xbox.obj",
       "source": "input/input_xbox.c",
       "functions": [
+        {
+          "decl": "void input_vertical_blank_update(void);",
+          "addr": "0xcf7e0"
+        },
         {
           "decl": "void input_flush(void);",
           "addr": "0xcf500"

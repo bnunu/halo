@@ -184,6 +184,7 @@ void main_initialize_time(void)
   unk_time_globals.unk_0 = system_milliseconds();
   unk_time_globals.unk_8 = 0L;
   rasterizer_set_vblank_callback(main_vertical_blank_interrupt_handler);
+#undef main_vertical_blank_interrupt_handler
   word_46DDDC = 0;
   csmemset(word_46DDDE, 0, 0x1Eu);
   flip_count_ptr = d3d_find_flipcount();
@@ -563,4 +564,19 @@ void main_game_time_halt(void)
 void main_game_time_resume(void)
 {
   byte_46DA47 = 1;
+}
+
+void main_vertical_blank_interrupt_handler(void)
+{
+  qword_325678++;
+  if (!flip_count_ptr) {
+    qword_325680 = qword_325678;
+  } else if (*flip_count_ptr != dword_325670) {
+    word_46DDDE[word_46DDDC] =
+      (__int16)((__int16)qword_325678 - (__int16)qword_325680);
+    word_46DDDC = (__int16)((word_46DDDC + 1) % 15);
+    qword_325680 = qword_325678;
+    dword_325670 = *flip_count_ptr;
+  }
+  input_vertical_blank_update();
 }
