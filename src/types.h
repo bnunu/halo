@@ -118,10 +118,10 @@ typedef struct {
   void *unk_6c;                       ///< offset=0x6c
   void *unk_70;                       ///< offset=0x70  .text:000AD3FE
   void *unk_74;                       ///< offset=0x74
-  void *unk_78;                       ///< offset=0x78  .text:000A91BE
+  void *unk_78;                       ///< offset=0x78  .text:000A91BE (team-allegiance query, consulted with game_allegiance_globals entries)
   void *unk_7c;                       ///< offset=0x7c  .text:000AC515/000ADC6D
-  void *unk_80;                       ///< offset=0x80  .text:000ACD96/000AD5E0/000AF434 (called per player in the update loop)
-  void *unk_84;                       ///< offset=0x84  .text:000AE39E/000AE9F9
+  void *unk_80;                       ///< offset=0x80  .text:000ACD96/000AD5E0/000AF434 (bool(player_index, bool); when true the spawn path grants powerup 0 for 15 ticks .text:000ACDBB)
+  void *unk_84;                       ///< offset=0x84  .text:000AE39E/000AE9F9 (team-score related; caller 0xae340 looks players up by team_index)
 } game_engine_interface_t;
 
 /// size=0x20
@@ -682,18 +682,31 @@ typedef struct {
   char    unk_3f[1];           ///< offset=0x3F
   int32_t unk_40;              ///< offset=0x40  set NONE in player_new
   char    unk_44[4];           ///< offset=0x44
-  char    unk_48[0x20];        ///< offset=0x48  copy of the 0x20-byte properties block passed to player_new (starts with the wide name) .text:000BB3E9
+  char    unk_48[0x1e];        ///< offset=0x48  copy of the 0x20-byte properties block passed to player_new (starts with the wide name) .text:000BB3E9
+  int8_t  unk_66;              ///< offset=0x66  color/index assigned from counter dword_5aa724 in game_engine_player_added .text:000AE86C; team_index derives from it
+  char    unk_67[1];           ///< offset=0x67
   int16_t powerup_times[NUMBER_OF_PLAYER_POWERUPS]; ///< offset=0x68  ticks left per powerup; assert players.c:2794 "powerup_type>=0 && powerup_type<NUMBER_OF_PLAYER_POWERUPS"; decremented .text:000BC4D1, cleared on respawn .text:000BBF8C
-  float   unk_6c;              ///< offset=0x6C  set 1.0f in player_new; speed multiplier?
-  char    unk_70[0x3a];        ///< offset=0x70
+  float   unk_6c;              ///< offset=0x6C  set 1.0f in player_new and again in game_engine_player_added .text:000AE802; speed multiplier?
+  int32_t unk_70;              ///< offset=0x70  set NONE in game_engine_player_added .text:000AE809
+  int32_t unk_74;              ///< offset=0x74  set NONE .text:000AE7FC
+  int32_t unk_78;              ///< offset=0x78  set NONE .text:000AE7FF
+  int32_t unk_7c;              ///< offset=0x7C  set NONE .text:000AE80C
+  char    unk_80[4];           ///< offset=0x80
+  uint32_t unk_84;             ///< offset=0x84  set to current game time when the player dies .text:000AF6B6
+  char    unk_88[0x22];        ///< offset=0x88
   int16_t unk_aa;              ///< offset=0xAA  respawn-penalty/lives counter: compared vs dword_456b30 in game_engine .text:000ABB15, gates starting-profile choice .text:000BBF61
-  char    unk_ac[0x20];        ///< offset=0xAC
+  char    unk_ac[0x14];        ///< offset=0xAC
+  char    unk_c0[4];           ///< offset=0xC0  cleared in game_engine_player_added .text:000AE80F
+  char    unk_c4[8];           ///< offset=0xC4
   datum_handle_t unk_cc;       ///< offset=0xCC  set NONE in player_new
   char    unk_d0[1];           ///< offset=0xD0
   int8_t  unk_d1;              ///< offset=0xD1  set 0 in player_new
   char    unk_d2[2];           ///< offset=0xD2
 } player_data_t;
 
+/// team datum ("teams" data array, element size 0x40 per players_initialize
+/// .text:000BA111). The only code referencing team_data in this build is the
+/// players.c lifecycle (0xba130..0xba259) — no field accesses to map yet.
 /// size=0x40
 typedef struct {
   char unk_0[0x40];
