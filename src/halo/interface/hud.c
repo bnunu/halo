@@ -3,9 +3,9 @@ void hud_load(bool a1)
   __int16 v1;
 
   if (a1) {
-    v1 = *((_WORD *)hud_globals + 492);
+    v1 = hud_globals->unk_3d8;
   } else {
-    v1 = *((_WORD *)hud_globals + 493);
+    v1 = hud_globals->unk_3da;
   }
   scripted_hud_messages_clear();
   if (v1 != -1) {
