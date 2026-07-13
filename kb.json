@@ -343,6 +343,22 @@
         {
           "decl": "game_allegiance_globals_t * game_allegiance_globals;",
           "addr": "0x4566f0"
+        },
+        {
+          "decl": "char byte_46c404;",
+          "addr": "0x46c404"
+        },
+        {
+          "decl": "data_t * terminal_output_data;",
+          "addr": "0x46c408"
+        },
+        {
+          "decl": "int dword_46c40c;",
+          "addr": "0x46c40c"
+        },
+        {
+          "decl": "int dword_46c410;",
+          "addr": "0x46c410"
         }
       ]
     },
@@ -638,6 +654,10 @@
         {
           "decl": "bool console_update(void);",
           "addr": "0xff9e0"
+        },
+        {
+          "decl": "bool console_is_active(void);",
+          "addr": "0xff4c0"
         }
       ]
     },
@@ -767,6 +787,10 @@
         {
           "decl": "void *data_iterator_next(data_iter_t *iterator);",
           "addr": "0x119810"
+        },
+        {
+          "decl": "void datum_delete(data_t *data, int handle);",
+          "addr": "0x1196d0"
         }
       ]
     },
@@ -2201,7 +2225,19 @@
           "addr": "0xe3560"
         },
         {
-          "decl": "void terminal_update(void);",
+          "decl": "bool terminal_gets_update(void);",
+          "addr": "0xe3580"
+        },
+        {
+          "decl": "void terminal_initialize(void);",
+          "addr": "0xe33a0"
+        },
+        {
+          "decl": "void terminal_output_update(void);",
+          "addr": "0xe3640"
+        },
+        {
+          "decl": "bool terminal_update(void);",
           "addr": "0xe39e0"
         }
       ]
