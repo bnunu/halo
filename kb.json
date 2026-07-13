@@ -185,6 +185,26 @@
           "addr": "0x46c414"
         },
         {
+          "decl": "float flt_325130;",
+          "addr": "0x325130"
+        },
+        {
+          "decl": "float flt_325134;",
+          "addr": "0x325134"
+        },
+        {
+          "decl": "float flt_29d954;",
+          "addr": "0x29d954"
+        },
+        {
+          "decl": "float flt_4761fc;",
+          "addr": "0x4761fc"
+        },
+        {
+          "decl": "float flt_476200;",
+          "addr": "0x476200"
+        },
+        {
           "decl": "char byte_46cf60;",
           "addr": "0x46cf60"
         },
@@ -239,6 +259,15 @@
         {
           "decl": "void * game_allegiance_globals;",
           "addr": "0x4566f0"
+        }
+      ]
+    },
+    {
+      "name": "LIBCMT:contrl87.obj",
+      "functions": [
+        {
+          "decl": "unsigned int _control87(unsigned int new_value, unsigned int mask);",
+          "addr": "0x1db67f"
         }
       ]
     },

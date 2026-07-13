@@ -32,6 +32,8 @@ target_sources(halo PRIVATE
 	halo/main/debug_keys.c
 	halo/game/player_queues_new.c
 	halo/math/random_math.c
+	halo/math/real_math.c
+	halo/render/render_cameras.c
 	halo/physics/breakable_surfaces.c
 	halo/physics/collision_usage.c
 	halo/physics/point_physics.c
