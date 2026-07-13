@@ -3,6 +3,7 @@ target_sources(halo PRIVATE
 	inlines.c
 	halo/cseries/cseries.c
 	halo/cseries/profile.c
+	halo/ai/ai_debug.c
 	halo/game/game.c
 	halo/game/game_engine.c
 	halo/game/game_time.c

@@ -221,6 +221,14 @@
           "addr": "0x335090"
         },
         {
+          "decl": "void * dword_331f58;",
+          "addr": "0x331f58"
+        },
+        {
+          "decl": "void * dword_331f5c;",
+          "addr": "0x331f5c"
+        },
+        {
           "decl": "char byte_46cf60;",
           "addr": "0x46cf60"
         },
@@ -373,6 +381,16 @@
         {
           "decl": "void breakable_surfaces_dispose_from_old_map(void);",
           "addr": "0x145980"
+        }
+      ]
+    },
+    {
+      "name": "ai_debug.obj",
+      "source": "ai/ai_debug.c",
+      "functions": [
+        {
+          "decl": "void ai_debug_dispose(void);",
+          "addr": "0x48f50"
         }
       ]
     },
