@@ -46,6 +46,26 @@ void ai_communication_dispose(void)
 {
 }
 
+void ai_communication_initialize_for_new_map(void)
+{
+  ai_globals->unk_10 = true;
+  csmemset(&ai_globals->unk_14, 0, sizeof(ai_globals->unk_14));
+  csmemset(&ai_globals->unk_1c, 0, sizeof(ai_globals->unk_1c));
+  csmemset(&ai_globals->unk_24, 0, sizeof(ai_globals->unk_24));
+  for (int16_t index = 0; index < word_331f08 * 2; index++) {
+    dialogue_status_table[index].unk_4 = -1;
+    dialogue_status_table[index].unk_0 = -1;
+  }
+  for (int16_t index = 0; index < word_331f10 * 2; index++) {
+    reply_status_table[index].unk_4 = -1;
+    reply_status_table[index].unk_0 = -1;
+  }
+  ai_globals->unk_2c = 0;
+  ai_globals->unk_2e = 0;
+  csmemset(&ai_globals->unk_30, 0, sizeof(ai_globals->unk_30));
+  data_make_valid(conversation_data);
+}
+
 void ai_communication_dispose_from_old_map(void)
 {
   data_make_invalid(conversation_data);

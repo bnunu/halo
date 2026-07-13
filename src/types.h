@@ -923,7 +923,8 @@ typedef struct
 {
   int  unk_0;          ///< offset=0x00
   bool unk_4;          ///< offset=0x04, set to true by ai_profile_initialize
-  char unk_5[0xee7];   ///< offset=0x05
+  char unk_5[7];       ///< offset=0x05
+  char unk_c[0xee0];   ///< offset=0x0C, zeroed by ai_profile_initialize_for_new_map
 } ai_profile_globals_t;
 
 /// size=0x85B2C
@@ -942,10 +943,34 @@ typedef struct
 /// size=0x8DC; allocated by ai_initialize ("ai globals")
 typedef struct
 {
-  char unk_0;        ///< offset=0x00
-  bool unk_1;        ///< offset=0x01, cleared by ai_dispose_from_old_map
-  char unk_2[0x8da]; ///< offset=0x02
+  bool  unk_0;           ///< offset=0x00, set by ai_initialize_for_new_map
+  bool  unk_1;           ///< offset=0x01, set at end of ai_initialize_for_new_map,
+                         ///<              cleared by ai_dispose_from_old_map
+  bool  unk_2;           ///< offset=0x02, set by ai_initialize_for_new_map
+  char  unk_3[5];        ///< offset=0x03
+  int   unk_8;           ///< offset=0x08, -1 at map init
+  char  unk_c[4];        ///< offset=0x0C
+  bool  unk_10;          ///< offset=0x10, set by ai_communication_initialize_for_new_map
+  char  unk_11[3];       ///< offset=0x11
+  char  unk_14[8];       ///< offset=0x14, -1-filled then zeroed at map init
+  char  unk_1c[8];       ///< offset=0x1C, -1-filled then zeroed at map init
+  char  unk_24[8];       ///< offset=0x24, -1-filled then zeroed at map init
+  int16_t unk_2c;        ///< offset=0x2C
+  int16_t unk_2e;        ///< offset=0x2E
+  char  unk_30[0x100];   ///< offset=0x30, zeroed by ai_communication_initialize_for_new_map
+  int16_t unk_130;       ///< offset=0x130
+  int16_t unk_132;       ///< offset=0x132
+  char  unk_134[0x280];  ///< offset=0x134, zeroed by ai_initialize_for_new_map
+  bool  unk_3b4;         ///< offset=0x3B4, set by ai_initialize_for_new_map
+  char  unk_3b5[0x527];  ///< offset=0x3B5
 } ai_globals_t;
+
+/// size=0x8; slot in the comm dialogue/reply status tables (2 per definition)
+typedef struct
+{
+  int32_t unk_0; ///< offset=0x00, -1 at map init
+  int32_t unk_4; ///< offset=0x04, -1 at map init
+} dialogue_status_t;
 
 /// size=0x28; const table @ 0x257e48, terminated by unk_0 == -1
 typedef struct

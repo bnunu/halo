@@ -10,6 +10,11 @@ void props_dispose(void)
 {
 }
 
+void props_initialize_for_new_map(void)
+{
+  data_make_valid(prop_data);
+}
+
 void props_dispose_from_old_map(void)
 {
   data_make_invalid(prop_data);

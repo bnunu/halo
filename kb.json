@@ -397,7 +397,7 @@
           "addr": "0x331f08"
         },
         {
-          "decl": "void * dialogue_status_table;",
+          "decl": "dialogue_status_t * dialogue_status_table;",
           "addr": "0x331f0c"
         },
         {
@@ -405,7 +405,7 @@
           "addr": "0x331f10"
         },
         {
-          "decl": "void * reply_status_table;",
+          "decl": "dialogue_status_t * reply_status_table;",
           "addr": "0x331f14"
         },
         {
@@ -500,6 +500,10 @@
           "addr": "0x3aa50"
         },
         {
+          "decl": "void actors_initialize_for_new_map(void);",
+          "addr": "0x3aa60"
+        },
+        {
           "decl": "void actors_dispose_from_old_map(void);",
           "addr": "0x3aa90"
         }
@@ -544,6 +548,10 @@
           "addr": "0x42b80"
         },
         {
+          "decl": "void ai_communication_initialize_for_new_map(void);",
+          "addr": "0x42b90"
+        },
+        {
           "decl": "void ai_communication_dispose_from_old_map(void);",
           "addr": "0x42ca0"
         }
@@ -562,6 +570,10 @@
           "addr": "0x53640"
         },
         {
+          "decl": "void ai_profile_initialize_for_new_map(void);",
+          "addr": "0x53650"
+        },
+        {
           "decl": "void ai_profile_dispose_from_old_map(void);",
           "addr": "0x53670"
         }
@@ -578,6 +590,10 @@
         {
           "decl": "void ai_script_dispose(void);",
           "addr": "0x540c0"
+        },
+        {
+          "decl": "void ai_script_initialize_for_new_map(void);",
+          "addr": "0x540d0"
         },
         {
           "decl": "void ai_script_dispose_from_old_map(void);",
@@ -1842,6 +1858,10 @@
           "addr": "0x5df90"
         },
         {
+          "decl": "void path_initialize_for_new_map(void);",
+          "addr": "0x5dfa0"
+        },
+        {
           "decl": "void path_dispose_from_old_map(void);",
           "addr": "0x5dfb0"
         }
@@ -2079,6 +2099,10 @@
         {
           "decl": "void props_dispose(void);",
           "addr": "0x64140"
+        },
+        {
+          "decl": "void props_initialize_for_new_map(void);",
+          "addr": "0x64150"
         },
         {
           "decl": "void props_dispose_from_old_map(void);",
