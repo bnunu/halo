@@ -689,6 +689,39 @@ typedef struct {
   hud_player_messaging_t players[4]; ///< offset=0x00
 } hud_messaging_state_t;
 
+/// sound class state (array of NUMBER_OF_SOUND_CLASSES=51 at *sound_class_data)
+/// size=0xc
+typedef struct {
+  float   unk_0;    ///< offset=0x00
+  float   unk_4;    ///< offset=0x04
+  int16_t unk_8;    ///< offset=0x08
+  char    unk_a[2]; ///< offset=0x0a
+} sound_class_t;
+
+/// debug key table entry (const table at 0x31f9c8, terminated by unk_0==NULL)
+/// size=0x14
+typedef struct {
+  void *unk_0;      ///< offset=0x00
+  char  unk_4[0xc]; ///< offset=0x04
+  char *down;       ///< offset=0x10
+} debug_key_t;
+
+/// size=0x4204
+typedef struct {
+  bool  unk_0;              ///< offset=0x00
+  char  unk_1[16][0x20];    ///< offset=0x01
+  char  unk_201[3];         ///< offset=0x201
+  float unk_204[16][0x100]; ///< offset=0x204
+} breakable_surface_globals_t;
+
+/// size=0xb4
+typedef struct {
+  int16_t  unk_0;      ///< offset=0x00
+  char     unk_2[0x92]; ///< offset=0x02
+  uint32_t unk_94[4];  ///< offset=0x94
+  uint32_t unk_a4[4];  ///< offset=0xa4
+} game_allegiance_globals_t;
+
 /// per-local-player weather particle system state
 /// size=0x9c
 typedef struct {

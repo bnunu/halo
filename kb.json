@@ -53,7 +53,7 @@
           "addr": "0x46bb2d"
         },
         {
-          "decl": "int dword_50548c;",
+          "decl": "sound_class_t * sound_class_data;",
           "addr": "0x50548c"
         },
         {
@@ -93,7 +93,7 @@
           "addr": "0x5054e0"
         },
         {
-          "decl": "void * dword_46d928;",
+          "decl": "unsigned int * global_debug_key_down;",
           "addr": "0x46d928"
         },
         {
@@ -137,7 +137,7 @@
           "addr": "0x5aa8c0"
         },
         {
-          "decl": "void * breakable_surface_globals;",
+          "decl": "breakable_surface_globals_t * breakable_surface_globals;",
           "addr": "0x46f08c"
         },
         {
@@ -237,6 +237,10 @@
           "addr": "0x3352b8"
         },
         {
+          "decl": "debug_key_t debug_keys_table[];",
+          "addr": "0x31f9c8"
+        },
+        {
           "decl": "char byte_46cf60;",
           "addr": "0x46cf60"
         },
@@ -289,7 +293,7 @@
           "addr": "0x5064d0"
         },
         {
-          "decl": "void * game_allegiance_globals;",
+          "decl": "game_allegiance_globals_t * game_allegiance_globals;",
           "addr": "0x4566f0"
         }
       ]
