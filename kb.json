@@ -392,6 +392,16 @@
       ]
     },
     {
+      "name": "actors.obj",
+      "source": "ai/actors.c",
+      "functions": [
+        {
+          "decl": "void actors_dispose(void);",
+          "addr": "0x3aa50"
+        }
+      ]
+    },
+    {
       "name": "ai.obj",
       "source": "ai/ai.c",
       "functions": [
@@ -414,6 +424,36 @@
         {
           "decl": "void ai_initialize_for_new_map(void);",
           "addr": "0x41090"
+        }
+      ]
+    },
+    {
+      "name": "ai_communication.obj",
+      "source": "ai/ai_communication.c",
+      "functions": [
+        {
+          "decl": "void ai_communication_dispose(void);",
+          "addr": "0x42b80"
+        }
+      ]
+    },
+    {
+      "name": "ai_profile.obj",
+      "source": "ai/ai_profile.c",
+      "functions": [
+        {
+          "decl": "void ai_profile_dispose(void);",
+          "addr": "0x53640"
+        }
+      ]
+    },
+    {
+      "name": "ai_script.obj",
+      "source": "ai/ai_script.c",
+      "functions": [
+        {
+          "decl": "void ai_script_dispose(void);",
+          "addr": "0x540c0"
         }
       ]
     },
@@ -917,6 +957,16 @@
         {
           "decl": "void effects_dispose(void);",
           "addr": "0x9c6e0"
+        }
+      ]
+    },
+    {
+      "name": "encounters.obj",
+      "source": "ai/encounters.c",
+      "functions": [
+        {
+          "decl": "void encounters_dispose(void);",
+          "addr": "0x58fa0"
         }
       ]
     },
@@ -1636,6 +1686,16 @@
       ]
     },
     {
+      "name": "path.obj",
+      "source": "ai/path.c",
+      "functions": [
+        {
+          "decl": "void path_dispose(void);",
+          "addr": "0x5df90"
+        }
+      ]
+    },
+    {
       "name": "physical_memory_map.obj",
       "source": "cache/physical_memory_map.c",
       "functions": [
@@ -1853,6 +1913,16 @@
         {
           "decl": "void progress_bar_display(float progress);",
           "addr": "0xe3300"
+        }
+      ]
+    },
+    {
+      "name": "props.obj",
+      "source": "ai/props.c",
+      "functions": [
+        {
+          "decl": "void props_dispose(void);",
+          "addr": "0x64140"
         }
       ]
     },

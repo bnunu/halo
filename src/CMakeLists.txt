@@ -59,4 +59,12 @@ target_sources(halo PRIVATE
 	halo/interface/event_manager.c
 	halo/input/input_abstraction.c
 	halo/scenario/scenario.c
+	halo/ai/ai.c
+	halo/ai/actors.c
+	halo/ai/ai_communication.c
+	halo/ai/ai_profile.c
+	halo/ai/ai_script.c
+	halo/ai/encounters.c
+	halo/ai/path.c
+	halo/ai/props.c
 	)
