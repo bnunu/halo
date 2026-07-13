@@ -670,8 +670,16 @@
           "addr": "0x1191a0"
         },
         {
+          "decl": "void *datum_get(data_t *data, int handle);",
+          "addr": "0x119320"
+        },
+        {
           "decl": "void data_verify(data_t *data);",
           "addr": "0x1193f0"
+        },
+        {
+          "decl": "int data_next_index(data_t *data, int handle);",
+          "addr": "0x1198f0"
         },
         {
           "decl": "data_t *data_new(char *name, __int16 maximum_count, __int16 size);",
@@ -994,6 +1002,10 @@
         {
           "decl": "void game_sound_initialize(void);",
           "addr": "0x1c7030"
+        },
+        {
+          "decl": "void game_sound_stop_scripted_looping_sounds(void);",
+          "addr": "0x1c70b0"
         },
         {
           "decl": "void game_sound_dispose(void);",

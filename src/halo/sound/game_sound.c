@@ -16,6 +16,14 @@ void game_sound_initialize_for_new_map(void)
   }
 }
 
+void game_sound_dispose_from_old_map(void)
+{
+  if (object_looping_sound_data && object_looping_sound_data->valid) {
+    game_sound_stop_scripted_looping_sounds();
+    data_make_invalid(object_looping_sound_data);
+  }
+}
+
 void game_sound_dispose(void)
 {
   if (object_looping_sound_data) {
