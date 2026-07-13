@@ -351,6 +351,34 @@
         {
           "decl": "ai_profile_globals_t ai_profile_globals;",
           "addr": "0x5abaa0"
+        },
+        {
+          "decl": "data_t * actor_data;",
+          "addr": "0x6325a4"
+        },
+        {
+          "decl": "data_t * swarm_data;",
+          "addr": "0x6325a0"
+        },
+        {
+          "decl": "data_t * swarm_component_data;",
+          "addr": "0x63259c"
+        },
+        {
+          "decl": "data_t * encounter_data;",
+          "addr": "0x5ab270"
+        },
+        {
+          "decl": "void * squad_array;",
+          "addr": "0x5ab278"
+        },
+        {
+          "decl": "void * platoon_array;",
+          "addr": "0x5ab274"
+        },
+        {
+          "decl": "data_t * pursuit_data;",
+          "addr": "0x5ab26c"
         }
       ]
     },
@@ -400,9 +428,23 @@
       ]
     },
     {
+      "name": "actor_types.obj",
+      "source": "ai/actor_types.c",
+      "functions": [
+        {
+          "decl": "void actor_types_initialize(void);",
+          "addr": "0x3a740"
+        }
+      ]
+    },
+    {
       "name": "actors.obj",
       "source": "ai/actors.c",
       "functions": [
+        {
+          "decl": "void actors_initialize(void);",
+          "addr": "0x3a990"
+        },
         {
           "decl": "void actors_dispose(void);",
           "addr": "0x3aa50"
@@ -980,6 +1022,10 @@
       "name": "encounters.obj",
       "source": "ai/encounters.c",
       "functions": [
+        {
+          "decl": "void encounters_initialize(void);",
+          "addr": "0x58eb0"
+        },
         {
           "decl": "void encounters_dispose(void);",
           "addr": "0x58fa0"
