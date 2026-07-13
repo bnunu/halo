@@ -209,6 +209,10 @@
           "addr": "0x2f66bc"
         },
         {
+          "decl": "hud_messaging_state_t * hud_messaging_state;",
+          "addr": "0x46bd18"
+        },
+        {
           "decl": "char byte_46cf60;",
           "addr": "0x46cf60"
         },
@@ -1091,7 +1095,7 @@
       "source": "interface/hud_messaging.c",
       "functions": [
         {
-          "decl": "_BYTE *scripted_hud_messages_clear(void);",
+          "decl": "void scripted_hud_messages_clear(void);",
           "addr": "0xd5120"
         },
         {

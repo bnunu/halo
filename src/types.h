@@ -671,6 +671,24 @@ typedef struct {
   uint32_t unk_4; ///< offset=0x04
 } game_sound_globals_t;
 
+/// size=0x8c
+typedef struct {
+  char unk_0[0x82]; ///< offset=0x00
+  bool unk_82;      ///< offset=0x82
+  char unk_83[9];   ///< offset=0x83
+} hud_scripted_message_t;
+
+/// size=0x460
+typedef struct {
+  hud_scripted_message_t scripted_messages[4]; ///< offset=0x00
+  char unk_230[0x460 - 4 * 0x8c];              ///< offset=0x230
+} hud_player_messaging_t;
+
+/// partial: per-local-player messaging state blocks
+typedef struct {
+  hud_player_messaging_t players[4]; ///< offset=0x00
+} hud_messaging_state_t;
+
 /// hud globals ('hudg' tag data); partial layout, only evidenced fields
 typedef struct {
   char           unk_0[0xa0];      ///< offset=0x00
