@@ -281,6 +281,18 @@
           "addr": "0x2c1220"
         },
         {
+          "decl": "void * dword_46e8bc;",
+          "addr": "0x46e8bc"
+        },
+        {
+          "decl": "void * dword_46e8c0;",
+          "addr": "0x46e8c0"
+        },
+        {
+          "decl": "char byte_46e8c5;",
+          "addr": "0x46e8c5"
+        },
+        {
           "decl": "data_t * effect_data;",
           "addr": "0x5aa8b0"
         },
@@ -1437,6 +1449,26 @@
         {
           "decl": "void network_game_abort(void);",
           "addr": "0x12a780"
+        }
+      ]
+    },
+    {
+      "name": "network_server_manager.obj",
+      "source": "networking/network_server_manager.c",
+      "functions": [
+        {
+          "decl": "void network_game_server_delete(void *server);",
+          "addr": "0x12ea00"
+        }
+      ]
+    },
+    {
+      "name": "network_client_manager.obj",
+      "source": "networking/network_client_manager.c",
+      "functions": [
+        {
+          "decl": "void network_game_client_delete(void *client);",
+          "addr": "0x1249b0"
         }
       ]
     },
