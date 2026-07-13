@@ -293,6 +293,10 @@
           "addr": "0x46e8c5"
         },
         {
+          "decl": "bink_playback_globals_t bink_playback_globals;",
+          "addr": "0x4ead58"
+        },
+        {
           "decl": "data_t * effect_data;",
           "addr": "0x5aa8b0"
         },
@@ -339,6 +343,15 @@
         {
           "decl": "game_allegiance_globals_t * game_allegiance_globals;",
           "addr": "0x4566f0"
+        }
+      ]
+    },
+    {
+      "name": "BINK:radmem.obj",
+      "functions": [
+        {
+          "decl": "void RADSetMemory(void *allocate, void *free);",
+          "addr": "0x231490"
         }
       ]
     },
@@ -409,8 +422,20 @@
       "source": "bink/bink_playback.c",
       "functions": [
         {
+          "decl": "void *bink_playback_memory_allocate(unsigned int size);",
+          "addr": "0x1c5ab0"
+        },
+        {
+          "decl": "void bink_playback_memory_free(void *pointer);",
+          "addr": "0x1c5ca0"
+        },
+        {
           "decl": "void bink_playback_initialize(void);",
           "addr": "0x1c61a0"
+        },
+        {
+          "decl": "void bink_playback_stop(void);",
+          "addr": "0x1c62a0"
         },
         {
           "decl": "void bink_playback_dispose(void);",

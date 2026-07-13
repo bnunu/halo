@@ -698,6 +698,16 @@ typedef struct {
   char unk_1185;                     ///< offset=0x1185
 } hud_messaging_state_t;
 
+/// static bink playback globals at 0x4ead58; partial layout
+/// size=0xd8
+typedef struct {
+  bool     initialized; ///< offset=0x00
+  char     unk_1[3];    ///< offset=0x01
+  uint32_t unk_4;       ///< offset=0x04
+  void    *unk_8;       ///< offset=0x08
+  char     unk_c[0xcc]; ///< offset=0x0c
+} bink_playback_globals_t;
+
 /// scenario globals ("scenario globals" game-state block); partial layout
 /// size=0x100
 typedef struct {

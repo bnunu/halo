@@ -43,6 +43,7 @@ target_sources(halo PRIVATE
 	halo/physics/point_physics.c
 	halo/sound/sound_classes.c
 	halo/sound/sound_manager.c
+	halo/bink/bink_playback.c
 	halo/cache/cache_files_windows.c
 	halo/shell.c
 	halo/game/game_statistics.c
