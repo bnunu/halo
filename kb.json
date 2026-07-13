@@ -415,6 +415,10 @@
         {
           "decl": "data_t * conversation_data;",
           "addr": "0x6324ec"
+        },
+        {
+          "decl": "ai_globals_t * ai_globals;",
+          "addr": "0x632574"
         }
       ]
     },
@@ -460,6 +464,16 @@
         {
           "decl": "void __cdecl qsort(void *base, size_t nmemb, size_t size, int (__cdecl *compar)(const void *, const void *));",
           "addr": "0x1d9260"
+        }
+      ]
+    },
+    {
+      "name": "actor_moving.obj",
+      "source": "ai/actor_moving.c",
+      "functions": [
+        {
+          "decl": "void actor_moving_initialize(void);",
+          "addr": "0x2b5d0"
         }
       ]
     },
