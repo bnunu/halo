@@ -939,4 +939,18 @@ typedef struct
   char unk_f8[0x85a34]; ///< offset=0xF8
 } ai_debug_globals_t;
 
+/// size=0x28; const table @ 0x257e48, terminated by unk_0 == -1
+typedef struct
+{
+  int16_t unk_0;       ///< offset=0x00, matched against vocalization index 0..0x38
+  char    unk_2[0x26]; ///< offset=0x02
+} dialogue_definition_t;
+
+/// size=0x24; const table @ 0x258eb0, terminated by unk_0 == -1
+typedef struct
+{
+  int16_t unk_0;       ///< offset=0x00
+  char    unk_2[0x22]; ///< offset=0x02
+} reply_definition_t;
+
 #pragma pack()

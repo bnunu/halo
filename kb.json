@@ -383,6 +383,38 @@
         {
           "decl": "ai_debug_globals_t ai_debug_globals;",
           "addr": "0x5ac9c0"
+        },
+        {
+          "decl": "dialogue_definition_t dialogue_definitions[105];",
+          "addr": "0x257e48"
+        },
+        {
+          "decl": "reply_definition_t reply_definitions[46];",
+          "addr": "0x258eb0"
+        },
+        {
+          "decl": "int16_t word_331f08;",
+          "addr": "0x331f08"
+        },
+        {
+          "decl": "void * dialogue_status_table;",
+          "addr": "0x331f0c"
+        },
+        {
+          "decl": "int16_t word_331f10;",
+          "addr": "0x331f10"
+        },
+        {
+          "decl": "void * reply_status_table;",
+          "addr": "0x331f14"
+        },
+        {
+          "decl": "int16_t word_632500[0x39];",
+          "addr": "0x632500"
+        },
+        {
+          "decl": "data_t * conversation_data;",
+          "addr": "0x6324ec"
         }
       ]
     },
@@ -485,6 +517,10 @@
       "name": "ai_communication.obj",
       "source": "ai/ai_communication.c",
       "functions": [
+        {
+          "decl": "void ai_communication_initialize(void);",
+          "addr": "0x42a30"
+        },
         {
           "decl": "void ai_communication_dispose(void);",
           "addr": "0x42b80"
