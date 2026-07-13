@@ -277,6 +277,10 @@
           "addr": "0x46d920"
         },
         {
+          "decl": "char byte_2c1220[0x48];",
+          "addr": "0x2c1220"
+        },
+        {
           "decl": "data_t * effect_data;",
           "addr": "0x5aa8b0"
         },
@@ -317,7 +321,7 @@
           "addr": "0x46b664"
         },
         {
-          "decl": "void * scenario_globals;",
+          "decl": "scenario_globals_t * scenario_globals;",
           "addr": "0x5064d0"
         },
         {
@@ -708,6 +712,16 @@
         {
           "decl": "void *data_iterator_next(data_iter_t *iterator);",
           "addr": "0x119810"
+        }
+      ]
+    },
+    {
+      "name": "wind.obj",
+      "source": "scenario/wind.c",
+      "functions": [
+        {
+          "decl": "void wind_initialize_for_new_map(void);",
+          "addr": "0x190500"
         }
       ]
     },

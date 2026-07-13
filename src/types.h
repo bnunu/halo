@@ -689,6 +689,16 @@ typedef struct {
   hud_player_messaging_t players[4]; ///< offset=0x00
 } hud_messaging_state_t;
 
+/// scenario globals ("scenario globals" game-state block); partial layout
+/// size=0x100
+typedef struct {
+  char unk_0[4];     ///< offset=0x00
+  char unk_4[0xb0];  ///< offset=0x04
+  bool unk_b4;       ///< offset=0xb4
+  char unk_b5[3];    ///< offset=0xb5
+  char unk_b8[0x48]; ///< offset=0xb8
+} scenario_globals_t;
+
 /// sound class state (array of NUMBER_OF_SOUND_CLASSES=51 at *sound_class_data)
 /// size=0xc
 typedef struct {
