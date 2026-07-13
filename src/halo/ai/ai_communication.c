@@ -48,7 +48,7 @@ void ai_communication_dispose(void)
 
 void ai_communication_initialize_for_new_map(void)
 {
-  ai_globals->unk_10 = true;
+  ai_globals->dialogue_triggers_enabled = true;
   csmemset(&ai_globals->unk_14, 0, sizeof(ai_globals->unk_14));
   csmemset(&ai_globals->unk_1c, 0, sizeof(ai_globals->unk_1c));
   csmemset(&ai_globals->unk_24, 0, sizeof(ai_globals->unk_24));

@@ -536,6 +536,18 @@
         {
           "decl": "void ai_initialize_for_new_map(void);",
           "addr": "0x41090"
+        },
+        {
+          "decl": "void ai_set_enabled(bool enabled);",
+          "addr": "0x3f770"
+        },
+        {
+          "decl": "void ai_set_dialogue_triggers_enabled(bool enabled);",
+          "addr": "0x3f7b0"
+        },
+        {
+          "decl": "void ai_set_grenades_enabled(bool enabled);",
+          "addr": "0x3f800"
         }
       ]
     },

@@ -943,14 +943,14 @@ typedef struct
 /// size=0x8DC; allocated by ai_initialize ("ai globals")
 typedef struct
 {
-  bool  unk_0;           ///< offset=0x00, set by ai_initialize_for_new_map
+  bool  enabled;         ///< offset=0x00, hs "ai": turns all AI on or off
   bool  unk_1;           ///< offset=0x01, set at end of ai_initialize_for_new_map,
                          ///<              cleared by ai_dispose_from_old_map
   bool  unk_2;           ///< offset=0x02, set by ai_initialize_for_new_map
   char  unk_3[5];        ///< offset=0x03
   int   unk_8;           ///< offset=0x08, -1 at map init
   char  unk_c[4];        ///< offset=0x0C
-  bool  unk_10;          ///< offset=0x10, set by ai_communication_initialize_for_new_map
+  bool  dialogue_triggers_enabled; ///< offset=0x10, hs "ai_dialogue_triggers"
   char  unk_11[3];       ///< offset=0x11
   char  unk_14[8];       ///< offset=0x14, -1-filled then zeroed at map init
   char  unk_1c[8];       ///< offset=0x1C, -1-filled then zeroed at map init
@@ -961,7 +961,7 @@ typedef struct
   int16_t unk_130;       ///< offset=0x130
   int16_t unk_132;       ///< offset=0x132
   char  unk_134[0x280];  ///< offset=0x134, zeroed by ai_initialize_for_new_map
-  bool  unk_3b4;         ///< offset=0x3B4, set by ai_initialize_for_new_map
+  bool  grenades_enabled; ///< offset=0x3B4, hs "ai_grenades": grenade inventory on/off
   char  unk_3b5[0x527];  ///< offset=0x3B5
 } ai_globals_t;
 

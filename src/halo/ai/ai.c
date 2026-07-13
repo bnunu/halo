@@ -32,11 +32,11 @@ void ai_dispose(void)
 void ai_initialize_for_new_map(void)
 {
   csmemset(ai_globals, 0, sizeof(ai_globals_t));
-  ai_globals->unk_0 = true;
+  ai_globals->enabled = true;
   ai_globals->unk_2 = true;
   ai_globals->unk_8 = -1;
-  ai_globals->unk_3b4 = true;
-  ai_globals->unk_10 = true;
+  ai_globals->grenades_enabled = true;
+  ai_globals->dialogue_triggers_enabled = true;
   csmemset(&ai_globals->unk_14, -1, sizeof(ai_globals->unk_14));
   csmemset(&ai_globals->unk_1c, -1, sizeof(ai_globals->unk_1c));
   csmemset(&ai_globals->unk_24, -1, sizeof(ai_globals->unk_24));
@@ -52,6 +52,24 @@ void ai_initialize_for_new_map(void)
   ai_globals->unk_130 = 0;
   csmemset(&ai_globals->unk_134, 0, sizeof(ai_globals->unk_134));
   ai_globals->unk_1 = true;
+}
+
+void ai_set_enabled(bool enabled)
+{
+  assert_halt_msg(ai_globals, "ai_globals");
+  ai_globals->enabled = enabled;
+}
+
+void ai_set_dialogue_triggers_enabled(bool enabled)
+{
+  assert_halt_msg(ai_globals, "ai_globals");
+  ai_globals->dialogue_triggers_enabled = enabled;
+}
+
+void ai_set_grenades_enabled(bool enabled)
+{
+  assert_halt_msg(ai_globals, "ai_globals");
+  ai_globals->grenades_enabled = enabled;
 }
 
 void ai_dispose_from_old_map(void)
