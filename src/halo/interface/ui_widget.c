@@ -25,3 +25,9 @@ void ui_widgets_dispose(void)
   ui_widget_globals->unk_8 = NULL;
   csmemset(byte_46cc20, 0, sizeof(byte_46cc20));
 }
+
+void *ui_widget_realloc(int a1, unsigned short a2, const char *a3,
+                        unsigned int a4)
+{
+  return stack_memory_pool_realloc(ui_widget_globals, a1, a2, a3, a4);
+}

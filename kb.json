@@ -249,6 +249,34 @@
           "addr": "0x46cf64"
         },
         {
+          "decl": "float flt_31f9b8[4];",
+          "addr": "0x31f9b8"
+        },
+        {
+          "decl": "float console_color[4];",
+          "addr": "0x46cfe8"
+        },
+        {
+          "decl": "char console_prompt_text[32];",
+          "addr": "0x46cff8"
+        },
+        {
+          "decl": "char byte_46d018;",
+          "addr": "0x46d018"
+        },
+        {
+          "decl": "__int16 word_46d91c;",
+          "addr": "0x46d91c"
+        },
+        {
+          "decl": "__int16 word_46d91e;",
+          "addr": "0x46d91e"
+        },
+        {
+          "decl": "__int16 word_46d920;",
+          "addr": "0x46d920"
+        },
+        {
           "decl": "data_t * effect_data;",
           "addr": "0x5aa8b0"
         },
@@ -593,6 +621,10 @@
           "addr": "0x8de70"
         },
         {
+          "decl": "char *csstrcpy(char *destination, const char *source);",
+          "addr": "0x8dff0"
+        },
+        {
           "decl": "int csstrlen(const char *s1);",
           "addr": "0x8df60"
         },
@@ -668,6 +700,16 @@
         {
           "decl": "void *data_iterator_next(data_iter_t *iterator);",
           "addr": "0x119810"
+        }
+      ]
+    },
+    {
+      "name": "stack_memory_pool.obj",
+      "source": "memory/stack_memory_pool.c",
+      "functions": [
+        {
+          "decl": "void *stack_memory_pool_realloc(void *pool, int block, unsigned __int16 size, const char *a4, unsigned int a5);",
+          "addr": "0x11fbe0"
         }
       ]
     },
