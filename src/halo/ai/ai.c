@@ -28,3 +28,16 @@ void ai_dispose(void)
   ai_profile_dispose();
   ai_debug_dispose();
 }
+
+void ai_dispose_from_old_map(void)
+{
+  ai_communication_dispose_from_old_map();
+  ai_script_dispose_from_old_map();
+  encounters_dispose_from_old_map();
+  props_dispose_from_old_map();
+  actors_dispose_from_old_map();
+  path_dispose_from_old_map();
+  ai_profile_dispose_from_old_map();
+  ai_debug_dispose_from_old_map();
+  ai_globals->unk_1 = false;
+}

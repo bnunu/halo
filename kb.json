@@ -662,6 +662,10 @@
         {
           "decl": "void ai_debug_dispose(void);",
           "addr": "0x48f50"
+        },
+        {
+          "decl": "void ai_debug_dispose_from_old_map(void);",
+          "addr": "0x48fa0"
         }
       ]
     },

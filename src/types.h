@@ -942,7 +942,9 @@ typedef struct
 /// size=0x8DC; allocated by ai_initialize ("ai globals")
 typedef struct
 {
-  char unk_0[0x8dc]; ///< offset=0x00
+  char unk_0;        ///< offset=0x00
+  bool unk_1;        ///< offset=0x01, cleared by ai_dispose_from_old_map
+  char unk_2[0x8da]; ///< offset=0x02
 } ai_globals_t;
 
 /// size=0x28; const table @ 0x257e48, terminated by unk_0 == -1
