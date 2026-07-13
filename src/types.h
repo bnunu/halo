@@ -616,9 +616,42 @@ typedef struct {
   char unk_420[4];        ///< offset=0x1A4
 } sound_scenery_data_t;
 
+#define NUMBER_OF_PLAYER_POWERUPS 2
+
+/// player datum ("players" data array, element size 0xd4 per players_initialize
+/// .text:000BA100). Offsets evidenced by game\players.c functions
+/// 0xba270..0xbd7e0 (player_new .text:000BB2F0 initializes most fields) and
+/// by assert strings.
 /// size=0xd4
 typedef struct {
-  char unk_0[0xd4];
+  int16_t identifier;          ///< offset=0x00  datum identifier word
+  int16_t local_player_index;  ///< offset=0x02  assert players.c:1447 "player->local_player_index!=NONE"; .text:000BBB36 cmp word ptr [edi+2], -1
+  wchar_t name[12];            ///< offset=0x04  player_new: ustrncpy(player->name, name, 11), [esi+1Ah]=0 terminator
+  int8_t  machine_index;       ///< offset=0x1C  assert network_client_manager.c:1415 "player->machine_index==client->machine_index"; .text:00125AC9 movsx eax, byte ptr [edi+1Ch]; whole dword set NONE in player_new
+  char    unk_1d[3];           ///< offset=0x1D
+  int32_t team_index;          ///< offset=0x20  assert game_engine.c "player->team_index != NONE" (.text:000ABB24 cmp [esi+20h], -1); low word copied to unit owner_team_index on spawn .text:000BBF16; set 1 in player_new
+  datum_handle_t action_object_index; ///< offset=0x24  nearby-object action target (weapon/seat/device), stored with action_type at .text:000BC0B6; set NONE in player_new
+  int16_t action_type;         ///< offset=0x28  action enum (values 5..0xB dispatched at .text:000BC107: 6/7 weapon swap/pickup, 8/9 seat entry, 0xA device, 0xB vehicle flip)
+  int16_t action_seat_index;   ///< offset=0x2A  seat index for seat-entry actions .text:000BC172; asserts players.c:2104/2109 "seat_index != NONE"
+  int32_t unk_2c;              ///< offset=0x2C  set 1 when the player has no unit in players_update_before_game .text:000BD40A; respawn related
+  char    unk_30[4];           ///< offset=0x30
+  datum_handle_t unit_index;   ///< offset=0x34  assert players.c:1382 "player->unit_index!=NONE"
+  datum_handle_t dead_unit_index; ///< offset=0x38  latches old unit_index when the unit dies (.text:000BA566 / .text:000BA951); cleared on respawn .text:000BA691
+  int16_t unk_3c;              ///< offset=0x3C  cached bsp cluster index of the unit, copied from object+0x4C at .text:000BAD03; set NONE after teleports
+  int8_t  unk_3e;              ///< offset=0x3E  bool, latches weapon-pickup action result .text:000BD4CD/.text:000BD4D5
+  char    unk_3f[1];           ///< offset=0x3F
+  int32_t unk_40;              ///< offset=0x40  set NONE in player_new
+  char    unk_44[4];           ///< offset=0x44
+  char    unk_48[0x20];        ///< offset=0x48  copy of the 0x20-byte properties block passed to player_new (starts with the wide name) .text:000BB3E9
+  int16_t powerup_times[NUMBER_OF_PLAYER_POWERUPS]; ///< offset=0x68  ticks left per powerup; assert players.c:2794 "powerup_type>=0 && powerup_type<NUMBER_OF_PLAYER_POWERUPS"; decremented .text:000BC4D1, cleared on respawn .text:000BBF8C
+  float   unk_6c;              ///< offset=0x6C  set 1.0f in player_new; speed multiplier?
+  char    unk_70[0x3a];        ///< offset=0x70
+  int16_t unk_aa;              ///< offset=0xAA  respawn-penalty/lives counter: compared vs dword_456b30 in game_engine .text:000ABB15, gates starting-profile choice .text:000BBF61
+  char    unk_ac[0x20];        ///< offset=0xAC
+  datum_handle_t unk_cc;       ///< offset=0xCC  set NONE in player_new
+  char    unk_d0[1];           ///< offset=0xD0
+  int8_t  unk_d1;              ///< offset=0xD1  set 0 in player_new
+  char    unk_d2[2];           ///< offset=0xD2
 } player_data_t;
 
 /// size=0x40
@@ -626,13 +659,23 @@ typedef struct {
   char unk_0[0x40];
 } team_data_t;
 
+/// "players globals" game-state block (game_state_malloc size 0xb0 at
+/// players_initialize .text:000BA130); layout evidenced by game\players.c
 /// size=0xb0
 typedef struct {
-  datum_handle_t unk_0;            ///< offset=0x00
+  datum_handle_t unk_0;            ///< offset=0x00  set NONE at players_initialize .text:000BA151
   datum_handle_t local_players[4]; ///< offset=0x04
-  char    unk_14[0x10];            ///< offset=0x14
-  int16_t local_player_count;      ///< offset=0x24
-  char    unk_26[0xb0 - 0x26];     ///< offset=0x26
+  datum_handle_t unk_14[4];        ///< offset=0x14  per-local-player slot latching the unit that died .text:000BA8DF; old body deleted from it on respawn .text:000BBCF2
+  int16_t local_player_count;      ///< offset=0x24  recounted from local_players at .text:000BD786
+  int16_t unk_26;                  ///< offset=0x26  accumulates double-speed powerup time .text:000BD014
+  bool    unk_28;                  ///< offset=0x28  true when no player has a living unit; recomputed .text:000BA58B, getter .text:000BA5E0
+  bool    unk_29;                  ///< offset=0x29  inverted bool arg of setter .text:000BA6D0; when set, player actions are not processed .text:000BD47A
+  int16_t unk_2a;                  ///< offset=0x2A  scenario player starting-location index of a pending group teleport .text:000BCA6F; NONE when idle
+  int16_t unk_2c;                  ///< offset=0x2C  coop respawn state 0..3 (players_respawn_coop .text:000BC750); getter .text:000BA3B0
+  bool    unk_2e;                  ///< offset=0x2E  coop respawn-failed retry flag .text:000BC8F9
+  char    unk_2f[1];               ///< offset=0x2F
+  char    unk_30[0x40];            ///< offset=0x30  combined player PVS cluster bitvector (rebuilt by .text:000BAC80, getter .text:000BA6C0)
+  char    unk_70[0x40];            ///< offset=0x70  second combined player PVS bitvector (getter .text:000BA6B0)
 } players_globals_t;
 
 /// size=0x110
