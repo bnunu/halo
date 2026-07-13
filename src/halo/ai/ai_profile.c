@@ -9,3 +9,7 @@ void ai_profile_initialize(void)
 void ai_profile_dispose(void)
 {
 }
+
+void ai_profile_dispose_from_old_map(void)
+{
+}

@@ -15,3 +15,9 @@ void encounters_initialize(void)
 void encounters_dispose(void)
 {
 }
+
+void encounters_dispose_from_old_map(void)
+{
+  data_make_invalid(encounter_data);
+  data_make_invalid(pursuit_data);
+}

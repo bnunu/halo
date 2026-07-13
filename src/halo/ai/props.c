@@ -9,3 +9,8 @@ void props_initialize(void)
 void props_dispose(void)
 {
 }
+
+void props_dispose_from_old_map(void)
+{
+  data_make_invalid(prop_data);
+}

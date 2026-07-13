@@ -45,3 +45,8 @@ void ai_communication_initialize(void)
 void ai_communication_dispose(void)
 {
 }
+
+void ai_communication_dispose_from_old_map(void)
+{
+  data_make_invalid(conversation_data);
+}

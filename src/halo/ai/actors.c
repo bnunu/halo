@@ -14,3 +14,10 @@ void actors_initialize(void)
 void actors_dispose(void)
 {
 }
+
+void actors_dispose_from_old_map(void)
+{
+  data_make_invalid(actor_data);
+  data_make_invalid(swarm_data);
+  data_make_invalid(swarm_component_data);
+}

@@ -498,6 +498,10 @@
         {
           "decl": "void actors_dispose(void);",
           "addr": "0x3aa50"
+        },
+        {
+          "decl": "void actors_dispose_from_old_map(void);",
+          "addr": "0x3aa90"
         }
       ]
     },
@@ -538,6 +542,10 @@
         {
           "decl": "void ai_communication_dispose(void);",
           "addr": "0x42b80"
+        },
+        {
+          "decl": "void ai_communication_dispose_from_old_map(void);",
+          "addr": "0x42ca0"
         }
       ]
     },
@@ -552,6 +560,10 @@
         {
           "decl": "void ai_profile_dispose(void);",
           "addr": "0x53640"
+        },
+        {
+          "decl": "void ai_profile_dispose_from_old_map(void);",
+          "addr": "0x53670"
         }
       ]
     },
@@ -566,6 +578,10 @@
         {
           "decl": "void ai_script_dispose(void);",
           "addr": "0x540c0"
+        },
+        {
+          "decl": "void ai_script_dispose_from_old_map(void);",
+          "addr": "0x540e0"
         }
       ]
     },
@@ -1087,6 +1103,10 @@
         {
           "decl": "void encounters_dispose(void);",
           "addr": "0x58fa0"
+        },
+        {
+          "decl": "void encounters_dispose_from_old_map(void);",
+          "addr": "0x58fb0"
         }
       ]
     },
@@ -1816,6 +1836,10 @@
         {
           "decl": "void path_dispose(void);",
           "addr": "0x5df90"
+        },
+        {
+          "decl": "void path_dispose_from_old_map(void);",
+          "addr": "0x5dfb0"
         }
       ]
     },
@@ -2051,6 +2075,10 @@
         {
           "decl": "void props_dispose(void);",
           "addr": "0x64140"
+        },
+        {
+          "decl": "void props_dispose_from_old_map(void);",
+          "addr": "0x64160"
         }
       ]
     },
