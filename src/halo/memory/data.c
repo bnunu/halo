@@ -43,6 +43,20 @@ void data_make_invalid(data_t *data)
   data->valid = 0;
 }
 
+void data_delete_all(data_t *data)
+{
+  data_verify(data);
+  assert_halt(data->valid);
+  data->current_count = 0;
+  data->actual_count = 0;
+  data->next_index = 0;
+  csstrncpy((char *)&data->next_identifier, data->name, 2);
+  data->next_identifier |= 0x8000;
+  for (__int16 i = 0; i < data->maximum_count; i++) {
+    *(int16_t *)((char *)data->data + data->size * i) = 0;
+  }
+}
+
 void data_make_valid(data_t *data)
 {
   data_verify(data);

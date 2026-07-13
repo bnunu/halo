@@ -642,18 +642,18 @@ typedef struct {
 
 /// size=0x38
 typedef struct {
-  char    name[32];                ///< offset=0x00
-  int16_t maximum_count;           ///< offset=0x20
-  int16_t size;                    ///< offset=0x22
-  bool    valid;                   ///< offset=0x24
-  bool    identifier_zero_invalid; ///< offset=0x25
-  char    unk_38[2];               ///< offset=0x26
-  int     magic;                   ///< offset=0x28
-  char    unk_44[2];               ///< offset=0x2c
-  int16_t current_count;           ///< offset=0x2e
-  int16_t unk_48;                  ///< offset=0x30
-  char    unk_50[2];               ///< offset=0x32
-  void    *data;                   ///< offset=0x34
+  char     name[32];                ///< offset=0x00
+  int16_t  maximum_count;           ///< offset=0x20
+  int16_t  size;                    ///< offset=0x22
+  bool     valid;                   ///< offset=0x24
+  bool     identifier_zero_invalid; ///< offset=0x25
+  char     unk_38[2];               ///< offset=0x26
+  int      magic;                   ///< offset=0x28
+  int16_t  next_index;              ///< offset=0x2c
+  int16_t  current_count;           ///< offset=0x2e
+  int16_t  actual_count;            ///< offset=0x30
+  uint16_t next_identifier;         ///< offset=0x32
+  void     *data;                   ///< offset=0x34
 } data_t;
 
 /// size=0x10
