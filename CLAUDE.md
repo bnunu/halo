@@ -23,7 +23,7 @@ The target executable is the **Halo Xbox debug build 2276** ("cachebeta"):
 
 ## Current state (keep this updated)
 
-- **148 / 331** declared functions implemented (patched redirects counted from the build log).
+- **162 / 336** declared functions implemented (patched redirects counted from the build log).
   Note: the earlier "106" figure over-counted — `cutscene/cinematics.c` existed but was
   missing from `src/CMakeLists.txt` and silently never compiled (fixed).
 - **~55** data globals declared in `kb.json` `<common>`. Key identifications this session:
