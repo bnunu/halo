@@ -309,6 +309,22 @@
           "addr": "0x4ea9a0"
         },
         {
+          "decl": "void (* dword_32eaa0)(void);",
+          "addr": "0x32eaa0"
+        },
+        {
+          "decl": "void (* dword_32eaa4)(void);",
+          "addr": "0x32eaa4"
+        },
+        {
+          "decl": "void (* game_state_revert_procs[13])(void);",
+          "addr": "0x32eaa8"
+        },
+        {
+          "decl": "char recover_saved_games_hack;",
+          "addr": "0x5054e8"
+        },
+        {
           "decl": "data_t * effect_data;",
           "addr": "0x5aa8b0"
         },
@@ -1252,6 +1268,20 @@
       ]
     },
     {
+      "name": "game_state_xbox.obj",
+      "source": "saved_games/game_state_xbox.c",
+      "functions": [
+        {
+          "decl": "char xbox_game_state_write(void);",
+          "addr": "0x1c0370"
+        },
+        {
+          "decl": "char xbox_game_state_read(void);",
+          "addr": "0x1c0450"
+        }
+      ]
+    },
+    {
       "name": "hud.obj",
       "source": "interface/hud.c",
       "data": [
@@ -1380,6 +1410,18 @@
         {
           "decl": "short game_connection(void);",
           "addr": "0xfff80"
+        },
+        {
+          "decl": "void main_reset_map(void);",
+          "addr": "0x1002a0"
+        },
+        {
+          "decl": "void main_game_time_halt(void);",
+          "addr": "0x101c90"
+        },
+        {
+          "decl": "void main_game_time_resume(void);",
+          "addr": "0x101ca0"
         },
         {
           "decl": "int __cdecl sort_desired_local_player_controllers(const void *a1, const void *a2);",

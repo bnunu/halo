@@ -545,3 +545,22 @@ int sort_desired_local_player_controllers(const void *a1, const void *a2)
   }
   return (x >= y) - 1;
 }
+
+void main_reset_map(void)
+{
+  word_46DA40 = -1;
+  byte_46DA28 = 0;
+  game_reset_pending = 1;
+  byte_46DA3B = 0;
+}
+
+void main_game_time_halt(void)
+{
+  byte_46DA46 = 0;
+  byte_46DA47 = 0;
+}
+
+void main_game_time_resume(void)
+{
+  byte_46DA47 = 1;
+}

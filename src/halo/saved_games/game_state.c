@@ -26,3 +26,24 @@ void game_state_initialize_for_new_map(void)
   xbox_game_state_globals.header->unk_128 = cache_file_get_checksum();
   xbox_game_state_globals.header->unk_0 = xbox_game_state_globals.unk_0;
 }
+
+void game_state_save(void)
+{
+  dword_32eaa0();
+  main_game_time_halt();
+  xbox_game_state_globals.unk_5 = xbox_game_state_write() != 0;
+  main_game_time_resume();
+}
+
+void game_state_revert(void)
+{
+  if (!xbox_game_state_globals.unk_5 && !recover_saved_games_hack) {
+    main_reset_map();
+    return;
+  }
+  dword_32eaa4();
+  xbox_game_state_read();
+  for (int i = 0; i < 13; i++) {
+    game_state_revert_procs[i]();
+  }
+}
