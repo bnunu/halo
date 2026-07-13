@@ -671,6 +671,12 @@ typedef struct {
   uint32_t unk_4; ///< offset=0x04
 } game_sound_globals_t;
 
+/// hud globals ('hudg' tag data); partial layout, only evidenced fields
+typedef struct {
+  char           unk_0[0xa0];      ///< offset=0x00
+  datum_handle_t item_message_text; ///< offset=0xa0
+} hud_globals_t;
+
 /// ui_widget globals (pointed to from 0x31e04c); partial layout, only
 /// evidenced fields are typed
 typedef struct {

@@ -205,6 +205,10 @@
           "addr": "0x476200"
         },
         {
+          "decl": "wchar_t * dword_2f66bc;",
+          "addr": "0x2f66bc"
+        },
+        {
           "decl": "char byte_46cf60;",
           "addr": "0x46cf60"
         },
@@ -357,6 +361,26 @@
         {
           "decl": "void breakable_surfaces_dispose_from_old_map(void);",
           "addr": "0x145980"
+        }
+      ]
+    },
+    {
+      "name": "cache_files.obj",
+      "source": "cache/cache_files.c",
+      "functions": [
+        {
+          "decl": "void *tag_get(unsigned int group_tag, int tag_handle);",
+          "addr": "0x1ba140"
+        }
+      ]
+    },
+    {
+      "name": "international_strings.obj",
+      "source": "text/international_strings.c",
+      "functions": [
+        {
+          "decl": "wchar_t *unicode_string_list_get_string(int tag_handle, __int16 index);",
+          "addr": "0x19d420"
         }
       ]
     },
@@ -1043,7 +1067,7 @@
       "source": "interface/hud.c",
       "data": [
         {
-          "decl": "void * hud_globals;",
+          "decl": "hud_globals_t * hud_globals;",
           "addr": "0x46bd0c"
         }
       ],
