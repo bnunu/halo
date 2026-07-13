@@ -363,6 +363,14 @@
         {
           "decl": "game_engine_interface_t game_engine_slayer;",
           "addr": "0x2f00f8"
+        },
+        {
+          "decl": "xbox_game_state_globals_t xbox_game_state_globals;",
+          "addr": "0x4ea9a0"
+        },
+        {
+          "decl": "void * dword_4ea994;",
+          "addr": "0x4ea994"
         }
       ]
     },

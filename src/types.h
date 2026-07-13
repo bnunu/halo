@@ -984,6 +984,26 @@ typedef struct
   bool main_menu_scenario_loaded; ///< offset=0x00
 } main_globals_t;
 
+/// static globals block at 0x4ea9a0 (saved games\game_state_xbox.c);
+/// field names from asserts "xbox_game_state_globals.buffer_allocated"/
+/// ".file_open"/".file_valid_for_read"; layout from functions
+/// 0x1c0064 (initialize), 0x1c00c0 (buffer allocate), 0x1c0260 (file open),
+/// 0x1c0370 (write), 0x1c0450 (read)
+/// size=0x24
+typedef struct {
+  int32_t  unk_0;               ///< offset=0x00  set NONE at initialize via helper .text:001190B0
+  char     unk_4[8];            ///< offset=0x04
+  void    *header;              ///< offset=0x0c  game_state_malloc("header", NULL, 0x14c) result .text:001C00AC
+  bool     buffer_allocated;    ///< offset=0x10  assert game_state_xbox.c:46
+  char     unk_11[3];           ///< offset=0x11
+  void    *buffer;              ///< offset=0x14  allocation base (0x80061000) .text:001C0213; WriteFile/ReadFile buffer
+  uint32_t buffer_size;         ///< offset=0x18  cpu_size+gpu_size .text:001C0206
+  bool     file_open;           ///< offset=0x1c  assert game_state_xbox.c:87; "z:\savegame.bin"
+  bool     file_valid_for_read; ///< offset=0x1d  assert game_state_xbox.c:146; set after full write .text:001C0407
+  char     unk_1e[2];           ///< offset=0x1e
+  int32_t  file;                ///< offset=0x20  CreateFile handle .text:001C02CB
+} xbox_game_state_globals_t;
+
 /// size=0x10C
 typedef struct
 {
