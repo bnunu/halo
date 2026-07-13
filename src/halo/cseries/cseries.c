@@ -22,3 +22,11 @@ int csstrlen(const char *s1)
 
   return size;
 }
+
+void *csstrncpy(char *destination, const char *source, size_t size)
+{
+  assert_halt_msg(destination && source, "s1 && s2");
+  assert_halt_msg(size < MAXIMUM_STRING_SIZE,
+                  "size>=0 && size<MAXIMUM_STRING_SIZE");
+  return strncpy(destination, source, size);
+}
