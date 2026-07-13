@@ -614,6 +614,14 @@
         {
           "decl": "void ai_script_dispose_from_old_map(void);",
           "addr": "0x540e0"
+        },
+        {
+          "decl": "void ai_deselect(void);",
+          "addr": "0x54e20"
+        },
+        {
+          "decl": "void ai_reconnect(void);",
+          "addr": "0x57c60"
         }
       ]
     },
@@ -702,6 +710,10 @@
         {
           "decl": "void ai_debug_dispose_from_old_map(void);",
           "addr": "0x48fa0"
+        },
+        {
+          "decl": "void ai_debug_select(int encounter_index, int squad_index);",
+          "addr": "0x4b1b0"
         }
       ]
     },
