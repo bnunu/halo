@@ -926,4 +926,17 @@ typedef struct
   char unk_5[0xee7];   ///< offset=0x05
 } ai_profile_globals_t;
 
+/// size=0x85B2C
+typedef struct
+{
+  char unk_0[0x34];     ///< offset=0x00
+  int  unk_34;          ///< offset=0x34, -1 at init
+  int  unk_38;          ///< offset=0x38, -1 at init
+  char unk_3c[0x69];    ///< offset=0x3C
+  bool unk_a5;          ///< offset=0xA5, true at init
+  char unk_a6[0x4e];    ///< offset=0xA6
+  int  unk_f4;          ///< offset=0xF4, 1 at init
+  char unk_f8[0x85a34]; ///< offset=0xF8
+} ai_debug_globals_t;
+
 #pragma pack()
