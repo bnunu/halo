@@ -718,9 +718,38 @@ typedef struct {
   char    unk_70[0x40];            ///< offset=0x70  second combined player PVS bitvector (getter .text:000BA6B0)
 } players_globals_t;
 
+/// size=0x8
+typedef struct {
+  float yaw;   ///< offset=0x00
+  float pitch; ///< offset=0x04
+} euler_angles2d_t;
+
+/// per-local-player control state; 4 blocks of 0x40 at
+/// player_control_globals+0x10 (accessor .text:000B6380 returns
+/// globals + 0x10 + local_player_index*0x40)
+/// size=0x40
+typedef struct {
+  datum_handle_t unit_index;        ///< offset=0x00  .text:000B6FC0 memsets the block then stores the controlled unit handle
+  char unk_4[8];                    ///< offset=0x04
+  euler_angles2d_t desired_angles;  ///< offset=0x0c  asserts "valid_euler_angles2d(&player->desired_angles)" (.text:000B7EC1 yaw, .text:000B7E9B pitch bound) and "player_control->desired_angles.yaw"
+  char unk_14[0xc];                 ///< offset=0x14
+  int16_t unk_20;                   ///< offset=0x20  set NONE on unit change .text:000B701C (desired weapon index?)
+  int16_t unk_22;                   ///< offset=0x22  set NONE .text:000B7020 (desired grenade index?)
+  int16_t unk_24;                   ///< offset=0x24  set NONE .text:000B7024 (desired zoom level?)
+  char unk_26[2];                   ///< offset=0x26  byte cleared .text:000B7028
+  datum_handle_t unk_28;            ///< offset=0x28  set NONE .text:000B702B
+  char unk_2c[0x14];                ///< offset=0x2c
+} player_control_t;
+
+/// game-state block "player control globals" (pointer 0x457090);
+/// header cleared by player_control_initialize_for_new_map .text:000B85C0
 /// size=0x110
 typedef struct {
-  char unk_0[0x110];
+  uint32_t unk_0;               ///< offset=0x00  flag bits 1/2/4/8 or'd per local player .text:000B6BF1..000B6C0E
+  uint32_t unk_4;               ///< offset=0x04  read-modify-write accumulator .text:000B6AB5
+  uint32_t unk_8;               ///< offset=0x08  flags accumulator .text:000B6AC2
+  uint32_t unk_c;               ///< offset=0x0c  bit 0 tested .text:000B6415/.text:000B7337/.text:000B8932
+  player_control_t players[4]; ///< offset=0x10
 } player_control_globals_t;
 
 /// size=0x38
