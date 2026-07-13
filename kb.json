@@ -680,6 +680,10 @@
           "addr": "0x48f50"
         },
         {
+          "decl": "void ai_debug_initialize_for_new_map(void);",
+          "addr": "0x4c0f0"
+        },
+        {
           "decl": "void ai_debug_dispose_from_old_map(void);",
           "addr": "0x48fa0"
         }
@@ -1123,6 +1127,10 @@
         {
           "decl": "void encounters_dispose(void);",
           "addr": "0x58fa0"
+        },
+        {
+          "decl": "void encounters_initialize_for_new_map(void);",
+          "addr": "0x5b200"
         },
         {
           "decl": "void encounters_dispose_from_old_map(void);",

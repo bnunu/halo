@@ -29,6 +29,31 @@ void ai_dispose(void)
   ai_debug_dispose();
 }
 
+void ai_initialize_for_new_map(void)
+{
+  csmemset(ai_globals, 0, sizeof(ai_globals_t));
+  ai_globals->unk_0 = true;
+  ai_globals->unk_2 = true;
+  ai_globals->unk_8 = -1;
+  ai_globals->unk_3b4 = true;
+  ai_globals->unk_10 = true;
+  csmemset(&ai_globals->unk_14, -1, sizeof(ai_globals->unk_14));
+  csmemset(&ai_globals->unk_1c, -1, sizeof(ai_globals->unk_1c));
+  csmemset(&ai_globals->unk_24, -1, sizeof(ai_globals->unk_24));
+  ai_debug_initialize_for_new_map();
+  ai_profile_initialize_for_new_map();
+  path_initialize_for_new_map();
+  actors_initialize_for_new_map();
+  props_initialize_for_new_map();
+  encounters_initialize_for_new_map();
+  ai_script_initialize_for_new_map();
+  ai_communication_initialize_for_new_map();
+  ai_globals->unk_132 = 0;
+  ai_globals->unk_130 = 0;
+  csmemset(&ai_globals->unk_134, 0, sizeof(ai_globals->unk_134));
+  ai_globals->unk_1 = true;
+}
+
 void ai_dispose_from_old_map(void)
 {
   ai_communication_dispose_from_old_map();
