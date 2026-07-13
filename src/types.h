@@ -673,20 +673,29 @@ typedef struct {
 
 /// size=0x8c
 typedef struct {
-  char unk_0[0x82]; ///< offset=0x00
-  bool unk_82;      ///< offset=0x82
-  char unk_83[9];   ///< offset=0x83
+  int     time;       ///< offset=0x00
+  wchar_t text[0x3f]; ///< offset=0x04
+  bool    unk_82;     ///< offset=0x82
+  char    unk_83;     ///< offset=0x83
+  int     unk_84;     ///< offset=0x84
+  char    unk_88[2];  ///< offset=0x88
+  char    unk_8a;     ///< offset=0x8a
+  char    unk_8b;     ///< offset=0x8b
 } hud_scripted_message_t;
 
 /// size=0x460
 typedef struct {
   hud_scripted_message_t scripted_messages[4]; ///< offset=0x00
-  char unk_230[0x460 - 4 * 0x8c];              ///< offset=0x230
+  char unk_230[0x22e];                         ///< offset=0x230
+  bool unk_45e;                                ///< offset=0x45e
+  char unk_45f;                                ///< offset=0x45f
 } hud_player_messaging_t;
 
 /// partial: per-local-player messaging state blocks
 typedef struct {
   hud_player_messaging_t players[4]; ///< offset=0x00
+  char unk_1180[5];                  ///< offset=0x1180
+  char unk_1185;                     ///< offset=0x1185
 } hud_messaging_state_t;
 
 /// scenario globals ("scenario globals" game-state block); partial layout
