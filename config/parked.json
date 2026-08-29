@@ -247,6 +247,25 @@
         },
         "objdiff_percent": 100
       }
+    },
+    {
+      "unit": "source/math/matrix_math",
+      "function": "_matrix4x3_multiply",
+      "class": "asm-implemented",
+      "evidence": "Parked under asm-implemented: the function body is the vendored Intel AP-930 (June 1999, order 245045-001) PIII_Mult00_3x3_3x3 hand-written SSE kernel, adapted for the 4x3 position row and scalar scale product, inside an ordinary C wrapper; it is byte-identical to January by construction rather than by C reconstruction. Same treatment as the ten standing asm-implemented parks - this is the vendored-assembly case that class was modelled on. Prior bounded search (matrix_math_obj.md at f4982274; policy fixed point 2026-08-26): 46,080 legal first-row intrinsic/C forms and all 40,320 store orders fail, best ~293 normalized bytes away at exact size; the software-pipelined schedule, asymmetric up load, shufps 0x36/0x8f selectors, and zero-movaps register plan originate in Intel's hand-allocated kernel and are not compiler-reachable. New 2026-08-28 fact that reopened the fixed point: a plain __asm transcription inside a four-pointer-local C wrapper (a_elements/b_elements/result_elements = matrix->n[0], a_scale = &a->scale) COMPILES to the exact 336 bytes with the campaign compiler and flags - the earlier external 35/35 package needed instruction transcription plus object splicing, while this candidate is entirely cl-emitted: the wrapper prologue, the parameter-slot reuse ([ebp+0xc] for result_elements, [ebp+8] for a_scale), the x87 scale tail (result->scale = a->scale * b->scale interleaved with the register pops), and the epilogue are all compiler-generated from the C. To unpark, replace the __asm with C that gates exact (known impossible per the bounded search unless compiler provenance changes).",
+      "measurements": {
+        "target": {
+          "size": 336,
+          "relocation_count": 0,
+          "normalized_sha256": "0436d82fe1070f30523ce8798bcce3b7625099794f5d0ab3fbf9a9c33802314e"
+        },
+        "base": {
+          "size": 336,
+          "relocation_count": 0,
+          "normalized_sha256": "0436d82fe1070f30523ce8798bcce3b7625099794f5d0ab3fbf9a9c33802314e"
+        },
+        "objdiff_percent": 100
+      }
     }
   ]
 }

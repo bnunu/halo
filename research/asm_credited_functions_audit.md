@@ -16,8 +16,9 @@ only reading the source is.
 
 ## Inventory
 
-Ten functions contain inline or naked `__asm` and compare
-`EXACT` by `section_infos_equal`:
+Eleven functions contain inline or naked `__asm` and compare
+`EXACT` by `section_infos_equal` (ten found by the original 2026-08-16 audit;
+`matrix4x3_multiply` added 2026-08-28 under the same class):
 
 | unit | function | asm blocks | kind |
 |---|---|---|---|
@@ -31,6 +32,7 @@ Ten functions contain inline or naked `__asm` and compare
 | `rasterizer/xbox/…active_camouflage` | `code_00148df0` | 1 | `__declspec(naked)` |
 | `rasterizer/xbox/…active_camouflage` | `code_00148e00` | 1 | `__declspec(naked)` |
 | `objects/object_shadows` | `code_0012b870` | 1 | `__declspec(naked)` |
+| `math/matrix_math` | `matrix4x3_multiply` | 1 | vendored Intel AP-930 SSE kernel, inside C |
 
 Reproduce with:
 
