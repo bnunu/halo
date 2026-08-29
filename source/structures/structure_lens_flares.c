@@ -64,6 +64,25 @@ enum
 	MAXIMUM_TRIANGLES_PER_CONNECTED_GEOMETRY_COPLANAR_GROUP = 20000,
 };
 
+/* HCEX places fast_ftol in cseries.h; it is defined locally here because a
+ * shared-header inline measurably perturbs unrelated translation units
+ * (see research/asm_credited_functions_audit.md and the fast_ftol ledger).
+ * The x87 conversion body is the attested original: January emits 32-bit
+ * fistp at every expansion, which no C conversion on this compiler produces. */
+__inline long fast_ftol(
+	float d)
+{
+	long result;
+
+	__asm
+	{
+		fld d
+		fistp result
+	}
+
+	return result;
+}
+
 /* ---------- macros */
 
 /* ---------- structures */
@@ -288,30 +307,24 @@ boolean build_structure_lens_flares(
 			{
 				struct shader_lens_flare_fields_environment *lens_flare_fields =
 					(struct shader_lens_flare_fields_environment *)shader_get_and_verify_type(shader, 3);
-				struct shader_lens_flare_fields_environment *spacing_fields =
-					(struct shader_lens_flare_fields_environment *)shader_get_and_verify_type(shader, 3);
-				lens_flare_spacing = spacing_fields->lens_flare_spacing;
 				lens_flare_reference = &lens_flare_fields->lens_flare;
+				lens_flare_spacing = ((struct shader_lens_flare_fields_environment *)shader_get_and_verify_type(shader, 3))->lens_flare_spacing;
 				break;
 			}
 			case 5:
 			{
 				struct shader_lens_flare_fields_transparent *lens_flare_fields =
 					(struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, 5);
-				struct shader_lens_flare_fields_transparent *spacing_fields =
-					(struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, 5);
-				lens_flare_spacing = spacing_fields->lens_flare_spacing;
 				lens_flare_reference = &lens_flare_fields->lens_flare;
+				lens_flare_spacing = ((struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, 5))->lens_flare_spacing;
 				break;
 			}
 			case 6:
 			{
 				struct shader_lens_flare_fields_transparent *lens_flare_fields =
 					(struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, 6);
-				struct shader_lens_flare_fields_transparent *spacing_fields =
-					(struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, 6);
-				lens_flare_spacing = spacing_fields->lens_flare_spacing;
 				lens_flare_reference = &lens_flare_fields->lens_flare;
+				lens_flare_spacing = ((struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, 6))->lens_flare_spacing;
 				break;
 			}
 			default:
@@ -400,40 +413,32 @@ boolean build_structure_lens_flares(
 						triangle_index,
 						sizeof(*triangle));
 					real_point3d *triangle_points[3];
-					long edge_designator;
-					struct connected_geometry_edge *edge;
 
 					if (triangle->coplanar_group_index != coplanar_group_index)
 						continue;
 
-					edge_designator = triangle->edge_designators[0];
-					edge = dynamic_array_get_element(
-						&geometry.edges,
-						edge_designator & LONG_MAX,
-						sizeof(*edge));
 					triangle_points[0] = dynamic_array_get_element(
 						&geometry.points,
-						edge->point_indices[(edge_designator & LONG_MIN) != 0],
+						((struct connected_geometry_edge *)dynamic_array_get_element(
+							&geometry.edges,
+							triangle->edge_designators[0] & LONG_MAX,
+							sizeof(struct connected_geometry_edge)))->point_indices[(triangle->edge_designators[0] & LONG_MIN) != 0],
 						sizeof(*triangle_points[0]));
 
-					edge_designator = triangle->edge_designators[1];
-					edge = dynamic_array_get_element(
-						&geometry.edges,
-						edge_designator & LONG_MAX,
-						sizeof(*edge));
 					triangle_points[1] = dynamic_array_get_element(
 						&geometry.points,
-						edge->point_indices[(edge_designator & LONG_MIN) != 0],
+						((struct connected_geometry_edge *)dynamic_array_get_element(
+							&geometry.edges,
+							triangle->edge_designators[1] & LONG_MAX,
+							sizeof(struct connected_geometry_edge)))->point_indices[(triangle->edge_designators[1] & LONG_MIN) != 0],
 						sizeof(*triangle_points[1]));
 
-					edge_designator = triangle->edge_designators[2];
-					edge = dynamic_array_get_element(
-						&geometry.edges,
-						edge_designator & LONG_MAX,
-						sizeof(*edge));
 					triangle_points[2] = dynamic_array_get_element(
 						&geometry.points,
-						edge->point_indices[(edge_designator & LONG_MIN) != 0],
+						((struct connected_geometry_edge *)dynamic_array_get_element(
+							&geometry.edges,
+							triangle->edge_designators[2] & LONG_MAX,
+							sizeof(struct connected_geometry_edge)))->point_indices[(triangle->edge_designators[2] & LONG_MIN) != 0],
 						sizeof(*triangle_points[2]));
 
 					if (point_count == 0)
@@ -488,10 +493,7 @@ boolean build_structure_lens_flares(
 					real_vector3d t_axis;
 					real_rectangle2d bounds;
 					short hull_index;
-					short s_min;
-					short s_max;
-					short t_min;
-					short t_max;
+					rectangle2d grid_bounds;
 					long t_count;
 					long t_grid;
 
@@ -507,48 +509,51 @@ boolean build_structure_lens_flares(
 
 					vector_from_points3d(&points[0], &points[1], &s_axis);
 					normalize3d(&s_axis);
-					cross_product3d(&s_axis, &plane.n, &t_axis);
+					cross_product3d(&plane.n, &s_axis, &t_axis);
 
 					{
-						real_vector3d relative;
-						vector_from_points3d(&origin, &points[hull_indices[0]], &relative);
-						bounds.x0 = bounds.x1 = dot_product3d(&relative, &s_axis);
-						bounds.y0 = bounds.y1 = dot_product3d(&relative, &t_axis);
-					}
-					for (hull_index = 0; hull_index < hull_count; hull_index++)
-					{
-						real_vector3d relative;
-						real s;
-						real t_coordinate;
-						vector_from_points3d(&origin, &points[hull_indices[hull_index]], &relative);
-						s = dot_product3d(&relative, &s_axis);
-						t_coordinate = dot_product3d(&relative, &t_axis);
-						bounds.x0 = MIN(bounds.x0, s);
-						bounds.x1 = MAX(bounds.x1, s);
-						bounds.y0 = MIN(bounds.y0, t_coordinate);
-						bounds.y1 = MAX(bounds.y1, t_coordinate);
-					}
+						real origin_s = dot_product3d((real_vector3d const *)&origin, &s_axis);
+						real origin_t = dot_product3d((real_vector3d const *)&origin, &t_axis);
 
-					if (lens_flare_spacing == 0.f)
-						s_min = s_max = t_min = t_max = 0;
-					else
-					{
-						s_min = (short)(real)ceil(PIN(bounds.x0 / lens_flare_spacing, -1000.f, 1000.f));
-						t_min = (short)(real)ceil(PIN(bounds.y0 / lens_flare_spacing, -1000.f, 1000.f));
-						s_max = (short)(real)floor(PIN(bounds.x1 / lens_flare_spacing, -1000.f, 1000.f));
-						t_max = (short)(real)floor(PIN(bounds.y1 / lens_flare_spacing, -1000.f, 1000.f));
-					}
-
-					if (t_min <= t_max)
-					{
-						t_count = (unsigned short)(t_max - t_min + 1);
-						t_grid = t_min;
+						bounds.x0 = bounds.x1 = dot_product3d((real_vector3d const *)&points[hull_indices[0]], &s_axis) - origin_s;
+						bounds.y0 = bounds.y1 = dot_product3d((real_vector3d const *)&points[hull_indices[0]], &t_axis) - origin_t;
+						hull_index = 0;
 						do
 						{
-							if (s_min <= s_max)
+							real s = dot_product3d((real_vector3d const *)&points[hull_indices[hull_index]], &s_axis) - origin_s;
+							real t_coordinate = dot_product3d((real_vector3d const *)&points[hull_indices[hull_index]], &t_axis) - origin_t;
+
+							bounds.x0 = MIN(bounds.x0, s);
+							bounds.y0 = MIN(bounds.y0, t_coordinate);
+							bounds.x1 = MAX(bounds.x1, s);
+							bounds.y1 = MAX(bounds.y1, t_coordinate);
+							hull_index++;
+						}
+						while (hull_index < hull_count);
+					}
+
+					if (lens_flare_spacing != 0.f)
+					{
+						grid_bounds.x0 = (short)fast_ftol((real)ceil(PIN(bounds.x0 / lens_flare_spacing, -1000.f, 1000.f)));
+						grid_bounds.y0 = (short)fast_ftol((real)ceil(PIN(bounds.y0 / lens_flare_spacing, -1000.f, 1000.f)));
+						grid_bounds.x1 = (short)fast_ftol((real)floor(PIN(bounds.x1 / lens_flare_spacing, -1000.f, 1000.f)));
+						grid_bounds.y1 = (short)fast_ftol((real)floor(PIN(bounds.y1 / lens_flare_spacing, -1000.f, 1000.f)));
+					}
+					else
+					{
+						grid_bounds.x0 = grid_bounds.y0 = grid_bounds.x1 = grid_bounds.y1 = 0;
+					}
+
+					if (grid_bounds.y0 <= grid_bounds.y1)
+					{
+						t_count = (unsigned short)(grid_bounds.y1 - grid_bounds.y0 + 1);
+						t_grid = grid_bounds.y0;
+						do
+						{
+							if (grid_bounds.x0 <= grid_bounds.x1)
 							{
-								long s_count = (unsigned short)(s_max - s_min + 1);
-								long s_grid = s_min;
+								long s_count = (unsigned short)(grid_bounds.x1 - grid_bounds.x0 + 1);
+								long s_grid = grid_bounds.x0;
 								real t_distance = (real)t_grid * lens_flare_spacing;
 								real_vector3d t_offset;
 
@@ -585,15 +590,14 @@ boolean build_structure_lens_flares(
 												marker_index,
 												struct structure_lens_flare_marker);
 											marker->position = position;
-											marker->direction[0] = (char)(real)floor(plane.n.i * 127.5f);
-											marker->direction[1] = (char)(real)floor(plane.n.j * 127.5f);
-											marker->direction[2] = (char)(real)floor(plane.n.k * 127.5f);
+											marker->direction[0] = (char)fast_ftol((real)floor(plane.n.i * 127.5f));
+											marker->direction[1] = (char)fast_ftol((real)floor(plane.n.j * 127.5f));
+											marker->direction[2] = (char)fast_ftol((real)floor(plane.n.k * 127.5f));
 											marker->lens_flare_index = (byte)lens_flare_index;
 										}
 										else
 										{
-											error(_error_silent, "### WARNING failed to add lens flare marker to structure_bsp (max=#%d)",
-												structure_bsp->lens_flare_markers.definition->maximum_element_count);
+											error(_error_silent, "### WARNING failed to add lens flare marker to structure_bsp (max=#%d)", 65536);
 										}
 									}
 
@@ -700,7 +704,7 @@ boolean build_structure_lens_flares(
 					clusters,
 					cluster_index,
 					struct structure_cluster_lens_flare_data);
-				if (cluster->lens_flare_marker_count)
+				if (cluster->lens_flare_marker_count > 0)
 				{
 					match_assert("c:\\halo\\SOURCE\\structures\\structure_lens_flares.c", 444,
 						cluster->first_lens_flare_marker_index<structure_bsp->lens_flare_markers.count);
