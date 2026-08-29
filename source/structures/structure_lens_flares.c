@@ -495,15 +495,17 @@ boolean build_structure_lens_flares(
 					cross_product3d(&plane.n, &s_axis, &t_axis);
 
 					{
-						real origin_s = dot_product3d((real_vector3d const *)&origin, &s_axis);
-						real origin_t = dot_product3d((real_vector3d const *)&origin, &t_axis);
+						real_point2d origin_projection;
 
-						bounds.x0 = bounds.x1 = dot_product3d((real_vector3d const *)&points[hull_indices[0]], &s_axis) - origin_s;
-						bounds.y0 = bounds.y1 = dot_product3d((real_vector3d const *)&points[hull_indices[0]], &t_axis) - origin_t;
+						origin_projection.x = dot_product3d((real_vector3d const *)&origin, &s_axis);
+						origin_projection.y = dot_product3d((real_vector3d const *)&origin, &t_axis);
+
+						bounds.x0 = bounds.x1 = dot_product3d((real_vector3d const *)&points[hull_indices[0]], &s_axis) - origin_projection.x;
+						bounds.y0 = bounds.y1 = dot_product3d((real_vector3d const *)&points[hull_indices[0]], &t_axis) - origin_projection.y;
 						for (hull_index = 0; hull_index < hull_count; hull_index++)
 						{
-							real s = dot_product3d((real_vector3d const *)&points[hull_indices[hull_index]], &s_axis) - origin_s;
-							real t_coordinate = dot_product3d((real_vector3d const *)&points[hull_indices[hull_index]], &t_axis) - origin_t;
+							real s = dot_product3d((real_vector3d const *)&points[hull_indices[hull_index]], &s_axis) - origin_projection.x;
+							real t_coordinate = dot_product3d((real_vector3d const *)&points[hull_indices[hull_index]], &t_axis) - origin_projection.y;
 
 							bounds.x0 = MIN(s, bounds.x0);
 							bounds.y0 = MIN(t_coordinate, bounds.y0);
@@ -543,9 +545,9 @@ boolean build_structure_lens_flares(
 									long marker_index;
 									struct structure_lens_flare_marker *marker;
 
-									position.x = s_axis.i * s_distance + position.x;
-									position.y = s_axis.j * s_distance + position.y;
-									position.z = s_axis.k * s_distance + position.z;
+									position.x = position.x + s_axis.i * s_distance;
+									position.y = position.y + s_axis.j * s_distance;
+									position.z = position.z + s_axis.k * s_distance;
 									position.x = t_axis.i * t_distance + position.x;
 									position.y = t_axis.j * t_distance + position.y;
 									position.z = t_axis.k * t_distance + position.z;

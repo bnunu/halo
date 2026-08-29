@@ -255,3 +255,51 @@ splits for the material-block locals (fully normalized), all nine legal
 statement-order permutations of the hull axis/dot block (each strictly
 worse), and pairwise/triple combinations of fourteen scope hoists (none beat
 the baseline masked distance of 64).
+
+## c2 adjudication of the normalize seam (2026-08-29)
+
+The seam was taken to the instrumented compiler (fresh `dbg32.exe`, the
+campaign C2.DLL). Findings, in full at the branch's scratch ledger and
+summarized here for the record:
+
+- The seam is two coupled instances of one c2 x87 scheduler decision —
+  consume-vs-keep for a shared FP operand (the freshly stored `s_axis.k` in
+  the magnitude sum; the reciprocal across the three scale multiplies).
+- The FP store node carries NO pop/keep field (live node dumps: opcode
+  0x258, operand links only); `fst` vs `fstp` is computed at encode time
+  from FP-stack liveness. The documented modrm-formation site 0x10744304
+  never fires for this store — it dispatches through the FP-store jump-table
+  handler at 0x10745628. New live-confirmed VAs: 0x107455e6 (byte emitter),
+  0x10745628 (FP store case).
+- A 24-site census of January's inlined normalize expansions shows the
+  compiler itself lands on BOTH sides from identical statement classes
+  (k,j,i dominant, 6 sites fused exactly like ours; the KEEP j,k,i shape is
+  a two-site deviant), and our compiler reproduces January's other deviant
+  orders wherever the surrounding context matches — the choice is a
+  deterministic function of upstream IR context, not nondeterminism.
+- No isolated source lever exists: nine targeted spellings are
+  byte-identical; the one perturbing construct (a redundant
+  `s_axis.k = s_axis.k;` self-assignment) flips only the magnitude arm, to
+  the wrong order, and repartitions allocation globally.
+
+## Basin-dependent levers (methodology correction)
+
+A 1,822-combination lottery over the measured-inert edit pool found that
+`real_point2d origin_projection` (aggregate origin dots) plus
+`position.x = position.x + s_axis.i * s_distance` operand order — both
+byte-identical when first measured — become active after the base changed:
+on the then-current base they moved padded size and frame to exact target
+values. Both are landed in production. **A "measured inert" verdict is only
+valid within the basin where it was measured**; re-run surviving pool
+members after every landing.
+
+## The legal ceiling
+
+With every recovery landed, the legal (no-asm) candidate stands at
+4,288/4,336 padded bytes, 156/156 relocations with exact destination/type
+sequence, ~60 masked-differing instructions, decomposing entirely into:
+the seven `fast_ftol` sites (~25, unreachable from C by the conversion-width
+proof), the two c2 scheduler ties above (~19, no isolated source lever,
+instrumentation-verified), downstream multiply-order wobbles of those ties,
+and alignment-pad parity. This is the proven ceiling of ordinary C on this
+compiler for this function.
