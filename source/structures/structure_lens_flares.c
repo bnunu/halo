@@ -372,6 +372,8 @@ boolean build_structure_lens_flares(
 
 			if (lens_flare_index != NONE)
 			{
+			struct structure_environment_vertex *vertices = material->uncompressed_vertex_data.address;
+
 			connected_geometry_new(&geometry);
 			for (surface_offset = 0; surface_offset < material->surface_count; surface_offset++)
 			{
@@ -379,8 +381,6 @@ boolean build_structure_lens_flares(
 					&structure_bsp->surfaces,
 					material->first_surface_index + surface_offset,
 					struct structure_surface);
-				struct structure_environment_vertex *vertices = material->uncompressed_vertex_data.address;
-
 				match_assert("c:\\halo\\SOURCE\\structures\\structure_lens_flares.c", 179,
 					surface->vertex_indices[0]>=0 && surface->vertex_indices[0]<material->vertices.count);
 				match_assert("c:\\halo\\SOURCE\\structures\\structure_lens_flares.c", 180,
@@ -517,19 +517,16 @@ boolean build_structure_lens_flares(
 
 						bounds.x0 = bounds.x1 = dot_product3d((real_vector3d const *)&points[hull_indices[0]], &s_axis) - origin_s;
 						bounds.y0 = bounds.y1 = dot_product3d((real_vector3d const *)&points[hull_indices[0]], &t_axis) - origin_t;
-						hull_index = 0;
-						do
+						for (hull_index = 0; hull_index < hull_count; hull_index++)
 						{
 							real s = dot_product3d((real_vector3d const *)&points[hull_indices[hull_index]], &s_axis) - origin_s;
 							real t_coordinate = dot_product3d((real_vector3d const *)&points[hull_indices[hull_index]], &t_axis) - origin_t;
 
-							bounds.x0 = MIN(bounds.x0, s);
-							bounds.y0 = MIN(bounds.y0, t_coordinate);
-							bounds.x1 = MAX(bounds.x1, s);
-							bounds.y1 = MAX(bounds.y1, t_coordinate);
-							hull_index++;
+							bounds.x0 = MIN(s, bounds.x0);
+							bounds.y0 = MIN(t_coordinate, bounds.y0);
+							bounds.x1 = MAX(s, bounds.x1);
+							bounds.y1 = MAX(t_coordinate, bounds.y1);
 						}
-						while (hull_index < hull_count);
 					}
 
 					if (lens_flare_spacing != 0.f)
@@ -546,14 +543,14 @@ boolean build_structure_lens_flares(
 
 					if (grid_bounds.y0 <= grid_bounds.y1)
 					{
-						t_count = (unsigned short)(grid_bounds.y1 - grid_bounds.y0 + 1);
 						t_grid = grid_bounds.y0;
+						t_count = (unsigned short)(grid_bounds.y1 - grid_bounds.y0 + 1);
 						do
 						{
 							if (grid_bounds.x0 <= grid_bounds.x1)
 							{
-								long s_count = (unsigned short)(grid_bounds.x1 - grid_bounds.x0 + 1);
 								long s_grid = grid_bounds.x0;
+								long s_count = (unsigned short)(grid_bounds.x1 - grid_bounds.x0 + 1);
 								real t_distance = (real)t_grid * lens_flare_spacing;
 								real_vector3d t_offset;
 
@@ -629,8 +626,11 @@ boolean build_structure_lens_flares(
 		sizeof(*temp_markers) * structure_bsp->lens_flare_markers.count);
 	if (temp_markers)
 	{
+	long marker_index;
+	long marker_write_index = 0;
+
+	cluster_index = NONE;
 	{
-		long marker_index;
 		for (marker_index = 0; marker_index < structure_bsp->lens_flare_markers.count; marker_index++)
 		{
 			struct structure_lens_flare_marker *marker = TAG_BLOCK_GET_ELEMENT(
@@ -663,9 +663,6 @@ boolean build_structure_lens_flares(
 		(int (__cdecl *)(const void *, const void *))code_00183bb0);
 
 	{
-		long marker_index;
-		short marker_write_index = 0;
-		cluster_index = NONE;
 		for (marker_index = 0; marker_index < structure_bsp->lens_flare_markers.count; marker_index++)
 		{
 			struct temporary_lens_flare_marker *temporary_marker = &temp_markers[marker_index];
