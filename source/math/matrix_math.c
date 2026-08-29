@@ -86,6 +86,10 @@ symbols in this file:
 
 /* ---------- headers */
 
+/* NOTE: before cseries.h, which macro-defines malloc and free and so breaks the
+prototypes malloc.h declares by way of xmmintrin.h. */
+#include <xmmintrin.h>
+
 #include "cseries.h"
 #include "real_math.h"
 
@@ -261,6 +265,31 @@ void matrix4x3_from_orientation(
 	matrix4x3_rotation_from_quaternion(matrix, &orientation->rotation);
 	matrix->scale = orientation->scale;
 	matrix->position = orientation->translation;
+
+	return;
+}
+
+#define MATRIX4X3_LOAD_ROW(m, r) 	_mm_loadh_pi(_mm_load_ss(&(m)->r.i), (__m64 const *)&(m)->r.j)
+#define MATRIX4X3_LOAD_POSITION(m) 	_mm_loadh_pi(_mm_load_ss(&(m)->position.x), (__m64 const *)&(m)->position.y)
+#define MATRIX4X3_STORE(p, value) 	_mm_store_ss(&(p)->i, (value)), _mm_storeh_pi((__m64 *)&(p)->j, (value))
+#define MATRIX4X3_BROADCAST(p) _mm_load_ps1(p)
+
+void matrix4x3_multiply(
+	real_matrix4x3 const *a,
+	real_matrix4x3 const *b,
+	real_matrix4x3 *result)
+{
+	real_vector3d const *b_rows = &b->forward;
+	real_vector3d *result_rows = &result->forward;
+
+	MATRIX4X3_STORE(result_rows, _mm_add_ps(_mm_add_ps(_mm_mul_ps(MATRIX4X3_BROADCAST(&b_rows->i), MATRIX4X3_LOAD_ROW(a, forward)), _mm_mul_ps(MATRIX4X3_BROADCAST(&b_rows->j), MATRIX4X3_LOAD_ROW(a, left))), _mm_mul_ps(MATRIX4X3_BROADCAST(&b_rows->k), MATRIX4X3_LOAD_ROW(a, up))));
+	MATRIX4X3_STORE(result_rows+1, _mm_add_ps(_mm_add_ps(_mm_mul_ps(MATRIX4X3_BROADCAST(&(b_rows+1)->i), MATRIX4X3_LOAD_ROW(a, forward)), _mm_mul_ps(MATRIX4X3_BROADCAST(&(b_rows+1)->j), MATRIX4X3_LOAD_ROW(a, left))), _mm_mul_ps(MATRIX4X3_BROADCAST(&(b_rows+1)->k), MATRIX4X3_LOAD_ROW(a, up))));
+	MATRIX4X3_STORE(result_rows+2, _mm_add_ps(_mm_add_ps(_mm_mul_ps(MATRIX4X3_BROADCAST(&(b_rows+2)->i), MATRIX4X3_LOAD_ROW(a, forward)), _mm_mul_ps(MATRIX4X3_BROADCAST(&(b_rows+2)->j), MATRIX4X3_LOAD_ROW(a, left))), _mm_mul_ps(MATRIX4X3_BROADCAST(&(b_rows+2)->k), MATRIX4X3_LOAD_ROW(a, up))));
+	MATRIX4X3_STORE(result_rows+3,
+		_mm_add_ps(_mm_mul_ps(_mm_add_ps(_mm_add_ps(_mm_mul_ps(MATRIX4X3_BROADCAST(&(b_rows+3)->i), MATRIX4X3_LOAD_ROW(a, forward)), _mm_mul_ps(MATRIX4X3_BROADCAST(&(b_rows+3)->j), MATRIX4X3_LOAD_ROW(a, left))), _mm_mul_ps(MATRIX4X3_BROADCAST(&(b_rows+3)->k), MATRIX4X3_LOAD_ROW(a, up))), MATRIX4X3_BROADCAST(&a->scale)),
+			MATRIX4X3_LOAD_POSITION(a)));
+
+	result->scale = a->scale * b->scale;
 
 	return;
 }

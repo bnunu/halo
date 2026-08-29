@@ -247,6 +247,44 @@
         },
         "objdiff_percent": 100
       }
+    },
+    {
+      "unit": "source/math/matrix_math",
+      "function": "_matrix4x3_multiply",
+      "class": "vendored-assembly",
+      "evidence": "Not compiler output. The body is Intel Application Note AP-930, 'Streaming SIMD Extensions - Matrix Multiplication' (June 1999, order number 245045-001), routine PIII_Mult00_3x3_3x3, which that note publishes as a __declspec(naked) __asm block; only its 6x6 routine is given in intrinsics. Aligning the two instruction streams, the first 31 SSE instructions are identical in order position for position and 39 of Intel's 47 appear in order across five contiguous runs; the eight that do not are where January interleaves the fourth row and the scale, which a pure 3x3 has no equivalent of. The shufps 0x36 that corrects a deliberately reversed 'up' row load and the shufps 0x8f that only permutes lanes before a store are both pessimisations no cost model emits, and both are Intel's verbatim. The compiler-shaped prologue (three lea, homed, reloaded into ecx/edx/eax) is what MSVC emits for C locals referenced from an __asm block, and maps onto Intel's src1/src2/dst. Parked because the original source was assembly and this project does not use assembly; a C form that reproduced these bytes would be a false reconstruction rather than a recovery. The committed C is semantically correct and marked NonMatching. Three independent searches (an external exhaustive 46,080-form first-row enumeration with all 40,320 store orders, our pointer-pressure sweeps, and the combination of both) all plateau near 293 differing bytes. Restored 2026-08-29: this entry and its intrinsics base are the verbatim owner-approved park from commit 2fdddb42, dropped during the units integration; the 2026-08-28 lab additionally proved a C wrapper around the verbatim __asm kernel compiles byte-exact (ledger matrix_math_obj_fable_vendored_kernel_recovery_20260828.md), which the no-assembly rule excludes from production.",
+      "measurements": {
+        "target": {
+          "size": 336,
+          "relocation_count": 0,
+          "normalized_sha256": "0436d82fe1070f30523ce8798bcce3b7625099794f5d0ab3fbf9a9c33802314e"
+        },
+        "base": {
+          "size": 352,
+          "relocation_count": 0,
+          "normalized_sha256": "cea7023cde53aa2903636e0ca0ab11f5c9088e0f64c9284b5ce8a9323280563a"
+        },
+        "objdiff_percent": 10.326316
+      }
+    },
+    {
+      "unit": "source/structures/structure_lens_flares",
+      "function": "_build_structure_lens_flares",
+      "class": "vendored-assembly",
+      "evidence": "The residual bytes are not compiler output. External origin identified: the seven float-to-integer sites are inline expansions of the historical __asm helper fast_ftol(float d) from cseries.h (HCEX-PDB-attested; restored verbatim in non-ancestor commit 5093ac1a; January's actor_combat.obj carries a byte-exact standalone _fast_ftol with the identical fld/dword-fistp body, and hud_draw.obj carries the hand-written fist/fisub/sbb fast_ftol_C twin). Measured width law on the campaign XDK 3911 compiler: /QIfist converts every C float-to-integer conversion through a 64-bit fistp regardless of source or destination type, across every cast type, staging topology, and flag family, so January's seven 32-bit fistp sites are unreachable from C; tools/flag_provenance_census.py records the same law independently. With the helper restored in a lab build the same source reaches 4320/4336 with frame and relocation identity exact; the last ~29 instructions are two c2 scheduler ties adjudicated by live compiler instrumentation (FP store nodes carry no pop/keep field - fst versus fstp is computed from encode-time FP-stack liveness via the jump-table handler at 0x10745628 - and January's own 24-site inlined-normalize census lands on both sides of the tie from identical statement classes, e.g. keep at path_obstacle_avoidance@0125 versus fold at decals@0d94), plus their downstream multiply-order and alignment-pad fallout. The committed C is the maximal legal candidate: 4288/4336 padded bytes, 156/156 relocations with the destination/type sequence exact, three sibling functions and all owned data strict-exact, roughly 25 January source shapes recovered (nested dynamic_array_get_element calls, rectangle2d grid bounds, distributed origin dots, reversed cross_product3d and plane3d_from_points argument orders, marker-phase long counters, and more - full ledger structure_lens_flares_obj_fable_fast_ftol_attribution_20260828.md). To unpark, either admit the attested fast_ftol helper or find a compiler provenance whose C conversions emit 32-bit fistp.",
+      "measurements": {
+        "target": {
+          "size": 4336,
+          "relocation_count": 156,
+          "normalized_sha256": "40aa8e486e52fe258065ae9cc9bd892679b15fd7845008cc0ebe1651788cf33b"
+        },
+        "base": {
+          "size": 4288,
+          "relocation_count": 156,
+          "normalized_sha256": "99525243a3d7a8d000a905ccf58ca4f44879cee82fe26b5d11b56d4be51e7205"
+        },
+        "objdiff_percent": 94.67852
+      }
     }
   ]
 }

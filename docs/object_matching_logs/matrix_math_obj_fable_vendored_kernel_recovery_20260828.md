@@ -104,3 +104,17 @@ function is provably uncompletable: the kernel is hand-scheduled vendor
 assembly (already established by the 46,080-form intrinsic/C search, best
 ~293 normalized bytes away, and the zero-`movaps` proof), so the 2026-08-26
 policy fixed point stands. Reopen only if the policy changes.
+
+## Closure (2026-08-29): historical vendored-assembly park restored
+
+The owner-approved completion state from commit `2fdddb42` ("matrix_math is
+complete at 34/35 under the no-assembly rule", 2026-08-06) is restored
+verbatim: the semantically correct intrinsics-based C implementation of
+`matrix4x3_multiply` (352 bytes, 0 relocations, normalized SHA-256
+`cea7023c…` — byte-identical to the historical base) and the
+`vendored-assembly` parked entry with the AP-930 evidence. The units
+integration had silently dropped both. The entry validates ACTIVE; the
+object is complete under the no-assembly rule: 34 strict-exact functions,
+all data exact, one function parked as vendored assembly with its external
+origin identified and its 2026-08-28 byte-exact lab attribution referenced.
+No `__asm` exists anywhere in the unit.

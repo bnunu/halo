@@ -303,3 +303,19 @@ proof), the two c2 scheduler ties above (~19, no isolated source lever,
 instrumentation-verified), downstream multiply-order wobbles of those ties,
 and alignment-pad parity. This is the proven ceiling of ordinary C on this
 compiler for this function.
+
+## Closure (2026-08-29): vendored-assembly park
+
+`_build_structure_lens_flares` is recorded in `config/parked.json` under the
+`vendored-assembly` class — the manifest class for residuals that are not
+compiler output, whose allowlist entry was created for exactly this
+situation (matrix4x3_multiply's park in `2fdddb42`). External origin: the
+seven conversion sites are inline expansions of the historical `__asm`
+helper `fast_ftol` from cseries.h (HCEX-attested, with January's own
+standalone byte-exact twin in actor_combat.obj); the conversion-width law
+and the c2 tie adjudication complete the evidence. The committed base is the
+maximal legal candidate (4,288/4,336, 156/156 with exact destination/type
+sequence). The entry validates ACTIVE; the object is complete under the
+no-assembly rule: three strict-exact functions, all owned data exact, one
+function parked with its external origin identified and the byte-exactness
+path documented for any future policy decision.
