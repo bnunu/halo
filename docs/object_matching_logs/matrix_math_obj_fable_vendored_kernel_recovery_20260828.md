@@ -87,3 +87,20 @@ current compiler provenance.
 - Semantic audit: 0 unit errors, 0 ordinary-rejected, accepted-exact 4599
   (+1 for this function).
 - `git diff --check`: pass.
+
+## Reversal (2026-08-29, owner ruling)
+
+The owner ruled that no `__asm` may enter production, including under the
+`asm-implemented` parked class. All landings from this ledger are reverted:
+`matrix4x3_multiply` is removed from `source/math/matrix_math.c` (unwritten
+again), the parked entry is withdrawn, configuration index 226 returns to
+`NonMatching`, and the audit inventory returns to ten functions.
+
+The compile-level attribution in this ledger remains valid as evidence: a C
+wrapper (four pointer locals, including the newly recovered
+`a_scale = &a->scale`) around the verbatim AP-930 kernel compiles to the
+exact 336 bytes with the campaign toolchain. Under a strict no-asm rule the
+function is provably uncompletable: the kernel is hand-scheduled vendor
+assembly (already established by the 46,080-form intrinsic/C search, best
+~293 normalized bytes away, and the zero-`movaps` proof), so the 2026-08-26
+policy fixed point stands. Reopen only if the policy changes.

@@ -16,9 +16,8 @@ only reading the source is.
 
 ## Inventory
 
-Eleven functions contain inline or naked `__asm` and compare
-`EXACT` by `section_infos_equal` (ten found by the original 2026-08-16 audit;
-`matrix4x3_multiply` added 2026-08-28 under the same class):
+Ten functions contain inline or naked `__asm` and compare
+`EXACT` by `section_infos_equal`:
 
 | unit | function | asm blocks | kind |
 |---|---|---|---|
@@ -32,7 +31,14 @@ Eleven functions contain inline or naked `__asm` and compare
 | `rasterizer/xbox/…active_camouflage` | `code_00148df0` | 1 | `__declspec(naked)` |
 | `rasterizer/xbox/…active_camouflage` | `code_00148e00` | 1 | `__declspec(naked)` |
 | `objects/object_shadows` | `code_0012b870` | 1 | `__declspec(naked)` |
-| `math/matrix_math` | `matrix4x3_multiply` | 1 | vendored Intel AP-930 SSE kernel, inside C |
+
+`math/matrix_math::matrix4x3_multiply` was briefly added to this class on
+2026-08-28 (a C wrapper around the vendored Intel AP-930 SSE kernel that
+compiles byte-exact) and removed on 2026-08-29 by owner ruling: no new `__asm`
+enters production. The compile-level attribution survives in
+`docs/object_matching_logs/matrix_math_obj_fable_vendored_kernel_recovery_20260828.md`
+and in branch history; the function is unwritten again and the object stays
+`NonMatching` per the 2026-08-26 policy fixed point.
 
 Reproduce with:
 

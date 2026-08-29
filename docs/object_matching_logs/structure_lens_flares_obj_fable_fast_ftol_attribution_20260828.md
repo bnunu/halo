@@ -240,3 +240,18 @@ fast_ftol spelling (helper verbatim, seven call sites) is preserved in this
 ledger and in the branch history (commits a06af868..) and reaches 4,320/4,336
 the moment the owner grants the same adjudication the class's other eleven
 members already have.
+
+## Third wave note (2026-08-29, owner ruling)
+
+The owner ruled that no `__asm` may enter production. `fast_ftol` remains
+reverted; production is the maximal legal candidate (4,256/4,336, 156/156
+with exact destination/type sequence). Under the no-asm rule the function is
+provably uncompletable to byte-exactness: the seven conversion sites require
+the inlined `__asm` helper (the conversion-width proof above), and even with
+the helper the last ~29 instructions are compiler-state ties. Additional
+negatives measured in the third wave before the ruling: TU function-order
+permutation (inert — per-function compilation), decl-init to statement-init
+splits for the material-block locals (fully normalized), all nine legal
+statement-order permutations of the hull axis/dot block (each strictly
+worse), and pairwise/triple combinations of fourteen scope hoists (none beat
+the baseline masked distance of 64).
