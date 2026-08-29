@@ -97,8 +97,8 @@ struct structure_surface
 struct structure_cluster_lens_flare_data
 {
 	byte reserved[0x40];
-	short first_lens_flare_marker_index;
-	short lens_flare_marker_count;
+	word first_lens_flare_marker_index;
+	word lens_flare_marker_count;
 	byte trailing[0x24];
 };
 
@@ -388,8 +388,8 @@ boolean build_structure_lens_flares(
 			{
 				short point_count = 0;
 				short triangle_index;
-				short projection_axis = _z;
-				boolean projection_sign = TRUE;
+				short projection_axis;
+				boolean projection_sign;
 				real_plane3d plane;
 				short hull_count;
 
@@ -460,26 +460,24 @@ boolean build_structure_lens_flares(
 					match_assert("c:\\halo\\SOURCE\\structures\\structure_lens_flares.c", 218,
 						point_count+2<MAXIMUM_TRIANGLES_PER_CONNECTED_GEOMETRY_COPLANAR_GROUP*NUMBER_OF_VERTICES_PER_TRIANGLE);
 					points[point_count] = *triangle_points[0];
+					points[point_count + 1] = *triangle_points[1];
+					points[point_count + 2] = *triangle_points[2];
 					project_point3d(
 						triangle_points[0],
 						projection_axis,
 						projection_sign,
 						&projected_points[point_count]);
-					point_count++;
-					points[point_count] = *triangle_points[1];
 					project_point3d(
 						triangle_points[1],
 						projection_axis,
 						projection_sign,
-						&projected_points[point_count]);
-					point_count++;
-					points[point_count] = *triangle_points[2];
+						&projected_points[point_count + 1]);
 					project_point3d(
 						triangle_points[2],
 						projection_axis,
 						projection_sign,
-						&projected_points[point_count]);
-					point_count++;
+						&projected_points[point_count + 2]);
+					point_count += 3;
 				}
 
 				hull_count = convex_hull2d(point_count, projected_points, hull_indices);
