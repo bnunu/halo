@@ -64,25 +64,6 @@ enum
 	MAXIMUM_TRIANGLES_PER_CONNECTED_GEOMETRY_COPLANAR_GROUP = 20000,
 };
 
-/* HCEX places fast_ftol in cseries.h; it is defined locally here because a
- * shared-header inline measurably perturbs unrelated translation units
- * (see research/asm_credited_functions_audit.md and the fast_ftol ledger).
- * The x87 conversion body is the attested original: January emits 32-bit
- * fistp at every expansion, which no C conversion on this compiler produces. */
-__inline long fast_ftol(
-	float d)
-{
-	long result;
-
-	__asm
-	{
-		fld d
-		fistp result
-	}
-
-	return result;
-}
-
 /* ---------- macros */
 
 /* ---------- structures */
@@ -344,7 +325,7 @@ boolean build_structure_lens_flares(
 					break;
 			}
 
-			if (lens_flare_index == structure_bsp->lens_flares.count)
+			if (structure_bsp->lens_flares.count == lens_flare_index)
 			{
 				struct structure_lens_flare *lens_flare;
 
@@ -412,34 +393,36 @@ boolean build_structure_lens_flares(
 						&geometry.triangles,
 						triangle_index,
 						sizeof(*triangle));
-					real_point3d *triangle_points[3];
+					real_point3d *triangle_point0;
+					real_point3d *triangle_point1;
+					real_point3d *triangle_point2;
 
 					if (triangle->coplanar_group_index != coplanar_group_index)
 						continue;
 
-					triangle_points[0] = dynamic_array_get_element(
+					triangle_point0 = dynamic_array_get_element(
 						&geometry.points,
 						((struct connected_geometry_edge *)dynamic_array_get_element(
 							&geometry.edges,
 							triangle->edge_designators[0] & LONG_MAX,
 							sizeof(struct connected_geometry_edge)))->point_indices[(triangle->edge_designators[0] & LONG_MIN) != 0],
-						sizeof(*triangle_points[0]));
+						sizeof(*triangle_point0));
 
-					triangle_points[1] = dynamic_array_get_element(
+					triangle_point1 = dynamic_array_get_element(
 						&geometry.points,
 						((struct connected_geometry_edge *)dynamic_array_get_element(
 							&geometry.edges,
 							triangle->edge_designators[1] & LONG_MAX,
 							sizeof(struct connected_geometry_edge)))->point_indices[(triangle->edge_designators[1] & LONG_MIN) != 0],
-						sizeof(*triangle_points[1]));
+						sizeof(*triangle_point1));
 
-					triangle_points[2] = dynamic_array_get_element(
+					triangle_point2 = dynamic_array_get_element(
 						&geometry.points,
 						((struct connected_geometry_edge *)dynamic_array_get_element(
 							&geometry.edges,
 							triangle->edge_designators[2] & LONG_MAX,
 							sizeof(struct connected_geometry_edge)))->point_indices[(triangle->edge_designators[2] & LONG_MIN) != 0],
-						sizeof(*triangle_points[2]));
+						sizeof(*triangle_point2));
 
 					if (point_count == 0)
 					{
@@ -449,9 +432,9 @@ boolean build_structure_lens_flares(
 
 						plane3d_from_points(
 							&plane,
-							triangle_points[0],
-							triangle_points[1],
-							triangle_points[2]);
+							triangle_point2,
+							triangle_point1,
+							triangle_point0);
 						i = fabs(plane.n.i);
 						j = fabs(plane.n.j);
 						k = fabs(plane.n.k);
@@ -464,21 +447,21 @@ boolean build_structure_lens_flares(
 
 					match_assert("c:\\halo\\SOURCE\\structures\\structure_lens_flares.c", 218,
 						point_count+2<MAXIMUM_TRIANGLES_PER_CONNECTED_GEOMETRY_COPLANAR_GROUP*NUMBER_OF_VERTICES_PER_TRIANGLE);
-					points[point_count] = *triangle_points[0];
-					points[point_count + 1] = *triangle_points[1];
-					points[point_count + 2] = *triangle_points[2];
+					points[point_count] = *triangle_point0;
+					points[point_count + 1] = *triangle_point1;
+					points[point_count + 2] = *triangle_point2;
 					project_point3d(
-						triangle_points[0],
+						triangle_point0,
 						projection_axis,
 						projection_sign,
 						&projected_points[point_count]);
 					project_point3d(
-						triangle_points[1],
+						triangle_point1,
 						projection_axis,
 						projection_sign,
 						&projected_points[point_count + 1]);
 					project_point3d(
-						triangle_points[2],
+						triangle_point2,
 						projection_axis,
 						projection_sign,
 						&projected_points[point_count + 2]);
@@ -531,10 +514,10 @@ boolean build_structure_lens_flares(
 
 					if (lens_flare_spacing != 0.f)
 					{
-						grid_bounds.x0 = (short)fast_ftol((real)ceil(PIN(bounds.x0 / lens_flare_spacing, -1000.f, 1000.f)));
-						grid_bounds.y0 = (short)fast_ftol((real)ceil(PIN(bounds.y0 / lens_flare_spacing, -1000.f, 1000.f)));
-						grid_bounds.x1 = (short)fast_ftol((real)floor(PIN(bounds.x1 / lens_flare_spacing, -1000.f, 1000.f)));
-						grid_bounds.y1 = (short)fast_ftol((real)floor(PIN(bounds.y1 / lens_flare_spacing, -1000.f, 1000.f)));
+						grid_bounds.x0 = (short)(real)ceil(PIN(bounds.x0 / lens_flare_spacing, -1000.f, 1000.f));
+						grid_bounds.y0 = (short)(real)ceil(PIN(bounds.y0 / lens_flare_spacing, -1000.f, 1000.f));
+						grid_bounds.x1 = (short)(real)floor(PIN(bounds.x1 / lens_flare_spacing, -1000.f, 1000.f));
+						grid_bounds.y1 = (short)(real)floor(PIN(bounds.y1 / lens_flare_spacing, -1000.f, 1000.f));
 					}
 					else
 					{
@@ -552,11 +535,6 @@ boolean build_structure_lens_flares(
 								long s_grid = grid_bounds.x0;
 								long s_count = (unsigned short)(grid_bounds.x1 - grid_bounds.x0 + 1);
 								real t_distance = (real)t_grid * lens_flare_spacing;
-								real_vector3d t_offset;
-
-								t_offset.i = t_axis.i * t_distance;
-								t_offset.j = t_axis.j * t_distance;
-								t_offset.k = t_axis.k * t_distance;
 								do
 								{
 									real_point3d position = origin;
@@ -568,9 +546,9 @@ boolean build_structure_lens_flares(
 									position.x = s_axis.i * s_distance + position.x;
 									position.y = s_axis.j * s_distance + position.y;
 									position.z = s_axis.k * s_distance + position.z;
-									position.x = t_offset.i + position.x;
-									position.y = t_offset.j + position.y;
-									position.z = t_offset.k + position.z;
+									position.x = t_axis.i * t_distance + position.x;
+									position.y = t_axis.j * t_distance + position.y;
+									position.z = t_axis.k * t_distance + position.z;
 									project_point3d(&position, projection_axis, projection_sign, &projected_position);
 									if (convex_hull2d_test_point_indexed(
 										hull_count,
@@ -587,9 +565,9 @@ boolean build_structure_lens_flares(
 												marker_index,
 												struct structure_lens_flare_marker);
 											marker->position = position;
-											marker->direction[0] = (char)fast_ftol((real)floor(plane.n.i * 127.5f));
-											marker->direction[1] = (char)fast_ftol((real)floor(plane.n.j * 127.5f));
-											marker->direction[2] = (char)fast_ftol((real)floor(plane.n.k * 127.5f));
+											marker->direction[0] = (char)(real)floor(plane.n.i * 127.5f);
+											marker->direction[1] = (char)(real)floor(plane.n.j * 127.5f);
+											marker->direction[2] = (char)(real)floor(plane.n.k * 127.5f);
 											marker->lens_flare_index = (byte)lens_flare_index;
 										}
 										else

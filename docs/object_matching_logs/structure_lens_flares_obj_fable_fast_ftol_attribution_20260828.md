@@ -157,3 +157,86 @@ the recorded staged-dword residuals in `breakable_surfaces`,
 `rasterizer_geometry` compress family. If not admitted, this function is
 asm-blocked by target evidence and should be treated like the
 asm-forced family.
+
+## Second wave (2026-08-28/29): topology recovery to the tie frontier
+
+A follow-up wave recovered eleven further January source shapes, all landed in
+production as ordinary C. Metrics are for `_build_structure_lens_flares`
+against the 4,336-byte target with `fast_ftol` present during the grind and
+re-measured legal-only at the end:
+
+1. Nested `dynamic_array_get_element` calls (the edge lookup inline inside the
+   point lookup's index argument, designator re-read from the triangle
+   pointer): reached exact 4,336 padded size for the first time.
+2. `rectangle2d grid_bounds` replaces the four `short` grid bounds: word
+   cells, packed y0/x0/y1/x1 layout, chain zero-arm store order, dword-pair
+   count loads — the sites became byte-identical to January's.
+3. Spacing-test polarity flipped (`!= 0.f` first, zero arm sunk cold).
+4. `if (... > 0)` on the marker-count validation test.
+5. `cross_product3d(&plane.n, &s_axis, ...)` — arguments reversed; the fsubp
+   product structure proves January computed cross(normal, tangent). This is
+   a semantic correction to the reconstruction (t-axis sign).
+6. `plane3d_from_points(&plane, triangle_point2, triangle_point1,
+   triangle_point0)` — the push stream proves the points passed reversed
+   (plane winding correction, flagged deliberately).
+7. Distributed hull dots: `origin_s`/`origin_t` hoisted once,
+   `dot(point, axis) - origin_dot` per point; `relative` never existed.
+8. Guardless do-while for the grid hull walk plus a `for` min/max loop
+   (pointer-walk countdown, memory-resident origin dots).
+9. Shader cases: reference from the first `shader_get_and_verify_type` call
+   (add-in-place), spacing from an inline second call.
+10. `vertices` hoisted out of the surface loop (single pre-call read);
+    marker-phase `long marker_index`/`long marker_write_index` hoisted with
+    inits ahead of the decode loop; `triangle_points[3]` decomposed into
+    three scalar pointers; `t_offset` deleted in favor of compiler-hoisted
+    loop invariants; grid init statement orders; min/max spelled value-first
+    (`MIN(s, bounds.x0)`); count-on-the-left search-loop equality; the
+    literal 65536 marker warning argument.
+
+With `fast_ftol` at the seven sites this candidate measures 4,320/4,336
+padded bytes, 156/156 relocations with the destination/type sequence exact,
+26 masked diff blocks (~29 target instructions), and the frame at 0x104
+versus 0x10c. Without `fast_ftol` (production, legal): 4,256/4,336, 156/156,
+normalized positional distance 1,890 (wave start: 3,807), LCS byte distance
+1,308 (wave start: 2,842). Three siblings and all data remain strict-exact.
+
+## The measured tie frontier (do not re-sweep)
+
+Instruction-level decode agents censused both frames completely and swept the
+remaining clusters. All of the following are measured inert or regressive:
+scope hoists to function scope for fourteen locals (each adds instructions or
+is byte-identical); `normalize3d(vector_from_points3d(...))` nesting; explicit
+member subtractions; origin-dot statement/decl-init respellings; every
+commutative dot/argument/operand order (fully normalized); do-while vs for vs
+while vs guarded-do for the min/max loop except the landed form; search-loop
+init placements; result-init split; named reciprocals; point2d origin pair.
+
+The remaining residual decomposes into three certified compiler-state ties
+with January-corpus twins on BOTH sides:
+
+- the lens-flare search head first-scratch-choice (January loads the count
+  into ecx leaving eax free for a shared zero; we load it into eax) — same
+  axis as the units `start_action` family;
+- the normalize seam keep-vs-fold (January keeps the reciprocal stacked with
+  a shared join pop; we fold destructively — January itself folds in
+  `decals@04c0` and keeps in `path_obstacle_avoidance@0125` from identical
+  statement classes);
+- the frame cell packing below -0x28 (aggregate-coalition pairings
+  {direction+origin} and {test_point+position} in January versus different
+  legal pairings in ours), which owns the residual size delta through
+  disp8/disp32 encoding lengths and alignment-pad parity.
+
+Adjudication route if ever reopened: c2 instrumentation per
+`tools/c2dbg32/IR_LAYOUT.md` with the corpus contrasting pair above as the
+minimal differential; not source sweeps.
+
+## Production policy disposition
+
+`fast_ftol` was reverted from production at wave end: the asm-implemented
+parked class covers only byte-exact functions, and this function is not yet
+exact, so carrying `__asm` in it would violate the no-asm rule without the
+parking justification. Production is the maximal legal candidate. The
+fast_ftol spelling (helper verbatim, seven call sites) is preserved in this
+ledger and in the branch history (commits a06af868..) and reaches 4,320/4,336
+the moment the owner grants the same adjudication the class's other eleven
+members already have.
