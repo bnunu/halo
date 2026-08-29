@@ -118,3 +118,37 @@ object is complete under the no-assembly rule: 34 strict-exact functions,
 all data exact, one function parked as vendored assembly with its external
 origin identified and its 2026-08-28 byte-exact lab attribution referenced.
 No `__asm` exists anywhere in the unit.
+
+## The park's last open question, now closed (2026-08-29)
+
+A donor sweep found that our committed intrinsics base contains no
+`_mm_shuffle_ps(...,0x36)` and no `_mm_shuffle_ps(...,0x8f)`, while the target
+has both — and the park's prior searches (first-row enumeration, store orders,
+pointer pressure) did not obviously cover the reversed `up`-row load plus those
+two permutes. That gap is now tested directly:
+
+| variant | size | movaps | shufps | insns |
+| --- | ---: | ---: | ---: | ---: |
+| target | 336 | **0** | 15 | ~95 |
+| committed base | 352 | 8 | 13 | 107 |
+| donor topology (named row locals, 0x36 + 0x8f, deferred row-1 store) | 416 | 10 | 15 | 139 |
+| same permutes inside the base's expression-nested form | 368 | 9 | 15 | 116 |
+
+The shuffle count is reproducible from intrinsics — `shufps=15` matches the
+target exactly — but **every intrinsic form floors at `movaps >= 8`**, because
+the register allocator inserts copies wherever the hand-written kernel keeps
+eight values resident. The committed base remains the best intrinsic form.
+
+Supporting provenance from the same wave: `cachebeta.pdb` module #226 carries
+the same 13.00.9254 stamp as every matched Halo module (no toolchain escape);
+the AP-930 signatures `0f c6 d2 36` and `0f c6 ff 8f` each occur **exactly
+once in the whole 6.5 MB image**, both inside this one COMDAT, so the kernel
+is not a shared or library routine; all 35 MASM modules in the image are
+XDK/CRT objects, so it was pasted into `matrix_math.c` rather than assembled
+separately; January's prologue homes three `lea` results and immediately
+reloads them, and mid-body reloads `a` from memory though ESI holds it live —
+the signature of an `__asm` block naming C locals. Independently, the HCEA
+(2011) PDB shows Bungie's own later source carried
+`matrix4x3_multiply_vmx` (hand-written VMX assembly) beside a
+`matrix4x3_multiply_cpp` scalar twin, with the public entry a folded thunk —
+the PowerPC analogue of exactly this arrangement.

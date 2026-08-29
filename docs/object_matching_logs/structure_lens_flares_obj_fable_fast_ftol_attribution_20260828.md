@@ -319,3 +319,55 @@ sequence). The entry validates ACTIVE; the object is complete under the
 no-assembly rule: three strict-exact functions, all owned data exact, one
 function parked with its external origin identified and the byte-exactness
 path documented for any future policy decision.
+
+## Primary-artifact closure (2026-08-29): the PDB and the image settle it
+
+Four research fan-outs (compiler-provenance forensics on cachebeta.pdb, an
+exhaustive switch/internal-flag sweep, a whole-corpus KEEP/FOLD census, and a
+ten-repository donor sweep) produced primary evidence that closes every
+remaining escape route.
+
+**1. No compiler discrepancy exists.** `cachebeta.pdb` (present locally,
+signature 0x3C4344A0, age 1, matching the EXE's NB10 record) carries an
+`S_COMPILE2_ST` record per module. Module #59
+(`\halo\objects\halobetacache\structure_lens_flares.obj`) and module #226
+(`matrix_math.obj`) carry a stamp byte-identical to all 466 other Halo
+modules — language C, frontend = backend 13.00.9254, CPU 0x06, flags 0x200
+(NoDbgInfo) — the same compiler build we have. The PE Rich header agrees
+(706 C objects at build 9254, 81 C++ at 9254, 35 MASM library objects, no
+second C build). Every "try another toolchain" line is closed by primary
+evidence; the three locally available VC7 images (XDK 3911, the 9210 zip in
+`xbox/bin/vc7/`, and XDK 4361) are byte-identical backends in every trial.
+
+**2. January was not compiled with `/QIfist` at all.** Function-anchored
+disassembly of the image finds 223 direct `call __ftol2` sites across 133
+functions, and exactly ONE real `fistp qword` in the entire `.text` (inside
+`__ftol2` itself). Of the 137 real 32-bit `fistp` instructions, 116 are
+immediately preceded by `fld dword ptr m32` — the exact two-instruction
+`fast_ftol` body. `_fast_ftol` has zero call sites (inline-only, with one
+never-called out-of-line COMDAT in actor_combat.obj); `_fast_ftol_C` has 32.
+So the seven residual sites are inlined `fast_ftol`, definitively, and the
+unit's configured `/QIfist` is itself mis-provenanced — it is retained only
+because it is the closest legal approximation (inline conversion, no added
+`__ftol2` relocations), not because January used it.
+
+**3. The switch space is exhausted.** ~9,600 compiler invocations covering
+every documented switch, both compiler builds, and the complete `/d1`//`/d2`
+internal-flag space (mapped by exhaustive 1- and 2-character body probing;
+only `/d2GH`, `/d2Gh`, `/d2GZ` are codegen-active). No setting emits a 32-bit
+`fistp` for a C conversion; the width law held in all 846 oracle settings.
+
+**4. The KEEP/FOLD tie is decoded but not source-controlled.** A whole-tree
+census plus confusion table shows our compiler reproduces January's shape at
+every paired site except this one, and the magnitude linearisation law is
+"components sorted by decreasing next-use distance, ties k,j,i" with the
+`fst` fusion firing when k linearises first. About 60 further variants,
+including all 30 scope hoists and every producer/consumer respelling, leave
+the scale arm at destructive+jmp-over-pop.
+
+**5. Independent corroboration of the seven sites.** A project that has never
+seen this tree reconstructed the October-2001 sibling build (2276) and
+identified exactly the same seven sites, spelling them
+`(short)x87_round_to_int((float)ceil(...))` over an `__asm { fld; fistp }`
+helper, and additionally argues the semantics are round-to-nearest — which no
+C cast expresses with or without `/QIfist`.
