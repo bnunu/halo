@@ -37,6 +37,40 @@ struct breakable_surface_globals
 
 /* ---------- prototypes */
 
+/* Bungie's own float-to-long conversion helper, recovered verbatim from
+   the historical cseries.h.  January inlines it at the four grid-bound
+   conversions below; this compiler lowers every ordinary C conversion
+   through a 64-bit fistp instead, so the helper is the only way to
+   reproduce those chains.  Admitted by owner ruling 2026-08-30.  Its
+   historical home is cseries.h; it is kept local to this unit so that
+   adding an __inline to a shared header cannot perturb unrelated
+   translation units. */
+static __inline long fast_ftol(
+	float d)
+{
+	long result;
+
+	__asm
+	{
+		fld d
+		fistp result
+	}
+
+	return result;
+}
+
+/* Plane distance with the j and k terms summed first.  January's four
+   expansions in this function evaluate the sum in that association.  The
+   shared dot_product3d must stay flat -- seventeen other exact functions
+   depend on it -- so the association is expressed here, local to this
+   unit, where it costs nothing elsewhere. */
+static __inline real breakable_surface_plane_distance(
+	real_plane3d const *plane,
+	real_point3d const *point)
+{
+	return point->x*plane->n.i + (point->y*plane->n.j + point->z*plane->n.k) - plane->d;
+}
+
 static void breakable_surface_effect(
 	short breakable_surface_index,
 	const struct damage_data *damage_data,
@@ -354,15 +388,15 @@ static void breakable_surface_effect(
 					plane3d_from_point_and_normal(&s_plane, &origin, &s_normal);
 					plane3d_from_point_and_normal(&t_plane, &origin, &t_normal);
 
-					surface_bounds.x1 = plane3d_distance_to_point(&s_plane, vertex_point);
+					surface_bounds.x1 = breakable_surface_plane_distance(&s_plane, vertex_point);
 					surface_bounds.x0 = surface_bounds.x1;
-					surface_bounds.y1 = plane3d_distance_to_point(&t_plane, vertex_point);
+					surface_bounds.y1 = breakable_surface_plane_distance(&t_plane, vertex_point);
 					surface_bounds.y0 = surface_bounds.y1;
 				}
 				else
 				{
-					real s = plane3d_distance_to_point(&s_plane, vertex_point);
-					real t = plane3d_distance_to_point(&t_plane, vertex_point);
+					real s = breakable_surface_plane_distance(&s_plane, vertex_point);
+					real t = breakable_surface_plane_distance(&t_plane, vertex_point);
 
 					surface_bounds.x0 = MIN(s, surface_bounds.x0);
 					surface_bounds.y0 = MIN(t, surface_bounds.y0);
@@ -431,10 +465,10 @@ static void breakable_surface_effect(
 
 					if (particle_effect->density!=0.0f)
 					{
-						bounds.x0 = (short)(long)(real)ceil(PIN(surface_bounds.x0 / particle_effect->density, -1000.f, 1000.f));
-						bounds.y0 = (short)(long)(real)ceil(PIN(surface_bounds.y0 / particle_effect->density, -1000.f, 1000.f));
-						bounds.x1 = (short)(long)(real)floor(PIN(surface_bounds.x1 / particle_effect->density, -1000.f, 1000.f));
-						bounds.y1 = (short)(long)(real)floor(PIN(surface_bounds.y1 / particle_effect->density, -1000.f, 1000.f));
+						bounds.x0 = (short)fast_ftol(ceil(PIN(surface_bounds.x0 / particle_effect->density, -1000.f, 1000.f)));
+						bounds.y0 = (short)fast_ftol(ceil(PIN(surface_bounds.y0 / particle_effect->density, -1000.f, 1000.f)));
+						bounds.x1 = (short)fast_ftol(floor(PIN(surface_bounds.x1 / particle_effect->density, -1000.f, 1000.f)));
+						bounds.y1 = (short)fast_ftol(floor(PIN(surface_bounds.y1 / particle_effect->density, -1000.f, 1000.f)));
 					}
 					else
 					{

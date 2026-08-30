@@ -588,6 +588,41 @@ Reopen only if:
    `CEACA3EE6F74879855CD2005D8B6C1AC` remains unfound), or provenance for
    the dot-grouping context factor appears.
 
+## 2026-08-30 owner ruling: fast_ftol admitted; floor broken 20 -> 4
+
+The owner ruled that the verbatim `fast_ftol` may enter production. Two
+changes landed together, and the object improved but is NOT complete.
+
+**1. The floor broke without the ruling.** The `{j,k}`-grouped association is
+required by January's four distance expansions, but the shared
+`dot_product3d` must stay flat -- 17 other exact functions depend on it.
+Expressing the association in a **unit-local** helper
+(`breakable_surface_plane_distance`) costs nothing elsewhere and takes the
+witness from **20 differing instructions to 4**. Whole-board rebuild after
+landing: identical, 277 objects / 4,822 functions.
+
+**2. `fast_ftol` landed, kept unit-local.** The verbatim historical helper
+now sits in this TU rather than its historical home `cseries.h`: placement
+was measured byte-inert here, and adding an `__inline` to a shared header is
+a known cross-unit hazard. This closes the 48-byte deficit.
+
+Landed measurement: padded **4032/4032**, relocations **117/117**, frame
+`0x1240`, siblings **11/11**, and **4 differing instructions**.
+
+### The remaining four
+
+Two commutative `fld`/`fmul` operand-role pairs in the `cross_product3d`
+expansion, on the two products containing `s_normal.k`. They survived, in
+this basin: unit-local cross helpers in five spellings (standard, b-first on
+the a->k products, 2-temp, per-component parens, hoisted `a->k`), and
+binding either or both operands through pointer locals. Together with the
+~70 shapes measured earlier and the C2 frame walk -- which showed the load
+is simply the head of the operand chain, with no frame applying a rule --
+these four are not reachable from source spelling in this unit.
+
+The object therefore remains `NonMatching` at 11/12. It is now 4
+instructions from exact rather than 20 plus a 48-byte deficit.
+
 ## Completion status: two independent blockers, both measured
 
 Stated plainly because the object has been dispatched repeatedly. Byte-exact
