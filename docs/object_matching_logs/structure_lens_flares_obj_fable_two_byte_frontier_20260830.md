@@ -68,6 +68,69 @@ distinct attempts across sessions/agents. It is the project_point3d arg-push
 scheduling interleaved with the caller's position FP — a genuine low-level
 tie-break.
 
+## dbg32b decode of tie B (session 4) — DEFINITIVE
+
+Ran dbg32b (the same-bitness C2.Dll debugger) on the pn1+fi4 witness (tie B
+isolated), esi-filtering the emit loop at 0x1075132d to the [0xe60,0xe6c] byte
+window. Captured the live emit-list nodes of tuple group **0x168**:
+
+| esi | insn | node flags(+8) | +14 (fmt·group) | prev |
+|---|---|---|---|---|
+| 0xe63 | `lea ecx,[&pp]` | 0x1004010d int | 0x0006·0168 | (lea before) |
+| 0xe69 | `push ecx` | 0x1004010d int | 0x0001·0168 | lea |
+| 0xe6a | `push ebx` (sign) | 0x2004010d push | 0x0001·0168 | push ecx |
+| 0xe6b | `fadd [origin.x]` | 0x4004010d x87 | 0x0100·0168 | push ebx |
+
+Each node's `prev` points at the previously-emitted node: the emit loop is a
+pure list walker, and the nodes are **linked in creation order**. `push ebx`
+(the projection_sign arg) was created immediately before `fadd`. The only fields
+that distinguish the two are opcode(+4), the class nibble(+8: 2004 push vs 4004
+x87), the format hi-word(+14: 0x0001 vs 0x0100), and operand-producer pointers
+(+28/+2c/+48) — **every one a consequence of what each op is, none an
+order-priority key.** Confirmed at the creation level what the earlier pass saw
+at the field level.
+
+**Mechanism, now decoded:** tie B is the argument-evaluation interleave of the
+call `project_point3d(&position, axis, sign, &pp)`. VC7 evaluates arguments
+right-to-left — &pp(4), sign(3), axis(2), &position(1, last) — so position.x's
+fadd (the dependency of arg1 &position) is *created after* the sign push (arg3):
+our order. January emits the fadd first, i.e. its position.x s-term linearized
+one step earlier in the same traversal. The creation order is a deterministic
+function of the normalized call+position DAG, and the front-end collapses every
+source respelling of the position computation and the call to the same DAG —
+which is why no in-function construct reorders these two node creations
+(15k variants + corpus + two session-4 sweeps + the explicit origin-placement
+forms ub1/ub2/ub3: zero flips, while pn1 flipped 0x6c9 and fi4 flipped tie A).
+
+**Determination (tie B):** a DAG-creation-order tie-break with no node order
+field and no in-function source lever. By the identical-compiler theorem a
+form exists, but the differentiating input is not a statement of
+build_structure_lens_flares — it is either an unfound in-function DAG nuance the
+front-end erases, or global-TU codegen state (node-creation counts from other
+functions / file-scope declaration order) that this function's source cannot
+steer. This is the same certified family as tie A's non-byte-forcing space, the
+normalize seam, and the units scheduler-tie negatives — below practical source
+visibility.
+
+## Finish status
+
+Byte-exact via legitimate in-function C is **not achievable** for this object,
+by three independent, individually-proven blockers:
+1. the seven `fld dword; fistp dword` fast_ftol conversions (non-legal-C;
+   conversion-width law, first-hand re-confirmed);
+2. tie A (only the byte-forcing `fi4` double-cast reaches it);
+3. tie B (dbg32b-decoded DAG-creation-order tie-break; no source lever, clean
+   or byte-forcing).
+
+The maximal recovery is the witness at **lcsd 8 clean** (base8 + pn1, all
+ordinary C) plus the historical `__asm fast_ftol`, reproducing the entire
+4336-byte function to two scheduler tie-breaks. The object remains parked
+(vendored-assembly); the production no-asm candidate is unchanged at 4288 (the
+closest-size legal form — the plane-family stack improves masked blocks 47→25
+but is 16 B smaller, a mixed trade not landed). The two owner decisions stand:
+the fast_ftol `__asm` convention, and (only if that is granted) whether tie A/B
+warrant a dbg32b ready-list session on the global-context hypothesis.
+
 ## The identical-compiler theorem (why this is not "impossible")
 
 C2.Dll and the campaign flags are byte-identical to January's (primary-artifact
