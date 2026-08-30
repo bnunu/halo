@@ -15,7 +15,7 @@ The rough October source at
 is a topology hint only. January machine code, relocations, and data ownership
 remain authoritative.
 
-## Current validated state
+## Current validated state (updated 2026-08-30)
 
 - Functions: `11/12` strict exact.
 - Only residual: `_breakable_surface_effect`.
@@ -25,12 +25,15 @@ remain authoritative.
 - Target normalized SHA-256:
   `510486a7d0a1f2fc1dfb8f0c47990c57f83ce1030ef5e4db8dfc42943dc56bfa`
 - Current normalized SHA-256:
-  `fcf66a3ce196b5295b412824a98f874123effcdf9f3043e6a1cd9bb98bfcaef2`
+  `71d6cbcb08cc60c74cedb83be6993be23705fc458e2d66c4f3fb2bcf1b021b60`
 - All 11 protected sibling functions remain strict exact.
 
 The current source is the E09 traversal/audio scratch union plus the E18
-`rectangle2d grid_bounds` shape. It was rebuilt from source under the
-canonical flags after all later analysis-only experiments were reverted.
+`rectangle2d grid_bounds` shape, plus the three witness-proven 2026-08-30
+recoveries X1/X2/X3 (named interpolate random, named sound definition
+index, and the alpha multiply operand order; see the 2026-08-30 section).
+`surface_vertices3d` is back at function scope — both scopes were measured
+byte-identical in both basins.
 
 ## Accepted controls retained in source
 
@@ -163,7 +166,14 @@ Reproducible evidence is under
 - Adding guessed padding merely to force the missing 16 frame bytes.
 - Treating `_build_structure_lens_flares` as an exact donor.
 - Inline assembly, `volatile` byte forcing, undefined behavior, object-byte
-  patches, or compiler-flag changes.
+  patches, or compiler-flag changes (the recommended `/QIfist` removal is an
+  owner reconciliation action, not a lane experiment).
+- 2026-08-30 additions: hunting a C spelling for the four `fistp dword`
+  chains (mechanism-proven impossible — see the conversion-width law);
+  re-measuring `surface_vertices3d` scope (byte-inert in both basins);
+  landing the W3 offset flow while the unit still builds with `/QIfist`
+  (regresses the checkpoint to 3984); re-sweeping the witness's remaining
+  dot-order and frame-placement ties outside a funded lottery session.
 
 ## 2026-07-28 provenance audit: January PDB, HCEX PDB, and local source corpus
 
@@ -246,29 +256,171 @@ October-source audit, macro/type audit, or local source-hash census; reopen
 only if an authentic source blob, a distinct compatible compiler/QFE, or a
 strict donor artifact appears.
 
+## 2026-08-30 mechanism adjudication, witness reconstruction, and landing
+
+Session worktree `claude/breakable-surfaces-20260830` from canonical commit
+`6bb7e2ec9`. Three results: the adjudicated E09/E18 source state is finally
+landed on the canonical line, the four-home conversion motif is
+mechanism-proven as inline-assembly `fast_ftol` expansions, and three new
+witness-proven ordinary-C topology recoveries are landed in production. The
+object remains `NonMatching` with zero credit.
+
+### Canonical-line reconciliation
+
+The canonical production blob predated this ledger's "current validated
+state": the E09 union and E18 `rectangle2d` shape lived only on
+`codex/breakable-surfaces-finish-20260728` (commit `d07bd0d58`), which is
+not an ancestor of canon; the backfilled ledger described a state the tree
+did not contain. Measured canonical baseline: residual `3952/4032`. Porting
+the codex blob reproduced the documented checkpoint exactly
+(`4032/4032`, `117/117`, normalized SHA-256
+`fcf66a3ce196b5295b412824a98f874123effcdf9f3043e6a1cd9bb98bfcaef2`, 11/11
+siblings), and this session landed it.
+
+### Mechanism adjudication: the four homes are `fast_ftol` expansions
+
+The 2026-08-28/29 lens-flares campaign proved the conversion-width law
+(`/QIfist` lowers EVERY C float/double-to-integer conversion through one
+64-bit `fistp qword`, across all destination types, stagings, and flags; a
+32-bit inline `fistp` is never VC7 13.00.9254 compiler output) and
+attributed the staged January motif to inline expansion of the historical
+`__inline long fast_ftol(float d) { long result; __asm { fld d; fistp
+result } return result; }` from `cseries.h` (verbatim in non-ancestor
+commit `5093ac1a1`; HCEX-PDB-attested; byte-exact standalone twin in
+January actor_combat.obj). See
+`docs/object_matching_logs/structure_lens_flares_obj_jonas_policy_reconciled_20260829.md`.
+
+This session verified the attribution byte-level for THIS object. January's
+four sites decode as exactly the expansion shape:
+
+- one shared single-precision float home `[ebp-8]` — the inlined parameter
+  `d`, which also receives the `call _ceil/_floor` double result (the
+  `fstp dword`/`fld dword` "round trip" is the float parameter store), and
+  is later even reused as an integer loop temp;
+- four distinct dword result homes `[ebp-0x120]`, `[ebp-0x118]`,
+  `[ebp-0x108]`, `[ebp-0xFC]` — each expansion's `result` local;
+- the `(short)` reads (`mov r16, word ptr [result]` or a full dword load
+  then `mov word`) are the callers' truncations.
+
+An analysis-only witness (never production; owner rule: no `__asm`, period)
+respelled the four sites `(short)fast_ftol(ceil/floor(PIN(...)))` with the
+verbatim helper. All four call sites immediately aligned at January's exact
+section offsets and the frame became `0x1240` exact.
+
+### Flag-provenance result for this unit
+
+The witness is **byte-identical with and without `/QIfist`** (no compiler
+conversion remains once the helper owns all four sites), so nothing in the
+January object requires `/QIfist`, and the flag is provably unnecessary to
+explain any January byte in this TU — the same conclusion the owner reached
+when removing the lens-flares per-unit `/QIfist` exception. All 11 exact
+siblings are also byte-identical without `/QIfist` (none contains a
+conversion). Full decision table, campaign compiler:
+
+| Configuration | Padded size | Relocations |
+| --- | ---: | ---: |
+| `/QIfist` (current config), landed source | 4032/4032 | 117/117 |
+| `/QIfist`, landed source + W3 offset flow | 3984/4032 | 117/117 |
+| uniform profile (no `/QIfist`), landed source | 4000/4032 | 121/117 (four `_ftol`) |
+| uniform profile, landed source + W3 offset flow | 3952/4032 | 121/117 |
+| fast_ftol witness, either flag state | 4032/4032 | 117/117 |
+
+The current `4032/117` checkpoint therefore rests on two compensating
+inauthenticities: the disproven flag emits a shared `fistp qword`, and the
+E09 union member stores in the offset block supply roughly the bytes the
+missing `fast_ftol` expansions would. Recommendation to the owner: when
+reconciling this unit with the uniform profile (as done for lens-flares),
+remove the per-unit `/QIfist` and land the W3 offset flow together; this
+ledger records the honest measurements for that basin in advance. The flag
+was deliberately left unchanged this session — that reconciliation is an
+owner policy action, and the lens precedent shows it done as one.
+
+### Witness reconstruction: three ordinary-C recoveries and the final gap
+
+Bounded single-factor experiments in the witness basin (full stack:
+`research/breakable_surfaces_closeout/witness_fast_ftol_stack_20260830.json`):
+
+| Step | Content | Result |
+| --- | --- | --- |
+| W1 | helper + four `(short)fast_ftol(...)` sites | 4064; all four call sites at January offsets |
+| W5 | + both random offsets stored to union members, products passed as expressions | 4032 size-exact; extra `fstp`/temp traffic vs January |
+| W3 | s random stored to the union member, `real t_offset` plain local, both `point_from_line3d` factors passed as expressions | offset region instruction-for-instruction identical to January (unstored second random, `fxch st(1)`, hoisted `(real)t_index` spill); 4016 overall |
+| W4 | both offsets plain locals | 4016; January stores the first random at the scratch base `[ebp-0x1E0]`, so the member store is right for s only |
+| X1 | named `real random_value` = the `rgb_colors_interpolate` fifth argument | January's temp-store/reload/push of that random reproduced; large cascade (LCS replaced 53 -> 28) |
+| X2 | named `long sound_definition_index` scoping the sound epilogue | January's registerized compare and the whole forward/velocity/game_location copy choreography reproduced |
+| X3 | alpha PIN multiply spelled `(upper - lower) * real_local_random()` | January's non-popping `fmul st(1)` + deferred `fstp st(0)` in all three macro arms reproduced; instruction counts equalize |
+| probe | `surface_vertices3d` function scope vs block scope | byte-identical in both basins (layout-inert) |
+
+Final witness: padded `4032/4032`, relocations `117/117`, instructions
+`1156/1156`, frame `0x1240`, siblings 11/11. The complete remaining
+divergence is:
+
+1. four dot-product accumulation orders (8 `fmul` lines): the same
+   `dot_product3d` inline emits January's k,j,i in the four vertex-point
+   distance expansions where ours emits k,i,j (both reassociated away from
+   the written i,j,k; the first-vertex arm matches, so the choice is
+   context-driven, not the inline's text);
+2. frame placement: January allocates `new_particle_data` at `-0x188` with
+   the conversion/staging temp cluster shallower (`-0x12C..-0xF8`); ours
+   swaps the two groups, with a consequent mid-frame slot rotation.
+
+Both are the certified allocation/scheduling tie classes from the
+lens-flares campaign (per-basin lottery / definition-position territory).
+They matter only to the inadmissible witness, so they were enumerated and
+left unhunted.
+
+### Production landing and gates
+
+Landed in production: the ported E09/E18 state plus X1, X2, X3 — all
+ordinary C, each individually January-proven in the witness basin, and
+jointly size/relocation-preserving under the current config. Measured:
+`4032/4032`, `117/117`, normalized SHA-256
+`71d6cbcb08cc60c74cedb83be6993be23705fc458e2d66c4f3fb2bcf1b021b60`;
+normalized-instruction LCS distance to January improved (replaced
+175 -> 144, ours-only 23 -> 20). The W3 offset flow is deliberately NOT
+landed while the unit builds with `/QIfist` (table above).
+
+Gates, all pass: full ninja graph; semantic report 470 units / 4957
+functions / 4840 semantic exact / 4850 accepted / 0 unit errors; campaign
+progress 384/833 (halobetacache 282/468) unchanged except this unit's
+internal improvement; admission audit 0 candidates / 0 contradictions /
+0 revocations; parked audit 12 active / 0 stale / 0 invalid; tooling tests
+212/212; protected Units sentinel `_unit_preprocess_node_orientations`
+1920 B / 87 relocs /
+`5d5c8edc492fb8ab6ea83e1ccaa4cb2798da51ae4a17182fa848878bed05a7ed`;
+`git diff --check` clean.
+
 ## Residual classification
 
-Compiler-precision/provenance fixed point. Size, call set, relocation count,
-recovered grid type, and large aggregate layout are strongly supported.
-January has a repeated single-precision rounding and four-home conversion
-topology that the current VC7 binary does not emit from any tested legal-C
-shape. This is not strict exactness and receives no completion credit.
+Mechanism-proven vendored-assembly boundary (2026-08-30). The four January
+conversion chains are inline expansions of the historical `__asm fast_ftol`
+helper; no C spelling can emit them (`/QIfist` lowers every C conversion
+through a shared `fistp qword`; the uniform profile emits `_ftol` calls).
+Under the standing owner rule — no `__asm` in production, period — the
+function is provably uncompletable, exactly like
+`_build_structure_lens_flares`. Everything reachable by ordinary C has been
+recovered and either landed (E09, E18, X1, X2, X3) or recorded for the
+flag-reconciled basin (W3 offset flow). This is not strict exactness and
+receives no completion credit.
 
 ## Reopen/continuation criteria
 
-Reopen only with evidence for one of:
+Reopen only if:
 
-1. an original October/January/HCEX source or debug topology that explains
-   the intermediate `real` materialization;
-2. a strict reconstructed-C donor for the complete conversion motif;
-3. a genuinely new legal-C dataflow that predicts both the `fstp/fld`
-   single-precision round trip and four distinct dword homes.
+1. the owner changes the no-assembly rule or admits `fast_ftol`
+   specifically — the witness stack then closes the function to within four
+   dot-product accumulation orders and the particle/temp-cluster frame
+   placement, which would need the per-basin lottery method;
+2. the owner reconciles this unit's flags with the uniform profile — then
+   remove `/QIfist`, land the W3 offset flow, and re-measure against the
+   honest table in the 2026-08-30 section; or
+3. a distinct compatible compiler/QFE or an authentic source blob appears.
 
 ## Disposition
 
-`NonMatching` / rigorously parked at 11/12 exact functions. The retained E09
-and E18 changes are an evidence-backed improvement checkpoint, not an object
-completion. Do not mark the object complete or grant credit from equal size
-or semantic plausibility. Reopen only if an authentic source blob, a
-distinct compatible VC7/XDK compiler or QFE, or a strict reconstructed-C
-donor becomes available.
+`NonMatching` / rigorously parked at 11/12 exact functions. The landed E09,
+E18, X1, X2, and X3 changes are an evidence-backed improvement checkpoint,
+not an object completion. Do not mark the object complete or grant credit
+from equal size or semantic plausibility, and do not respend implementation
+lanes here under the no-asm rule: the blocker is mechanism-proven, not a
+missing source idea.

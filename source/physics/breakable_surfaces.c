@@ -268,13 +268,27 @@ static void breakable_surface_effect(
 	real_rectangle2d surface_bounds;
 	real_plane3d t_plane;
 	real_point3d surface_vertices3d[MAXIMUM_VERTICES_PER_COLLISION_SURFACE];
-	real_point2d surface_vertices2d[MAXIMUM_VERTICES_PER_COLLISION_SURFACE];
 	real_vector3d t_normal;
 	real_vector3d s_normal;
 	real_point3d position;
-	real_point2d position_2d_test;
 	real_vector3d velocity;
 	struct new_particle_data particle;
+	union
+	{
+		struct
+		{
+			real s_offset;
+			real t_offset;
+			real_point2d position_2d_test;
+			real_point2d projected_epicenter;
+			real_point2d surface_vertices2d[MAXIMUM_VERTICES_PER_COLLISION_SURFACE];
+		} traversal;
+		struct
+		{
+			byte unused[0x2C];
+			struct sound_location sound_location;
+		} audio;
+	} scratch;
 	
 	struct structure_bsp *structure_bsp = global_structure_bsp_get();
 	struct collision_bsp *collision_bsp = global_collision_bsp_get();
@@ -343,9 +357,8 @@ static void breakable_surface_effect(
 
 					if (surface_index==seed_surface_index)
 					{
-						real_point2d projected_epicenter;
-						project_point3d(&damage_data->epicenter, projection_axis, projection_sign, &projected_epicenter);
-						project_point2d(&projected_epicenter, &surface_plane, projection_axis, projection_sign, &origin);
+						project_point3d(&damage_data->epicenter, projection_axis, projection_sign, &scratch.traversal.projected_epicenter);
+						project_point2d(&scratch.traversal.projected_epicenter, &surface_plane, projection_axis, projection_sign, &origin);
 					}
 					else
 					{
@@ -379,7 +392,7 @@ static void breakable_surface_effect(
 				match_assert("c:\\halo\\SOURCE\\physics\\breakable_surfaces.c", 348, surface_vertex_index<MAXIMUM_VERTICES_PER_COLLISION_SURFACE);
 
 				surface_vertices3d[surface_vertex_index] = vertex->point;
-				project_point3d(&vertex->point, projection_axis, projection_sign, &surface_vertices2d[surface_vertex_index]);
+				project_point3d(&vertex->point, projection_axis, projection_sign, &scratch.traversal.surface_vertices2d[surface_vertex_index]);
 
 				if (total_bounds_valid)
 				{
@@ -432,63 +445,61 @@ static void breakable_surface_effect(
 				
 				if (particle_effect->particle.index!=NONE)
 				{
-					short s_min;
-					short s_max;
-					short t_min;
-					short t_max;
+					rectangle2d grid_bounds;
 					short t_index;
 
 					if (particle_effect->density!=0.f)
 					{
-						s_min = (short)(long)(real)ceil(PIN(surface_bounds.x0 / particle_effect->density, -1000.f, 1000.f));
-						t_min = (short)(long)(real)ceil(PIN(surface_bounds.y0 / particle_effect->density, -1000.f, 1000.f));
-						s_max = (short)(long)(real)floor(PIN(surface_bounds.x1 / particle_effect->density, -1000.f, 1000.f));
-						t_max = (short)(long)(real)floor(PIN(surface_bounds.y1 / particle_effect->density, -1000.f, 1000.f));
+						grid_bounds.x0 = (short)(long)(real)ceil(PIN(surface_bounds.x0 / particle_effect->density, -1000.f, 1000.f));
+						grid_bounds.y0 = (short)(long)(real)ceil(PIN(surface_bounds.y0 / particle_effect->density, -1000.f, 1000.f));
+						grid_bounds.x1 = (short)(long)(real)floor(PIN(surface_bounds.x1 / particle_effect->density, -1000.f, 1000.f));
+						grid_bounds.y1 = (short)(long)(real)floor(PIN(surface_bounds.y1 / particle_effect->density, -1000.f, 1000.f));
 					}
 					else
 					{
 						if (surface_index==seed_surface_index)
 						{
-							t_max = 0;
-							s_max = 0;
-							t_min = 0;
-							s_min = 0;
+							grid_bounds.y1 = 0;
+							grid_bounds.x1 = 0;
+							grid_bounds.y0 = 0;
+							grid_bounds.x0 = 0;
 						}
 						else
 						{
-							t_min = 1;
-							s_min = 1;
-							t_max = 0;
-							s_max = 0;
+							grid_bounds.y0 = 1;
+							grid_bounds.x0 = 1;
+							grid_bounds.y1 = 0;
+							grid_bounds.x1 = 0;
 						}
 					}
 
-					for (t_index = t_min; t_index<=t_max; ++t_index)
+					for (t_index = grid_bounds.y0; t_index<=grid_bounds.y1; ++t_index)
 					{
 						short s_index;
 
-						for (s_index = s_min; s_index<=s_max; ++s_index)
+						for (s_index = grid_bounds.x0; s_index<=grid_bounds.x1; ++s_index)
 						{
 							position = origin;
 
 							{
-								real s_offset = real_local_random_range(-0.75f, 0.75f);
-								real t_offset = real_local_random_range(-0.75f, 0.75f);
+								scratch.traversal.s_offset = real_local_random_range(-0.75f, 0.75f);
+								scratch.traversal.t_offset = real_local_random_range(-0.75f, 0.75f);
 
-								s_offset = ((real)s_index + s_offset) * particle_effect->density;
-								t_offset = ((real)t_index + t_offset) * particle_effect->density;
+								scratch.traversal.s_offset = ((real)s_index + scratch.traversal.s_offset) * particle_effect->density;
+								scratch.traversal.t_offset = ((real)t_index + scratch.traversal.t_offset) * particle_effect->density;
 
-								point_from_line3d(&position, &s_plane.n, s_offset, &position);
-								point_from_line3d(&position, &t_plane.n, t_offset, &position);
+								point_from_line3d(&position, &s_plane.n, scratch.traversal.s_offset, &position);
+								point_from_line3d(&position, &t_plane.n, scratch.traversal.t_offset, &position);
 							}
 
-							project_point3d(&position, projection_axis, projection_sign, &position_2d_test);
+							project_point3d(&position, projection_axis, projection_sign, &scratch.traversal.position_2d_test);
 
-							if (convex_hull2d_test_point(surface_vertex_index, surface_vertices2d, &position_2d_test, 0.f))
+							if (convex_hull2d_test_point(surface_vertex_index, scratch.traversal.surface_vertices2d, &scratch.traversal.position_2d_test, 0.f))
 							{
 								struct damage_breaking_effect_definition const *breaking_effect;
 								real_vector3d outward;
 								real distance;
+								real random_value;
 
 								velocity = *global_zero_vector3d;
 								breaking_effect = &damage_effect_definition_get(damage_data->definition_index)->breaking_effect;
@@ -544,6 +555,7 @@ static void breakable_surface_effect(
 								particle.angular_velocity = real_local_random_range(particle_effect->angular_velocity_lower_bound, particle_effect->angular_velocity_upper_bound);
 								particle.radius = real_local_random_range(particle_effect->radius_lower_bound, particle_effect->radius_upper_bound);
 
+								random_value = real_local_random();
 								rgb_colors_interpolate(
 									&particle.color.rgb,
 									particle_effect->flags &
@@ -553,10 +565,10 @@ static void breakable_surface_effect(
 									),
 									&particle_effect->tint_lower_bound.rgb,
 									&particle_effect->tint_upper_bound.rgb,
-									real_local_random()
+									random_value
 								);
 
-								particle.color.alpha = PIN(particle_effect->tint_lower_bound.alpha + real_local_random() * (particle_effect->tint_upper_bound.alpha - particle_effect->tint_lower_bound.alpha), 0.f, 1.f);
+								particle.color.alpha = PIN(particle_effect->tint_lower_bound.alpha + (particle_effect->tint_upper_bound.alpha - particle_effect->tint_lower_bound.alpha) * real_local_random(), 0.f, 1.f);
 
 								if (normalize3d(&particle.direction)==0.f)
 								{
@@ -571,15 +583,17 @@ static void breakable_surface_effect(
 			}
 		}
 
-		if (breakable_surface->sound.index != NONE && total_bounds_valid)
 		{
-			struct sound_location sound_location;
+			long sound_definition_index = breakable_surface->sound.index;
 
-			set_real_point3d(&sound_location.position, (total_bounds.x0 + total_bounds.x1) * 0.5f, (total_bounds.y0 + total_bounds.y1) * 0.5f, (total_bounds.z0 + total_bounds.z1) * 0.5f);
-			sound_location.forward = *global_forward3d;
-			sound_location.translational_velocity = *global_zero_vector3d;
-			sound_location.game_location = damage_data->location;
-			unattached_impulse_sound_new(breakable_surface->sound.index, &sound_location, 1.f);
+			if (sound_definition_index != NONE && total_bounds_valid)
+			{
+				set_real_point3d(&scratch.audio.sound_location.position, (total_bounds.x0 + total_bounds.x1) * 0.5f, (total_bounds.y0 + total_bounds.y1) * 0.5f, (total_bounds.z0 + total_bounds.z1) * 0.5f);
+				scratch.audio.sound_location.forward = *global_forward3d;
+				scratch.audio.sound_location.translational_velocity = *global_zero_vector3d;
+				scratch.audio.sound_location.game_location = damage_data->location;
+				unattached_impulse_sound_new(sound_definition_index, &scratch.audio.sound_location, 1.f);
+			}
 		}
 	}
 

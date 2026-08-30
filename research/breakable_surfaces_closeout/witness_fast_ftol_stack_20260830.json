@@ -1,0 +1,62 @@
+[
+ [
+  "/* ---------- prototypes */\n",
+  "/* ---------- prototypes */\n\n__inline long fast_ftol(\n\tfloat d)\n{\n\tlong result;\n\n\t__asm\n\t{\n\t\tfld d\n\t\tfistp result\n\t}\n\n\treturn result;\n}\n",
+  "helper"
+ ],
+ [
+  "grid_bounds.x0 = (short)(long)(real)ceil(PIN(surface_bounds.x0 / particle_effect->density, -1000.f, 1000.f));",
+  "grid_bounds.x0 = (short)fast_ftol(ceil(PIN(surface_bounds.x0 / particle_effect->density, -1000.f, 1000.f)));",
+  "site0"
+ ],
+ [
+  "grid_bounds.y0 = (short)(long)(real)ceil(PIN(surface_bounds.y0 / particle_effect->density, -1000.f, 1000.f));",
+  "grid_bounds.y0 = (short)fast_ftol(ceil(PIN(surface_bounds.y0 / particle_effect->density, -1000.f, 1000.f)));",
+  "site1"
+ ],
+ [
+  "grid_bounds.x1 = (short)(long)(real)floor(PIN(surface_bounds.x1 / particle_effect->density, -1000.f, 1000.f));",
+  "grid_bounds.x1 = (short)fast_ftol(floor(PIN(surface_bounds.x1 / particle_effect->density, -1000.f, 1000.f)));",
+  "site2"
+ ],
+ [
+  "grid_bounds.y1 = (short)(long)(real)floor(PIN(surface_bounds.y1 / particle_effect->density, -1000.f, 1000.f));",
+  "grid_bounds.y1 = (short)fast_ftol(floor(PIN(surface_bounds.y1 / particle_effect->density, -1000.f, 1000.f)));",
+  "site3"
+ ],
+ [
+  "\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\tscratch.traversal.s_offset = real_local_random_range(-0.75f, 0.75f);\n\t\t\t\t\t\t\t\tscratch.traversal.t_offset = real_local_random_range(-0.75f, 0.75f);\n\n\t\t\t\t\t\t\t\tscratch.traversal.s_offset = ((real)s_index + scratch.traversal.s_offset) * particle_effect->density;\n\t\t\t\t\t\t\t\tscratch.traversal.t_offset = ((real)t_index + scratch.traversal.t_offset) * particle_effect->density;\n\n\t\t\t\t\t\t\t\tpoint_from_line3d(&position, &s_plane.n, scratch.traversal.s_offset, &position);\n\t\t\t\t\t\t\t\tpoint_from_line3d(&position, &t_plane.n, scratch.traversal.t_offset, &position);\n\t\t\t\t\t\t\t}\n",
+  "\t\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\treal t_offset;\n\n\t\t\t\t\t\t\t\tscratch.traversal.s_offset = real_local_random_range(-0.75f, 0.75f);\n\t\t\t\t\t\t\t\tt_offset = real_local_random_range(-0.75f, 0.75f);\n\n\t\t\t\t\t\t\t\tpoint_from_line3d(&position, &s_plane.n, ((real)s_index + scratch.traversal.s_offset) * particle_effect->density, &position);\n\t\t\t\t\t\t\t\tpoint_from_line3d(&position, &t_plane.n, ((real)t_index + t_offset) * particle_effect->density, &position);\n\t\t\t\t\t\t\t}\n",
+  "w3"
+ ],
+ [
+  "\t\t\t\t\t\t\t\treal distance;\n",
+  "\t\t\t\t\t\t\t\treal distance;\n\t\t\t\t\t\t\t\treal random_value;\n",
+  "x1decl"
+ ],
+ [
+  "\t\t\t\t\t\t\t\trgb_colors_interpolate(\n",
+  "\t\t\t\t\t\t\t\trandom_value = real_local_random();\n\t\t\t\t\t\t\t\trgb_colors_interpolate(\n",
+  "x1assign"
+ ],
+ [
+  "\t\t\t\t\t\t\t\t\t&particle_effect->tint_upper_bound.rgb,\n\t\t\t\t\t\t\t\t\treal_local_random()\n",
+  "\t\t\t\t\t\t\t\t\t&particle_effect->tint_upper_bound.rgb,\n\t\t\t\t\t\t\t\t\trandom_value\n",
+  "x1arg"
+ ],
+ [
+  "\t\tif (breakable_surface->sound.index != NONE && total_bounds_valid)\n\t\t{\n",
+  "\t\t{\n\t\t\tlong sound_definition_index = breakable_surface->sound.index;\n\n\t\t\tif (sound_definition_index != NONE && total_bounds_valid)\n\t\t\t{\n",
+  "x2open"
+ ],
+ [
+  "\t\t\tunattached_impulse_sound_new(breakable_surface->sound.index, &scratch.audio.sound_location, 1.f);\n\t\t}\n",
+  "\t\t\t\tunattached_impulse_sound_new(sound_definition_index, &scratch.audio.sound_location, 1.f);\n\t\t\t}\n\t\t}\n",
+  "x2close"
+ ],
+ [
+  "particle.color.alpha = PIN(particle_effect->tint_lower_bound.alpha + real_local_random() * (particle_effect->tint_upper_bound.alpha - particle_effect->tint_lower_bound.alpha), 0.f, 1.f);",
+  "particle.color.alpha = PIN(particle_effect->tint_lower_bound.alpha + (particle_effect->tint_upper_bound.alpha - particle_effect->tint_lower_bound.alpha) * real_local_random(), 0.f, 1.f);",
+  "x3alpha"
+ ]
+]
