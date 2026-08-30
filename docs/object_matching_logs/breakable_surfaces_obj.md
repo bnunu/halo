@@ -588,6 +588,61 @@ Reopen only if:
    `CEACA3EE6F74879855CD2005D8B6C1AC` remains unfound), or provenance for
    the dot-grouping context factor appears.
 
+## Completion status: two independent blockers, both measured
+
+Stated plainly because the object has been dispatched repeatedly. Byte-exact
+completion requires clearing BOTH of the following. Neither is an opinion.
+
+**1. The four conversion sites need inline assembly.** January's
+`fld dword`/`fistp dword` chains are inline expansions of the historical
+`__asm fast_ftol`. The conversion-width law (measured across all destination
+types, stagings and flags, and re-confirmed first-hand here) is that this
+compiler lowers EVERY C float-to-integer conversion through a 64-bit
+`fistp qword` under `/QIfist`, or through `_ftol` calls without it. No C
+spelling reaches January's form. Production therefore sits 48 bytes short --
+exactly four sites x 12 bytes -- and that gap is closed only by admitting the
+verbatim helper, which the standing owner rule forbids.
+
+**2. Twenty instructions remain even WITH the helper.** The analysis witness
+(mirror topology + verbatim `fast_ftol`) reaches 4032/4032 bytes, 117/117
+relocations, frame `0x1240`, 1156/1156 instructions and every stack home
+identical -- and still differs at five commutative-order sites. Admitting the
+assembly is therefore necessary but NOT sufficient: it would move production
+from 3984 to 4032 bytes and leave the object still non-exact.
+
+### Why the twenty are not a search failure
+
+Roughly 70 source shapes were measured inert in the correct basin across
+every structural class (helper text and structure, upstream producers,
+caller structure, call-site order, dataflow, declaration order and scope).
+A full C2 reverse-engineering pass then established the mechanism:
+
+- the FP encoder only renders node fields (`0x107455e6`, node in `ebp`);
+- the frame that builds the load takes the **head of the operand chain**
+  (`0x10736518`-`0x1073653d`) and applies no rule;
+- the one site that would order a commutative pair explicitly
+  (`0x10760e84`) takes **zero hits**;
+- so the order is canonicalised upstream, at or above the C1/C2 boundary.
+
+That is a mechanistic explanation for the inert shapes rather than an
+excuse: operand text order cannot matter because it is canonicalised away
+before any of the mapped machinery runs. The prediction this yielded --
+that symbol/declaration order would be the lever -- was tested and is also
+inert.
+
+### The only two things that change this
+
+1. **An owner ruling admitting the verbatim `fast_ftol`.** Necessary for any
+   exact outcome; on its own it yields 4032/4032 with 20 instructions left.
+2. **Locating the C1 commutative canonicaliser.** The front end is now
+   reachable (`dbg32` plants in any module; C1.Dll at `0x10600000` fires) and
+   a working differential sampler exists, but C1 has no anchors and mapping
+   it is a fresh multi-session effort with the failure modes recorded in
+   `tools/c2dbg32/IR_LAYOUT.md`.
+
+Until both are cleared the object stays `NonMatching`. Do not mark it
+complete, and do not grant credit from size, plausibility, or effort spent.
+
 ## Disposition
 
 `NonMatching` / rigorously parked at 11/12 exact functions. The landed
