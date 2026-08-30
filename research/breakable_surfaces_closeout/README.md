@@ -122,7 +122,61 @@ argument order / read-`normal`-vs-copy / d-before-n, caller statement
 order, nesting the cross into the plane construction, and reversed cross
 arguments (13 lines, worse).
 
-### Debugger state (tools/c2dbg32)
+### C2 debugger mapping against micro_m6 (2026-08-30, session 3)
+
+Target: `probes/m6only.c`, a single-function TU whose entire FP output is
+the six cross products, so every FP hit is relevant.  It emits the tie at
+function offset `0x18`: `fld [ebp-0x10]` (a.k) / `fmul [ebp-8]` (b.j),
+where January loads b.j instead.  Config: `tools/c2dbg32/gen_config_cross.py
+--src scratch/m6only.c <VAs>`.
+
+**Mapped (measured, not inferred):**
+
+* **The FP path on this compile runs through the byte emitter
+  `0x107455e6`** (76 hits over ~4 passes), called from `0x10744452`.
+  At each hit `edi` points at a live IR node.
+* **IR nodes confirmed on this path**: opcode at `node[+4]` (`0x24e` seen,
+  in the documented 0x249-0x25a FP band), flags `node[+8] = 0x10040002`
+  for operand nodes, and an operand/leaf pointer at `node[+0x18]`.  The
+  leaf nodes for the vector members are **0x60 apart** (one node stride) —
+  e.g. `...48dc`, `...493c`, `...499c` — so the members occupy consecutive
+  leaves, matching the documented stride.
+* **The assembled function lives in the arena and is findable by pattern
+  scan.**  Scanning for the prologue `55 8b ec 83 ec 18` finds the emit
+  buffer (`buffer+0`); scanning for the tied pair `d9 45 f0 d8 4d f8` finds
+  it at **`buffer+0x18`**, exactly the function offset.  So the emitted
+  bytes for the decision are directly addressable at runtime.
+* **Determinism**: node and buffer *offsets* are identical across runs;
+  only the arena base shifts (~1 MB per run).  A watchpoint therefore needs
+  a runtime-resolved address, which dbg32 cannot yet do (it programs DR0-3
+  when C2 loads).
+
+**Negatives (do not repeat):**
+
+* **Every previously-mapped FP decision site takes ZERO hits here** —
+  `0x10745628` (FP jump table), `0x10744304` (FP modrm formation),
+  `0x10735135` (per-node codegen).  Those were mapped from an ai_debug
+  compile; they are path-specific, not general.  Live on this path instead:
+  arena `0x10701000` (26), byte emitter `0x107455e6` (70-76), interference
+  `0x1070943b` (30), preferred-register push `0x1075fa55` (39),
+  width-class write `0x10715873` (53).
+* **The emitter's hits are NOT 1:1 with FP instructions.**  Comparing the
+  observed `ebx` sequence against the disassembly's operand displacements
+  matches only 4 of 12 positions.  An early reading of this session that
+  took hit 1 / hit 2 as the tied `fld` / `fmul` pair, and diffed their
+  nodes, was therefore **invalid and has been discarded**.  Establishing a
+  real hit-to-instruction correlation is the prerequisite for any node
+  differential.
+
+**Concrete next step.**  Add a "resolve the watch address at run time" mode
+to `dbg32` (either `watch [reg+off]` captured at the Nth hit of a
+breakpoint, or `watch <scan-hit>+<off>`), then watch the displacement byte
+at `buffer+0x1a`.  Its `writer_eip` is the byte-level operand encoder; walk
+back from there to the lowering site that chose which operand becomes the
+load.  That is the decision this residual turns on, and it is one
+instrument away rather than a blind search.
+
+### Earlier debugger state (superseded by the section above)
 
 `gen_config_cross.py` points dbg32 at the probe compile.  Profiled hit
 counts on this path: arena `0x10701000` 26, byte emitter `0x107455e6` 70,
