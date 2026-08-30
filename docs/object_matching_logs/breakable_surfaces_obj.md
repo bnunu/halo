@@ -15,25 +15,27 @@ The rough October source at
 is a topology hint only. January machine code, relocations, and data ownership
 remain authoritative.
 
-## Current validated state (updated 2026-08-30)
+## Current validated state (updated 2026-08-30, part 2)
 
 - Functions: `11/12` strict exact.
 - Only residual: `_breakable_surface_effect`.
-- Target/current padded size: `0xFC0/0xFC0` (`4032/4032`).
+- Target/current padded size: `0xFC0/0xF90` (`4032/3984`) — the honest
+  deficit is exactly the four forbidden `fast_ftol` expansions; the earlier
+  `4032/4032` state rested on compensating union stores and is superseded.
 - Target/current relocations: `117/117`, with the same semantic destinations.
-- Target/current frame: `0x1240/0x1230`.
 - Target normalized SHA-256:
   `510486a7d0a1f2fc1dfb8f0c47990c57f83ce1030ef5e4db8dfc42943dc56bfa`
 - Current normalized SHA-256:
-  `71d6cbcb08cc60c74cedb83be6993be23705fc458e2d66c4f3fb2bcf1b021b60`
+  `3e92357588ee17cc138699dbfa7476727653565b02d04460b1815093b9141e81`
 - All 11 protected sibling functions remain strict exact.
 
-The current source is the E09 traversal/audio scratch union plus the E18
-`rectangle2d grid_bounds` shape, plus the three witness-proven 2026-08-30
-recoveries X1/X2/X3 (named interpolate random, named sound definition
-index, and the alpha multiply operand order; see the 2026-08-30 section).
-`surface_vertices3d` is back at function scope — both scopes were measured
-byte-identical in both basins.
+The current source is the recovered origin-mirror topology (2026-08-30
+part 2): natural block scoping with no union, `real_point2d jitter`,
+inner-scope `new_particle_data particle`, `real u` interpolate argument,
+`rectangle2d bounds`, `vertex_point` lvalues, and the four conversions
+spelled `(short)(long)(real)ceil/floor(PIN(...))` in place of January's
+assembly `fast_ftol`. The analysis witness built from the same text plus the
+verbatim helper reaches 4 differing instructions (see part 2).
 
 ## Accepted controls retained in source
 
@@ -393,6 +395,92 @@ all 11 siblings `still_exact`, and only the non-exact residual in
 `5d5c8edc492fb8ab6ea83e1ccaa4cb2798da51ae4a17182fa848878bed05a7ed`;
 `git diff --check` clean.
 
+## 2026-08-30 part 2: origin-mirror source recovery and 4-instruction witness
+
+Directed continuation of the same session ("recover the human-readable
+code; do not give up"). Origin-remote commit
+`fc47f9a15a0aea7f0081394c4d66db5c68ab5323` (github.com/punpckhdq/halo — this
+repository's own `origin`) preserves a `breakable_surfaces.c` from an
+earlier reconstruction lineage. It is not an authentic Bungie blob (it
+contains `match_assert` and its headers carry a `// TODO: doesn't match`),
+so it is level-5 hypothesis evidence — but its topology byte-verified almost
+wholesale, and all 11 siblings gate strict-exact from its text unchanged.
+
+### What the mirror settled
+
+- The E09 union was a compensating reconstruction device. January's layout
+  falls out of natural block scoping: `surface_vertices2d` at while scope,
+  `position_2d_test` in the s-loop, `s_normal`/`t_normal` in the
+  first-vertex arm, `temp_2d` in the seed arm, plain `sound_location` in
+  the epilogue.
+- The offset pair is `real_point2d jitter` in an inner block with both
+  products passed as expressions — `jitter.y` is consumed on the x87 stack
+  and never stored, which is why January's `[ebp-0x1DC]` slot exists but is
+  never written.
+- `struct new_particle_data particle` is declared inside the convex-hull
+  block; this alone resolved the particle-vs-temp-cluster frame placement
+  and the mid-frame rotation from part 1.
+- Part 1's X3 alpha operand order appears verbatim in the mirror
+  (independent byte-derivation and source lineage agree); X1 is the
+  mirror's `real u` block; X2 is superseded — the mirror's plain
+  `breakable_surface->sound.index != NONE` test matches January in the new
+  basin, so the named-long was a basin-local crutch and is removed.
+- Rejected by January bytes: the mirror's `projection_from_vector3d` call
+  (January open-codes the fabs block — `test ah,1`/`jne`) and its shared
+  `bsp3d_get_plane_from_designator` (January needs our private helper's
+  `& LONG_MIN`/`jns` shape).
+- Line-anchor validation: January's attested assert lines 251/266/348/388
+  span 15/82/40 source lines; the reconstruction spans 16/82/40. The two
+  body spans are exact (the 82 requires the open-coded fabs block); one
+  head line is still unaccounted.
+
+### Witness state
+
+`research/breakable_surfaces_closeout/witness_mirror_fast_ftol_20260830.c`
+(mirror topology + verbatim `fast_ftol`) measures, under the campaign
+compiler and flags, with one analysis-only context lever
+(`dot_product3d` spelled `a->i*b->i + (a->j*b->j + a->k*b->k)`):
+
+- padded `4032/4032`, relocations `117/117`, instructions `1156/1156`,
+  frame `0x1240`, every stack home identical;
+- **4 differing instruction lines**: two commutative `fld`/`fmul` pairs in
+  the `cross_product3d` expansion (January folds `s_normal.i` in exactly
+  the two `a->i` products, loading the plane member first).
+
+Without the lever the witness differs by 20 lines (the four
+`plane3d_distance_to_point` dot expansions reassociate k,i,j against
+January's k,j,i, plus the same cross pair). The lever is fi4-class
+(scheduling-only, no provenance) and is NOT in production headers; its
+effect proves a genuine still-unfound upstream source difference
+(identical-compiler theorem). Next instrument: read the C2 IR node numbers
+at the fld-choice site with `tools/c2dbg32`.
+
+Measured-inert negatives and the stale-header method warning are recorded
+in `research/breakable_surfaces_closeout/README.md`. Notable corrections to
+part 1's record: the mirror 2-temp `cross_product3d` is byte-neutral here
+and tree-neutral under a full-board rebuild (an earlier 4-line reading of
+it came from a stale header state), and header experiments must checksum
+the header per run.
+
+### Production landing and gates (part 2)
+
+Production now carries the recovered mirror topology with the four
+conversions spelled `(short)(long)(real)ceil/floor(PIN(...))` — the closest
+ordinary-C stand-in for the forbidden `fast_ftol`. Headers are untouched.
+Measured: `3984/4032`, `117/117`, normalized SHA-256
+`3e92357588ee17cc138699dbfa7476727653565b02d04460b1815093b9141e81`,
+siblings 11/11; normalized-instruction distance target-only 48 / ours-only
+15 / replaced 120. The superseded `4032/4032` checkpoint is retained in
+part 1 for the record; equal size from compensating stores is not evidence
+of closeness.
+
+Gates, all pass: full ninja graph twice (with and without the trial header
+edit); whole-board per-object diff byte-identical both times (277/619
+strict objects, 667,591 bytes, 4,822 functions); semantic report 470
+units / 0 errors / 4850 accepted exact; admission audit 0/0/0; parked audit
+12/0/0; tooling tests 212/212; Units sentinel exact; `git diff --check`
+clean.
+
 ## Residual classification
 
 Mechanism-proven vendored-assembly boundary (2026-08-30). The four January
@@ -402,28 +490,33 @@ through a shared `fistp qword`; the uniform profile emits `_ftol` calls).
 Under the standing owner rule — no `__asm` in production, period — the
 function is provably uncompletable, exactly like
 `_build_structure_lens_flares`. Everything reachable by ordinary C has been
-recovered and either landed (E09, E18, X1, X2, X3) or recorded for the
-flag-reconciled basin (W3 offset flow). This is not strict exactness and
-receives no completion credit.
+recovered and landed (the part-2 mirror topology). This is not strict
+exactness and receives no completion credit.
 
 ## Reopen/continuation criteria
 
 Reopen only if:
 
 1. the owner changes the no-assembly rule or admits `fast_ftol`
-   specifically — the witness stack then closes the function to within four
-   dot-product accumulation orders and the particle/temp-cluster frame
-   placement, which would need the per-basin lottery method;
+   specifically — the archived witness then leaves 4 instructions (two
+   commutative folds in the `cross_product3d` expansion) plus the four
+   dot reassociation orders behind them; the next instrument is a
+   `tools/c2dbg32` read of the C2 IR node numbers at the fld-choice site,
+   not further source lotteries;
 2. the owner reconciles this unit's flags with the uniform profile — then
-   remove `/QIfist`, land the W3 offset flow, and re-measure against the
-   honest table in the 2026-08-30 section; or
-3. a distinct compatible compiler/QFE or an authentic source blob appears.
+   remove `/QIfist` and re-measure against the honest table in the part-1
+   section (the part-2 source is already the right topology for that
+   basin); or
+3. a distinct compatible compiler/QFE, an authentic source blob (HCEX MD5
+   `CEACA3EE6F74879855CD2005D8B6C1AC` remains unfound), or provenance for
+   the dot-grouping context factor appears.
 
 ## Disposition
 
-`NonMatching` / rigorously parked at 11/12 exact functions. The landed E09,
-E18, X1, X2, and X3 changes are an evidence-backed improvement checkpoint,
-not an object completion. Do not mark the object complete or grant credit
-from equal size or semantic plausibility, and do not respend implementation
-lanes here under the no-asm rule: the blocker is mechanism-proven, not a
-missing source idea.
+`NonMatching` / rigorously parked at 11/12 exact functions. The landed
+part-2 mirror topology is an evidence-backed reconstruction of the January
+source — validated by the 4-instruction witness and the assert line-anchor
+spans — not an object completion. Do not mark the object complete or grant
+credit from equal size or semantic plausibility, and do not respend
+implementation lanes here under the no-asm rule: the blocker is
+mechanism-proven, not a missing source idea.

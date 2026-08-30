@@ -37,6 +37,22 @@ struct breakable_surface_globals
 
 /* ---------- prototypes */
 
+/* ANALYSIS-ONLY WITNESS - never production: the owner rule is no __asm.
+   fast_ftol is the verbatim historical cseries.h helper (commit 5093ac1a1). */
+__inline long fast_ftol(
+	float d)
+{
+	long result;
+
+	__asm
+	{
+		fld d
+		fistp result
+	}
+
+	return result;
+}
+
 static void breakable_surface_effect(
 	short breakable_surface_index,
 	const struct damage_data *damage_data,
@@ -431,10 +447,10 @@ static void breakable_surface_effect(
 
 					if (particle_effect->density!=0.0f)
 					{
-						bounds.x0 = (short)(long)(real)ceil(PIN(surface_bounds.x0 / particle_effect->density, -1000.f, 1000.f));
-						bounds.y0 = (short)(long)(real)ceil(PIN(surface_bounds.y0 / particle_effect->density, -1000.f, 1000.f));
-						bounds.x1 = (short)(long)(real)floor(PIN(surface_bounds.x1 / particle_effect->density, -1000.f, 1000.f));
-						bounds.y1 = (short)(long)(real)floor(PIN(surface_bounds.y1 / particle_effect->density, -1000.f, 1000.f));
+						bounds.x0 = fast_ftol(ceil(PIN(surface_bounds.x0 / particle_effect->density, -1000.f, 1000.f)));
+						bounds.y0 = fast_ftol(ceil(PIN(surface_bounds.y0 / particle_effect->density, -1000.f, 1000.f)));
+						bounds.x1 = fast_ftol(floor(PIN(surface_bounds.x1 / particle_effect->density, -1000.f, 1000.f)));
+						bounds.y1 = fast_ftol(floor(PIN(surface_bounds.y1 / particle_effect->density, -1000.f, 1000.f)));
 					}
 					else
 					{
