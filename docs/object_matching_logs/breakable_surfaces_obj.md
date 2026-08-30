@@ -385,7 +385,10 @@ functions / 4840 semantic exact / 4850 accepted / 0 unit errors; campaign
 progress 384/833 (halobetacache 282/468) unchanged except this unit's
 internal improvement; admission audit 0 candidates / 0 contradictions /
 0 revocations; parked audit 12 active / 0 stale / 0 invalid; tooling tests
-212/212; protected Units sentinel `_unit_preprocess_node_orientations`
+212/212; fail-closed whole-TU regression manifest against the
+canonical 6bb7e2ec9 baseline `ok: true` with zero failures/warnings,
+all 11 siblings `still_exact`, and only the non-exact residual in
+`changed_nonexact`; protected Units sentinel `_unit_preprocess_node_orientations`
 1920 B / 87 relocs /
 `5d5c8edc492fb8ab6ea83e1ccaa4cb2798da51ae4a17182fa848878bed05a7ed`;
 `git diff --check` clean.
