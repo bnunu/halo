@@ -210,6 +210,7 @@ static void code_000527e0(
 			struct unit_datum *prop_unit = unit_get(unit_index);
 			struct unit_definition *unit_definition =
 				unit_definition_get(prop_unit->definition_index);
+			boolean dead;
 
 			match_assert(
 				"c:\\halo\\SOURCE\\ai\\props.c",
@@ -225,11 +226,12 @@ static void code_000527e0(
 			prop->ally = game_team_is_ally(actor->meta.team_index, prop->team_index);
 			prop->ally_status_changed =
 				game_team_ally_status_changed(actor->meta.team_index, prop->team_index);
-			prop->dead = TEST_FLAG(prop_unit->object.damage_flags, _object_dead_bit);
+			dead = TEST_FLAG(prop_unit->object.damage_flags, _object_dead_bit);
+			prop->dead = dead;
 			prop->suicide_radius = unit_definition->unit.ai_danger_radius;
 			prop->really_dead =
-				prop->dead && prop_unit->unit.feign_death_timer == 0;
-			prop->dead_ticks = prop->dead ? 1000 : 0;
+				dead && prop_unit->unit.feign_death_timer == 0;
+			prop->dead_ticks = dead ? 1000 : 0;
 			prop->player = prop_unit->object.owner_player_index != NONE;
 
 			if (prop_unit->unit.swarm_actor_index != NONE)
@@ -243,20 +245,20 @@ static void code_000527e0(
 				prop->actor_index = prop_unit->unit.actor_index;
 			}
 
-			if (!prop->player)
+			if (prop->player)
 			{
-				if (prop->actor_index == NONE)
-				{
-					prop->type = NONE;
-				}
-				else
-				{
-					prop->type = actor_get(prop->actor_index)->meta.type;
-				}
+				prop->type = 6;
 			}
 			else
 			{
-				prop->type = 6;
+				if (prop->actor_index != NONE)
+				{
+					prop->type = actor_get(prop->actor_index)->meta.type;
+				}
+				else
+				{
+					prop->type = NONE;
+				}
 			}
 		}
 
@@ -360,32 +362,29 @@ long prop_new_unacknowledged(
 	long unit_index,
 	boolean enemy)
 {
-	long next_prop_index;
 	long prop_index;
 	long worst_prop_index = NONE;
 	long worst_required_prop_index = NONE;
 	real worst_distance = REAL_MAX;
 	real worst_required_distance = REAL_MAX;
 	short required_prop_count = 0;
-	struct actor_datum *actor = actor_get(actor_index);
+	short required_prop_maximum;
+	struct prop_iterator iterator;
+	struct prop_datum *prop;
 
-	next_prop_index = actor->meta.first_prop_index;
-
-scan_next_prop:
+	prop_iterator_new(&iterator, actor_index);
+	while ((prop = prop_iterator_next(&iterator)) != NULL)
 	{
-		struct prop_datum *prop;
-
-		prop_index = next_prop_index;
-		if (next_prop_index == NONE)
+		if (prop->state >= _prop_state_uninspected_orphan &&
+			prop->state <= _prop_state_inspected_orphan)
 		{
-			goto scan_complete;
+			continue;
+		}
+		if (prop->orphan_prop_index != NONE)
+		{
+			continue;
 		}
 
-		prop = prop_get(prop_index);
-		next_prop_index = prop->next_prop_index;
-		if ((prop->state < _prop_state_uninspected_orphan ||
-			 prop->state > _prop_state_inspected_orphan) &&
-			prop->orphan_prop_index == NONE)
 		{
 			boolean replace = FALSE;
 			boolean desire_prop = actor_perception_desire_prop(
@@ -407,7 +406,7 @@ scan_next_prop:
 			{
 				if (prop->distance < worst_distance)
 				{
-					worst_prop_index = prop_index;
+					worst_prop_index = iterator.index;
 					worst_distance = prop->distance;
 				}
 			}
@@ -417,31 +416,33 @@ scan_next_prop:
 
 				if (replace && prop->distance < worst_required_distance)
 				{
-					worst_required_prop_index = prop_index;
+					worst_required_prop_index = iterator.index;
 					worst_required_distance = prop->distance;
 				}
 			}
 		}
-
-		goto scan_next_prop;
 	}
 
-scan_complete:
 	prop_index = worst_prop_index;
 	if (prop_index == NONE)
 	{
-		prop_index = worst_required_prop_index;
-		if (prop_index == NONE ||
-			required_prop_count < (enemy ? 6 : 4))
+		required_prop_maximum = enemy ? 6 : 4;
+		if (worst_required_prop_index != NONE &&
+			required_prop_count >= required_prop_maximum)
 		{
-			prop_index = datum_new(prop_data);
-			goto initialize_prop;
+			prop_index = worst_required_prop_index;
 		}
 	}
 
+	if (prop_index == NONE)
 	{
-		struct prop_datum *prop = prop_get(prop_index);
+		prop_index = datum_new(prop_data);
+	}
+	else
+	{
 		short identifier;
+
+		prop = prop_get(prop_index);
 
 		match_assert(
 			"c:\\halo\\SOURCE\\ai\\props.c",
@@ -459,11 +460,11 @@ scan_complete:
 		prop->identifier = identifier;
 	}
 
-initialize_prop:
 	code_000527e0(actor_index, prop_index, unit_index);
 
 	return prop_index;
 }
+
 
 static void code_00052e30(
 	long actor_index,
@@ -611,17 +612,12 @@ long prop_get_active_by_unit_index(
 
 	actor = actor_get(actor_index);
 	next_prop_index = actor->meta.first_prop_index;
-	while (TRUE)
+	while (next_prop_index != NONE)
 	{
 		struct prop_datum *prop;
 
 		prop_index = next_prop_index;
-		if (next_prop_index == NONE)
-		{
-			return NONE;
-		}
-
-		prop = prop_get(next_prop_index);
+		prop = prop_get(prop_index);
 		next_prop_index = prop->next_prop_index;
 		if (prop->state >= _prop_state_unacknowledged &&
 			prop->state <= _prop_state_becoming_acknowledged)
@@ -647,6 +643,8 @@ long prop_get_active_by_unit_index(
 
 		return prop_index;
 	}
+
+	return NONE;
 }
 
 long prop_get_base_by_unit_index(
@@ -661,9 +659,14 @@ long prop_get_base_by_unit_index(
 	{
 		struct actor_datum *actor = actor_get(actor_index);
 		struct unit_datum *unit = unit_get(unit_index);
-		long target_actor_index = unit->unit.swarm_actor_index;
+		long swarm_actor_index = unit->unit.swarm_actor_index;
+		long target_actor_index;
 
-		if (target_actor_index == NONE)
+		if (swarm_actor_index != NONE)
+		{
+			target_actor_index = swarm_actor_index;
+		}
+		else
 		{
 			target_actor_index = unit->unit.actor_index;
 		}
@@ -671,32 +674,24 @@ long prop_get_base_by_unit_index(
 		if (unit->object.type == _object_type_biped &&
 			target_actor_index != actor_index)
 		{
-			long next_prop_index = actor_get(actor_index)->meta.first_prop_index;
-			long prop_index;
+			struct prop_iterator iterator;
 			struct prop_datum *prop;
 
-			do
+			prop_iterator_new(&iterator, actor_index);
+			while ((prop = prop_iterator_next(&iterator)) != NULL)
 			{
-				prop_index = next_prop_index;
-				if (prop_index == NONE)
+				if (prop->unit_index == unit_index ||
+					(prop->swarm &&
+					 prop->actor_index != NONE &&
+					 prop->actor_index == target_actor_index))
 				{
+					result = iterator.index;
+					if (prop->orphan_prop_index != NONE)
+					{
+						result = prop->orphan_prop_index;
+					}
+
 					break;
-				}
-
-				prop = prop_get(prop_index);
-				next_prop_index = prop->next_prop_index;
-			}
-			while (prop->unit_index != unit_index &&
-				(!prop->swarm ||
-				 prop->actor_index == NONE ||
-				 prop->actor_index != target_actor_index));
-
-			if (prop_index != NONE)
-			{
-				result = prop_index;
-				if (prop->orphan_prop_index != NONE)
-				{
-					result = prop->orphan_prop_index;
 				}
 			}
 

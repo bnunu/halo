@@ -120,8 +120,8 @@ unsigned long *generate_prime_numbers(
 		while (i < odd_count)
 		{
 			primes[i] = k;
-			k += 2;
 			i++;
+			k += 2;
 		}
 
 		while (scan_count < odd_count && primes[scan_count] <= sqrt_max)

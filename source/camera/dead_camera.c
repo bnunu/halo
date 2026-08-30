@@ -102,6 +102,7 @@ void dead_camera_new(
 	long unit_index)
 {
 	struct observer_result const *observer;
+	long new_unit_index;
 	long player_index;
 	real distance;
 	real pitch;
@@ -117,8 +118,8 @@ void dead_camera_new(
 	yaw = real_local_random_range(0.f, 2.f * _pi);
 	camera->facing.yaw = yaw;
 	pitch = real_local_random_range(0.47123894f, 1.0995574f);
-	camera->timer = rdata_00256ae8.timer;
 	camera->facing.pitch = -pitch;
+	camera->timer = rdata_00256ae8.timer;
 	if (unit_index != NONE)
 	{
 		switch_timer = FLT_MAX;
@@ -136,12 +137,13 @@ void dead_camera_new(
 
 	if (unit_index == NONE)
 	{
-		camera->unit_index = player_get(player_index)->dead_unit_index;
+		new_unit_index = player_get(player_index)->dead_unit_index;
 	}
 	else
 	{
-		camera->unit_index = unit_index;
+		new_unit_index = unit_index;
 	}
+	camera->unit_index = new_unit_index;
 	camera->current_player_index = camera->player_index;
 
 	return;

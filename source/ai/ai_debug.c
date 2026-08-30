@@ -84,7 +84,7 @@ real global_ai_debug_drawstack_height;
 real_argb_color global_temporary_render_color;
 long global_ai_debug_firing_position_color_count = NONE;
 
-static char const *postcombat_type_strings[NUMBER_OF_ACTOR_POSTCOMBAT_ACTIONS] =
+char const *postcombat_type_strings[NUMBER_OF_ACTOR_POSTCOMBAT_ACTIONS] =
 {
 	"none",
 	"alone",
@@ -239,7 +239,7 @@ struct path_debug_storage *ai_debug_get_last_path(
 		}
 	}
 
-	return found_path_index!=NONE ? &actor_path_debug_array[found_path_index] : NULL;
+	return found_path_index==NONE ? NULL : &actor_path_debug_array[found_path_index];
 }
 
 boolean ai_debug_highlight_cluster(
@@ -2882,7 +2882,7 @@ static void ai_debug_render_actor(
 				sprintf(temporary, "melee-cannotmove (%f)", actor_debug_info->field_194);
 				break;
 			case _charge_melee_success:
-				sprintf(temporary, "melee-success (%sairborne)", actor_debug_info->field_198 ? "not-" : "not-" );
+				sprintf(temporary, "melee-success (%sairborne)", actor_debug_info->field_198 ? "" : "not-");
 				break;
 			case _charge_stalking_success:
 				csstrcpy(temporary, "stalking-success");
@@ -3178,8 +3178,8 @@ static void ai_debug_render_actor(
 				real cosine_horizontal_angle = cosine(horizontal_angle);
 				real sine_horizontal_angle = sine(horizontal_angle);
 				
-				cosine_vertical_angle[0] = cosine(DEGREES_TO_RADIANS(50));
-				sine_vertical_angle[0] = sine(DEGREES_TO_RADIANS(50));
+				cosine_vertical_angle[0] = cosine(DEGREES_TO_RADIANS(30));
+				sine_vertical_angle[0] = sine(DEGREES_TO_RADIANS(30));
 				cosine_vertical_angle[1] = cosine(DEGREES_TO_RADIANS(45));
 				sine_vertical_angle[1] = -sine(DEGREES_TO_RADIANS(45));
 

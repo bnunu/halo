@@ -649,9 +649,9 @@ boolean item_update(
 			cross_product3d(
 				&item->object.up,
 				&item->object.forward,
-				&vectors.velocity);
+				(real_vector3d *)&vectors.candidate);
 			cross_product3d(
-				&vectors.velocity,
+				(real_vector3d const *)&vectors.candidate,
 				&item->object.up,
 				&item->object.forward);
 			if (normalize3d(&item->object.forward) == 0.f)
@@ -982,9 +982,9 @@ boolean item_update(
 			cross_product3d(
 				&item->object.up,
 				&item->object.forward,
-				&vectors.velocity);
+				(real_vector3d *)&vectors.candidate);
 			cross_product3d(
-				&vectors.velocity,
+				(real_vector3d const *)&vectors.candidate,
 				&item->object.up,
 				&item->object.forward);
 			normalize3d(&item->object.forward);

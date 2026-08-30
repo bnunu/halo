@@ -1015,9 +1015,7 @@ boolean point_in_triangle3d(
 			projection,
 			projection_sign,
 			&projected_offset);
-		cross0 =
-			projected_edge0.x * projected_offset.y -
-			projected_edge0.y * projected_offset.x;
+		cross0 = cross_product2d((real_vector2d const *)&projected_edge0, (real_vector2d const *)&projected_offset);
 		if (cross0 >= 0.0f)
 		{
 			project_point3d(
@@ -1025,14 +1023,10 @@ boolean point_in_triangle3d(
 				projection,
 				projection_sign,
 				&projected_edge1);
-			cross1 =
-				projected_offset.x * projected_edge1.y -
-				projected_offset.y * projected_edge1.x;
+			cross1 = cross_product2d((real_vector2d const *)&projected_offset, (real_vector2d const *)&projected_edge1);
 			if (cross1 >= 0.0f)
 			{
-				determinant =
-					projected_edge0.x * projected_edge1.y -
-					projected_edge0.y * projected_edge1.x;
+				determinant = cross_product2d((real_vector2d const *)&projected_edge0, (real_vector2d const *)&projected_edge1);
 				if (cross0 + cross1 <= determinant)
 				{
 					real inverse_determinant;
@@ -1321,7 +1315,6 @@ boolean sphere_intersects_triangle3d(
 	real_vector3d edge12;
 	real_vector3d edge20;
 	real_vector3d normal;
-	real_vector3d cross;
 	real plane_dot;
 	real normal_magnitude_squared;
 	boolean result;
@@ -1338,37 +1331,49 @@ boolean sphere_intersects_triangle3d(
 		return FALSE;
 	}
 
-	cross_product3d(&center_offset, &edge01, &cross);
-	if (dot_product3d(&normal, &cross) > 0.0f)
 	{
-		if (fast_vector_intersects_sphere(triangle0, &edge01, center, radius))
+		real_vector3d cross;
+
+		cross_product3d(&center_offset, &edge01, &cross);
+		if (dot_product3d(&normal, &cross) > 0.0f)
 		{
-			return TRUE;
+			if (fast_vector_intersects_sphere(triangle0, &edge01, center, radius))
+			{
+				return TRUE;
+			}
+			result = FALSE;
 		}
-		result = FALSE;
 	}
 
 	vector_from_points3d(triangle1, center, &center_offset);
-	cross_product3d(&center_offset, &edge12, &cross);
-	if (dot_product3d(&normal, &cross) > 0.0f)
 	{
-		if (fast_vector_intersects_sphere(triangle1, &edge12, center, radius))
+		real_vector3d cross;
+
+		cross_product3d(&center_offset, &edge12, &cross);
+		if (dot_product3d(&normal, &cross) > 0.0f)
 		{
-			return TRUE;
+			if (fast_vector_intersects_sphere(triangle1, &edge12, center, radius))
+			{
+				return TRUE;
+			}
+			result = FALSE;
 		}
-		result = FALSE;
 	}
 
-	vector_from_points3d(triangle2, triangle0, &edge20);
 	vector_from_points3d(triangle2, center, &center_offset);
-	cross_product3d(&center_offset, &edge20, &cross);
-	if (dot_product3d(&normal, &cross) < 0.0f)
+	vector_from_points3d(triangle2, triangle0, &edge20);
 	{
-		if (fast_vector_intersects_sphere(triangle2, &edge20, center, radius))
+		real_vector3d cross;
+
+		cross_product3d(&center_offset, &edge20, &cross);
+		if (dot_product3d(&normal, &cross) < 0.0f)
 		{
-			return TRUE;
+			if (fast_vector_intersects_sphere(triangle2, &edge20, center, radius))
+			{
+				return TRUE;
+			}
+			result = FALSE;
 		}
-		result = FALSE;
 	}
 
 	return result;
@@ -1392,10 +1397,9 @@ boolean pill_intersects_triangle3d(
 	real t;
 	real closest_t;
 	real plane_distance;
-	boolean outside;
+	boolean outside = FALSE;
 
 	vector_from_points3d(triangle0, triangle1, &edge01);
-	outside = FALSE;
 	vector_from_points3d(triangle1, triangle2, &edge12);
 	vector_from_points3d(pill_base, triangle0, &offset);
 	cross_product3d(&edge01, &edge12, &normal);
@@ -1443,7 +1447,7 @@ return_true:
 			pill_height,
 			pill_width))
 		{
-			return TRUE;
+			goto return_true;
 		}
 		outside = TRUE;
 	}
@@ -1460,7 +1464,7 @@ return_true:
 			pill_height,
 			pill_width))
 		{
-			return TRUE;
+			goto return_true;
 		}
 		return FALSE;
 	}
@@ -2820,11 +2824,7 @@ boolean pill_test_vector3d(
 	else if (xv < 0.0f)
 	{
 		*t = n;
-		x.i = x.i + n * vector->i;
-		x.j = x.j + n * vector->j;
-		fast_normalize2d(&x);
-		normal->i = x.i;
-		normal->j = x.j;
+		fast_normalize2d((real_vector2d *)point_from_line2d((real_point2d *)&x, (real_vector2d const *)vector, *t, (real_point2d *)normal));
 		normal->k = 0.0f;
 	}
 	else

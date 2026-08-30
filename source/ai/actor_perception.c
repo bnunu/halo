@@ -1155,8 +1155,37 @@ boolean actor_compute_prop_unopposable(
 void actor_stimulus_prop_acknowledged(
 	long actor_index,
 	long prop_index,
-	long stimulus,
+	boolean stimulus,
 	boolean initial_acknowledgement);
+
+long prop_new_unacknowledged(
+	long actor_index,
+	long unit_index,
+	boolean enemy);
+
+void actor_switch_props(
+	long actor_index,
+	long old_prop_index,
+	long new_prop_index);
+void prop_delete(
+	long actor_index,
+	long prop_index);
+long prop_get_base_by_unit_index(
+	long actor_index,
+	long unit_index,
+	boolean create_if_missing,
+	boolean update_status);
+void prop_orphan_update_information(
+	long actor_index,
+	long prop_index,
+	long parent_prop_index);
+long prop_orphan_from_friend(
+	long actor_index,
+	long parent_prop_index,
+	long friend_prop_index);
+long prop_orphan_transition(
+	long actor_index,
+	long parent_prop_index);
 
 long ai_get_responsible_unit(
 	long object_index,
@@ -1486,7 +1515,7 @@ done:
 void actor_perception_acknowledge(
 	long actor_index,
 	long prop_index,
-	long stimulus,
+	boolean stimulus,
 	boolean initial_acknowledgement)
 {
 	struct prop_datum *prop = prop_get(prop_index);
@@ -2468,7 +2497,6 @@ void code_0001f560(
 {
 	struct actor_emotion_target targets[16];
 	struct actor_emotion_actor_view *actor;
-	struct prop_iterator iterator;
 	short target_count;
 	long target_prop_index;
 	struct actor_emotion_definition_view *definition;
@@ -2481,124 +2509,130 @@ void code_0001f560(
 			actor_definition_get(actor->definition_index);
 	target_count = 0;
 
-	prop_iterator_new(&iterator, actor_index);
-	prop =
-		(struct actor_emotion_prop_view *)
-			prop_iterator_next(&iterator);
-	while (prop != NULL)
 	{
-		short priority =
-			(short)code_0001f4f0(iterator.index);
+		struct prop_iterator iterator;
 
-		if (priority > 0)
-			goto add_direct_emotion_target;
+		prop_iterator_new(&iterator, actor_index);
+		prop =
+			(struct actor_emotion_prop_view *)
+				prop_iterator_next(&iterator);
+		while (prop != NULL)
+		{
+			short priority =
+				(short)code_0001f4f0(iterator.index);
 
-		goto consider_friend_emotion_target;
+			if (priority > 0)
+				goto add_direct_emotion_target;
+
+			goto consider_friend_emotion_target;
 
 add_direct_emotion_target:
-		{
-			short target_index = (short)code_0001f470(
-				targets,
-				prop->unit_index,
-				actor_index,
-				&target_count,
-				NUMBEROF(targets));
-
-			if (target_index != NONE)
 			{
-				struct actor_emotion_target *target =
-					&targets[target_index];
+				short target_index = (short)code_0001f470(
+					targets,
+					prop->unit_index,
+					actor_index,
+					&target_count,
+					NUMBEROF(targets));
 
-				if (target->priority < priority)
+				if (target_index != NONE)
 				{
-					target->prop_index = iterator.index;
-					target->unit_index = prop->unit_index;
-					target->prop = prop;
-					target->priority = priority;
+					struct actor_emotion_target *target =
+						&targets[target_index];
+
+					if (target->priority < priority)
+					{
+						target->prop_index = iterator.index;
+						target->unit_index = prop->unit_index;
+						target->prop = prop;
+						target->priority = priority;
+					}
 				}
 			}
-		}
-		goto next_emotion_prop;
+			goto next_emotion_prop;
 
 consider_friend_emotion_target:
-		if (prop->state >= _prop_state_becoming_unacknowledged &&
-			prop->state <= _prop_state_acknowledged &&
-			!prop->enemy &&
-			prop->actor_index != NONE &&
-			prop->distance < 8.0f)
-		{
-			struct actor_emotion_actor_view *friend_actor =
-				(struct actor_emotion_actor_view *)actor_get(prop->actor_index);
-
-			if (friend_actor->emotion_target_ticks != 0 &&
-				friend_actor->emotion_target_prop_index != NONE &&
-				(actor->last_emotion_target_time == NONE ||
-					actor->last_emotion_target_time <=
-						friend_actor->emotion_target_time))
+			if (prop->state >= _prop_state_becoming_unacknowledged &&
+				prop->state <= _prop_state_acknowledged &&
+				!prop->enemy &&
+				prop->actor_index != NONE &&
+				prop->distance < 8.0f)
 			{
-				struct actor_emotion_prop_view *friend_target_prop =
-					(struct actor_emotion_prop_view *)prop_get(
-						friend_actor->emotion_target_prop_index);
+				struct actor_emotion_actor_view *friend_actor =
+					(struct actor_emotion_actor_view *)actor_get(prop->actor_index);
 
-				target_prop_index =
-					prop_get_active_by_unit_index(
-						actor_index,
-						friend_target_prop->unit_index);
-
-				if (target_prop_index != NONE)
+				if (friend_actor->emotion_target_ticks != 0 &&
+					friend_actor->emotion_target_prop_index != NONE &&
+					(actor->last_emotion_target_time == NONE ||
+						friend_actor->emotion_target_time >=
+							actor->last_emotion_target_time))
 				{
-					struct actor_emotion_prop_view *target_prop =
-						(struct actor_emotion_prop_view *)
-							prop_get(target_prop_index);
+					struct actor_emotion_prop_view *friend_target_prop =
+						(struct actor_emotion_prop_view *)prop_get(
+							friend_actor->emotion_target_prop_index);
 
-					if (target_prop->state >=
-							_prop_state_becoming_unacknowledged &&
-						target_prop->state <= _prop_state_acknowledged &&
-						target_prop->unopposable)
-					{
-						short target_index = (short)code_0001f470(
-							targets,
-							friend_target_prop->unit_index,
+					target_prop_index =
+						prop_get_active_by_unit_index(
 							actor_index,
-							&target_count,
-							NUMBEROF(targets));
+							friend_target_prop->unit_index);
 
-						if (target_index != NONE)
+					if (target_prop_index != NONE)
+					{
+						struct actor_emotion_prop_view *target_prop =
+							(struct actor_emotion_prop_view *)
+								prop_get(target_prop_index);
+
+						if (target_prop->state >=
+								_prop_state_becoming_unacknowledged &&
+							target_prop->state <= _prop_state_acknowledged &&
+							target_prop->unopposable)
 						{
-							struct actor_emotion_target *target =
-								&targets[target_index];
-							real distance_squared =
-								friend_target_prop->distance *
-									friend_target_prop->distance;
+							short target_index = (short)code_0001f470(
+								targets,
+								friend_target_prop->unit_index,
+								actor_index,
+								&target_count,
+								NUMBEROF(targets));
 
-							target->count++;
-							if (distance_squared <
-								target->minimum_distance_squared)
+							if (target_index != NONE)
 							{
-								target->minimum_distance_squared =
-									distance_squared;
-								target->closest_unit_index =
-									prop->actor_index;
-							}
+								struct actor_emotion_target *target;
+								real distance_squared;
 
-							if (target->prop_index == NONE)
-							{
-								target->prop_index =
-									target_prop_index;
-								target->unit_index =
-									target_prop->unit_index;
-								target->prop = target_prop;
+								targets[target_index].count++;
+								target = &targets[target_index];
+								distance_squared =
+									friend_target_prop->distance *
+										friend_target_prop->distance;
+
+								if (distance_squared <
+									target->minimum_distance_squared)
+								{
+									target->minimum_distance_squared =
+										distance_squared;
+									target->closest_unit_index =
+										prop->actor_index;
+								}
+
+								if (target->prop_index == NONE)
+								{
+									target->prop_index =
+										target_prop_index;
+									target->unit_index =
+										target_prop->unit_index;
+									target->prop = target_prop;
+								}
 							}
 						}
 					}
 				}
 			}
-		}
 
 next_emotion_prop:
-		prop =
-			(struct actor_emotion_prop_view *)
-				prop_iterator_next(&iterator);
+			prop =
+				(struct actor_emotion_prop_view *)
+					prop_iterator_next(&iterator);
+		}
 	}
 
 	if (target_count > 0)
@@ -2622,7 +2656,7 @@ next_emotion_prop:
 
 			if (target_prop->player &&
 				definition->player_threshold > 0 &&
-				definition->player_threshold < threshold)
+				threshold > definition->player_threshold)
 			{
 				threshold = definition->player_threshold;
 			}
@@ -2644,11 +2678,14 @@ next_emotion_prop:
 			{
 				if (target_prop->emotion_trigger_age == 0)
 				{
+					real upper_bound = definition->trigger_delay_upper;
+					real lower_bound = definition->trigger_delay_lower;
+
 					target_prop->emotion_trigger_threshold =
 						(short)(real_seed_random_range(
 							get_global_random_seed_address(),
-							definition->trigger_delay_lower,
-							definition->trigger_delay_upper) *
+							lower_bound,
+							upper_bound) *
 							30.0f);
 				}
 
@@ -2705,25 +2742,34 @@ next_emotion_prop:
 		short best_priority = 5;
 		short target_index;
 
-		for (target_index = 0;
-			target_index < target_count;
-			target_index++)
+		if (target_count > 0)
 		{
-			if (targets[target_index].priority > best_priority &&
-				targets[target_index].prop_index != NONE)
+			for (target_index = 0;
+				target_index < target_count;
+				target_index++)
 			{
-				best_priority = targets[target_index].priority;
-				best_prop_index = targets[target_index].prop_index;
+				struct actor_emotion_target *target =
+					&targets[target_index];
+
+				if (target->priority > best_priority &&
+					target->prop_index != NONE)
+				{
+					best_priority = target->priority;
+					best_prop_index = target->prop_index;
+				}
 			}
 		}
 
 		if (best_prop_index != NONE)
 		{
+			real upper_bound = definition->target_duration_upper;
+			real lower_bound = definition->target_duration_lower;
+
 			actor->emotion_target_ticks =
 				(short)(real_seed_random_range(
 					get_global_random_seed_address(),
-					definition->target_duration_lower,
-					definition->target_duration_upper) *
+					lower_bound,
+					upper_bound) *
 					30.0f);
 			actor->emotion_target_prop_index = best_prop_index;
 			actor->emotion_target_time = game_time_get();
@@ -3144,7 +3190,7 @@ boolean actor_perception_become_acknowledged(
 
 	if (prop->state < 2 || prop->state > 3)
 	{
-		long orphaned = prop->orphan_prop_index != NONE;
+		boolean orphaned = prop->orphan_prop_index != NONE;
 
 		expected_acknowledgement =
 			actor_expected_acknowledgement(actor_index, prop_index);
@@ -3724,6 +3770,7 @@ void code_000228b0(
 				struct actor_perception_refresh_list *list;
 				struct unit_definition *unit_definition;
 				real_point3d origin;
+				real_vector3d delta;
 				real distance_squared;
 				real suicide_radius;
 				long unit_index;
@@ -3735,6 +3782,7 @@ void code_000228b0(
 				boolean dead;
 				boolean candidate;
 
+				unit_index = object_index;
 				object_get_origin(object_index, &origin);
 				actor_perception_find_sense_position(
 					actor_index,
@@ -3761,7 +3809,6 @@ void code_000228b0(
 				else
 				{
 					unit_actor_index = unit->unit.actor_index;
-					unit_index = object_index;
 				}
 
 				if (unit_index == NONE ||
@@ -3793,10 +3840,11 @@ void code_000228b0(
 				}
 
 				suicide_radius = unit_definition->unit.ai_danger_radius;
-				distance_squared =
-					distance_squared3d(
-						&origin,
-						&position.body_position);
+				vector_from_points3d(
+					&position.body_position,
+					&origin,
+					&delta);
+				distance_squared = magnitude_squared3d(&delta);
 
 				if (suicide_radius > 0.0f &&
 					(dead ||
@@ -3919,18 +3967,19 @@ live_unit:
 					candidate = distance_squared > 36.0f;
 					goto choose_list;
 				}
-
-				if (distance_squared >= 225.0f)
-					goto object_done;
-
-				if (current_actor->combat_status >= 4)
+				else
 				{
-					candidate = TRUE;
-				}
-				else if (!current_actor->corpse_interest_inhibited &&
-					distance_squared > 16.0f)
-				{
-					candidate = TRUE;
+					boolean interested = distance_squared < 225.0f;
+
+					if (current_actor->artificial_combat_status >= 4)
+						candidate = TRUE;
+					else if (current_actor->corpse_interest_inhibited)
+						candidate = FALSE;
+					else
+						candidate = distance_squared > 16.0f;
+
+					if (!interested)
+						goto object_done;
 				}
 				goto choose_list;
 

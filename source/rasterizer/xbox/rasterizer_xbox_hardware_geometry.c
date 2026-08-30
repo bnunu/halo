@@ -195,8 +195,8 @@ boolean rasterizer_vertex_buffer_new(
 		{
 			csmemcpy(locked_vertices, vertices, buffer_size);
 			vertex_buffer->count = count;
-			vertex_buffer->base_address = (void *)vertices;
 			vertex_buffer->offset = 0;
+			vertex_buffer->base_address = (void *)vertices;
 			vertex_buffer->type = vertex_type;
 			_ReadWriteBarrier();
 			vertex_buffer->hardware_format = d3d_vertex_buffer;
@@ -319,8 +319,8 @@ failure:
 			triangles,
 			buffer_size);
 		triangle_buffer->type = triangle_type;
-		triangle_buffer->count = count;
 		triangle_buffer->base_address = (void *)triangles;
+		triangle_buffer->count = count;
 		_ReadWriteBarrier();
 		triangle_buffer->hardware_format = d3d_index_buffer;
 	}

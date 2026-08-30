@@ -763,8 +763,8 @@ static void *code_0010e490(
 		return NULL;
 	}
 	if (
-		allocation_size <=
-		(unsigned long)((byte *)block-pool->base_address))
+		(unsigned long)((byte *)block-pool->base_address) >=
+		allocation_size)
 	{
 		return pool->base_address;
 	}
@@ -779,10 +779,10 @@ static void *code_0010e490(
 	{
 		match_assert("c:\\halo\\SOURCE\\memory\\stack_memory_pool.c", 0x22F, block);
 		if (
-			allocation_size <=
 			(unsigned long)(
 				(byte *)next_block-
-				((byte *)block+(block->size_and_flags&0x7FFFFFFF))))
+				((byte *)block+(block->size_and_flags&0x7FFFFFFF))) >=
+			allocation_size)
 		{
 			break;
 		}

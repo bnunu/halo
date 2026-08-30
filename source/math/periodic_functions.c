@@ -311,30 +311,40 @@ static void code_000fa050(
 	real *values)
 {
 	long index;
+	long count;
 	real sum = 0.0f;
-	real frequencies[3];
+	real x;
+	real value;
 	real amplitudes[3];
+	real cosine0;
+	real cosine1;
+	real cosine2;
+	real *destination;
 
-	for (index = 0; index < PERIODIC_FUNCTION_TABLE_SIZE; index++)
+	index = 0;
+	destination = values;
+	for (count = PERIODIC_FUNCTION_TABLE_SIZE; count; count--)
 	{
-		values[index] = sum;
+		*destination = sum;
 		amplitudes[0] = real_seed_random(get_global_random_seed_address());
 		amplitudes[1] = real_seed_random(get_global_random_seed_address());
 		amplitudes[2] = real_seed_random(get_global_random_seed_address());
-		frequencies[0] = (real)index;
-		frequencies[1] = real_seed_random(get_global_random_seed_address());
-		frequencies[1] = (frequencies[1]+1.0f)*0.25f;
-		frequencies[0] = (real)cos(frequencies[0]*0.044792242f);
-		frequencies[0] = (frequencies[0]+1.0f)*amplitudes[2] + frequencies[1];
-		frequencies[1] = (real)cos((real)index*0.03129321f);
-		frequencies[1] = (frequencies[1]+1.0f)*amplitudes[1] + frequencies[0];
-		frequencies[2] = (real)cos((real)index*0.025157286f);
-		frequencies[2] = (frequencies[2]+1.0f)*amplitudes[0] + frequencies[1];
-		sum += frequencies[2];
+		x = (real)index;
+		value = (real_seed_random(get_global_random_seed_address())+1.0f)*0.25f;
+		cosine0 = (real)cos(x*0.044792242f);
+		value = (cosine0+1.0f)*amplitudes[2] + value;
+		cosine1 = (real)cos(x*0.03129321f);
+		value = (cosine1+1.0f)*amplitudes[1] + value;
+		cosine2 = (real)cos(x*0.025157286f);
+		value = (cosine2+1.0f)*amplitudes[0] + value;
+		sum += value;
+		destination++;
+		index++;
 	}
 
+	destination = values;
 	for (index = 0; index < PERIODIC_FUNCTION_TABLE_SIZE; index++)
-		values[index] *= 1.0f/sum;
+		*destination++ *= 1.0f/sum;
 
 	return;
 }
@@ -344,10 +354,12 @@ static void code_000fa150(
 	short function_type)
 {
 	long index;
+	long count;
 	real value;
 	real result;
 
-	for (index = 0; index < PERIODIC_FUNCTION_TABLE_SIZE; index++)
+	index = 0;
+	for (count = PERIODIC_FUNCTION_TABLE_SIZE; count; count--)
 	{
 		value = index * (1.0f/(PERIODIC_FUNCTION_TABLE_SIZE-1));
 		switch (function_type)
@@ -373,11 +385,11 @@ static void code_000fa150(
 		default:
 			display_assert(NULL, "c:\\halo\\SOURCE\\math\\periodic_functions.c", 411, TRUE);
 			system_exit(-1);
-			result = 0.0f;
 			break;
 		}
 
 		table[index] = (byte)PIN((long)(result*255.0f), 0, 255);
+		index++;
 	}
 
 	return;
@@ -388,6 +400,7 @@ void code_000fa280(
 	byte *table)
 {
 	long index;
+	long count;
 	real random_values[PERIODIC_FUNCTION_TABLE_SIZE];
 	real values[PERIODIC_FUNCTION_TABLE_SIZE];
 	real minimum = 3.402823466e+38f;
@@ -396,9 +409,11 @@ void code_000fa280(
 	real random_x;
 	real result;
 	real range;
+	real *value;
 
 	code_000fa050(random_values);
-	for (index = 0; index < PERIODIC_FUNCTION_TABLE_SIZE; index++)
+	index = 0;
+	for (count = PERIODIC_FUNCTION_TABLE_SIZE; count; count--)
 	{
 		x = index*0.027343748f;
 		random_x = random_values[index]*28.0f;
@@ -416,21 +431,25 @@ void code_000fa280(
 		case _periodic_function_cosine_variable_period:
 			result = (real)cos(random_x*6.2831855f);
 			break;
+		case _periodic_function_slide:
+			result = (real)fmod((double)x, 1.0);
+			break;
+		case _periodic_function_slide_variable_period:
+			result = (real)fmod((double)random_x, 1.0);
+			break;
 		case _periodic_function_diagonal_wave:
 			result = (real)fmod((double)x, 1.0);
-		case _periodic_function_diagonal_wave_variable_period:
-			if (function_type == _periodic_function_diagonal_wave_variable_period)
-				result = (real)fmod((double)random_x, 1.0);
-			if (result <= 0.5f)
+			if (result < 0.5f)
 				result *= 2.0f;
 			else
 				result = 1.0f-(result-0.5f)*2.0f;
 			break;
-		case _periodic_function_slide:
-		case _periodic_function_slide_variable_period:
-			result = (real)fmod(
-				(double)(function_type == _periodic_function_slide ? x : random_x),
-				1.0);
+		case _periodic_function_diagonal_wave_variable_period:
+			result = (real)fmod((double)random_x, 1.0);
+			if (result < 0.5f)
+				result *= 2.0f;
+			else
+				result = 1.0f-(result-0.5f)*2.0f;
 			break;
 		case _periodic_function_noise:
 			result = real_seed_random(get_global_random_seed_address());
@@ -448,24 +467,29 @@ void code_000fa280(
 		default:
 			display_assert(NULL, "c:\\halo\\SOURCE\\math\\periodic_functions.c", 499, TRUE);
 			system_exit(-1);
-			result = 0.0f;
 			break;
 		}
 
-		minimum = MIN(minimum, result);
-		maximum = MAX(maximum, result);
+		if (result > maximum)
+			maximum = result;
+		if (result < minimum)
+			minimum = result;
 		values[index] = result;
+		index++;
 	}
 
 	range = ((1 << function_type)&0xC0) != 0
 		? 0.0f
 		: maximum-minimum;
-	for (index = 0; index < PERIODIC_FUNCTION_TABLE_SIZE; index++)
+	value = values;
+	for (count = PERIODIC_FUNCTION_TABLE_SIZE; count; count--)
 	{
-		result = values[index];
 		if (range != 0.0f)
-			result = (result-minimum)/range;
-		table[index] = (byte)PIN((long)(result*255.0f), 0, 255);
+			result = (*value-minimum)/range;
+		else
+			result = *value;
+		*table++ = (byte)PIN((long)(result*255.0f), 0, 255);
+		value++;
 	}
 
 	return;
