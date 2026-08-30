@@ -15,7 +15,7 @@ The rough October source at
 is a topology hint only. January machine code, relocations, and data ownership
 remain authoritative.
 
-## Current validated state (updated 2026-08-30, part 2)
+## Current validated state (updated 2026-08-30, session 3)
 
 - Functions: `11/12` strict exact.
 - Only residual: `_breakable_surface_effect`.
@@ -35,7 +35,9 @@ inner-scope `new_particle_data particle`, `real u` interpolate argument,
 `rectangle2d bounds`, `vertex_point` lvalues, and the four conversions
 spelled `(short)(long)(real)ceil/floor(PIN(...))` in place of January's
 assembly `fast_ftol`. The analysis witness built from the same text plus the
-verbatim helper reaches 4 differing instructions (see part 2).
+verbatim helper reaches **20 differing instructions** at identical size,
+relocations, frame and stack homes (session 3 corrected an earlier figure
+of 4, which depended on a shared-header edit the whole board refutes).
 
 ## Accepted controls retained in source
 
@@ -354,8 +356,10 @@ Bounded single-factor experiments in the witness basin (full stack:
 | probe | `surface_vertices3d` function scope vs block scope | byte-identical in both basins (layout-inert) |
 
 Final witness: padded `4032/4032`, relocations `117/117`, instructions
-`1156/1156`, frame `0x1240`, siblings 11/11. The complete remaining
-divergence is:
+`1156/1156`, frame `0x1240`, siblings 11/11, every stack home identical,
+and **20 differing instruction lines** (see the session-3 correction
+below; an earlier figure of 4 in this session was produced by a refuted
+shared-header edit). The complete remaining divergence is:
 
 1. four dot-product accumulation orders (8 `fmul` lines): the same
    `dot_product3d` inline emits January's k,j,i in the four vertex-point
@@ -395,7 +399,7 @@ all 11 siblings `still_exact`, and only the non-exact residual in
 `5d5c8edc492fb8ab6ea83e1ccaa4cb2798da51ae4a17182fa848878bed05a7ed`;
 `git diff --check` clean.
 
-## 2026-08-30 part 2: origin-mirror source recovery and 4-instruction witness
+## 2026-08-30 part 2: origin-mirror source recovery and the witness
 
 Directed continuation of the same session ("recover the human-readable
 code; do not give up"). Origin-remote commit
@@ -481,6 +485,78 @@ units / 0 errors / 4850 accepted exact; admission audit 0/0/0; parked audit
 12/0/0; tooling tests 212/212; Units sentinel exact; `git diff --check`
 clean.
 
+## 2026-08-30 session 3: C2-debugger pass, and a correction to the above
+
+Directed continuation ("use the c2 debugger to solve the last 4
+instructions"). It produced a real methodological correction rather than a
+close, and the corrected number is worse than the one it started from.
+
+### The "4 instructions" figure was wrong
+
+Session 2 reported the witness at 4 differing lines using a
+`dot_product3d` spelled `a->i*b->i + (a->j*b->j + a->k*b->k)`, and stated
+its whole-board impact was nil. The board check behind that statement had
+been run *after* the header was reverted, so it never tested the edit.
+Re-measured with a full rebuild between each header state and the board:
+
+| `dot_product3d` body | this function | whole board |
+| --- | ---: | --- |
+| flat (production) | 20 lines | **277 objects / 4822 fns** |
+| grouped `i + (j + k)` | 4 lines | 271 / 4805 — 17 functions lost |
+| k,j,i sequential accumulation | 4 lines | 271 / 4787 — 35 functions lost |
+
+Both candidate levers are refuted by tree-wide evidence: they break
+`source/math/real_math` itself plus objects, items, vehicles and units.
+The flat form is *proven* by those functions. A corpus census over 66,930
+objects / 9,989 commits independently found the grouped spelling has no
+provenance in any preserved copy, while confirming that **no authentic
+Bungie blob of these headers exists anywhere** — every copy is a
+reconstruction, so absence of provenance is weak evidence either way and
+the board is the real arbiter.
+
+The accumulation form was not a guess: it is the lever the acceleration
+playbook documents for exactly this symptom (it closed
+`collision_prism_test_vector`). Here the board says it is wrong.
+
+**Standing rule this establishes: a shared-header lever's local win is
+meaningless until the whole board is rebuilt and diffed, and the board
+numbers — not the local diff count — go in the ledger.**
+
+### The true residual, precisely characterised
+
+All 20 lines are one phenomenon: VC7 and January order commutative FP
+operands/terms differently at five sites. Instruction counts, relocations,
+frame size and every stack home already agree.
+
+1. **Four `plane3d_distance_to_point` expansions** (0x3fc, 0x426, 0x45b,
+   0x47f): both sides open the sum with the same term, then January adds
+   the j term and finally the i term while ours adds i then j.
+2. **One `cross_product3d` expansion** (0x37b, 0x389): for the two
+   products containing `s_normal.k`, January loads the other operand and
+   multiplies by `s_normal.k`; ours loads `s_normal.k`.
+
+A 96-byte micro-probe (`scratch/micro.c::micro_m6`) reproduces item 2
+exactly and shows VC7's default is *right-operand-loaded*, with the `a.k`
+products as the deviation; `micro_m1`/`m2` prove local definition order is
+not the driver. Roughly 40 further source shapes were measured inert in
+the true basin (full list in the research README), including every operand
+text order inside the helpers — VC7 canonicalizes commutative multiply
+operands, so the helper text provably cannot move this.
+
+### Debugger findings
+
+`tools/c2dbg32/gen_config_cross.py` (new) points dbg32 at the probe
+compile; the harness is confirmed working (C2 loads at its fixed base,
+breakpoints trap, 36 hits on the arena allocator). Profiled over this
+path: arena `0x10701000` 26 hits, byte emitter `0x107455e6` 70,
+interference test `0x1070943b` 30, preferred-register push `0x1075fa55`
+39, width-class write `0x10715873` 53 — and **zero** hits on every mapped
+FP site (`0x10745628`, `0x10744304`, `0x10735135`), which were mapped from
+an ai_debug compile and are not on this path. The FP commutative-order
+decision is therefore in code not yet mapped; the byte emitter and the
+allocator chain are the live anchors, and `micro_m6` is the right target
+for that RE because it is 96 bytes and compiles in a second.
+
 ## Residual classification
 
 Mechanism-proven vendored-assembly boundary (2026-08-30). The four January
@@ -498,11 +574,12 @@ exactness and receives no completion credit.
 Reopen only if:
 
 1. the owner changes the no-assembly rule or admits `fast_ftol`
-   specifically — the archived witness then leaves 4 instructions (two
-   commutative folds in the `cross_product3d` expansion) plus the four
-   dot reassociation orders behind them; the next instrument is a
-   `tools/c2dbg32` read of the C2 IR node numbers at the fld-choice site,
-   not further source lotteries;
+   specifically — the archived witness then leaves 20 instructions at five
+   commutative-order sites (four `plane3d_distance_to_point` term orders,
+   one `cross_product3d` operand-role pair). Do not resume with source
+   lotteries: ~40 shapes are measured inert and the helper text provably
+   cannot move a commutative multiply. The next instrument is C2 RE against
+   `scratch/micro.c::micro_m6`, a 96-byte probe that reproduces the tie;
 2. the owner reconciles this unit's flags with the uniform profile — then
    remove `/QIfist` and re-measure against the honest table in the part-1
    section (the part-2 source is already the right topology for that
@@ -515,7 +592,7 @@ Reopen only if:
 
 `NonMatching` / rigorously parked at 11/12 exact functions. The landed
 part-2 mirror topology is an evidence-backed reconstruction of the January
-source — validated by the 4-instruction witness and the assert line-anchor
+source — validated by the 20-instruction witness and the assert line-anchor
 spans — not an object completion. Do not mark the object complete or grant
 credit from equal size or semantic plausibility, and do not respend
 implementation lanes here under the no-asm rule: the blocker is

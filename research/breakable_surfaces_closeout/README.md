@@ -48,17 +48,10 @@ the whole body, one line still unaccounted in the declaration head.
 ## witness_mirror_fast_ftol_20260830.c
 
 Self-contained analysis-only witness (owner rule: no `__asm` in
-production). With ONE additional analysis-only context lever in
-`source/math/real_math.h`:
-
-```
--	return a->i*b->i + a->j*b->j + a->k*b->k;
-+	return a->i*b->i + (a->j*b->j + a->k*b->k);
-```
-
-the witness measures **4 differing instruction lines** against January
-(1156/1156 instructions, 4032/4032 padded bytes, 117/117 relocations, frame
-`0x1240`, every stack home identical):
+production).  Under the UNMODIFIED production headers it measures
+**20 differing instruction lines** against January -- 1156/1156
+instructions, 4032/4032 padded bytes, 117/117 relocations, frame `0x1240`,
+and every stack home identical:
 
 ```
 python tools/campaign/gate.py source/physics/breakable_surfaces \
@@ -66,33 +59,80 @@ python tools/campaign/gate.py source/physics/breakable_surfaces \
     --fn _breakable_surface_effect --disas _breakable_surface_effect
 ```
 
-The residual 4 lines are two commutative fld/fmul pairs in the
-`cross_product3d` expansion (January folds `s_normal.i`, loading the plane
-member first, in exactly the two `a->i` products).
+### CORRECTION (2026-08-30, session 3): the "4 instructions" figure was wrong
 
-The paren-grouping lever is fi4-class (scheduling-only, no provenance — the
-lineage's grouped `triple_product3d` is explicitly marked "doesn't match" by
-its own author) and is therefore NOT in production headers. Without it the
-witness differs by 20 lines (the four distance-dot expansions reassociate
-k,i,j instead of January's k,j,i, plus the same cross pair). Its byte-effect
-proves a real, still-unfound upstream source difference exists
-(identical-compiler theorem); the next instrument is reading the C2 IR node
-numbers with `tools/c2dbg32` at the fld-choice site.
+An earlier pass in this session reported the witness at 4 differing lines
+with a `dot_product3d` spelled `a->i*b->i + (a->j*b->j + a->k*b->k)`, and
+claimed the whole-board impact of that header edit was nil.  **Both claims
+were false.**  The board check that produced "BOARD IDENTICAL" was run
+after the header had already been reverted, so it never tested the edit.
 
-Measured-inert negatives in this basin (do not re-run): dot wrapper argument
-order (both wrappers), reverse-spelled dot, grouped `magnitude_squared3d`,
-2-temp vs 3-temp `cross_product3d` (byte-neutral here AND tree-neutral under
-a full-board rebuild), b-first operand text in the two cross products
-(changes other bytes, not the fold), nested
-`normalize3d(vector_from_points3d(...))`, `fast_ftol` helper placement
-(cseries.h vs TU), declaration-order permutations of
-`s_normal`/`t_normal`/`next_vertex_point`, decl/init split of the else-arm
-`s`/`t`, member-lvalue vs pointer-local vertex access.
+Re-measured properly, with a full `ninja` rebuild between header state and
+board:
 
-Method warning that cost this session an afternoon: header-state experiments
-MUST checksum the header per run (`scratch/header_matrix.py`) — a stale
-header state produced a wrong lever attribution (the 2-temp cross was
-credited with a fix that belonged to the paren lever).
+| `dot_product3d` body | this function | whole board |
+| --- | ---: | --- |
+| `a->i*b->i + a->j*b->j + a->k*b->k` (production, flat) | 20 lines | **277 objects / 4822 fns** |
+| `a->i*b->i + (a->j*b->j + a->k*b->k)` (grouped) | 4 lines | 271 objects / 4805 fns — **17 functions lost** |
+| k,j,i sequential accumulation | 4 lines | 271 objects / 4787 fns — **35 functions lost** |
+
+Both "fixes" are refuted by tree-wide evidence: they break
+`source/math/real_math` itself (79 -> 74 and 79 -> 69 exact functions),
+plus objects, items, vehicles and units.  The flat form is *proven* by
+those functions.  Any local win from a shared-header edit is meaningless
+until the whole board is rebuilt and diffed -- record the board numbers,
+not just the local diff count.
+
+The sequential-accumulation form deserved the test: it is the
+campaign-proven lever documented in the acceleration playbook (it closed
+`collision_prism_test_vector`).  Here it is simply wrong, and the board
+says so unambiguously.
+
+### The true residual: five commutative-order sites
+
+All 20 lines are one phenomenon -- VC7 and January order commutative FP
+operands/terms differently at five sites, with identical instruction
+counts and identical stack homes:
+
+* **Four `plane3d_distance_to_point` expansions** (0x3fc, 0x426, 0x45b,
+  0x47f).  Both sides start the sum with the same term; January then adds
+  the j term and finally the i term, ours adds i then j.  Example at
+  0x3fc: January `fld [-0x1c]; fmul [esi+4]` then `fld [-0x20]; fmul [esi]`;
+  ours has those two products in the opposite order.
+* **One `cross_product3d` expansion** (0x37b/0x389).  For the two products
+  containing `s_normal.k`, January loads the *other* operand
+  (`fld [-0x68]; fmul [-0x20]`); ours loads `s_normal.k` first.
+
+### Measured negatives in the TRUE (flat-dot) basin
+
+Micro-probes (`scratch/micro.c`, `scratch/probelab.py`) isolate the tie in
+a 96-byte function: `_micro_m6` reproduces our exact behaviour -- products
+containing `a.k` left-loaded, all others right-loaded -- so the default
+VC7 rule is *right-operand-loaded* and the a.k products are the deviation.
+`_micro_m1`/`m2` prove the choice is NOT driven by the definition order of
+the two vectors.
+
+Inert (no change to the operand roles): every operand text order inside
+`cross_product3d` (VC7 canonicalizes commutative multiply operands),
+2-temp vs 3-temp vs direct-to-`result`, decl/init split, named `a->k`
+local, named per-product locals, per-component accumulation, negated
+components, `scale_vector3d` store order (i,j,k is optimal; every other
+permutation is 20-410 lines worse), `plane3d_from_point_and_normal`
+argument order / read-`normal`-vs-copy / d-before-n, caller statement
+order, nesting the cross into the plane construction, and reversed cross
+arguments (13 lines, worse).
+
+### Debugger state (tools/c2dbg32)
+
+`gen_config_cross.py` points dbg32 at the probe compile.  Profiled hit
+counts on this path: arena `0x10701000` 26, byte emitter `0x107455e6` 70,
+interference test `0x1070943b` 30, preferred-register push `0x1075fa55`
+39, width-class write `0x10715873` 53; and **zero** on the mapped FP sites
+`0x10745628` / `0x10744304` / `0x10735135`, which were mapped from an
+ai_debug compile and do not fire here.  So the FP operand-order decision
+is made somewhere not yet mapped; the byte emitter and the allocator are
+live and are the anchors for the next search.  `_micro_m6` is the correct
+target for that work -- 96 bytes, exhibits the tie, compiles in a second.
 
 ## witness_fast_ftol_stack_20260830.json (superseded)
 
