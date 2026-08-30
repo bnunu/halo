@@ -143,6 +143,20 @@ static void code_000fa050(real *values);
 static void code_000fa150(byte *table, short function_type);
 void code_000fa280(short function_type, byte *table);
 
+__inline long fast_ftol(
+	float d)
+{
+	long result;
+
+	__asm
+	{
+		fld d
+		fistp result
+	}
+
+	return result;
+}
+
 /* ---------- globals */
 
 char *data_0030791c[NUMBER_OF_PERIODIC_FUNCTIONS] =
@@ -241,10 +255,12 @@ real periodic_function_evaluate(
 	{
 		time *= 25.6f;
 		fraction = (real)fmod((double)time, 1.0);
-		index = (long)(time-fraction);
+		index = fast_ftol(time-fraction);
 		table = bss_004561bc.periodic_function_tables[function_type];
-		first_value = table[index&PERIODIC_FUNCTION_TABLE_MASK] * (1.0f/255.0f);
-		second_value = table[(index+1)&PERIODIC_FUNCTION_TABLE_MASK] * (1.0f/255.0f);
+		index &= PERIODIC_FUNCTION_TABLE_MASK;
+		first_value = table[index] * (1.0f/255.0f);
+		index = (index+1)&PERIODIC_FUNCTION_TABLE_MASK;
+		second_value = table[index] * (1.0f/255.0f);
 
 		if (((1 << function_type)&0xC0) != 0)
 		{
@@ -270,6 +286,7 @@ real transition_function_evaluate(
 {
 	long index;
 	byte *table;
+	real scaled;
 	real fraction;
 	real first_value;
 	real second_value;
@@ -290,9 +307,9 @@ real transition_function_evaluate(
 	if (bss_004561bc.function_tables_initialized)
 	{
 		table = bss_004561bc.transition_function_tables[function_type];
-		value *= (real)(PERIODIC_FUNCTION_TABLE_SIZE-1);
-		fraction = (real)fmod((double)value, 1.0);
-		index = (long)(value-0.5f);
+		scaled = value*(real)(PERIODIC_FUNCTION_TABLE_SIZE-1);
+		fraction = (real)fmod((double)scaled, 1.0);
+		index = fast_ftol(scaled-0.5f);
 		if ((short)index == PERIODIC_FUNCTION_TABLE_SIZE-1)
 			return table[PERIODIC_FUNCTION_TABLE_SIZE-1] * (1.0f/255.0f);
 

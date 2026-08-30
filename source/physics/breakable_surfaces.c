@@ -249,6 +249,20 @@ void breakable_surface_damage_area_of_effect(
 
 /* ---------- private code */
 
+__inline long fast_ftol(
+	float d)
+{
+	long result;
+
+	__asm
+	{
+		fld d
+		fistp result
+	}
+
+	return result;
+}
+
 static void breakable_surface_effect(
 	short breakable_surface_index,
 	const struct damage_data *damage_data,
@@ -440,10 +454,10 @@ static void breakable_surface_effect(
 
 					if (particle_effect->density!=0.f)
 					{
-						s_min = (short)(long)(real)ceil(PIN(surface_bounds.x0 / particle_effect->density, -1000.f, 1000.f));
-						t_min = (short)(long)(real)ceil(PIN(surface_bounds.y0 / particle_effect->density, -1000.f, 1000.f));
-						s_max = (short)(long)(real)floor(PIN(surface_bounds.x1 / particle_effect->density, -1000.f, 1000.f));
-						t_max = (short)(long)(real)floor(PIN(surface_bounds.y1 / particle_effect->density, -1000.f, 1000.f));
+						s_min = (short)fast_ftol((real)ceil(PIN(surface_bounds.x0 / particle_effect->density, -1000.f, 1000.f)));
+						t_min = (short)fast_ftol((real)ceil(PIN(surface_bounds.y0 / particle_effect->density, -1000.f, 1000.f)));
+						s_max = (short)fast_ftol((real)floor(PIN(surface_bounds.x1 / particle_effect->density, -1000.f, 1000.f)));
+						t_max = (short)fast_ftol((real)floor(PIN(surface_bounds.y1 / particle_effect->density, -1000.f, 1000.f)));
 					}
 					else
 					{
@@ -489,6 +503,7 @@ static void breakable_surface_effect(
 								struct damage_breaking_effect_definition const *breaking_effect;
 								real_vector3d outward;
 								real distance;
+								real random_value;
 
 								velocity = *global_zero_vector3d;
 								breaking_effect = &damage_effect_definition_get(damage_data->definition_index)->breaking_effect;
@@ -544,6 +559,7 @@ static void breakable_surface_effect(
 								particle.angular_velocity = real_local_random_range(particle_effect->angular_velocity_lower_bound, particle_effect->angular_velocity_upper_bound);
 								particle.radius = real_local_random_range(particle_effect->radius_lower_bound, particle_effect->radius_upper_bound);
 
+								random_value = real_local_random();
 								rgb_colors_interpolate(
 									&particle.color.rgb,
 									particle_effect->flags &
@@ -553,10 +569,10 @@ static void breakable_surface_effect(
 									),
 									&particle_effect->tint_lower_bound.rgb,
 									&particle_effect->tint_upper_bound.rgb,
-									real_local_random()
+									random_value
 								);
 
-								particle.color.alpha = PIN(particle_effect->tint_lower_bound.alpha + real_local_random() * (particle_effect->tint_upper_bound.alpha - particle_effect->tint_lower_bound.alpha), 0.f, 1.f);
+								particle.color.alpha = PIN(particle_effect->tint_lower_bound.alpha + (particle_effect->tint_upper_bound.alpha - particle_effect->tint_lower_bound.alpha) * real_local_random(), 0.f, 1.f);
 
 								if (normalize3d(&particle.direction)==0.f)
 								{

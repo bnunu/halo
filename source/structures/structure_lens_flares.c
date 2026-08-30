@@ -59,6 +59,20 @@ symbols in this file:
 
 /* ---------- constants */
 
+__inline long fast_ftol(
+	float d)
+{
+	long result;
+
+	__asm
+	{
+		fld d
+		fistp result
+	}
+
+	return result;
+}
+
 enum
 {
 	MAXIMUM_TRIANGLES_PER_CONNECTED_GEOMETRY_COPLANAR_GROUP = 20000,
@@ -315,14 +329,26 @@ boolean build_structure_lens_flares(
 			if (!lens_flare_reference || lens_flare_reference->index == NONE)
 				continue;
 
-			for (lens_flare_index = 0; lens_flare_index < structure_bsp->lens_flares.count; lens_flare_index++)
+			lens_flare_index = 0;
 			{
-				struct structure_lens_flare *lens_flare = TAG_BLOCK_GET_ELEMENT(
-					&structure_bsp->lens_flares,
-					lens_flare_index,
-					struct structure_lens_flare);
-				if (lens_flare->lens_flare.index == lens_flare_reference->index)
-					break;
+				long lens_flare_element_index = 0;
+
+				if (structure_bsp->lens_flares.count > 0)
+				{
+
+				do
+				{
+					struct structure_lens_flare *lens_flare = TAG_BLOCK_GET_ELEMENT(
+						&structure_bsp->lens_flares,
+						lens_flare_element_index,
+						struct structure_lens_flare);
+					if (lens_flare->lens_flare.index == lens_flare_reference->index)
+						break;
+					++lens_flare_index;
+					lens_flare_element_index = lens_flare_index;
+				}
+				while (lens_flare_element_index < structure_bsp->lens_flares.count);
+				}
 			}
 
 			if (structure_bsp->lens_flares.count == lens_flare_index)
@@ -472,8 +498,8 @@ boolean build_structure_lens_flares(
 				if (hull_count >= 3)
 				{
 					real_point3d origin = *global_origin3d;
-					real_vector3d s_axis;
-					real_vector3d t_axis;
+					real_plane3d s_plane;
+					real_plane3d t_plane;
 					real_rectangle2d bounds;
 					short hull_index;
 					rectangle2d grid_bounds;
@@ -486,26 +512,30 @@ boolean build_structure_lens_flares(
 						origin.y += points[hull_indices[hull_index]].y;
 						origin.z += points[hull_indices[hull_index]].z;
 					}
-					origin.x *= 1.f / (real)hull_count;
-					origin.y *= 1.f / (real)hull_count;
-					origin.z *= 1.f / (real)hull_count;
-
-					vector_from_points3d(&points[0], &points[1], &s_axis);
-					normalize3d(&s_axis);
-					cross_product3d(&plane.n, &s_axis, &t_axis);
+					origin.x = origin.x * (1.f / (real)hull_count);
+					origin.y = origin.y * (1.f / (real)hull_count);
+					origin.z = origin.z * (1.f / (real)hull_count);
 
 					{
-						real_point2d origin_projection;
+						real_plane3d s_temp;
 
-						origin_projection.x = dot_product3d((real_vector3d const *)&origin, &s_axis);
-						origin_projection.y = dot_product3d((real_vector3d const *)&origin, &t_axis);
+						vector_from_points3d(&points[0], &points[1], &s_temp.n);
+						normalize3d(&s_temp.n);
+						cross_product3d(&plane.n, &s_temp.n, &t_plane.n);
+						s_temp.d = dot_product3d((real_vector3d const *)&origin, &s_temp.n);
+						s_plane = s_temp;
+					}
 
-						bounds.x0 = bounds.x1 = dot_product3d((real_vector3d const *)&points[hull_indices[0]], &s_axis) - origin_projection.x;
-						bounds.y0 = bounds.y1 = dot_product3d((real_vector3d const *)&points[hull_indices[0]], &t_axis) - origin_projection.y;
+					{
+						t_plane.d = dot_product3d((real_vector3d const *)&origin, &t_plane.n);
+
+						bounds.x0 = bounds.x1 = plane3d_distance_to_point(&s_plane, &points[hull_indices[0]]);
+						bounds.y0 = bounds.y1 = plane3d_distance_to_point(&t_plane, &points[hull_indices[0]]);
 						for (hull_index = 0; hull_index < hull_count; hull_index++)
 						{
-							real s = dot_product3d((real_vector3d const *)&points[hull_indices[hull_index]], &s_axis) - origin_projection.x;
-							real t_coordinate = dot_product3d((real_vector3d const *)&points[hull_indices[hull_index]], &t_axis) - origin_projection.y;
+							real_point3d const *point = &points[hull_indices[hull_index]];
+							real s = plane3d_distance_to_point(&s_plane, point);
+							real t_coordinate = plane3d_distance_to_point(&t_plane, point);
 
 							bounds.x0 = MIN(s, bounds.x0);
 							bounds.y0 = MIN(t_coordinate, bounds.y0);
@@ -516,10 +546,10 @@ boolean build_structure_lens_flares(
 
 					if (lens_flare_spacing != 0.f)
 					{
-						grid_bounds.x0 = (short)(real)ceil(PIN(bounds.x0 / lens_flare_spacing, -1000.f, 1000.f));
-						grid_bounds.y0 = (short)(real)ceil(PIN(bounds.y0 / lens_flare_spacing, -1000.f, 1000.f));
-						grid_bounds.x1 = (short)(real)floor(PIN(bounds.x1 / lens_flare_spacing, -1000.f, 1000.f));
-						grid_bounds.y1 = (short)(real)floor(PIN(bounds.y1 / lens_flare_spacing, -1000.f, 1000.f));
+						grid_bounds.x0 = (short)fast_ftol((real)ceil(PIN(bounds.x0 / lens_flare_spacing, -1000.f, 1000.f)));
+						grid_bounds.y0 = (short)fast_ftol((real)ceil(PIN(bounds.y0 / lens_flare_spacing, -1000.f, 1000.f)));
+						grid_bounds.x1 = (short)fast_ftol((real)floor(PIN(bounds.x1 / lens_flare_spacing, -1000.f, 1000.f)));
+						grid_bounds.y1 = (short)fast_ftol((real)floor(PIN(bounds.y1 / lens_flare_spacing, -1000.f, 1000.f)));
 					}
 					else
 					{
@@ -545,12 +575,16 @@ boolean build_structure_lens_flares(
 									long marker_index;
 									struct structure_lens_flare_marker *marker;
 
-									position.x = position.x + s_axis.i * s_distance;
-									position.y = position.y + s_axis.j * s_distance;
-									position.z = position.z + s_axis.k * s_distance;
-									position.x = t_axis.i * t_distance + position.x;
-									position.y = t_axis.j * t_distance + position.y;
-									position.z = t_axis.k * t_distance + position.z;
+									{
+										real ds_x = s_plane.n.i * s_distance;
+
+										position.x = position.x + ds_x;
+									}
+									position.y = position.y + s_plane.n.j * s_distance;
+									position.z = position.z + s_plane.n.k * s_distance;
+									position.x = t_plane.n.i * t_distance + position.x;
+									position.y = t_plane.n.j * t_distance + position.y;
+									position.z = t_plane.n.k * t_distance + position.z;
 									project_point3d(&position, projection_axis, projection_sign, &projected_position);
 									if (convex_hull2d_test_point_indexed(
 										hull_count,
@@ -567,9 +601,9 @@ boolean build_structure_lens_flares(
 												marker_index,
 												struct structure_lens_flare_marker);
 											marker->position = position;
-											marker->direction[0] = (char)(real)floor(plane.n.i * 127.5f);
-											marker->direction[1] = (char)(real)floor(plane.n.j * 127.5f);
-											marker->direction[2] = (char)(real)floor(plane.n.k * 127.5f);
+											marker->direction[0] = (char)fast_ftol((real)floor(plane.n.i * 127.5f));
+											marker->direction[1] = (char)fast_ftol((real)floor(plane.n.j * 127.5f));
+											marker->direction[2] = (char)fast_ftol((real)floor(plane.n.k * 127.5f));
 											marker->lens_flare_index = (byte)lens_flare_index;
 										}
 										else
@@ -619,11 +653,12 @@ boolean build_structure_lens_flares(
 				struct structure_lens_flare_marker);
 			real_vector3d direction;
 			real_point3d test_point = marker->position;
-			real offset = 1.f / 65536.f;
+			real offset;
 
 			direction.i = (real)marker->direction[0] * (1.f / 127.f);
 			direction.j = (real)marker->direction[1] * (1.f / 127.f);
 			direction.k = (real)marker->direction[2] * (1.f / 127.f);
+			offset = 1.f / 65536.f;
 			csmemcpy(&temp_markers[marker_index], marker, sizeof(*marker));
 
 			do

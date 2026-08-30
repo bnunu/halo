@@ -251,8 +251,8 @@
 		{
 			"unit": "source/structures/structure_lens_flares",
 			"function": "_build_structure_lens_flares",
-			"class": "vendored-assembly",
-			"evidence": "The residual bytes are not compiler output. External origin identified: the seven float-to-integer sites are inline expansions of the historical __asm helper fast_ftol(float d) from cseries.h (HCEX-PDB-attested; restored verbatim in non-ancestor commit 5093ac1a; January's actor_combat.obj carries a byte-exact standalone _fast_ftol with the identical fld/dword-fistp body, and hud_draw.obj carries the hand-written fist/fisub/sbb fast_ftol_C twin). Measured width law on the campaign XDK 3911 compiler: /QIfist converts every C float-to-integer conversion through a 64-bit fistp regardless of source or destination type, across every cast type, staging topology, and flag family, so January's seven 32-bit fistp sites are unreachable from C; tools/flag_provenance_census.py records the same law independently. With the helper restored in a lab build the same source reaches 4320/4336 with frame and relocation identity exact; the last ~29 instructions are two c2 scheduler ties adjudicated by live compiler instrumentation (FP store nodes carry no pop/keep field - fst versus fstp is computed from encode-time FP-stack liveness via the jump-table handler at 0x10745628 - and January's own 24-site inlined-normalize census lands on both sides of the tie from identical statement classes, e.g. keep at path_obstacle_avoidance@0125 versus fold at decals@0d94), plus their downstream multiply-order and alignment-pad fallout. The committed C is the maximal legal candidate: 4288/4336 padded bytes, 156/156 relocations with the destination/type sequence exact, three sibling functions and all owned data strict-exact, roughly 25 January source shapes recovered (nested dynamic_array_get_element calls, rectangle2d grid bounds, distributed origin dots, reversed cross_product3d and plane3d_from_points argument orders, marker-phase long counters, and more - full ledger structure_lens_flares_obj_fable_fast_ftol_attribution_20260828.md). To unpark, either admit the attested fast_ftol helper or find a compiler provenance whose C conversions emit 32-bit fistp.",
+			"class": "instruction-scheduling",
+			"evidence": "Reclassified 2026-08-30: the vendored-assembly park is superseded. With the owner-admitted unit-local fast_ftol helper (January cseries.h, HCEX-attested) and eight recovered source shapes (real_plane3d s_plane/t_plane factoring with plane3d_distance_to_point, a total-aggregate coalescing copy, the rotated pair-do-while search idiom, and a decl/init-split definition-position lever), the reconstruction now reproduces 1327 of 1327 instructions at exact padded size and exact relocation identities/sequence, with all 348 frame-slot references matching. The residual is TWO int-vs-x87 emission-order tie-breaks (a s_count home store at 0x0e28 and a project_point3d argument push at 0x0e6a), decoded with dbg32b inside C2.Dll: the emit list is walked in node-creation order by a pure serializer, the two nodes carry no order-priority field, and the order follows the right-to-left argument-evaluation DAG. No source lever moves them (~15000 measured variants, corpus sweeps of 4186 pairs and 7500 triples/quads, plus loop-nest, call-region and whole-body rewrites).",
 			"measurements": {
 				"target": {
 					"size": 4336,
@@ -260,11 +260,11 @@
 					"normalized_sha256": "40aa8e486e52fe258065ae9cc9bd892679b15fd7845008cc0ebe1651788cf33b"
 				},
 				"base": {
-					"size": 4288,
+					"size": 4336,
 					"relocation_count": 156,
-					"normalized_sha256": "99525243a3d7a8d000a905ccf58ca4f44879cee82fe26b5d11b56d4be51e7205"
+					"normalized_sha256": "eb9e1864cf913c53c14033a970aeb94a2d389f0bcc23ccaae6290c0fdfa4642a"
 				},
-				"objdiff_percent": 94.67852
+				"objdiff_percent": 99.697426
 			}
 		}
 	]

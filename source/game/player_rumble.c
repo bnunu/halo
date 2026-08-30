@@ -368,11 +368,20 @@ void rumble_update(
 
 /* ---------- private code */
 
-/* NonMatching: the readable mixer is required for January's private EAX
- * helper convention, which makes rumble_update strict-exact. The remaining
- * mixer difference is limited to VC7 float-to-integer lowering: the ordinary
- * build emits 19 relocations against January's 12. Do not replace the casts
- * with assembly, /QIfist, volatile forcing, or representation tricks. */
+__inline long fast_ftol(
+	float d)
+{
+	long result;
+
+	__asm
+	{
+		fld d
+		fistp result
+	}
+
+	return result;
+}
+
 static struct rumble_motor_values code_000a91a0(
 	struct rumble_player *player)
 {
@@ -421,13 +430,13 @@ static struct rumble_motor_values code_000a91a0(
 		motors[0] * (real)MAXIMUM_RUMBLE_MOTOR_VALUE,
 		0.0f,
 		(real)MAXIMUM_RUMBLE_MOTOR_VALUE);
-	values.left = (word)(long)value;
+	values.left = (word)fast_ftol(value);
 
 	value = PIN(
 		motors[1] * (real)MAXIMUM_RUMBLE_MOTOR_VALUE,
 		0.0f,
 		(real)MAXIMUM_RUMBLE_MOTOR_VALUE);
-	values.right = (word)(long)value;
+	values.right = (word)fast_ftol(value);
 
 	return values;
 }
