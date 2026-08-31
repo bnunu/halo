@@ -97,7 +97,6 @@ static struct mutex_reference *get_mutex_from_pool(
 /* ---------- globals */
 
 static struct thread_globals thread_globals = {0};
-extern struct mutex_reference transport_address_string;
 
 /* ---------- public code */
 
@@ -294,7 +293,7 @@ static struct mutex_reference *get_mutex_from_pool(
 		in_use += sizeof(struct mutex_reference);
 		mutex_index++;
 	}
-	while ((long)in_use<(long)&transport_address_string.in_use);
+	while ((long)in_use<(long)&thread_globals.mutex_references[MAXIMUM_MUTEX_REFERENCES].in_use);
 
 	return mutex_reference;
 }
