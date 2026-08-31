@@ -850,9 +850,6 @@ void code_00099b90(
 void code_0009ccf0(
 	void);
 
-void game_engine_intialize_queued_sounds(
-	void);
-
 void game_engine_post_rasterize_post_game(
 	void);
 
@@ -894,9 +891,6 @@ void code_00096ed0(
 	void);
 
 void code_0009b3a0(
-	void);
-
-void game_engine_update_multiplayer_sound(
 	void);
 
 void sound_class_set_gain(

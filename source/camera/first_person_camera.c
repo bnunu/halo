@@ -7,7 +7,7 @@ symbols in this file:
 000772F0 00d0:
 	_first_person_camera_deterministic (0000)
 000773C0 04f0:
-	_code_000773c0 (0000)
+	_first_person_camera_for_unit_and_vector (0000)
 000778B0 0030:
 	_first_person_camera_fake (0000)
 000778E0 00c0:
@@ -25,6 +25,8 @@ symbols in this file:
 #include "first_person_camera.h"
 #include "static_camera.h"
 
+#include "camera/observer.h"
+#include "game/player_control.h"
 #include "objects/objects.h"
 #include "units/unit_definitions.h"
 #include "units/units.h"
@@ -45,26 +47,14 @@ struct first_person_camera_action
 struct first_person_camera_result
 {
 	struct camera_command command;
-	byte reserved4C[3];
-	boolean field_4F;
-	byte reserved50[0x10];
-	real transition_time;
+	byte parameter_flags[5];
+	byte pad51[3];
+	real parameter_timers[5];
 };
 
 /* ---------- prototypes */
 
-void observer_up_from_forward(
-	real_vector3d const *forward,
-	real_vector3d *up);
-long player_control_get_unit_index(
-	short local_player_index);
-void player_control_get_facing_direction(
-	short local_player_index,
-	real_vector3d *facing_direction);
-real player_control_get_field_of_view(
-	short local_player_index);
-
-static void code_000773c0(
+static void first_person_camera_for_unit_and_vector(
 	long unit_index,
 	real_vector3d const *forward,
 	struct camera_command *result);
@@ -135,7 +125,7 @@ void first_person_camera_fake(
 	struct unit_datum *unit;
 
 	unit = unit_get(unit_index);
-	code_000773c0(unit_index, &unit->unit.aiming_vector, result);
+	first_person_camera_for_unit_and_vector(unit_index, &unit->unit.aiming_vector, result);
 	return;
 }
 
@@ -151,12 +141,12 @@ void first_person_camera_update(
 	match_assert("c:\\halo\\SOURCE\\camera\\first_person_camera.c", 157, camera);
 	match_assert("c:\\halo\\SOURCE\\camera\\first_person_camera.c", 158, result);
 	player_control_get_facing_direction(action->local_player_index, &facing_direction);
-	code_000773c0(unit_index, &facing_direction, &result->command);
+	first_person_camera_for_unit_and_vector(unit_index, &facing_direction, &result->command);
 	result->command.field_of_view = player_control_get_field_of_view(action->local_player_index);
 	if (camera->field_of_view != result->command.field_of_view)
 	{
-		result->transition_time = 0.18f;
-		result->field_4F = TRUE;
+		result->parameter_timers[3] = 0.18f;
+		result->parameter_flags[3] = TRUE;
 		camera->field_of_view = result->command.field_of_view;
 	}
 
@@ -165,7 +155,7 @@ void first_person_camera_update(
 
 /* ---------- private code */
 
-static void code_000773c0(
+static void first_person_camera_for_unit_and_vector(
 	long unit_index,
 	real_vector3d const *forward,
 	struct camera_command *result)
@@ -237,13 +227,13 @@ static void code_000773c0(
 			}
 		}
 
-		result->flags = FLAG(0);
+		result->flags = FLAG(_camera_command_valid_bit);
 	}
 
 	match_vassert(
 		"c:\\halo\\SOURCE\\camera\\first_person_camera.c",
 		133,
-		!(result->flags & FLAG(0)) ||
+		!(result->flags & FLAG(_camera_command_valid_bit)) ||
 		(valid_real_vector3d_axes2(&result->forward, &result->up) &&
 			valid_real(result->position.x) && result->position.x>=-5000.f && result->position.x<=5000.f &&
 			valid_real(result->position.y) && result->position.y>=-5000.f && result->position.y<=5000.f &&

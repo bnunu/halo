@@ -32,11 +32,11 @@ symbols in this file:
 
 /* ---------- prototypes */
 
-static real code_00143f40(
-	real *limits,
+static real physics_variable_position_get_seek_direction(
 	real position,
-	boolean wrap,
-	real target);
+	struct physics_variable_position const *definition,
+	boolean cyclical_position,
+	real desired_position);
 
 /* ---------- globals */
 
@@ -45,14 +45,14 @@ static real code_00143f40(
 void
 physics_variable_speed_update(
 	real *speed,
-	struct physics_variable_speed_parameters *parameters,
-	real delta)
+	struct physics_variable_speed const *definition,
+	real magnitude)
 {
-	real magnitude = (real)fabs(delta);
-	real acceleration = magnitude * parameters->acceleration;
-	real deceleration = magnitude * parameters->deceleration;
+	real absolute_magnitude = (real)fabs(magnitude);
+	real acceleration = absolute_magnitude * definition->acceleration;
+	real deceleration = absolute_magnitude * definition->deceleration;
 
-	if (delta > 0.f)
+	if (magnitude > 0.f)
 	{
 		if (*speed <= -deceleration)
 			*speed += deceleration;
@@ -61,12 +61,12 @@ physics_variable_speed_update(
 		else
 			*speed = (*speed / deceleration + 1.f) * acceleration;
 
-		*speed = MIN(*speed, magnitude * parameters->positive_scale);
+		*speed = MIN(*speed, absolute_magnitude * definition->positive_scale);
 
 		return;
 	}
 
-	if (delta < 0.f)
+	if (magnitude < 0.f)
 	{
 		if (*speed >= deceleration)
 			*speed -= deceleration;
@@ -75,7 +75,7 @@ physics_variable_speed_update(
 		else
 			*speed = (*speed / deceleration - 1.f) * acceleration;
 
-		*speed = MAX(-magnitude * parameters->negative_scale, *speed);
+		*speed = MAX(-absolute_magnitude * definition->negative_scale, *speed);
 	}
 
 	return;
@@ -84,27 +84,27 @@ physics_variable_speed_update(
 boolean
 physics_variable_speed_update_seek(
 	real *speed,
-	struct physics_variable_speed_parameters *parameters,
-	real target,
-	real delta)
+	struct physics_variable_speed const *definition,
+	real desired_speed,
+	real magnitude)
 {
 	boolean result = FALSE;
 
-	if (*speed > target)
+	if (*speed > desired_speed)
 	{
-		physics_variable_speed_update(speed, parameters, -delta);
-		if (*speed <= target)
+		physics_variable_speed_update(speed, definition, -magnitude);
+		if (*speed <= desired_speed)
 		{
-			*speed = target;
+			*speed = desired_speed;
 			result = TRUE;
 		}
 	}
-	else if (*speed < target)
+	else if (*speed < desired_speed)
 	{
-		physics_variable_speed_update(speed, parameters, delta);
-		if (*speed >= target)
+		physics_variable_speed_update(speed, definition, magnitude);
+		if (*speed >= desired_speed)
 		{
-			*speed = target;
+			*speed = desired_speed;
 			result = TRUE;
 		}
 	}
@@ -119,28 +119,28 @@ physics_variable_speed_update_seek(
 void
 physics_variable_position_update(
 	real *position,
-	real *limits,
-	boolean wrap,
-	real delta)
+	struct physics_variable_position const *definition,
+	boolean cyclical_position,
+	real speed)
 {
-	*position += delta;
+	*position += speed;
 
-	if (*position < limits[1])
+	if (*position < definition->minimum)
 	{
-		if (wrap)
-			*position += limits[0] - limits[1];
+		if (cyclical_position)
+			*position += definition->maximum - definition->minimum;
 		else
-			*position = limits[1];
+			*position = definition->minimum;
 
 		return;
 	}
 
-	if (*position > limits[0])
+	if (*position > definition->maximum)
 	{
-		if (wrap)
-			*position -= limits[0] - limits[1];
+		if (cyclical_position)
+			*position -= definition->maximum - definition->minimum;
 		else
-			*position = limits[0];
+			*position = definition->maximum;
 	}
 
 	return;
@@ -149,21 +149,21 @@ physics_variable_position_update(
 boolean
 physics_variable_position_update_seek(
 	real *position,
-	real *limits,
-	boolean wrap,
-	real target,
-	real delta)
+	struct physics_variable_position const *definition,
+	boolean cyclical_position,
+	real desired_position,
+	real speed)
 {
-	real direction = code_00143f40(limits, *position, wrap, target);
+	real direction = physics_variable_position_get_seek_direction(*position, definition, cyclical_position, desired_position);
 
 	if (direction != 0.f)
 	{
-		physics_variable_position_update(position, limits, wrap, direction * delta);
-		if (code_00143f40(limits, *position, wrap, target) == direction)
+		physics_variable_position_update(position, definition, cyclical_position, direction * speed);
+		if (physics_variable_position_get_seek_direction(*position, definition, cyclical_position, desired_position) == direction)
 			return FALSE;
 	}
 
-	*position = target;
+	*position = desired_position;
 
 	return TRUE;
 }
@@ -171,16 +171,13 @@ physics_variable_position_update_seek(
 void
 physics_variable_update(
 	real *position,
-	real *range,
-	real *velocity,
-	boolean update_velocity,
-	real delta)
+	real *speed,
+	struct physics_variable const *definition,
+	boolean cyclical_position,
+	real magnitude)
 {
-	physics_variable_speed_update(
-		range,
-		(struct physics_variable_speed_parameters *)(velocity + 2),
-		delta);
-	physics_variable_position_update(position, velocity, update_velocity, *range);
+	physics_variable_speed_update(speed, &definition->speed, magnitude);
+	physics_variable_position_update(position, &definition->position, cyclical_position, *speed);
 
 	return;
 }
@@ -188,28 +185,25 @@ physics_variable_update(
 boolean
 physics_variable_update_seek(
 	real *position,
-	real *range,
-	real *velocity,
-	boolean update_velocity,
-	real target,
-	real delta)
+	real *speed,
+	struct physics_variable const *definition,
+	boolean cyclical_position,
+	real desired_position,
+	real magnitude)
 {
-	real *parameters = velocity;
-	real direction = code_00143f40(parameters, *position, update_velocity, target);
+	struct physics_variable const *parameters = definition;
+	real direction = physics_variable_position_get_seek_direction(*position, &parameters->position, cyclical_position, desired_position);
 
 	if (direction != 0.f)
 	{
-		physics_variable_speed_update(
-			range,
-			(struct physics_variable_speed_parameters *)(parameters + 2),
-			direction * delta);
-		physics_variable_position_update(position, parameters, update_velocity, *range);
-		if (code_00143f40(parameters, *position, update_velocity, target) == direction)
+		physics_variable_speed_update(speed, &parameters->speed, direction * magnitude);
+		physics_variable_position_update(position, &parameters->position, cyclical_position, *speed);
+		if (physics_variable_position_get_seek_direction(*position, &parameters->position, cyclical_position, desired_position) == direction)
 			return FALSE;
 	}
 
-	*position = target;
-	*range = 0.f;
+	*position = desired_position;
+	*speed = 0.f;
 
 	return TRUE;
 }
@@ -217,17 +211,17 @@ physics_variable_update_seek(
 /* ---------- private code */
 
 static real
-code_00143f40(
-	real *limits,
+physics_variable_position_get_seek_direction(
 	real position,
-	boolean wrap,
-	real target)
+	struct physics_variable_position const *definition,
+	boolean cyclical_position,
+	real desired_position)
 {
-	real direction = target - position;
+	real direction = desired_position - position;
 
 	if (direction != 0.f)
 	{
-		if (wrap && fabs(direction) > (limits[0] - limits[1]) * 0.5f)
+		if (cyclical_position && fabs(direction) > (definition->maximum - definition->minimum) * 0.5f)
 			direction = -direction;
 
 		direction = direction > 0.f ? 1.f : -1.f;

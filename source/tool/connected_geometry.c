@@ -33,40 +33,13 @@ symbols in this file:
 /* ---------- headers */
 
 #include "memory/array.h"
+#include "tool/connected_geometry.h"
 
 /* ---------- constants */
 
 /* ---------- macros */
 
 /* ---------- structures */
-
-struct connected_geometry_point
-{
-	float x;
-	float y;
-	float z;
-};
-
-struct connected_geometry_edge
-{
-	struct dynamic_array triangle_indices;
-	long point_indices[2];
-	long unused[2];
-};
-
-struct connected_geometry_triangle
-{
-	long edge_designators[3];
-	long coplanar_group_index;
-	long unused[2];
-};
-
-struct connected_geometry
-{
-	struct dynamic_array points;
-	struct dynamic_array edges;
-	struct dynamic_array triangles;
-};
 
 typedef char connected_geometry_dynamic_array_size_assert[
 	sizeof(struct dynamic_array) == 0xC ? 1 : -1];

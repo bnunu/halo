@@ -3,25 +3,25 @@ RECORDED_ANIMATION_PLAYBACK.C
 
 symbols in this file:
 00081EF0 0090:
-	_code_00081ef0 (0000)
+	_apply_animation_state (0000)
 00081F80 0090:
-	_code_00081f80 (0000)
+	_apply_aiming_speed (0000)
 00082010 0090:
-	_code_00082010 (0000)
+	_apply_control_flags (0000)
 000820A0 0090:
-	_code_000820a0 (0000)
+	_apply_weapon_index (0000)
 00082130 00a0:
-	_code_00082130 (0000)
+	_apply_throttle (0000)
 000821D0 0040:
-	_code_000821d0 (0000)
+	_update_controller_char (0000)
 00082210 0040:
-	_code_00082210 (0000)
+	_update_controller_short (0000)
 00082250 0040:
-	_code_00082250 (0000)
+	_uncompress_vector_from_controller (0000)
 00082290 0200:
-	_code_00082290 (0000)
+	_apply_vector_char_difference (0000)
 00082490 0200:
-	_code_00082490 (0000)
+	_apply_vector_short_difference (0000)
 00082690 0040:
 	_recorded_animation_initialize_event_stream (0000)
 000826D0 0040:
@@ -77,7 +77,7 @@ symbols in this file:
 00258F18 0006:
 	??_C@_05CDKPFCKO@ticks?$AA@ (0000)
 002DCF20 0110:
-	_data_002dcf20 (0000)
+	_apply_funcs (0000)
 */
 
 /* ---------- headers */
@@ -102,6 +102,7 @@ enum
 	_playback_throttle_set,
 	_playback_vector_char_difference_set,
 	_playback_vector_short_difference_set = 15,
+	NUMBER_OF_RECORDED_ANIMATION_EVENTS = 23
 };
 
 enum
@@ -161,58 +162,39 @@ typedef void (*recorded_animation_apply_proc)(
 	struct animation_event_header const *header,
 	byte const **playback_stream);
 
-struct recorded_animation_playback_data
-{
-	recorded_animation_apply_proc apply_funcs[23];
-	byte_swap_code animation_state_codes[1];
-	struct byte_swap_definition animation_state_definition;
-	byte_swap_code aiming_speed_codes[1];
-	struct byte_swap_definition aiming_speed_definition;
-	byte_swap_code control_flags_codes[1];
-	struct byte_swap_definition control_flags_definition;
-	byte_swap_code weapon_index_codes[1];
-	struct byte_swap_definition weapon_index_definition;
-	byte_swap_code throttle_codes[2];
-	struct byte_swap_definition throttle_definition;
-	byte_swap_code vector_char_difference_codes[2];
-	struct byte_swap_definition vector_char_difference_definition;
-	byte_swap_code vector_short_difference_codes[2];
-	struct byte_swap_definition vector_short_difference_definition;
-};
-
 /* ---------- prototypes */
 
-void code_00081ef0(
+static void apply_animation_state(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
-void code_00081f80(
+static void apply_aiming_speed(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
-void code_00082010(
+static void apply_control_flags(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
-void code_000820a0(
+static void apply_weapon_index(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
-void code_00082130(
+static void apply_throttle(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
-void code_00082290(
+static void apply_vector_char_difference(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
-void code_00082490(
+static void apply_vector_short_difference(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
@@ -220,92 +202,67 @@ void code_00082490(
 
 /* ---------- globals */
 
-struct recorded_animation_playback_data data_002dcf20 =
+static recorded_animation_apply_proc apply_funcs[NUMBER_OF_RECORDED_ANIMATION_EVENTS] =
 {
-	{
-		NULL,
-		NULL,
-		code_00081ef0,
-		code_00081f80,
-		code_00082010,
-		code_000820a0,
-		code_00082130,
-		code_00082290,
-		code_00082290,
-		code_00082290,
-		code_00082290,
-		code_00082290,
-		code_00082290,
-		code_00082290,
-		code_00082290,
-		code_00082490,
-		code_00082490,
-		code_00082490,
-		code_00082490,
-		code_00082490,
-		code_00082490,
-		code_00082490,
-		code_00082490,
-	},
-	{ _1byte },
-	{
-		"animation_state_event_data",
-		sizeof(byte),
-		data_002dcf20.animation_state_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
-	{ _1byte },
-	{
-		"aiming_speed_event_data",
-		sizeof(byte),
-		data_002dcf20.aiming_speed_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
-	{ _2byte },
-	{
-		"control_flags_event_data",
-		sizeof(short),
-		data_002dcf20.control_flags_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
-	{ _2byte },
-	{
-		"weapon_index_event_data",
-		sizeof(short),
-		data_002dcf20.weapon_index_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
-	{ _4byte, _4byte },
-	{
-		"throttle_event_data",
-		sizeof(real_vector2d),
-		data_002dcf20.throttle_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
-	{ _1byte, _1byte },
-	{
-		"vector_char_difference_data",
-		sizeof(struct vector_char_difference_data),
-		data_002dcf20.vector_char_difference_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
-	{ _2byte, _2byte },
-	{
-		"vector_short_difference_data",
-		sizeof(struct vector_short_difference_data),
-		data_002dcf20.vector_short_difference_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
+	NULL,
+	NULL,
+	apply_animation_state,
+	apply_aiming_speed,
+	apply_control_flags,
+	apply_weapon_index,
+	apply_throttle,
+	apply_vector_char_difference,
+	apply_vector_char_difference,
+	apply_vector_char_difference,
+	apply_vector_char_difference,
+	apply_vector_char_difference,
+	apply_vector_char_difference,
+	apply_vector_char_difference,
+	apply_vector_char_difference,
+	apply_vector_short_difference,
+	apply_vector_short_difference,
+	apply_vector_short_difference,
+	apply_vector_short_difference,
+	apply_vector_short_difference,
+	apply_vector_short_difference,
+	apply_vector_short_difference,
+	apply_vector_short_difference,
 };
 
-#define apply_funcs data_002dcf20.apply_funcs
+static byte_swap_code animation_state_event_data_bs_codes[] = { _1byte };
+
+static struct byte_swap_definition animation_state_event_data_bs_definition =
+	{ "animation_state_event_data", sizeof(byte), animation_state_event_data_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
+
+static byte_swap_code aiming_speed_event_data_bs_codes[] = { _1byte };
+
+static struct byte_swap_definition aiming_speed_event_data_bs_definition =
+	{ "aiming_speed_event_data", sizeof(byte), aiming_speed_event_data_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
+
+static byte_swap_code control_flags_event_data_bs_codes[] = { _2byte };
+
+static struct byte_swap_definition control_flags_event_data_bs_definition =
+	{ "control_flags_event_data", sizeof(short), control_flags_event_data_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
+
+static byte_swap_code weapon_index_event_data_bs_codes[] = { _2byte };
+
+static struct byte_swap_definition weapon_index_event_data_bs_definition =
+	{ "weapon_index_event_data", sizeof(short), weapon_index_event_data_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
+
+static byte_swap_code throttle_event_data_bs_codes[] = { _4byte, _4byte };
+
+static struct byte_swap_definition throttle_event_data_bs_definition =
+	{ "throttle_event_data", sizeof(real_vector2d), throttle_event_data_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
+
+static byte_swap_code vector_char_difference_data_bs_codes[] = { _1byte, _1byte };
+
+static struct byte_swap_definition vector_char_difference_data_bs_definition =
+	{ "vector_char_difference_data", sizeof(struct vector_char_difference_data), vector_char_difference_data_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
+
+static byte_swap_code vector_short_difference_data_bs_codes[] = { _2byte, _2byte };
+
+static struct byte_swap_definition vector_short_difference_data_bs_definition =
+	{ "vector_short_difference_data", sizeof(struct vector_short_difference_data), vector_short_difference_data_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
 
 /* ---------- public code */
 
@@ -432,7 +389,7 @@ void byte_swap_recording_stream(
 
 /* ---------- private code */
 
-void code_00081ef0(
+static void apply_animation_state(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
@@ -450,7 +407,7 @@ void code_00081ef0(
 	return;
 }
 
-void code_00081f80(
+static void apply_aiming_speed(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
@@ -468,7 +425,7 @@ void code_00081f80(
 	return;
 }
 
-void code_00082010(
+static void apply_control_flags(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
@@ -486,7 +443,7 @@ void code_00082010(
 	return;
 }
 
-void code_000820a0(
+static void apply_weapon_index(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
@@ -504,7 +461,7 @@ void code_000820a0(
 	return;
 }
 
-void code_00082130(
+static void apply_throttle(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
@@ -523,7 +480,7 @@ void code_00082130(
 	return;
 }
 
-static void code_000821d0(
+static void update_controller_char(
 	struct vector_char_difference_data const *event_data,
 	struct direction_playback_controller *control)
 {
@@ -541,7 +498,7 @@ static void code_000821d0(
 	return;
 }
 
-static void code_00082210(
+static void update_controller_short(
 	struct vector_short_difference_data const *event_data,
 	struct direction_playback_controller *control)
 {
@@ -559,7 +516,7 @@ static void code_00082210(
 	return;
 }
 
-static void code_00082250(
+static void uncompress_vector_from_controller(
 	real_vector3d *vector,
 	struct direction_playback_controller const *controller)
 {
@@ -572,7 +529,7 @@ static void code_00082250(
 	return;
 }
 
-void code_00082290(
+static void apply_vector_char_difference(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
@@ -589,8 +546,8 @@ void code_00082290(
 	event_type = header->event_type - _playback_vector_char_difference_set;
 	if (event_type & FLAG(_control_vector_facing_bit))
 	{
-		code_000821d0(event_data, &animation_state->facing_control);
-		code_00082250(&control->facing_vector, &animation_state->facing_control);
+		update_controller_char(event_data, &animation_state->facing_control);
+		uncompress_vector_from_controller(&control->facing_vector, &animation_state->facing_control);
 	}
 
 	if (event_type & FLAG(_control_vector_aiming_bit))
@@ -602,8 +559,8 @@ void code_00082290(
 		}
 		else
 		{
-			code_000821d0(event_data, &animation_state->aiming_control);
-			code_00082250(&control->aiming_vector, &animation_state->aiming_control);
+			update_controller_char(event_data, &animation_state->aiming_control);
+			uncompress_vector_from_controller(&control->aiming_vector, &animation_state->aiming_control);
 		}
 	}
 
@@ -625,8 +582,8 @@ void code_00082290(
 			return;
 		}
 
-		code_000821d0(event_data, &animation_state->looking_control);
-		code_00082250(&control->looking_vector, &animation_state->looking_control);
+		update_controller_char(event_data, &animation_state->looking_control);
+		uncompress_vector_from_controller(&control->looking_vector, &animation_state->looking_control);
 	}
 
 	*playback_stream += sizeof(struct vector_char_difference_data);
@@ -634,7 +591,7 @@ void code_00082290(
 	return;
 }
 
-void code_00082490(
+static void apply_vector_short_difference(
 	struct animation_playback_controller *animation_state,
 	struct unit_control_data *control,
 	struct animation_event_header const *header,
@@ -651,8 +608,8 @@ void code_00082490(
 	event_type = header->event_type - _playback_vector_short_difference_set;
 	if (event_type & FLAG(_control_vector_facing_bit))
 	{
-		code_00082210(event_data, &animation_state->facing_control);
-		code_00082250(&control->facing_vector, &animation_state->facing_control);
+		update_controller_short(event_data, &animation_state->facing_control);
+		uncompress_vector_from_controller(&control->facing_vector, &animation_state->facing_control);
 	}
 
 	if (event_type & FLAG(_control_vector_aiming_bit))
@@ -664,8 +621,8 @@ void code_00082490(
 		}
 		else
 		{
-			code_00082210(event_data, &animation_state->aiming_control);
-			code_00082250(&control->aiming_vector, &animation_state->aiming_control);
+			update_controller_short(event_data, &animation_state->aiming_control);
+			uncompress_vector_from_controller(&control->aiming_vector, &animation_state->aiming_control);
 		}
 	}
 
@@ -687,8 +644,8 @@ void code_00082490(
 			return;
 		}
 
-		code_00082210(event_data, &animation_state->looking_control);
-		code_00082250(&control->looking_vector, &animation_state->looking_control);
+		update_controller_short(event_data, &animation_state->looking_control);
+		uncompress_vector_from_controller(&control->looking_vector, &animation_state->looking_control);
 	}
 
 	*playback_stream += sizeof(struct vector_short_difference_data);

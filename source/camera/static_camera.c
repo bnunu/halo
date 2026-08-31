@@ -64,14 +64,14 @@ void static_camera_update(
 		result->field_of_view = camera->field_of_view;
 		result->timer = (real)camera->timer;
 		result->velocity.i = result->velocity.j = result->velocity.k = 0.f;
-		result->flags = camera->flags | FLAG(0);
+		result->flags = camera->flags | FLAG(_camera_command_valid_bit);
 		result->offset = *global_zero_vector3d;
 		camera->initialized = TRUE;
 
 		match_vassert(
 			"c:\\halo\\SOURCE\\camera\\static_camera.c",
 			53,
-			!(result->flags & FLAG(0)) ||
+			!(result->flags & FLAG(_camera_command_valid_bit)) ||
 			(valid_real_vector3d_axes2(&result->forward, &result->up) &&
 				valid_real(result->position.x) && result->position.x>=-5000.f && result->position.x<=5000.f &&
 				valid_real(result->position.y) && result->position.y>=-5000.f && result->position.y<=5000.f &&

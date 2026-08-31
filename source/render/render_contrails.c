@@ -5,9 +5,9 @@ symbols in this file:
 001777D0 0090:
 	_contrail_fade (0000)
 00177860 07a0:
-	_code_00177860 (0000)
+	_render_contrail (0000)
 00178000 00b0:
-	_code_00178000 (0000)
+	_render_contrails (0000)
 001780B0 0010:
 	_render_contrails_ground_mapped (0000)
 001780C0 0010:
@@ -28,11 +28,13 @@ symbols in this file:
 #include "effects/contrail_definitions.h"
 #include "effects/contrails.h"
 #include "bitmaps/bitmap_group.h"
+#include "cache/texture_cache.h"
 #include "cseries/errors.h"
 #include "math/periodic_functions.h"
 #include "objects/object_definitions.h"
 #include "objects/objects.h"
 #include "rasterizer/rasterizer.h"
+#include "rasterizer/rasterizer_geometry.h"
 #include "render.h"
 #include "tag_files/tag_files.h"
 
@@ -40,15 +42,9 @@ symbols in this file:
 
 enum
 {
-	_contrail_render_mode_media_mapped = 1 << 2,
-	_contrail_render_mode_ground_mapped = 1 << 3,
+	_contrail_render_mode_media_mapped = FLAG(_contrail_render_type_media),
+	_contrail_render_mode_ground_mapped = FLAG(_contrail_render_type_ground),
 	_contrail_render_mode_normal = ~(_contrail_render_mode_media_mapped | _contrail_render_mode_ground_mapped),
-};
-
-enum
-{
-	_rasterizer_lock_none = 0,
-	_rasterizer_lock_contrail = 15,
 };
 
 enum
@@ -72,9 +68,9 @@ typedef char verify_contrail_vertex_size[
 
 /* ---------- prototypes */
 
-void code_00178000(
+static void render_contrails(
 	unsigned long render_mode_flags);
-void code_00177860(
+static void render_contrail(
 	struct contrail_datum *contrail,
 	struct contrail_definition *definition,
 	short instance_index);
@@ -83,18 +79,8 @@ struct bitmap_data *bitmap_group_get_bitmap_from_sequence(
 	long bitmap_group_index,
 	short sequence_index,
 	short frame_index);
-void *_texture_cache_bitmap_get_hardware_format(
-	struct bitmap_data *bitmap,
-	boolean block,
-	boolean load);
 pixel32 real_argb_color_to_pixel32(
 	real_argb_color const *color);
-
-real contrail_fade(
-	struct contrail_definition *definition,
-	short fade_mode,
-	real_point3d const *world_point,
-	real_vector3d const *world_normal);
 
 /* ---------- globals */
 
@@ -117,8 +103,8 @@ real contrail_fade(
 		vector_from_points3d(world_point, &render.camera.position, &to_camera);
 		result = fabs(dot_product3d(world_normal, &to_camera) / magnitude3d(&to_camera));
 
-		if (definition->flags & (1 << _contrail_fades_slowly_bit))
-			result = transition_function_evaluate(2, result);
+		if (TEST_FLAG(definition->flags, _contrail_fades_slowly_bit))
+			result = transition_function_evaluate(_transition_function_very_early, result);
 		if (fade_mode == 2)
 			result = 1.f - result;
 	}
@@ -126,7 +112,7 @@ real contrail_fade(
 	return result;
 }
 
-void code_00177860(
+static void render_contrail(
 	struct contrail_datum *contrail,
 	struct contrail_definition *definition,
 	short instance_index)
@@ -142,14 +128,14 @@ void code_00177860(
 		definition->bitmap.index,
 		contrail->sequence_index,
 		contrail->frame_index);
-	rasterizer_globals.current_lock_operation = _rasterizer_lock_contrail;
+	rasterizer_globals.current_lock_operation = _rasterizer_lock_contrails;
 	if (_texture_cache_bitmap_get_hardware_format(bitmap, FALSE, TRUE))
 	{
 		segment_count = contrail->contrail_point_counts[instance_index] - 1;
 		triangle_count = segment_count + segment_count;
 		vertex_count = triangle_count + 2;
 		triangle_buffer_index = rasterizer_dynamic_triangles_new(triangle_count);
-		vertex_buffer_index = rasterizer_dynamic_vertices_new(6, vertex_count);
+		vertex_buffer_index = rasterizer_dynamic_vertices_new(_rasterizer_vertex_type_dynamic_unlit, vertex_count);
 		if (triangle_buffer_index != NONE && vertex_buffer_index != NONE)
 		{
 			short *triangles;
@@ -177,12 +163,12 @@ void code_00177860(
 
 			texture_u = contrail->texture_offset_u;
 			texture_u_step = definition->texture_repeats_u;
-			if (definition->scale_flags & (1 << _contrail_texture_repeats_u_bit))
+			if (TEST_FLAG(definition->scale_flags, _contrail_texture_repeats_u_bit))
 				texture_u_step *= contrail->density;
 			texture_u_step = -texture_u_step;
 			texture_offset_v = contrail->texture_offset_v;
 			texture_v_far = definition->texture_repeats_v;
-			if (definition->scale_flags & (1 << _contrail_texture_repeats_v_bit))
+			if (TEST_FLAG(definition->scale_flags, _contrail_texture_repeats_v_bit))
 				texture_v_far *= contrail->density;
 			texture_v_far += texture_offset_v;
 			previous_point = NULL;
@@ -205,10 +191,10 @@ void code_00177860(
 					point->state_index,
 					struct contrail_point_state);
 				color_scale = 1.f;
-				if (state->scale_flags & (1 << _contrail_state_color_bit))
+				if (TEST_FLAG(state->scale_flags, _contrail_state_color_bit))
 					color_scale = point->density;
 				width = state->width;
-				if (state->scale_flags & (1 << _contrail_state_width_bit))
+				if (TEST_FLAG(state->scale_flags, _contrail_state_width_bit))
 					width *= point->density;
 				half_width = width;
 				color.alpha = (state->color_upper_bound.alpha - state->color_lower_bound.alpha) * color_scale + state->color_lower_bound.alpha;
@@ -216,7 +202,7 @@ void code_00177860(
 				color.green = (state->color_upper_bound.green - state->color_lower_bound.green) * color_scale + state->color_lower_bound.green;
 				color.blue = (state->color_upper_bound.blue - state->color_lower_bound.blue) * color_scale + state->color_lower_bound.blue;
 
-				if (point->flags & (1 << _contrail_point_transitioning_bit))
+				if (TEST_FLAG(point->flags, _contrail_point_transitioning_bit))
 				{
 					struct contrail_point_state *next_state;
 					real transition;
@@ -230,10 +216,10 @@ void code_00177860(
 						struct contrail_point_state);
 					transition = point->time;
 					next_color_scale = 1.f;
-					if (next_state->scale_flags & (1 << _contrail_state_color_bit))
+					if (TEST_FLAG(next_state->scale_flags, _contrail_state_color_bit))
 						next_color_scale = point->density;
 					next_width = next_state->width;
-					if (next_state->scale_flags & (1 << _contrail_state_width_bit))
+					if (TEST_FLAG(next_state->scale_flags, _contrail_state_width_bit))
 						next_width *= point->density;
 					next_color.alpha = (next_state->color_upper_bound.alpha - next_state->color_lower_bound.alpha) * next_color_scale + next_state->color_lower_bound.alpha;
 					next_color.red = (next_state->color_upper_bound.red - next_state->color_lower_bound.red) * next_color_scale + next_state->color_lower_bound.red;
@@ -406,12 +392,12 @@ void code_00177860(
 
 			vertices -= vertex_count;
 			first_vertex = vertices;
-			if (!(definition->flags & (1 << _contrail_first_point_unfaded_bit)))
+			if (!(TEST_FLAG(definition->flags, _contrail_first_point_unfaded_bit)))
 			{
 				((byte *)&first_vertex[0].color)[3] = 0;
 				((byte *)&first_vertex[1].color)[3] = 0;
 			}
-			if (!(definition->flags & (1 << _contrail_last_point_unfaded_bit)))
+			if (!(TEST_FLAG(definition->flags, _contrail_last_point_unfaded_bit)))
 			{
 				((byte *)&vertices[vertex_count - 1].color)[3] = 0;
 				((byte *)&vertices[vertex_count - 2].color)[3] = 0;
@@ -442,7 +428,7 @@ void code_00177860(
 			rasterizer_dynamic_unlit_geometry_draw(
 				(struct shader const *)shader,
 				bitmap,
-				0,
+				NULL,
 				triangle_buffer_index,
 				vertex_buffer_index,
 				triangle_count,
@@ -452,12 +438,12 @@ void code_00177860(
 			rasterizer_dynamic_vertices_delete(vertex_buffer_index);
 		}
 	}
-	rasterizer_globals.current_lock_operation = _rasterizer_lock_none;
+	rasterizer_globals.current_lock_operation = _rasterizer_lock_unlocked;
 
 	return;
 }
 
-void code_00178000(
+static void render_contrails(
 	unsigned long render_mode_flags)
 {
 	if (render_contrails_enabled)
@@ -475,10 +461,10 @@ void code_00178000(
 
 			for (instance_index = 0; instance_index < 4; instance_index++)
 			{
-				if (((1 << definition->render_type) & render_mode_flags) &&
+				if ((FLAG(definition->render_type) & render_mode_flags) &&
 					contrail->contrail_point_counts[instance_index] >= 2)
 				{
-					code_00177860(contrail, definition, instance_index);
+					render_contrail(contrail, definition, instance_index);
 				}
 			}
 		}
@@ -490,21 +476,21 @@ void code_00178000(
 void render_contrails_ground_mapped(
 	void)
 {
-	code_00178000(_contrail_render_mode_ground_mapped);
+	render_contrails(_contrail_render_mode_ground_mapped);
 	return;
 }
 
 void render_contrails_media_mapped(
 	void)
 {
-	code_00178000(_contrail_render_mode_media_mapped);
+	render_contrails(_contrail_render_mode_media_mapped);
 	return;
 }
 
 void render_contrails_normal(
 	void)
 {
-	code_00178000(_contrail_render_mode_normal);
+	render_contrails(_contrail_render_mode_normal);
 	return;
 }
 

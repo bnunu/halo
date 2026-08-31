@@ -19,11 +19,18 @@ header included in hcex build.
 
 /* ---------- structures */
 
+struct connected_geometry_point
+{
+	real x;
+	real y;
+	real z;
+};
+
 struct connected_geometry_edge
 {
-	byte reserved[0xC];
+	struct dynamic_array triangle_indices;
 	long point_indices[2];
-	byte trailing[0x8];
+	long unused[2];
 };
 
 struct connected_geometry_triangle
@@ -52,8 +59,17 @@ long connected_geometry_add_triangle(
 	real_point3d const *point1,
 	real_point3d const *point2,
 	boolean report_duplicates);
+long connected_geometry_add_intermediate_triangle(
+	struct connected_geometry *geometry,
+	real_point3d const *point0,
+	real_point3d const *point1,
+	real_point3d const *point2);
 long connected_geometry_group_coplanar(
 	struct connected_geometry *geometry);
+void connected_geometry_group_recursive(
+	struct connected_geometry *geometry,
+	long triangle_index,
+	long coplanar_group_index);
 
 /* ---------- globals */
 

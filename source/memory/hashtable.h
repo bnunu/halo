@@ -42,7 +42,11 @@ struct hashtable
 	struct dynamic_array elements;
 };
 
-/* ---------- prototypes/EXAMPLE.C */
+/* ---------- prototypes/HASHTABLE.C */
+
+short default_hash_function(
+	const void *key,
+	unsigned long key_size);
 
 void hashtable_new(
 	struct hashtable *table,

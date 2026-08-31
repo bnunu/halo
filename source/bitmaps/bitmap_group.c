@@ -3,9 +3,9 @@ BITMAP_GROUP.C
 
 symbols in this file:
 00065210 0010:
-	_code_00065210 (0000)
+	_postprocess_bitmap (0000)
 00065220 0020:
-	_code_00065220 (0000)
+	_delete_bitmap (0000)
 00065240 0420:
 	_code_00065240 (0000)
 00065660 0050:
@@ -333,10 +333,10 @@ typedef char bitmap_group_sequence_size_assert[
 
 /* ---------- prototypes */
 
-boolean code_00065210(
+boolean postprocess_bitmap(
 	struct bitmap_data *bitmap,
 	boolean editing);
-void code_00065220(
+void delete_bitmap(
 	struct tag_block *block,
 	long element_index);
 
@@ -424,14 +424,14 @@ struct bitmap_data *bitmap_group_get_bitmap_from_sequence(
 
 /* ---------- private code */
 
-boolean code_00065210(
+boolean postprocess_bitmap(
 	struct bitmap_data *bitmap,
 	boolean editing)
 {
 	return TRUE;
 }
 
-void code_00065220(
+void delete_bitmap(
 	struct tag_block *block,
 	long element_index)
 {

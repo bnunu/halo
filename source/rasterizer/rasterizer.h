@@ -87,6 +87,7 @@ enum rasterizer_lock_operation
 {
 	_rasterizer_lock_unlocked = 0,
 	_rasterizer_lock_cinematics = 8,
+	_rasterizer_lock_contrails = 15,
 };
 
 

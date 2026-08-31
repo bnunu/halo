@@ -5,7 +5,7 @@ symbols in this file:
 00077EC0 0060:
 	_following_camera_new (0000)
 00077F20 0080:
-	_code_00077f20 (0000)
+	_unit_camera_get (0000)
 00077FA0 0010:
 	_arcsine (0000)
 00077FB0 00e0:
@@ -13,7 +13,7 @@ symbols in this file:
 00078090 0090:
 	_uniform_cubic_spline_vector3d (0000)
 00078120 0150:
-	_code_00078120 (0000)
+	_camera_track_splut (0000)
 00078270 00d0:
 	_following_camera_deterministic (0000)
 00078340 0630:
@@ -44,6 +44,7 @@ symbols in this file:
 
 #include "static_camera.h"
 
+#include "camera/observer.h"
 #include "game/game_globals.h"
 #include "game/player_control.h"
 #include "objects/objects.h"
@@ -111,13 +112,9 @@ typedef char unit_camera_track_size_assert[
 
 /* ---------- prototypes */
 
-void observer_up_from_forward(
-	real_vector3d const *forward,
-	real_vector3d *up);
-
-static struct unit_camera const *code_00077f20(
+static struct unit_camera const *unit_camera_get(
 	long unit_index);
-static void code_00078120(
+static void camera_track_splut(
 	struct unit_camera const *camera,
 	real pitch,
 	real_vector3d *offset);
@@ -165,12 +162,12 @@ void following_camera_deterministic(
 	real horizontal_magnitude;
 
 	unit = unit_get(unit_index);
-	camera = code_00077f20(unit_index);
+	camera = unit_camera_get(unit_index);
 	unit_get_camera_position(unit_index, position);
 	*forward = unit->unit.aiming_vector;
 
 	pitch = arcsine(forward->k);
-	code_00078120(camera, pitch, &offset);
+	camera_track_splut(camera, pitch, &offset);
 
 	forward_x = forward->i;
 	forward_y = forward->j;
@@ -264,7 +261,7 @@ void following_camera_update(
 			magnitude3d(&command->forward) < 1.0001f,
 			"magnitude3d(&result->forward) > 0.9999f && magnitude3d(&result->forward) < 1.0001f");
 
-		code_00078120(camera_info.camera, facing.pitch, &track_offset);
+		camera_track_splut(camera_info.camera, facing.pitch, &track_offset);
 		command->depth = magnitude3d(&track_offset);
 		command->offset.i =
 			(command->depth * cosine(facing.pitch) + track_offset.i) * camera->distance_scale;
@@ -276,7 +273,7 @@ void following_camera_update(
 			0.6f);
 
 		object_get_velocities(camera_info.unit_index, &command->velocity, NULL);
-		SET_FLAG(command->flags, 0, TRUE);
+		SET_FLAG(command->flags, _camera_command_valid_bit, TRUE);
 	}
 
 	observer_up_from_forward(&command->forward, &command->up);
@@ -284,7 +281,7 @@ void following_camera_update(
 	match_vassert(
 		"c:\\halo\\SOURCE\\camera\\following_camera.c",
 		238,
-		!(command->flags & FLAG(0)) ||
+		!(command->flags & FLAG(_camera_command_valid_bit)) ||
 		(valid_real_vector3d_axes2(&command->forward, &command->up) &&
 			valid_real(command->position.x) && command->position.x>=-5000.f && command->position.x<=5000.f &&
 			valid_real(command->position.y) && command->position.y>=-5000.f && command->position.y<=5000.f &&
@@ -325,7 +322,7 @@ void following_camera_update(
 
 /* ---------- private code */
 
-static struct unit_camera const *code_00077f20(
+static struct unit_camera const *unit_camera_get(
 	long unit_index)
 {
 	struct unit_datum *unit;
@@ -364,7 +361,7 @@ static struct unit_camera const *code_00077f20(
 	return camera;
 }
 
-static void code_00078120(
+static void camera_track_splut(
 	struct unit_camera const *camera,
 	real pitch,
 	real_vector3d *offset)

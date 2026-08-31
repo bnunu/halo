@@ -3,25 +3,25 @@ RECORDED_ANIMATION_PLAYBACK_V1.C
 
 symbols in this file:
 00082910 00b0:
-	_code_00082910 (0000)
+	_apply_animation_state (0000)
 000829C0 00b0:
-	_code_000829c0 (0000)
+	_apply_aiming_speed (0000)
 00082A70 00b0:
-	_code_00082a70 (0000)
+	_apply_control_flags (0000)
 00082B20 00b0:
-	_code_00082b20 (0000)
+	_apply_weapon_index (0000)
 00082BD0 00c0:
-	_code_00082bd0 (0000)
+	_apply_throttle (0000)
 00082C90 00c0:
-	_code_00082c90 (0000)
+	_apply_facing_vector (0000)
 00082D50 00c0:
-	_code_00082d50 (0000)
+	_apply_aiming_vector (0000)
 00082E10 00c0:
-	_code_00082e10 (0000)
+	_apply_looking_vector (0000)
 00082ED0 0110:
-	_code_00082ed0 (0000)
+	_apply_angle_vector (0000)
 00082FE0 0100:
-	_code_00082fe0 (0000)
+	_apply_multi_vector (0000)
 000830E0 0020:
 	_recorded_animation_initialize_event_stream_v1 (0000)
 00083100 0110:
@@ -69,12 +69,13 @@ symbols in this file:
 00259268 007f:
 	??_C@_0HP@IJICEFOE@anim_event_v1?9?$DOtype?$DO?$DN_playback_v@ (0000)
 002DD030 0130:
-	_data_002dd030 (0000)
+	_apply_funcs (0000)
 */
 
 /* ---------- headers */
 
 #include "cseries.h"
+#include "cutscene/recorded_animation_initialize.h"
 #include "math/real_math.h"
 #include "memory/byte_swapping.h"
 
@@ -105,6 +106,7 @@ enum
 	_playback_v1_facing_looking_angles_set,
 	_playback_v1_aiming_looking_angles_set,
 	_playback_v1_facing_aiming_looking_angles_set,
+	NUMBER_OF_RECORDED_ANIMATION_V1_EVENTS
 };
 
 /* ---------- macros */
@@ -163,199 +165,128 @@ struct recorded_angle_vector_set_event_v1
 	real_euler_angles2d angles;
 };
 
-struct recorded_unit_control
-{
-	byte byte_field0;
-	byte byte_field1;
-	short word_field2;
-	short word_field4;
-	short version2_field;
-	short version3_field;
-	short unused_field10;
-	real_vector2d vector2d_field12;
-	long long_field20;
-	long version1_field;
-	real_vector3d vector3d_field28;
-	real_vector3d vector3d_field40;
-	real_vector3d vector3d_field52;
-};
-
 typedef void (*recorded_animation_apply_event_v1_proc)(
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *event,
 	byte const **playback_stream);
-
-struct recorded_animation_playback_v1_data
-{
-	recorded_animation_apply_event_v1_proc apply_funcs[23];
-	byte_swap_code animation_event_v1_codes[2];
-	struct byte_swap_definition animation_event_v1_definition;
-	byte_swap_code animation_state_set_event_v1_codes[1];
-	struct byte_swap_definition animation_state_set_event_v1_definition;
-	byte_swap_code aiming_speed_set_event_v1_codes[1];
-	struct byte_swap_definition aiming_speed_set_event_v1_definition;
-	byte_swap_code control_flags_set_event_v1_codes[1];
-	struct byte_swap_definition control_flags_set_event_v1_definition;
-	byte_swap_code weapon_index_set_event_v1_codes[1];
-	struct byte_swap_definition weapon_index_set_event_v1_definition;
-	byte_swap_code throttle_set_event_v1_codes[2];
-	struct byte_swap_definition throttle_set_event_v1_definition;
-	byte_swap_code multi_vector_set_event_v1_codes[3];
-	struct byte_swap_definition multi_vector_set_event_v1_definition;
-	byte_swap_code angle_vector_set_event_v1_codes[2];
-	struct byte_swap_definition angle_vector_set_event_v1_definition;
-};
 
 /* ---------- prototypes */
 
-void recorded_animation_initialize_unit_control(
-	struct recorded_unit_control *unit_control,
-	byte **stream,
-	byte unit_control_data_version);
-
-void code_00082910(
-	struct recorded_unit_control *control,
+static void apply_animation_state(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *event,
 	byte const **playback_stream);
-void code_000829c0(
-	struct recorded_unit_control *control,
+static void apply_aiming_speed(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *event,
 	byte const **playback_stream);
-void code_00082a70(
-	struct recorded_unit_control *control,
+static void apply_control_flags(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *event,
 	byte const **playback_stream);
-void code_00082b20(
-	struct recorded_unit_control *control,
+static void apply_weapon_index(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *event,
 	byte const **playback_stream);
-void code_00082bd0(
-	struct recorded_unit_control *control,
+static void apply_throttle(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *event,
 	byte const **playback_stream);
-void code_00082c90(
-	struct recorded_unit_control *control,
+static void apply_facing_vector(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *event,
 	byte const **playback_stream);
-void code_00082d50(
-	struct recorded_unit_control *control,
+static void apply_aiming_vector(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *event,
 	byte const **playback_stream);
-void code_00082e10(
-	struct recorded_unit_control *control,
+static void apply_looking_vector(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *event,
 	byte const **playback_stream);
-void code_00082ed0(
-	struct recorded_unit_control *control,
+static void apply_angle_vector(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *event,
 	byte const **playback_stream);
-void code_00082fe0(
-	struct recorded_unit_control *control,
+static void apply_multi_vector(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *event,
 	byte const **playback_stream);
 
 /* ---------- globals */
 
-struct recorded_animation_playback_v1_data data_002dd030 =
+static recorded_animation_apply_event_v1_proc apply_funcs[NUMBER_OF_RECORDED_ANIMATION_V1_EVENTS] =
 {
-	{
-		NULL,
-		NULL,
-		code_00082910,
-		code_000829c0,
-		code_00082a70,
-		code_00082b20,
-		code_00082bd0,
-		NULL,
-		NULL,
-		code_00082c90,
-		code_00082d50,
-		code_00082e10,
-		code_00082fe0,
-		code_00082fe0,
-		code_00082fe0,
-		code_00082fe0,
-		code_00082ed0,
-		code_00082ed0,
-		code_00082ed0,
-		code_00082ed0,
-		code_00082ed0,
-		code_00082ed0,
-		code_00082ed0,
-	},
-	{ _2byte, _2byte },
-	{
-		"animation_event_v1",
-		sizeof(struct recorded_animation_event_v1),
-		data_002dd030.animation_event_v1_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
-	{ _1byte },
-	{
-		"animation_state_set_event_v1",
-		sizeof(struct recorded_animation_state_set_event_v1),
-		data_002dd030.animation_state_set_event_v1_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
-	{ _1byte },
-	{
-		"aiming_speed_set_event_v1",
-		sizeof(struct recorded_aiming_speed_set_event_v1),
-		data_002dd030.aiming_speed_set_event_v1_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
-	{ _2byte },
-	{
-		"control_flags_set_event_v1",
-		sizeof(struct recorded_control_flags_set_event_v1),
-		data_002dd030.control_flags_set_event_v1_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
-	{ _2byte },
-	{
-		"weapon_index_set_event_v1",
-		sizeof(struct recorded_weapon_index_set_event_v1),
-		data_002dd030.weapon_index_set_event_v1_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
-	{ _4byte, _4byte },
-	{
-		"throttle_set_event_v1",
-		sizeof(struct recorded_throttle_set_event_v1),
-		data_002dd030.throttle_set_event_v1_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
-	{ _4byte, _4byte, _4byte },
-	{
-		"multi_vector_set_event_v1",
-		sizeof(struct recorded_multi_vector_set_event_v1),
-		data_002dd030.multi_vector_set_event_v1_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
-	{ _4byte, _4byte },
-	{
-		"angle_vector_set_event_v1",
-		sizeof(struct recorded_angle_vector_set_event_v1),
-		data_002dd030.angle_vector_set_event_v1_codes,
-		BYTE_SWAP_DEFINITION_SIGNATURE,
-		FALSE,
-	},
+	NULL,
+	NULL,
+	apply_animation_state,
+	apply_aiming_speed,
+	apply_control_flags,
+	apply_weapon_index,
+	apply_throttle,
+	NULL,
+	NULL,
+	apply_facing_vector,
+	apply_aiming_vector,
+	apply_looking_vector,
+	apply_multi_vector,
+	apply_multi_vector,
+	apply_multi_vector,
+	apply_multi_vector,
+	apply_angle_vector,
+	apply_angle_vector,
+	apply_angle_vector,
+	apply_angle_vector,
+	apply_angle_vector,
+	apply_angle_vector,
+	apply_angle_vector,
 };
 
-#define apply_funcs data_002dd030.apply_funcs
+static byte_swap_code animation_event_v1_bs_codes[] = { _2byte, _2byte };
+
+static struct byte_swap_definition animation_event_v1_bs_definition =
+	{ "animation_event_v1", sizeof(struct recorded_animation_event_v1), animation_event_v1_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
+
+static byte_swap_code animation_state_set_event_v1_bs_codes[] = { _1byte };
+
+static struct byte_swap_definition animation_state_set_event_v1_bs_definition =
+	{ "animation_state_set_event_v1", sizeof(struct recorded_animation_state_set_event_v1), animation_state_set_event_v1_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
+
+static byte_swap_code aiming_speed_set_event_v1_bs_codes[] = { _1byte };
+
+static struct byte_swap_definition aiming_speed_set_event_v1_bs_definition =
+	{ "aiming_speed_set_event_v1", sizeof(struct recorded_aiming_speed_set_event_v1), aiming_speed_set_event_v1_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
+
+static byte_swap_code control_flags_set_event_v1_bs_codes[] = { _2byte };
+
+static struct byte_swap_definition control_flags_set_event_v1_bs_definition =
+	{ "control_flags_set_event_v1", sizeof(struct recorded_control_flags_set_event_v1), control_flags_set_event_v1_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
+
+static byte_swap_code weapon_index_set_event_v1_bs_codes[] = { _2byte };
+
+static struct byte_swap_definition weapon_index_set_event_v1_bs_definition =
+	{ "weapon_index_set_event_v1", sizeof(struct recorded_weapon_index_set_event_v1), weapon_index_set_event_v1_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
+
+static byte_swap_code throttle_set_event_v1_bs_codes[] = { _4byte, _4byte };
+
+static struct byte_swap_definition throttle_set_event_v1_bs_definition =
+	{ "throttle_set_event_v1", sizeof(struct recorded_throttle_set_event_v1), throttle_set_event_v1_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
+
+static byte_swap_code multi_vector_set_event_v1_bs_codes[] = { _4byte, _4byte, _4byte };
+
+static struct byte_swap_definition multi_vector_set_event_v1_bs_definition =
+	{ "multi_vector_set_event_v1", sizeof(struct recorded_multi_vector_set_event_v1), multi_vector_set_event_v1_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
+
+static byte_swap_code angle_vector_set_event_v1_bs_codes[] = { _4byte, _4byte };
+
+static struct byte_swap_definition angle_vector_set_event_v1_bs_definition =
+	{ "angle_vector_set_event_v1", sizeof(struct recorded_angle_vector_set_event_v1), angle_vector_set_event_v1_bs_codes, BYTE_SWAP_DEFINITION_SIGNATURE, FALSE };
 
 /* ---------- public code */
 
 void recorded_animation_initialize_event_stream_v1(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *unit_control,
+	struct unit_control_data *unit_control,
 	byte **playback_stream,
 	byte unit_control_data_version)
 {
@@ -369,7 +300,7 @@ void recorded_animation_initialize_event_stream_v1(
 
 boolean recorded_animation_apply_event_stream_v1(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	long *ticks,
 	byte const **playback_stream)
 {
@@ -420,8 +351,8 @@ void byte_swap_recording_stream_v1(
 
 /* ---------- private code */
 
-void code_00082910(
-	struct recorded_unit_control *control,
+static void apply_animation_state(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *anim_event_v1,
 	byte const **playback_stream)
 {
@@ -433,14 +364,14 @@ void code_00082910(
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x19, anim_event_v1->type==_playback_v1_animation_state_set);
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x19, playback_stream);
 
-	control->byte_field0 = event->animation_state;
+	control->animation_state = event->animation_state;
 	*playback_stream += sizeof(*event);
 
 	return;
 }
 
-void code_000829c0(
-	struct recorded_unit_control *control,
+static void apply_aiming_speed(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *anim_event_v1,
 	byte const **playback_stream)
 {
@@ -452,14 +383,14 @@ void code_000829c0(
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x1A, anim_event_v1->type==_playback_v1_aiming_speed_set);
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x1A, playback_stream);
 
-	control->byte_field1 = event->aiming_speed;
+	control->aiming_speed = event->aiming_speed;
 	*playback_stream += sizeof(*event);
 
 	return;
 }
 
-void code_00082a70(
-	struct recorded_unit_control *control,
+static void apply_control_flags(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *anim_event_v1,
 	byte const **playback_stream)
 {
@@ -471,14 +402,14 @@ void code_00082a70(
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x1B, anim_event_v1->type==_playback_v1_control_flags_set);
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x1B, playback_stream);
 
-	control->word_field2 = event->control_flags;
+	control->control_flags = event->control_flags;
 	*playback_stream += sizeof(*event);
 
 	return;
 }
 
-void code_00082b20(
-	struct recorded_unit_control *control,
+static void apply_weapon_index(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *anim_event_v1,
 	byte const **playback_stream)
 {
@@ -490,14 +421,14 @@ void code_00082b20(
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x1C, anim_event_v1->type==_playback_v1_weapon_index_set);
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x1C, playback_stream);
 
-	control->word_field4 = event->weapon_index;
+	control->weapon_index = event->weapon_index;
 	*playback_stream += sizeof(*event);
 
 	return;
 }
 
-void code_00082bd0(
-	struct recorded_unit_control *control,
+static void apply_throttle(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *anim_event_v1,
 	byte const **playback_stream)
 {
@@ -509,15 +440,16 @@ void code_00082bd0(
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x23, anim_event_v1->type==_playback_v1_throttle_set);
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x24, playback_stream);
 
-	control->vector2d_field12 = event->throttle;
-	control->long_field20 = 0;
+	control->throttle.i = event->throttle.i;
+	control->throttle.j = event->throttle.j;
+	control->throttle.k = 0.f;
 	*playback_stream += sizeof(*event);
 
 	return;
 }
 
-void code_00082c90(
-	struct recorded_unit_control *control,
+static void apply_facing_vector(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *anim_event_v1,
 	byte const **playback_stream)
 {
@@ -529,14 +461,14 @@ void code_00082c90(
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x2C, anim_event_v1->type==_playback_v1_facing_vector_set);
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x2C, playback_stream);
 
-	control->vector3d_field28 = event->vector;
+	control->facing_vector = event->vector;
 	*playback_stream += sizeof(*event);
 
 	return;
 }
 
-void code_00082d50(
-	struct recorded_unit_control *control,
+static void apply_aiming_vector(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *anim_event_v1,
 	byte const **playback_stream)
 {
@@ -548,14 +480,14 @@ void code_00082d50(
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x2D, anim_event_v1->type==_playback_v1_aiming_vector_set);
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x2D, playback_stream);
 
-	control->vector3d_field40 = event->vector;
+	control->aiming_vector = event->vector;
 	*playback_stream += sizeof(*event);
 
 	return;
 }
 
-void code_00082e10(
-	struct recorded_unit_control *control,
+static void apply_looking_vector(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *anim_event_v1,
 	byte const **playback_stream)
 {
@@ -567,14 +499,14 @@ void code_00082e10(
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x2E, anim_event_v1->type==_playback_v1_looking_vector_set);
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback_v1.c", 0x2E, playback_stream);
 
-	control->vector3d_field52 = event->vector;
+	control->looking_vector = event->vector;
 	*playback_stream += sizeof(*event);
 
 	return;
 }
 
-void code_00082ed0(
-	struct recorded_unit_control *control,
+static void apply_angle_vector(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *anim_event_v1,
 	byte const **playback_stream)
 {
@@ -590,17 +522,17 @@ void code_00082ed0(
 	vector3d_from_euler_angles2d(&angle_vector, &event->angles);
 	if (anim_event_v1->type != _playback_v1_aiming_looking_angles_set)
 	{
-		control->vector3d_field28 = angle_vector;
+		control->facing_vector = angle_vector;
 	}
 
 	if (anim_event_v1->type != _playback_v1_facing_looking_angles_set)
 	{
-		control->vector3d_field40 = angle_vector;
+		control->aiming_vector = angle_vector;
 	}
 
 	if (anim_event_v1->type != _playback_v1_facing_aiming_angles_set)
 	{
-		control->vector3d_field52 = angle_vector;
+		control->looking_vector = angle_vector;
 	}
 
 	*playback_stream += sizeof(*event);
@@ -608,8 +540,8 @@ void code_00082ed0(
 	return;
 }
 
-void code_00082fe0(
-	struct recorded_unit_control *control,
+static void apply_multi_vector(
+	struct unit_control_data *control,
 	struct recorded_animation_event_v1 const *anim_event_v1,
 	byte const **playback_stream)
 {
@@ -623,17 +555,17 @@ void code_00082fe0(
 
 	if (anim_event_v1->type != _playback_v1_aiming_looking_vector_set)
 	{
-		control->vector3d_field28 = event->vector;
+		control->facing_vector = event->vector;
 	}
 
 	if (anim_event_v1->type != _playback_v1_facing_looking_vector_set)
 	{
-		control->vector3d_field40 = event->vector;
+		control->aiming_vector = event->vector;
 	}
 
 	if (anim_event_v1->type != _playback_v1_facing_aiming_vector_set)
 	{
-		control->vector3d_field52 = event->vector;
+		control->looking_vector = event->vector;
 	}
 
 	*playback_stream += sizeof(*event);

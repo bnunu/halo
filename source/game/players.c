@@ -13,7 +13,7 @@ symbols in this file:
 000A95E0 0020:
 	_machine_get_player_list (0000)
 000A9600 0050:
-	_code_000a9600 (0000)
+	_machine_add_player (0000)
 000A9650 0060:
 	_local_player_exists (0000)
 000A96B0 0050:
@@ -51,9 +51,9 @@ symbols in this file:
 000A9B70 0050:
 	_any_player_is_dead (0000)
 000A9BC0 0040:
-	_code_000a9bc0 (0000)
+	_is_player_in_trigger (0000)
 000A9C00 00e0:
-	_code_000a9c00 (0000)
+	_player_pseudo_kill (0000)
 000A9CE0 0120:
 	_player_control_fix_for_loaded_game_state (0000)
 000A9E00 0050:
@@ -63,31 +63,31 @@ symbols in this file:
 000A9F10 0070:
 	_placement_data_set_change_color (0000)
 000A9F80 0070:
-	_code_000a9f80 (0000)
+	_unit_create_starting_weapon (0000)
 000A9FF0 0170:
-	_code_000a9ff0 (0000)
+	_players_compute_combined_pvs (0000)
 000AA160 0020:
-	_code_000aa160 (0000)
+	_players_compute_local_player_count (0000)
 000AA180 0010:
-	_code_000aa180 (0000)
+	_player_examine_nearby_unit (0000)
 000AA190 0090:
 	_unit_should_autopick_weapon (0000)
 000AA220 0020:
-	_code_000aa220 (0000)
+	_player_reset_action_result (0000)
 000AA240 00c0:
-	_code_000aa240 (0000)
+	_player_handle_weapon_swap (0000)
 000AA300 00b0:
-	_code_000aa300 (0000)
+	_player_over_shield_screen_effect (0000)
 000AA3B0 00b0:
-	_code_000aa3b0 (0000)
+	_player_active_camo_screen_effect (0000)
 000AA460 0090:
-	_code_000aa460 (0000)
+	_player_health_pack_screen_effect (0000)
 000AA4F0 0040:
-	_code_000aa4f0 (0000)
+	_player_powerup_on (0000)
 000AA530 0030:
-	_code_000aa530 (0000)
+	_player_powerup_additional (0000)
 000AA560 0030:
-	_code_000aa560 (0000)
+	_player_powerup_off (0000)
 000AA590 0070:
 	_players_handle_deleted_object (0000)
 000AA600 0020:
@@ -101,23 +101,23 @@ symbols in this file:
 000AA8D0 0110:
 	_player_aiming_vector_from_facing (0000)
 000AA9E0 0510:
-	_code_000aa9e0 (0000)
+	_player_teleport_internal (0000)
 000AAEF0 0060:
 	_player_teleport (0000)
 000AAF50 00d0:
 	_find_best_starting_location_index (0000)
 000AB020 0330:
-	_code_000ab020 (0000)
+	_player_spawn (0000)
 000AB350 00f0:
-	_code_000ab350 (0000)
+	_player_set_action_result (0000)
 000AB440 0250:
-	_code_000ab440 (0000)
+	_player_handle_action (0000)
 000AB690 00f0:
 	_player_handle_powerup (0000)
 000AB780 00a0:
 	_player_handle_powerup_minor (0000)
 000AB820 0070:
-	_code_000ab820 (0000)
+	_player_update_powerups (0000)
 000AB890 01a0:
 	_players_debug_render (0000)
 000ABA30 0090:
@@ -125,25 +125,25 @@ symbols in this file:
 000ABAC0 01d0:
 	_players_respawn_coop (0000)
 000ABC90 0140:
-	_code_000abc90 (0000)
+	_player_teleport_on_bsp_switch (0000)
 000ABDD0 02e0:
 	_players_reconnect_to_structure_bsp (0000)
 000AC0B0 01c0:
-	_code_000ac0b0 (0000)
+	_player_examine_nearby_vehicle (0000)
 000AC270 00b0:
-	_code_000ac270 (0000)
+	_player_examine_nearby_device (0000)
 000AC320 0150:
-	_code_000ac320 (0000)
+	_player_handle_powerup_equipment (0000)
 000AC470 06e0:
 	_players_update_before_game (0000)
 000ACB50 0320:
-	_code_000acb50 (0000)
+	_player_examine_nearby_item (0000)
 000ACE70 00f0:
-	_code_000ace70 (0000)
+	_player_examine_nearby_objects (0000)
 000ACF60 0330:
 	_players_update_after_game (0000)
 0025CED8 006c:
-	_rdata_0025ced8 (0000)
+	_adjustment_weights (0000)
 0025CF44 001a:
 	??_C@_0BK@OOAKICCI@players_update_after_game?$AA@ (0000)
 0025CF60 001b:
@@ -219,9 +219,9 @@ symbols in this file:
 0025D730 0004:
 	__real@3c360b61 (0000)
 002DEE08 0c18:
-	_data_002dee08 (0000)
+	_players_static_data (0000)
 00453408 005d:
-	_bss_00453408 (0000)
+	_machine_to_player_table (0000)
 	_debug_render_player_teleport (005c)
 */
 
@@ -399,7 +399,7 @@ short player_ui_get_single_player_local_player_controller(
 real game_engine_get_starting_location_rating(
 	long player_index,
 	struct scenario_player_starting_location *starting_location);
-boolean code_000aa9e0(
+boolean player_teleport_internal(
 	long player_index,
 	long source_unit_index,
 	real_point3d const *position);
@@ -477,49 +477,49 @@ boolean dangerous_projectiles_near_player(
 boolean ai_enemies_attacking_player(
 	void);
 
-static long code_000a9bc0(
+static long is_player_in_trigger(
 	short bsp_switch_trigger_volume_index,
 	long object_index);
-static void code_000aa220(
+static void player_reset_action_result(
 	long player_index);
-static boolean code_000aa240(
+static boolean player_handle_weapon_swap(
 	long player_index);
-static void code_000aa300(
+static void player_over_shield_screen_effect(
 	long player_index);
-static void code_000aa3b0(
+static void player_active_camo_screen_effect(
 	long player_index);
-static void code_000aa460(
+static void player_health_pack_screen_effect(
 	long player_index);
-static void code_000aa4f0(
+static void player_powerup_on(
 	long player_index,
 	short powerup_type);
-static void code_000aa530(
+static void player_powerup_additional(
 	long player_index,
 	short powerup_type);
-static void code_000aa560(
+static void player_powerup_off(
 	long player_index,
 	long powerup_type);
-static __declspec(noinline) void code_000ab350(
+static __declspec(noinline) void player_set_action_result(
 	long player_index,
 	short action_result,
 	long object_index,
 	short seat_index);
-static boolean code_000ab440(
+static boolean player_handle_action(
 	long player_index);
-static void code_000ab820(
+static void player_update_powerups(
 	long player_index);
-static void code_000ac0b0(
+static void player_examine_nearby_vehicle(
 	long player_index,
 	long vehicle_index);
-static void code_000acb50(
+static void player_examine_nearby_item(
 	long player_index,
 	long item_index);
-static void code_000ace70(
+static void player_examine_nearby_objects(
 	long player_index);
-void code_000ac320(
+void player_handle_powerup_equipment(
 	long player_index,
 	long equipment_index);
-static void code_000abc90(
+static void player_teleport_on_bsp_switch(
 	long player_index,
 	long source_unit_index,
 	real_point3d const *position);
@@ -528,13 +528,23 @@ static void code_000abc90(
 
 struct data_array *player_data;
 extern struct data_array *team_data;
-byte bss_00453408[0x5C] = { 0 };
+/* january's players.obj owns one 0x5c .bss chunk here.  machine_to_player_table -
+MAXIMUM_MACHINES x MAXIMUM_LOCAL_PLAYERS player indices - is the object at its
+front; the zero-initialised screen_flash statics of the over-shield and
+active-camo effects sit behind it at +0x44.. and have not been split out yet, so
+the whole chunk is still carried as one array. */
+byte machine_to_player_table[0x5C] = { 0 };
 extern short player_spawn_count;
-extern byte data_002dee08[];
+/* january's players.obj .data chunk (0xc18 bytes).  Only its tail is understood -
+the two struct player_screen_flash_parameters records the over-shield and
+active-camo effects read at +0xbf0 and +0xc04 - so the chunk is carried as one
+extern block until the rest of it is reconstructed.  The name is a reconstruction
+stand-in, not a recovered Bungie identifier. */
+extern byte players_static_data[];
 boolean debug_render_player_teleport = FALSE;
 /* Exact: January owns this external 9-point co-op teleport search table in
    Players.obj .rdata (0x6C bytes, no relocations). */
-real_point3d const rdata_0025ced8[9] =
+static real_point3d const adjustment_weights[9] =
 {
 	{ { 1.f, 0.f, 0.f } },
 	{ { 0.f, 1.f, 0.f } },
@@ -548,11 +558,11 @@ real_point3d const rdata_0025ced8[9] =
 };
 
 #define PLAYER_SCREEN_FLASH_PARAMETERS(offset) \
-	((struct player_screen_flash_parameters *)(data_002dee08 + (offset)))
+	((struct player_screen_flash_parameters *)(players_static_data + (offset)))
 #define PLAYER_SCREEN_FLASH_FADE_FUNCTION(offset) \
-	(*(short *)((byte *)bss_00453408 + (offset)))
+	(*(short *)((byte *)machine_to_player_table + (offset)))
 #define PLAYER_SCREEN_FLASH_COLOR(offset) \
-	(*(real *)((byte *)bss_00453408 + (offset)))
+	(*(real *)((byte *)machine_to_player_table + (offset)))
 
 /* ---------- public code */
 
@@ -609,7 +619,7 @@ void players_initialize_for_new_map(
 	data_make_valid(player_data);
 	data_make_valid(team_data);
 	csmemset(
-		bss_00453408,
+		machine_to_player_table,
 		NONE,
 		0x40);
 
@@ -641,7 +651,7 @@ void players_dispose(
 long *machine_get_player_list(
 	long machine_index)
 {
-	return (long *)(bss_00453408 + ((machine_index & 0xFFFF) << 4));
+	return (long *)(machine_to_player_table + ((machine_index & 0xFFFF) << 4));
 }
 
 boolean local_player_exists(
@@ -1111,7 +1121,7 @@ struct scenario_player_starting_location *player_get_starting_location(
 	return starting_location;
 }
 
-static long code_000a9bc0(
+static long is_player_in_trigger(
 	short bsp_switch_trigger_volume_index,
 	long object_index)
 {
@@ -1152,7 +1162,7 @@ boolean valid_real_vector2d(
 	return valid_real(vector->i) && valid_real(vector->j);
 }
 
-static void code_000a9600(
+static void machine_add_player(
 	long machine_index,
 	long player_index)
 {
@@ -1161,7 +1171,7 @@ static void code_000a9600(
 
 	machine_index &= 0xFFFF;
 	machine_index <<= 4;
-	machine_player_list = (long *)((byte *)bss_00453408 + machine_index);
+	machine_player_list = (long *)((byte *)machine_to_player_table + machine_index);
 	for (machine_player_index = 0;
 		machine_player_index < MAXIMUM_LOCAL_PLAYERS;
 		machine_player_index++)
@@ -1231,7 +1241,7 @@ long player_new(
 			csmemcpy(&player->network_player_data, network_player, sizeof(struct network_player));
 	}
 
-	code_000a9600(machine_index, player_index);
+	machine_add_player(machine_index, player_index);
 
 	return player_index;
 }
@@ -1283,7 +1293,7 @@ long find_best_starting_location_index(
 	return best_starting_location_index;
 }
 
-void code_000ab020(
+void player_spawn(
 	long player_index)
 {
 	struct player_datum *player;
@@ -1452,8 +1462,8 @@ void code_000ab020(
 }
 
 /* Exact: January emits this private dead-unit replacement helper from the
-   reconstructed code_000aa9e0 caller below. */
-static void code_000a9c00(
+   reconstructed player_teleport_internal caller below. */
+static void player_pseudo_kill(
 	long player_index,
 	long replacement_dead_unit_index)
 {
@@ -1500,10 +1510,23 @@ static void code_000a9c00(
 
 /* NonMatching: exact 0x170 padded size and all 22 relocation identities.
    The residual is a single instruction-scheduling window after
-   objects_get_activating_cluster_index: January hoists &iterator before
-   storing EAX and loading player_data. This body remains dormant from the
-   exact-credit ledger. */
-static void code_000a9ff0(
+   objects_get_activating_cluster_index: January emits `lea ecx,[ebp-0x14]`
+   (the &iterator argument) BEFORE the spill store of the call result and the
+   player_data load; we emit it after the arg-2 push.  Everything else, frame
+   layout included, is byte-identical.  Measured inert against this window:
+   inner-block scoping of activating_cluster_index, of iterator, and of both;
+   declaring activating_cluster_index last; a for(data_iterator_new(...);...)
+   header; an `iter` pointer local used three times; an explicit `!= NULL` loop
+   test; hoisting the assignment into the argument list as a comma expression;
+   peeling the first data_iterator_next out of the loop (worse); swapping the
+   two statements (worse); hoisting player_data into a local (worse).
+
+   objects_get_activating_cluster_index() is called WITHOUT a prototype on
+   purpose: january stores the result with a plain `mov [ebp-4], eax` and no
+   sign extension, which only happens when the C89 implicit declaration (int
+   return) is in scope.  objects.c really does define it `short` - that object
+   is byte-exact that way - so january's objects.h simply did not declare it. */
+static void players_compute_combined_pvs(
 	unsigned long *combined_pvs,
 	boolean local_player_only)
 {
@@ -1521,8 +1544,7 @@ static void code_000a9ff0(
 	csmemset(combined_pvs, 0, 0x40);
 	if (!game_in_editor())
 	{
-		activating_cluster_index =
-			((long (*)(void))objects_get_activating_cluster_index)();
+		activating_cluster_index = objects_get_activating_cluster_index();
 		data_iterator_new(&iterator, player_data);
 		while (player = data_iterator_next(&iterator))
 		{
@@ -1593,7 +1615,7 @@ static void code_000a9ff0(
 	return;
 }
 
-static boolean code_000ab440(
+static boolean player_handle_action(
 	long player_index)
 {
 	struct player_datum *player;
@@ -1705,10 +1727,27 @@ static boolean code_000ab440(
 /* NonMatching foundation: exact 0x510 padded size and all 61 relocation
    identities, with residual register allocation and block-layout differences.
    This semantic caller is retained because it authentically emits the exact
-   private code_000a9c00 helper, the exact header-inline random_direction3d
-   leaf, and references the exact source-owned rdata_0025ced8 table. The caller
-   body remains dormant from the exact-credit ledger. */
-boolean code_000aa9e0(
+   private player_pseudo_kill helper, the exact header-inline random_direction3d
+   leaf, and references the exact source-owned adjustment_weights table. The caller
+   body remains dormant from the exact-credit ledger.
+
+   Mechanism, as far as it is understood: the residual is a stack-slot
+   assignment.  January groups player(-8), source_root_object(-0xc),
+   biped(-0x10) and player_unit_index(-0x14) in one descending run with the
+   FP-bounce temp at -4 and `scale` at -0x18; we get player(-4), temp(-8),
+   player_unit_index(-0xc), scale(-0x10), biped(-0x14).  Frame size (0x7c) and
+   the best_adjustment_vector slots (-0x1c..-0x24) already agree.  Measured:
+   splitting the `pointers` aggregate into two plain locals makes it worse
+   (lcsd 592 -> 662) with or without player_unit_index moved up beside them;
+   swapping the two aggregate members is inert.
+
+   CAVEAT (owner rule, pre-existing): the `*(volatile long *)&source_unit_index`
+   and `(*(struct player_datum *volatile *)&player)` casts below are codegen
+   levers, not source Bungie would have written.  They are what buys the exact
+   0x510 size and the 61 relocation identities: dropping either or both moves
+   the size to 0x520 and the relocation count to 62 (byte distance drops to
+   ~500, so they are not simply better).  Flagged rather than silently kept. */
+boolean player_teleport_internal(
 	long player_index,
 	long source_unit_index,
 	real_point3d const *position)
@@ -1807,7 +1846,7 @@ boolean code_000aa9e0(
 
 			matrix4x3_transform_point(
 				&placement_matrix,
-				&rdata_0025ced8[adjustment_index],
+				&adjustment_weights[adjustment_index],
 				&adjusted_position);
 			result = biped_fix_position(
 				player_unit_index,
@@ -1854,7 +1893,7 @@ boolean code_000aa9e0(
 
 			adjustment_index++;
 		}
-		while (adjustment_index < NUMBEROF(rdata_0025ced8));
+		while (adjustment_index < NUMBEROF(adjustment_weights));
 			goto placement_complete;
 		}
 		else
@@ -1943,7 +1982,7 @@ placement_complete:
 		respawn_effect_index = player_information->coop_respawn_effect.index;
 		if (respawn_effect_index != NONE)
 		{
-			code_000a9ff0(players_globals->combined_pvs, FALSE);
+			players_compute_combined_pvs(players_globals->combined_pvs, FALSE);
 			effect_new_from_object(
 				respawn_effect_index,
 				player_unit_index,
@@ -1964,7 +2003,7 @@ failure:
 		"c:\\halo\\SOURCE\\game\\players.c",
 		0x5AB,
 		player->local_player_index!=NONE);
-	code_000a9c00(player_index, source_unit_index);
+	player_pseudo_kill(player_index, source_unit_index);
 
 	return result;
 }
@@ -1987,7 +2026,7 @@ boolean player_teleport(
 	{
 		if (biped->object.parent_object_index != NONE)
 			unit_exit_seat_end(unit_index);
-		result = code_000aa9e0(player_index, source_unit_index, position);
+		result = player_teleport_internal(player_index, source_unit_index, position);
 	}
 
 	return result;
@@ -2085,7 +2124,7 @@ void players_debug_render(
 	return;
 }
 
-static void code_000ab820(
+static void player_update_powerups(
 	long player_index)
 {
 	struct player_datum *player;
@@ -2162,7 +2201,7 @@ void debug_player_teleport(
 	if (unit_index != NONE && target_unit_index != NONE)
 	{
 		target_unit = unit_get(target_unit_index);
-		code_000aa9e0(
+		player_teleport_internal(
 			player_index_from_unit_index(unit_index),
 			target_unit_index,
 			&target_unit->object.bounding_sphere_center);
@@ -2172,16 +2211,16 @@ void debug_player_teleport(
 	   emitted; their real call sites are manually inlined for exact codegen. */
 	if (0)
 	{
-		code_000aa220(0);
-		code_000aa240(0);
-		code_000aa4f0(0, 0);
-		code_000aa530(0, 0);
-		code_000aa560(0, 0);
-		code_000ab440(0);
-		code_000ab820(0);
-		code_000ac0b0(0, 0);
-		code_000acb50(0, 0);
-		code_000ace70(0);
+		player_reset_action_result(0);
+		player_handle_weapon_swap(0);
+		player_powerup_on(0, 0);
+		player_powerup_additional(0, 0);
+		player_powerup_off(0, 0);
+		player_handle_action(0);
+		player_update_powerups(0);
+		player_examine_nearby_vehicle(0, 0);
+		player_examine_nearby_item(0, 0);
+		player_examine_nearby_objects(0);
 	}
 
 	return;
@@ -2268,7 +2307,7 @@ boolean players_respawn_coop(
 		{
 			if (player->unit_index == NONE)
 			{
-				code_000ab020(iterator.datum_index);
+				player_spawn(iterator.datum_index);
 				if (player->unit_index != NONE)
 				{
 					result = player_teleport(
@@ -2294,7 +2333,7 @@ result_complete:
 	return result;
 }
 
-static void code_000abc90(
+static void player_teleport_on_bsp_switch(
 	long player_index,
 	long source_unit_index,
 	real_point3d const *position)
@@ -2357,7 +2396,7 @@ static void code_000abc90(
 
 			if (biped->object.parent_object_index == NONE)
 			{
-				teleport_succeeded = code_000aa9e0(
+				teleport_succeeded = player_teleport_internal(
 					player_index,
 					source_unit_index,
 					position);
@@ -2440,7 +2479,7 @@ void players_reconnect_to_structure_bsp(
 			if (player_unit_index != NONE &&
 				players_globals->pending_teleport_starting_location_index != NONE)
 			{
-				if (code_000a9bc0(
+				if (is_player_in_trigger(
 					players_globals->pending_teleport_starting_location_index,
 					player_unit_index))
 				{
@@ -2489,7 +2528,7 @@ void players_reconnect_to_structure_bsp(
 				if (player->unit_index != NONE &&
 					player->unit_index != source_unit_index)
 				{
-					code_000abc90(
+					player_teleport_on_bsp_switch(
 						player_index,
 						source_unit_index,
 						&teleport_position);
@@ -2534,7 +2573,7 @@ boolean unit_should_autopick_weapon(
 	return TRUE;
 }
 
-long code_000aa160(
+long players_compute_local_player_count(
 	void)
 {
 	long local_player_count = 0;
@@ -2551,7 +2590,7 @@ long code_000aa160(
 	return local_player_count;
 }
 
-void code_000aa180(
+void player_examine_nearby_unit(
 	void)
 {
 	return;
@@ -2559,7 +2598,7 @@ void code_000aa180(
 
 /* Exact-emission foundation: the players_update_after_game call is inlined,
    while VC7 also emits this private helper with January's register ABI. */
-static void code_000aa220(
+static void player_reset_action_result(
 	long player_index)
 {
 	struct player_datum *player;
@@ -2571,7 +2610,7 @@ static void code_000aa220(
 	return;
 }
 
-static boolean code_000aa240(
+static boolean player_handle_weapon_swap(
 	long player_index)
 {
 	struct player_datum *player;
@@ -2700,7 +2739,7 @@ void player_handle_powerup_minor(
 	return;
 }
 
-static void code_000aa300(
+static void player_over_shield_screen_effect(
 	long player_index)
 {
 	struct player_datum *player;
@@ -2737,7 +2776,7 @@ static void code_000aa300(
 	return;
 }
 
-static void code_000aa3b0(
+static void player_active_camo_screen_effect(
 	long player_index)
 {
 	struct player_datum *player;
@@ -2774,7 +2813,7 @@ static void code_000aa3b0(
 	return;
 }
 
-static void code_000aa460(
+static void player_health_pack_screen_effect(
 	long player_index)
 {
 	struct player_datum *player;
@@ -2805,7 +2844,7 @@ static void code_000aa460(
 
 /* VC7 inlines this helper into player_handle_powerup_minor while retaining
    the January-exact private body and register ABI. */
-static void code_000aa4f0(
+static void player_powerup_on(
 	long player_index,
 	short powerup_type)
 {
@@ -2826,7 +2865,7 @@ static void code_000aa4f0(
 /* Exact-emission foundations: these private helpers match January when their
    powerup-update callers are present. Unreferenced helpers are currently
    elided by VC7. */
-static void code_000aa530(
+static void player_powerup_additional(
 	long player_index,
 	short powerup_type)
 {
@@ -2841,7 +2880,7 @@ static void code_000aa530(
 	return;
 }
 
-static void code_000aa560(
+static void player_powerup_off(
 	long player_index,
 	long powerup_type)
 {
@@ -2880,7 +2919,7 @@ static __inline real player_action_new_distance3d(
 	return square_root(magnitude_squared);
 }
 
-static __declspec(noinline) void code_000ab350(
+static __declspec(noinline) void player_set_action_result(
 	long player_index,
 	short action_result,
 	long object_index,
@@ -2927,7 +2966,7 @@ static __declspec(noinline) void code_000ab350(
 	return;
 }
 
-static void code_000ac0b0(
+static void player_examine_nearby_vehicle(
 	long player_index,
 	long vehicle_index)
 {
@@ -2982,7 +3021,7 @@ static void code_000ac0b0(
 									TRUE);
 								system_exit(-1);
 							}
-							code_000ab350(
+							player_set_action_result(
 								player_index,
 								8,
 								vehicle_index,
@@ -2999,7 +3038,7 @@ static void code_000ac0b0(
 									TRUE);
 								system_exit(-1);
 							}
-							code_000ab350(
+							player_set_action_result(
 								player_index,
 								9,
 								vehicle_index,
@@ -3013,14 +3052,14 @@ static void code_000ac0b0(
 		else if (!TEST_FLAG(vehicle->vehicle.flags, 4) &&
 			vehicle->unit.driver_object_index == NONE)
 		{
-			code_000ab350(player_index, 11, vehicle_index, NONE);
+			player_set_action_result(player_index, 11, vehicle_index, NONE);
 		}
 	}
 
 	return;
 }
 
-static void code_000acb50(
+static void player_examine_nearby_item(
 	long player_index,
 	long item_index)
 {
@@ -3089,7 +3128,7 @@ static void code_000acb50(
 			current_equipment_index = unit_get_current_equipment(player->unit_index);
 			if (current_equipment_index == NONE)
 			{
-				code_000ac320(player_index, item_index);
+				player_handle_powerup_equipment(player_index, item_index);
 			}
 			else
 			{
@@ -3103,7 +3142,7 @@ static void code_000acb50(
 				if (equipment_definition->equipment.powerup_type !=
 					current_equipment_definition->equipment.powerup_type)
 				{
-					code_000ab350(player_index, 5, item_index, NONE);
+					player_set_action_result(player_index, 5, item_index, NONE);
 				}
 			}
 		}
@@ -3181,11 +3220,11 @@ static void code_000acb50(
 				current_weapon &&
 				current_weapon->definition_index != weapon->definition_index)
 			{
-				code_000ab350(player_index, 7, weapon_item_index, NONE);
+				player_set_action_result(player_index, 7, weapon_item_index, NONE);
 			}
 			else
 			{
-				code_000ab350(player_index, 6, weapon_item_index, NONE);
+				player_set_action_result(player_index, 6, weapon_item_index, NONE);
 			}
 		}
 	}
@@ -3193,7 +3232,7 @@ static void code_000acb50(
 	return;
 }
 
-void code_000ac270(
+void player_examine_nearby_device(
 	long player_index,
 	long device_index)
 {
@@ -3214,13 +3253,13 @@ void code_000ac270(
 		device_frontfacing(device_index, &camera_position, &unit->unit.aiming_vector) &&
 		device_can_change_position(device_index))
 	{
-		code_000ab350(player_index, 10, device_index, NONE);
+		player_set_action_result(player_index, 10, device_index, NONE);
 	}
 
 	return;
 }
 
-void code_000ac320(
+void player_handle_powerup_equipment(
 	long player_index,
 	long equipment_index)
 {
@@ -3248,13 +3287,13 @@ void code_000ac320(
 	{
 		if (!object_double_charge_shield(player->unit_index))
 			return;
-		code_000aa300(player_index);
+		player_over_shield_screen_effect(player_index);
 	}
 	else if (powerup_type == _equipment_powerup_health)
 	{
 		if (!object_restore_body(player->unit_index))
 			return;
-		code_000aa460(player_index);
+		player_health_pack_screen_effect(player_index);
 	}
 	else
 	{
@@ -3280,7 +3319,7 @@ void code_000ac320(
 		if (!player_handle_powerup(player_index, (short)powerup_index, duration))
 			return;
 		if ((short)powerup_index == 0)
-			code_000aa3b0(player_index);
+			player_active_camo_screen_effect(player_index);
 	}
 
 	equipment = equipment_get(equipment_index);
@@ -3315,7 +3354,7 @@ void players_handle_deleted_object(
 	return;
 }
 
-static void code_000ace70(
+static void player_examine_nearby_objects(
 	long player_index)
 {
 	struct player_datum *player;
@@ -3348,16 +3387,16 @@ static void code_000ace70(
 					continue;
 
 				case _object_type_vehicle:
-					code_000ac0b0(player_index, object_indices[object_number]);
+					player_examine_nearby_vehicle(player_index, object_indices[object_number]);
 					break;
 
 				case _object_type_weapon:
 				case _object_type_equipment:
-					code_000acb50(player_index, object_indices[object_number]);
+					player_examine_nearby_item(player_index, object_indices[object_number]);
 					break;
 
 				case _object_type_control:
-					code_000ac270(player_index, object_indices[object_number]);
+					player_examine_nearby_device(player_index, object_indices[object_number]);
 					break;
 				}
 			}
@@ -3367,7 +3406,7 @@ static void code_000ace70(
 	return;
 }
 
-static long code_000a9f80(
+static long unit_create_starting_weapon(
 	struct scenario_starting_profile_weapon const *starting_weapon,
 	long unit_index)
 {
@@ -3428,7 +3467,7 @@ void player_add_equipment(
 
 			if (starting_profile->primary_weapon.weapon.index != NONE)
 			{
-				weapon_index = code_000a9f80(
+				weapon_index = unit_create_starting_weapon(
 					&starting_profile->primary_weapon,
 					unit_index);
 				if (weapon_index != NONE &&
@@ -3444,7 +3483,7 @@ void player_add_equipment(
 
 			if (starting_profile->secondary_weapon.weapon.index != NONE)
 			{
-				weapon_index = code_000a9f80(
+				weapon_index = unit_create_starting_weapon(
 					&starting_profile->secondary_weapon,
 					unit_index);
 				if (weapon_index != NONE &&

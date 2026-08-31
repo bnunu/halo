@@ -136,7 +136,7 @@ void lruv_debug_to_file(
 void lruv_flush(
 	struct lruv_cache *cache);
 
-void lruv_verify(
+void lruv_cache_verify(
 	struct lruv_cache *cache,
 	boolean verify_blocks);
 

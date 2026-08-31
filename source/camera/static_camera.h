@@ -20,6 +20,11 @@ enum
 	_camera_command_valid_bit
 };
 
+enum
+{
+	NUMBER_OF_CAMERA_PARAMETERS = 5
+};
+
 /* ---------- macros */
 
 /* ---------- structures */

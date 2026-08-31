@@ -129,7 +129,7 @@ symbols in this file:
 0030D4CC 0004:
 	_profile_log_path (0000)
 00466320 0860:
-	_bss_00466320 (0000)
+	_rasterizer_frame_statistics_private_globals (0000)
 */
 
 /* ---------- headers */
@@ -149,25 +149,31 @@ struct rasterizer_frame_statistics_globals
 	byte data[0x170];
 };
 
-struct rasterizer_frame_statistics_private_globals_prefix
+struct rasterizer_frame_statistics_private_globals
 {
 	byte reserved000[0x740];
 	word *temp_buffer;
+	byte reserved744[0x11C];
 };
 
 typedef char verify_rasterizer_frame_statistics_temp_buffer_offset[
 	offsetof(
-		struct rasterizer_frame_statistics_private_globals_prefix,
+		struct rasterizer_frame_statistics_private_globals,
 		temp_buffer) == 0x740 ? 1 : -1];
+typedef char verify_rasterizer_frame_statistics_private_globals_size[
+	sizeof(struct rasterizer_frame_statistics_private_globals) == 0x860 ? 1 : -1];
 
 /* ---------- prototypes */
 
 /* ---------- globals */
 
 extern struct rasterizer_frame_statistics_globals rasterizer_frame_statistics;
-extern struct rasterizer_frame_statistics_private_globals_prefix bss_00466320;
 
-#define rasterizer_frame_statistics_temp_buffer bss_00466320.temp_buffer
+static char *profile_log_path = "d:\\r-prof.txt";
+static struct rasterizer_frame_statistics_private_globals
+	rasterizer_frame_statistics_private_globals;
+
+#define rasterizer_frame_statistics_temp_buffer rasterizer_frame_statistics_private_globals.temp_buffer
 
 /* ---------- public code */
 

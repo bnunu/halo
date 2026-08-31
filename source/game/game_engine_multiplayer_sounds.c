@@ -3,21 +3,22 @@ GAME_ENGINE_MULTIPLAYER_SOUNDS.C
 
 symbols in this file:
 000A1460 0060:
-	_code_000a1460 (0000)
+	__game_engine_play_multiplayer_sound (0000)
 000A14C0 0020:
-	_code_000a14c0 (0000)
+	_push_queued_sound (0000)
 000A14E0 0050:
 	_game_engine_update_multiplayer_sound (0000)
 000A1530 0080:
-	_code_000a1530 (0000)
+	_get_sound_length_in_ticks (0000)
 000A15B0 0050:
 	_game_engine_play_multiplayer_sound (0000)
 000A1600 0030:
 	_game_engine_intialize_queued_sounds (0000)
 002DE530 002b:
-	_data_002de530 (0000)
+	_sound_is_queueable (0000)
 0043EB78 002c:
-	_bss_0043eb78 (0000)
+	_mp_sound_queue_count (0000)
+	_mp_sound_queue (0004)
 */
 
 /* ---------- headers */
@@ -91,7 +92,7 @@ enum
 
 /* ---------- structures */
 
-struct queued_multiplayer_sound
+struct queued_mp_sound
 {
 	long sound_index;
 	long delay_ticks;
@@ -100,12 +101,7 @@ struct queued_multiplayer_sound
 struct multiplayer_sound_queue
 {
 	long count;
-	struct queued_multiplayer_sound sounds[MAXIMUM_QUEUED_MULTIPLAYER_SOUNDS];
-};
-
-struct multiplayer_sound_queue_count
-{
-	long count;
+	struct queued_mp_sound sounds[MAXIMUM_QUEUED_MULTIPLAYER_SOUNDS];
 };
 
 struct game_globals_multiplayer_sound_view
@@ -115,26 +111,22 @@ struct game_globals_multiplayer_sound_view
 };
 
 typedef char verify_multiplayer_sound_queue_size[sizeof(struct multiplayer_sound_queue) == 0x2C ? 1 : -1];
-typedef char verify_multiplayer_sound_queue_count_size[sizeof(struct multiplayer_sound_queue_count) == sizeof(long) ? 1 : -1];
 typedef char verify_game_globals_multiplayer_information_offset[
 	offsetof(struct game_globals_multiplayer_sound_view, multiplayer_information) == 0x164 ? 1 : -1];
 
 /* ---------- prototypes */
 
-/* game_engine_play_multiplayer_sound_immediate */
-static void code_000a1460(
+static void _game_engine_play_multiplayer_sound(
 	long sound_index);
-/* game_engine_queue_multiplayer_sound */
-static void code_000a14c0(
+static void push_queued_sound(
 	long sound_index,
 	long delay_ticks);
-/* game_engine_get_multiplayer_sound_duration */
-static long code_000a1530(
+static long get_sound_length_in_ticks(
 	long sound_index);
 
 /* ---------- globals */
 
-boolean data_002de530[_multiplayer_sound_ting] =
+static boolean sound_is_queueable[_multiplayer_sound_ting] =
 {
 	TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
 	TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
@@ -145,16 +137,18 @@ boolean data_002de530[_multiplayer_sound_ting] =
 	TRUE, TRUE, FALSE,
 };
 
-struct multiplayer_sound_queue_count bss_0043eb78 = { 0 };
-struct queued_multiplayer_sound bss_0043eb7c[
+/* the queue itself has external linkage in january: adding `static` to
+mp_sound_queue_count lets VC7 prove the count survives the
+_game_engine_play_multiplayer_sound() call and drops the reload in
+game_engine_update_multiplayer_sound, and adding it to mp_sound_queue turns that
+array's relocations section-relative.  sound_is_queueable is genuinely file-local. */
+long mp_sound_queue_count = 0;
+struct queued_mp_sound mp_sound_queue[
 	MAXIMUM_QUEUED_MULTIPLAYER_SOUNDS] = { 0 };
-
-#define multiplayer_sound_queue_count bss_0043eb78.count
-#define multiplayer_sound_queue_sounds bss_0043eb7c
 
 /* ---------- public code */
 
-static void code_000a1460(
+static void _game_engine_play_multiplayer_sound(
 	long sound_index)
 {
 	struct game_globals_multiplayer_sound_view *game_globals;
@@ -180,17 +174,17 @@ static void code_000a1460(
 	return;
 }
 
-static void code_000a14c0(
+static void push_queued_sound(
 	long sound_index,
 	long delay_ticks)
 {
-	long queue_index = multiplayer_sound_queue_count;
+	long queue_index = mp_sound_queue_count;
 
 	if (queue_index < MAXIMUM_QUEUED_MULTIPLAYER_SOUNDS)
 	{
-		multiplayer_sound_queue_sounds[queue_index].sound_index = sound_index;
-		multiplayer_sound_queue_sounds[queue_index].delay_ticks = delay_ticks;
-		multiplayer_sound_queue_count++;
+		mp_sound_queue[queue_index].sound_index = sound_index;
+		mp_sound_queue[queue_index].delay_ticks = delay_ticks;
+		mp_sound_queue_count++;
 	}
 
 	return;
@@ -200,23 +194,23 @@ void game_engine_update_multiplayer_sound(
 	void)
 {
 	long i;
-	long queue_count = multiplayer_sound_queue_count;
+	long queue_count = mp_sound_queue_count;
 
-	if (queue_count && --multiplayer_sound_queue_sounds[0].delay_ticks == 0)
+	if (queue_count && --mp_sound_queue[0].delay_ticks == 0)
 	{
 		for (i = 1; i < queue_count; i++)
-			multiplayer_sound_queue_sounds[i - 1] = multiplayer_sound_queue_sounds[i];
+			mp_sound_queue[i - 1] = mp_sound_queue[i];
 
 		queue_count--;
-		multiplayer_sound_queue_count = queue_count;
+		mp_sound_queue_count = queue_count;
 		if (queue_count)
-			code_000a1460(multiplayer_sound_queue_sounds[0].sound_index);
+			_game_engine_play_multiplayer_sound(mp_sound_queue[0].sound_index);
 	}
 
 	return;
 }
 
-static long code_000a1530(
+static long get_sound_length_in_ticks(
 	long sound_index)
 {
 	struct game_globals_multiplayer_sound_view *game_globals;
@@ -249,17 +243,17 @@ static long code_000a1530(
 void game_engine_play_multiplayer_sound(
 	long sound_index)
 {
-	if (data_002de530[sound_index])
+	if (sound_is_queueable[sound_index])
 	{
-		code_000a14c0(
+		push_queued_sound(
 			sound_index,
-			code_000a1530(sound_index) + 5);
-		if (multiplayer_sound_queue_count == 1)
-			code_000a1460(sound_index);
+			get_sound_length_in_ticks(sound_index) + 5);
+		if (mp_sound_queue_count == 1)
+			_game_engine_play_multiplayer_sound(sound_index);
 	}
 	else
 	{
-		code_000a1460(sound_index);
+		_game_engine_play_multiplayer_sound(sound_index);
 	}
 
 	return;
@@ -269,12 +263,12 @@ void game_engine_intialize_queued_sounds(
 	void)
 {
 	csmemset(
-		multiplayer_sound_queue_sounds,
+		mp_sound_queue,
 		0,
-		sizeof(multiplayer_sound_queue_sounds));
-	multiplayer_sound_queue_count = 1;
-	multiplayer_sound_queue_sounds[0].sound_index = NONE;
-	multiplayer_sound_queue_sounds[0].delay_ticks = MULTIPLAYER_SOUND_QUEUE_INITIAL_DELAY_TICKS;
+		sizeof(mp_sound_queue));
+	mp_sound_queue_count = 1;
+	mp_sound_queue[0].sound_index = NONE;
+	mp_sound_queue[0].delay_ticks = MULTIPLAYER_SOUND_QUEUE_INITIAL_DELAY_TICKS;
 
 	return;
 }

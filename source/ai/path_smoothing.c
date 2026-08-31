@@ -179,8 +179,7 @@ static void find_tangent_point(
 		point_to_tangent[1].i = tangent_points[1].x - point[0];
 		point_to_tangent[1].j = tangent_points[1].y - point[1];
 		cross_positive =
-			point_to_tangent[1].j*point_to_tangent[0].i -
-			point_to_tangent[1].i*point_to_tangent[0].j > 0.0f;
+			cross_product2d(&point_to_tangent[0], &point_to_tangent[1]) > 0.0f;
 		tangent_point_index = cross_positive != clockwise;
 		*(real_point2d *)tangent_point = tangent_points[tangent_point_index];
 	}
@@ -202,11 +201,11 @@ static void find_tangent_point(
 }
 
 static void find_avoidance_point(
-	real const *tangent_points,
-	real const *center,
-	real const *start_point,
+	real_point2d const *tangent_points,
+	real_point2d const *center,
+	real_point2d const *start_point,
 	real radius,
-	real *avoidance_point)
+	real_point2d *avoidance_point)
 {
 	real_vector2d center_to_tangent[2];
 	real cross;
@@ -214,30 +213,30 @@ static void find_avoidance_point(
 	real magnitude;
 	real_vector2d direction;
 
-	center_to_tangent[0].i = tangent_points[0] - center[0];
-	center_to_tangent[0].j = tangent_points[1] - center[1];
-	center_to_tangent[1].i = tangent_points[2] - center[0];
-	center_to_tangent[1].j = tangent_points[3] - center[1];
-	cross = center_to_tangent[1].j*center_to_tangent[0].i - center_to_tangent[0].j*center_to_tangent[1].i;
+	center_to_tangent[0].i = tangent_points[0].x - center->x;
+	center_to_tangent[0].j = tangent_points[0].y - center->y;
+	center_to_tangent[1].i = tangent_points[1].x - center->x;
+	center_to_tangent[1].j = tangent_points[1].y - center->y;
+	cross = cross_product2d(&center_to_tangent[0], &center_to_tangent[1]);
 
 	if (!(fabs(cross) < _real_epsilon))
 	{
 		real_vector2d avoidance;
 
 		scale = radius*radius / cross;
-		avoidance.j = (center_to_tangent[0].i - center_to_tangent[1].i)*scale + center[1];
-		avoidance.i = center[0] - (center_to_tangent[0].j - center_to_tangent[1].j)*scale;
-		avoidance_point[0] = avoidance.i;
-		avoidance_point[1] = avoidance.j;
+		avoidance.j = (center_to_tangent[0].i - center_to_tangent[1].i)*scale + center->y;
+		avoidance.i = center->x - (center_to_tangent[0].j - center_to_tangent[1].j)*scale;
+		avoidance_point->x = avoidance.i;
+		avoidance_point->y = avoidance.j;
 
-		direction.i = avoidance_point[0] - center[0];
-		direction.j = avoidance_point[1] - center[1];
+		direction.i = avoidance_point->x - center->x;
+		direction.j = avoidance_point->y - center->y;
 		if (!(direction.i*direction.i + direction.j*direction.j > radius*radius*4.0f))
 			return;
 	}
 
-	direction.i = tangent_points[0] - start_point[0];
-	direction.j = tangent_points[1] - start_point[1];
+	direction.i = tangent_points[0].x - start_point->x;
+	direction.j = tangent_points[0].y - start_point->y;
 	magnitude = (real)sqrt(direction.i*direction.i + direction.j*direction.j);
 	if (!(_real_epsilon > fabs(magnitude - 0.0f)))
 	{
@@ -252,8 +251,8 @@ static void find_avoidance_point(
 	if (magnitude == 0.0f)
 		direction = *global_left2d;
 
-	avoidance_point[0] = direction.i*radius + tangent_points[0];
-	avoidance_point[1] = direction.j*radius + tangent_points[1];
+	avoidance_point->x = direction.i*radius + tangent_points[0].x;
+	avoidance_point->y = direction.j*radius + tangent_points[0].y;
 
 	return;
 }
@@ -626,11 +625,11 @@ void path_smooth(
 				!chose_clockwise,
 				tangent_points[1].n);
 			find_avoidance_point(
-				tangent_points[0].n,
-				chosen_center.n,
-				current_position.n,
+				&tangent_points[0],
+				&chosen_center,
+				&current_position,
 				0.35f,
-				avoidance_point.n);
+				&avoidance_point);
 
 			known_point = current_position;
 			current_position = avoidance_point;

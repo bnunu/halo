@@ -3,11 +3,11 @@ DATA_PACKETS.C
 
 symbols in this file:
 0010A5F0 01d0:
-	_code_0010a5f0 (0000)
+	__data_packet_verify (0000)
 0010A7C0 0300:
-	_code_0010a7c0 (0000)
+	__data_packet_encode (0000)
 0010AAC0 02a0:
-	_code_0010aac0 (0000)
+	__data_packet_decode (0000)
 0010AD60 0110:
 	_data_packet_verify (0000)
 0010AE70 0100:
@@ -59,29 +59,29 @@ symbols in this file:
 
 /* ---------- prototypes */
 
-void code_0010a5f0(
+static void _data_packet_verify(
 	struct data_packet_definition *packet_definition,
-	short *packet_size,
-	struct data_packet_field *fields,
-	short *field_count);
+	short *byte_count_reference,
+	struct data_packet_field *first_field,
+	short *field_count_reference);
 
-void code_0010a7c0(
+static void _data_packet_encode(
 	struct data_packet_definition *packet_definition,
-	struct data_encoding_state *state,
-	short packet_version,
-	void const *decoded_packet,
-	short *encoded_packet_size,
-	struct data_packet_field *fields,
-	short *field_count);
+	struct data_encoding_state *encode_state,
+	short version,
+	void const *original_buffer,
+	short *byte_count_reference,
+	struct data_packet_field *first_field,
+	short *field_count_reference);
 
-void code_0010aac0(
+static void _data_packet_decode(
 	struct data_packet_definition *packet_definition,
-	struct data_encoding_state *state,
-	short packet_version,
-	void *decoded_packet,
-	short *encoded_packet_size,
-	struct data_packet_field *fields,
-	short *field_count);
+	struct data_encoding_state *decode_state,
+	short version,
+	void *original_buffer,
+	short *byte_count_reference,
+	struct data_packet_field *first_field,
+	short *field_count_reference);
 
 /* ---------- globals */
 
@@ -100,7 +100,7 @@ void data_packet_verify(
 
 	if (!packet_definition->initialized)
 	{
-		code_0010a5f0(packet_definition, &packet_size, packet_definition->fields, &field_count);
+		_data_packet_verify(packet_definition, &packet_size, packet_definition->fields, &field_count);
 		if (packet_size != packet_definition->size)
 		{
 			display_assert(
@@ -146,7 +146,7 @@ boolean data_packet_encode(
 		byte version_byte = (byte)version;
 		data_encode_memory(&state, &version_byte, 1, 1);
 	}
-	code_0010a7c0(
+	_data_packet_encode(
 		packet_definition,
 		&state,
 		version,
@@ -184,7 +184,7 @@ boolean data_packet_decode(
 		version = data_decode_byte(&state);
 	if (version <= packet_definition->version)
 	{
-		code_0010aac0(
+		_data_packet_decode(
 			packet_definition,
 			&state,
 			version,
@@ -205,20 +205,20 @@ boolean data_packet_decode(
 
 /* ---------- private code */
 
-void code_0010a5f0(
+static void _data_packet_verify(
 	struct data_packet_definition *packet_definition,
-	short *packet_size,
-	struct data_packet_field *fields,
-	short *field_count)
+	short *byte_count_reference,
+	struct data_packet_field *first_field,
+	short *field_count_reference)
 {
 	short field_size;
-	short total_size;
+	short byte_count;
 	struct data_packet_field *field;
 
-	field = fields;
-	total_size = 0;
+	field = first_field;
+	byte_count = 0;
 	/* BUG (original): a first version-ineligible field reads an indeterminate
-	 * field_size; later ineligible fields reuse the preceding size. A corrected
+	 * field_size; later ineligible first_field reuse the preceding size. A corrected
 	 * build should initialize field_size to zero before the loop. */
 	while (field->type != _data_packet_field_end)
 	{
@@ -277,7 +277,7 @@ void code_0010a5f0(
 				short element_size;
 				short element_field_count;
 
-				code_0010a5f0(packet_definition, &element_size, field + 1, &element_field_count);
+				_data_packet_verify(packet_definition, &element_size, field + 1, &element_field_count);
 				field_size = sizeof(short) + field->count * element_size;
 				field += element_field_count;
 				break;
@@ -292,79 +292,79 @@ void code_0010a5f0(
 			}
 		}
 		field->size = field_size;
-		total_size += field_size;
+		byte_count += field_size;
 		field++;
 	}
-	if (field_count)
-		*field_count = (short)(field - fields + 1);
-	if (packet_size)
-		*packet_size = total_size;
+	if (field_count_reference)
+		*field_count_reference = (short)(field - first_field + 1);
+	if (byte_count_reference)
+		*byte_count_reference = byte_count;
 
 	return;
 }
 
-void code_0010a7c0(
+static void _data_packet_encode(
 	struct data_packet_definition *packet_definition,
-	struct data_encoding_state *state,
-	short packet_version,
-	void const *decoded_packet,
-	short *encoded_packet_size,
-	struct data_packet_field *fields,
-	short *field_count)
+	struct data_encoding_state *encode_state,
+	short version,
+	void const *original_buffer,
+	short *byte_count_reference,
+	struct data_packet_field *first_field,
+	short *field_count_reference)
 {
 	struct data_packet_field *field;
-	byte const *decoded_data;
-	byte const *decoded_start;
+	byte const *buffer;
+	byte const *original_buffer_start;
 
-	field = fields;
-	decoded_data = decoded_packet;
-	decoded_start = decoded_data;
+	field = first_field;
+	buffer = original_buffer;
+	original_buffer_start = buffer;
 	while (field->type != _data_packet_field_end)
 	{
-		if (packet_version >= field->minimum_version &&
-			(packet_version <= field->maximum_version || field->maximum_version == 0))
+		if (version >= field->minimum_version &&
+			(version <= field->maximum_version || field->maximum_version == 0))
 		{
 			switch (field->type)
 			{
 			case _data_packet_field_pad:
 				break;
 			case _data_packet_field_bytes:
-				data_encode_memory(state, decoded_data, field->count, 1);
+				data_encode_memory(encode_state, buffer, field->count, 1);
 				break;
 			case _data_packet_field_shorts:
-				data_encode_memory(state, decoded_data, field->count, -2);
+				data_encode_memory(encode_state, buffer, field->count, -2);
 				break;
 			case _data_packet_field_longs:
-				data_encode_memory(state, decoded_data, field->count, -4);
+				data_encode_memory(encode_state, buffer, field->count, -4);
 				break;
 			case _data_packet_field_int64s:
-				data_encode_memory(state, decoded_data, field->count, -8);
+				data_encode_memory(encode_state, buffer, field->count, -8);
 				break;
 			case _data_packet_field_string:
-				data_encode_string(state, (char const *)decoded_data, field->count);
+				data_encode_string(encode_state, (char const *)buffer, field->count);
 				break;
 			case _data_packet_field_data:
 			{
-				short data_size = *(short const *)decoded_data;
-				byte const *data = decoded_data + sizeof(short);
+				short data_size = *(short const *)buffer;
+				byte const *data = buffer + sizeof(short);
 
 				match_assert("c:\\halo\\SOURCE\\memory\\data_packets.c", 253, data_size>=0 && data_size<=field->count);
 				if (data_size < 0 || data_size > field->count)
 					data_size = 0;
-				data_encode_integer(state, data_size, field->count);
-				data_encode_memory(state, data, data_size, 1);
+				data_encode_integer(encode_state, data_size, field->count);
+				data_encode_memory(encode_state, data, data_size, 1);
 				break;
 			}
 			case _data_packet_field_raw:
-				data_encode_memory(state, decoded_data, field->count, 1);
+				data_encode_memory(encode_state, buffer, field->count, 1);
 				break;
 			case _data_packet_field_array:
 			{
-				short element_count = *(short const *)decoded_data;
+				short element_count = *(short const *)buffer;
 				short element_field_count;
-				byte const *element = decoded_data + sizeof(short);
+				byte const *element = buffer + sizeof(short);
 
-				code_0010a5f0(
+				_data_packet_verify(
 					packet_definition,
 					NULL,
 					field + 1,
@@ -372,15 +372,15 @@ void code_0010a7c0(
 				match_assert("c:\\halo\\SOURCE\\memory\\data_packets.c", 281, element_count>=0 && element_count<=field->count);
 				if (element_count < 0 || element_count > field->count)
 					element_count = 0;
-				data_encode_integer(state, element_count, field->count);
+				data_encode_integer(encode_state, element_count, field->count);
 				while (element_count-- > 0)
 				{
 					short element_size;
 
-					code_0010a7c0(
+					_data_packet_encode(
 						packet_definition,
-						state,
-						packet_version,
+						encode_state,
+						version,
 						element,
 						&element_size,
 						field + 1,
@@ -407,19 +407,19 @@ void code_0010a7c0(
 			case _data_packet_field_longs:
 			case _data_packet_field_int64s:
 			case _data_packet_field_raw:
-				data_encode_memory(state, NULL, field->count, 1);
+				data_encode_memory(encode_state, NULL, field->count, 1);
 				break;
 			case _data_packet_field_string:
 			{
 				byte zero;
 
 				zero = 0;
-				data_encode_memory(state, &zero, 1, 1);
+				data_encode_memory(encode_state, &zero, 1, 1);
 				break;
 			}
 			case _data_packet_field_data:
 			case _data_packet_field_array:
-				data_encode_integer(state, 0, field->count);
+				data_encode_integer(encode_state, 0, field->count);
 				break;
 			default:
 				display_assert(NULL, "c:\\halo\\SOURCE\\memory\\data_packets.c", 324, TRUE);
@@ -427,73 +427,73 @@ void code_0010a7c0(
 				break;
 			}
 		}
-		decoded_data += field->size;
+		buffer += field->size;
 		field++;
 	}
-	if (field_count)
-		*field_count = (short)(field - fields + 1);
-	if (encoded_packet_size)
-		*encoded_packet_size = (short)(decoded_data - decoded_start);
+	if (field_count_reference)
+		*field_count_reference = (short)(field - first_field + 1);
+	if (byte_count_reference)
+		*byte_count_reference = (short)(buffer - original_buffer_start);
 
 	return;
 }
 
-void code_0010aac0(
+static void _data_packet_decode(
 	struct data_packet_definition *packet_definition,
-	struct data_encoding_state *state,
-	short packet_version,
-	void *decoded_packet,
-	short *encoded_packet_size,
-	struct data_packet_field *fields,
-	short *field_count)
+	struct data_encoding_state *decode_state,
+	short version,
+	void *original_buffer,
+	short *byte_count_reference,
+	struct data_packet_field *first_field,
+	short *field_count_reference)
 {
 	struct data_packet_field *field;
-	byte *decoded_data;
-	byte *decoded_start;
+	byte *buffer;
+	byte *original_buffer_start;
 
-	field = fields;
-	decoded_data = decoded_packet;
-	decoded_start = decoded_data;
+	field = first_field;
+	buffer = original_buffer;
+	original_buffer_start = buffer;
 	while (field->type != _data_packet_field_end)
 	{
-		if (packet_version >= field->minimum_version &&
-			(packet_version <= field->maximum_version || field->maximum_version == 0))
+		if (version >= field->minimum_version &&
+			(version <= field->maximum_version || field->maximum_version == 0))
 		{
 			switch (field->type)
 			{
 			case _data_packet_field_bytes:
 			{
-				void *source = data_decode_memory(state, field->count, 1);
+				void *source = data_decode_memory(decode_state, field->count, 1);
 				if (source)
-					csmemcpy(decoded_data, source, field->count);
+					csmemcpy(buffer, source, field->count);
 				break;
 			}
 			case _data_packet_field_shorts:
 			{
-				void *source = data_decode_memory(state, field->count, -2);
+				void *source = data_decode_memory(decode_state, field->count, -2);
 				if (source)
-					csmemcpy(decoded_data, source, field->count * sizeof(short));
+					csmemcpy(buffer, source, field->count * sizeof(short));
 				break;
 			}
 			case _data_packet_field_longs:
 			{
-				void *source = data_decode_memory(state, field->count, -4);
+				void *source = data_decode_memory(decode_state, field->count, -4);
 				if (source)
-					csmemcpy(decoded_data, source, field->count * sizeof(long));
+					csmemcpy(buffer, source, field->count * sizeof(long));
 				break;
 			}
 			case _data_packet_field_int64s:
 			{
-				void *source = data_decode_memory(state, field->count, -8);
+				void *source = data_decode_memory(decode_state, field->count, -8);
 				if (source)
-					csmemcpy(decoded_data, source, field->count * sizeof(__int64));
+					csmemcpy(buffer, source, field->count * sizeof(__int64));
 				break;
 			}
 			case _data_packet_field_string:
 			{
-				char *string = data_decode_string(state, field->count);
+				char *string = data_decode_string(decode_state, field->count);
 				if (string)
-					csstrcpy((char *)decoded_data, string);
+					csstrcpy((char *)buffer, string);
 				break;
 			}
 			case _data_packet_field_data:
@@ -501,18 +501,18 @@ void code_0010aac0(
 				short data_size;
 				void *source;
 
-				data_size = (short)data_decode_integer(state, field->count);
-				*(short *)decoded_data = data_size;
-				source = data_decode_memory(state, data_size, 1);
+				data_size = (short)data_decode_integer(decode_state, field->count);
+				*(short *)buffer = data_size;
+				source = data_decode_memory(decode_state, data_size, 1);
 				if (source)
-					csmemcpy(decoded_data + sizeof(short), source, data_size);
+					csmemcpy(buffer + sizeof(short), source, data_size);
 				break;
 			}
 			case _data_packet_field_raw:
 			{
-				void *source = data_decode_memory(state, field->count, 1);
+				void *source = data_decode_memory(decode_state, field->count, 1);
 				if (source)
-					csmemcpy(decoded_data, source, field->count);
+					csmemcpy(buffer, source, field->count);
 				break;
 			}
 			case _data_packet_field_array:
@@ -522,18 +522,18 @@ void code_0010aac0(
 				short element_field_count;
 				byte *element;
 
-				element_count = (short)data_decode_integer(state, field->count);
-				code_0010a5f0(packet_definition, NULL, field + 1, &element_field_count);
+				element_count = (short)data_decode_integer(decode_state, field->count);
+				_data_packet_verify(packet_definition, NULL, field + 1, &element_field_count);
 				if (element_count < 0 || element_count > field->count)
 					element_count = 0;
-				*(short *)decoded_data = element_count;
-				element = decoded_data + sizeof(short);
+				*(short *)buffer = element_count;
+				element = buffer + sizeof(short);
 				while (element_count-- > 0)
 				{
-					code_0010aac0(
+					_data_packet_decode(
 						packet_definition,
-						state,
-						packet_version,
+						decode_state,
+						version,
 						element,
 						&element_size,
 						field + 1,
@@ -549,14 +549,14 @@ void code_0010aac0(
 			}
 		}
 		else
-			csmemset(decoded_data, 0, field->size);
-		decoded_data += field->size;
+			csmemset(buffer, 0, field->size);
+		buffer += field->size;
 		field++;
 	}
-	if (field_count)
-		*field_count = (short)(field - fields + 1);
-	if (encoded_packet_size)
-		*encoded_packet_size = (short)(decoded_data - decoded_start);
+	if (field_count_reference)
+		*field_count_reference = (short)(field - first_field + 1);
+	if (byte_count_reference)
+		*byte_count_reference = (short)(buffer - original_buffer_start);
 
 	return;
 }

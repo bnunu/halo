@@ -5,13 +5,13 @@ symbols in this file:
 0017F740 0010:
 	_wind_dispose_from_old_map (0000)
 0017F750 00e0:
-	_code_0017f750 (0000)
+	_wind_variance_get (0000)
 0017F830 0260:
 	_wind_update (0000)
 0017FA90 0140:
 	_scenario_get_current_from_weather_palette (0000)
 0017FBD0 0180:
-	_code_0017fbd0 (0000)
+	_wind_variance_initialize (0000)
 0017FD50 0050:
 	_wind_initialize_for_new_map (0000)
 0017FDA0 0120:
@@ -105,12 +105,12 @@ typedef char structure_weather_palette_entry_direction_offset_assert[
 
 /* ---------- prototypes */
 
-static void code_0017f750(
+static void wind_variance_get(
 	real_point3d const *position,
 	real_vector3d *wind,
 	real local_variation_rate,
 	real maximum_magnitude);
-void code_0017fbd0(
+static void wind_variance_initialize(
 	void);
 
 /* ---------- globals */
@@ -128,7 +128,7 @@ void wind_dispose_from_old_map(
 	return;
 }
 
-static void code_0017f750(
+static void wind_variance_get(
 	real_point3d const *position,
 	real_vector3d *wind,
 	real local_variation_rate,
@@ -286,7 +286,7 @@ void scenario_get_current_from_weather_palette(
 					: definition->local_variation_weight;
 			real_vector3d variance;
 
-			code_0017f750(
+			wind_variance_get(
 				position,
 				&variance,
 				definition->local_variation_rate,
@@ -329,7 +329,7 @@ void wind_initialize_for_new_map(
 		!wind_globals.initialized);
 	memset(&wind_globals, 0, sizeof(wind_globals));
 	wind_globals.initialized = TRUE;
-	code_0017fbd0();
+	wind_variance_initialize();
 
 	return;
 }
@@ -433,3 +433,46 @@ void scenario_get_water_current(
 }
 
 /* ---------- private code */
+
+static void wind_variance_initialize(
+	void)
+{
+	long control_point_index;
+	long sample_index;
+	long axis_index;
+
+	for (control_point_index = 0; control_point_index < 8; control_point_index++)
+	{
+		for (axis_index = 0; axis_index < 3; axis_index++)
+		{
+			seed_random_direction3d(
+				get_global_random_seed_address(),
+				&wind_globals.variance[axis_index][control_point_index * 8]);
+		}
+	}
+
+	for (control_point_index = 0; control_point_index < 8; control_point_index++)
+	{
+		short previous_control_point = (short)((control_point_index - 1) & 7);
+		short next_control_point = (short)((control_point_index + 1) & 7);
+		short following_control_point = (short)((control_point_index + 2) & 7);
+
+		for (sample_index = 1; sample_index < 8; sample_index++)
+		{
+			for (axis_index = 0; axis_index < 3; axis_index++)
+			{
+				uniform_cubic_spline_vector3d(
+					&wind_globals.variance[axis_index][control_point_index * 8 + sample_index],
+					&wind_globals.variance[axis_index][previous_control_point * 8],
+					&wind_globals.variance[axis_index][control_point_index * 8],
+					&wind_globals.variance[axis_index][next_control_point * 8],
+					&wind_globals.variance[axis_index][following_control_point * 8],
+					(real)(control_point_index - 1),
+					1.f,
+					(real)sample_index * 0.125f + (real)control_point_index);
+			}
+		}
+	}
+
+	return;
+}

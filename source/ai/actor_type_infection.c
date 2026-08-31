@@ -360,10 +360,16 @@ void infection_swarm_control(
 	short intermittent_action_member = NONE;
 	short member_index;
 
-	if (swarm->swarm_intermittent_action_timer < 1)
+	if (swarm->swarm_intermittent_action_timer > 0)
 	{
-		if (actor->state.action == _actor_action_search ||
-			actor->state.action == _actor_action_charge)
+		swarm->swarm_intermittent_action_timer--;
+	}
+	else
+	{
+		long action = actor->state.action;
+
+		if (action == _actor_action_search ||
+			action == _actor_action_charge)
 		{
 			real cooldown = real_seed_random_range(
 				get_global_random_seed_address(),
@@ -380,10 +386,6 @@ void infection_swarm_control(
 				swarm->unit_count);
 		}
 	}
-	else
-	{
-		swarm->swarm_intermittent_action_timer--;
-	}
 
 	if (swarm->unit_count < 1)
 		return;
@@ -397,7 +399,7 @@ void infection_swarm_control(
 		struct prop_datum *best_prop = NULL;
 		long movement_target_prop_index = NONE;
 		short movement_type = _swarm_movement_none;
-		char animation_state = _unit_animation_state_in_combat;
+		short animation_state = _unit_animation_state_in_combat;
 		char aiming_speed = _unit_aiming_speed_casual;
 		boolean target_in_melee_range = FALSE;
 		boolean has_direction = FALSE;
@@ -759,7 +761,12 @@ void infection_swarm_control(
 					real facing_dot;
 					real_vector3d cross;
 
-					normalize3d(&direction);
+					{
+						real magnitude = magnitude3d(&direction);
+
+						if (!(_real_epsilon > fabs(magnitude - 0.f)))
+							scale_vector3d(&direction, 1.f / magnitude, &direction);
+					}
 					facing_dot = dot_product3d(&up, &direction);
 					if (facing_dot > 0.9f)
 						facing_target = TRUE;
@@ -821,7 +828,15 @@ void infection_swarm_control(
 
 						if (separation != 0.f)
 						{
-							real angle = MIN(MAX(separation, -1.f), 1.f) * (_pi / 2.f);
+							real angle;
+
+							if (separation > 1.f)
+								angle = _pi / 2.f;
+							else if (separation < -1.f)
+								angle = -(_pi / 2.f);
+							else
+								angle = separation * (_pi / 2.f);
+
 							rotate_vector_about_axis(
 								&direction,
 								&up,
@@ -832,9 +847,20 @@ void infection_swarm_control(
 
 					{
 						real_vector3d right;
+						real magnitude;
 
 						cross_product3d(&up, &direction, &right);
-						if (normalize3d(&right) != 0.f)
+						magnitude = magnitude3d(&right);
+						if (!(_real_epsilon > fabs(magnitude - 0.f)))
+						{
+							scale_vector3d(&right, 1.f / magnitude, &right);
+						}
+						else
+						{
+							magnitude = 0.f;
+						}
+
+						if (magnitude != 0.f)
 							cross_product3d(&right, &up, &direction);
 						else
 							direction = biped->object.forward;

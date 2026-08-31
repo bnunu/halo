@@ -2620,8 +2620,8 @@ boolean vehicle_update(
 
 seek_speed:
 	{
-		struct physics_variable_speed_parameters *speed_parameters =
-			(struct physics_variable_speed_parameters *)&definition->unknown2f8;
+		struct physics_variable_speed *speed_parameters =
+			(struct physics_variable_speed *)&definition->unknown2f8;
 
 		if (TEST_FLAG(vehicle->vehicle.flags, 3))
 		{
@@ -2634,7 +2634,7 @@ seek_speed:
 				&vehicle->vehicle.unknown42c, speed_parameters, vehicle->unit.throttle.i, 1.0f);
 			physics_variable_speed_update_seek(
 				&vehicle->vehicle.unknown430,
-				(struct physics_variable_speed_parameters *)&definition->unknown330,
+				(struct physics_variable_speed *)&definition->unknown330,
 				vehicle->unit.throttle.j, 1.0f);
 		}
 
@@ -2651,7 +2651,7 @@ seek_speed:
 
 			physics_variable_position_update_seek(
 				&vehicle->vehicle.unknown434,
-				&definition->unknown308,
+				(struct physics_variable_position *)&definition->unknown308,
 				FALSE,
 				desired_position,
 				DEGREES_TO_RADIANS(definition->unknown314)*(1.0f/TICKS_PER_SECOND));

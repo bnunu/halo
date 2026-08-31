@@ -445,6 +445,12 @@ boolean game_engine_force_autopickup(
 void game_engine_play_multiplayer_sound(
 	long sound_index);
 
+void game_engine_update_multiplayer_sound(
+	void);
+
+void game_engine_intialize_queued_sounds(
+	void);
+
 long game_engine_remap_object_definition(long definition_index);
 
 long game_engine_remap_vehicle(long vehicle_definition_index);

@@ -72,7 +72,16 @@ struct bitmap_group
 	struct tag_block bitmap_data;
 };
 
-/* ---------- prototypes/EXAMPLE.C */
+/* ---------- prototypes/BITMAP_GROUP.C */
+
+struct bitmap_data *bitmap_group_try_and_get_bitmap(
+	long bitmap_group_index,
+	short bitmap_index);
+
+struct bitmap_data *bitmap_group_get_bitmap_from_sequence(
+	long bitmap_group_index,
+	short sequence_index,
+	short frame_index);
 
 /* ---------- globals */
 

@@ -11,13 +11,13 @@ symbols in this file:
 0010B220 0050:
 	_default_hash_function (0000)
 0010B270 0120:
-	_code_0010b270 (0000)
+	_hashtable_search (0000)
 0010B390 00b0:
 	_hashtable_get (0000)
 0010B440 01f0:
 	_hashtable_remove (0000)
 0010B630 00a0:
-	_code_0010b630 (0000)
+	_hashtable_capacious_put (0000)
 0010B6D0 0240:
 	_hashtable_grow (0000)
 0010B910 00c0:
@@ -66,20 +66,18 @@ symbols in this file:
 
 /* ---------- prototypes */
 
-short default_hash_function(
-	const void *key,
-	unsigned long key_size);
-static boolean code_0010b270(
+static boolean hashtable_search(
 	struct hashtable *table,
 	const void *key,
-	short *element_index);
-static void *code_0010b630(
+	short *element_index_reference);
+
+static void *hashtable_capacious_put(
 	struct hashtable *table,
 	const void *key);
 
 /* ---------- globals */
 
-short default_hash_polynomial[] =
+static short default_hash_polynomial[] =
 {
 	3, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59
 };
@@ -170,7 +168,7 @@ void *hashtable_get(
 	short element_index;
 
 	match_assert("c:\\halo\\SOURCE\\memory\\hashtable.c", 77, hashtable_valid(table));
-	if (table->count && code_0010b270(table, key, &element_index))
+	if (table->count && hashtable_search(table, key, &element_index))
 	{
 		result = (byte *)dynamic_array_get_element(
 			&table->elements,
@@ -194,7 +192,7 @@ void hashtable_remove(
 	match_assert("c:\\halo\\SOURCE\\memory\\hashtable.c", 195, hashtable_valid(table));
 	match_assert("c:\\halo\\SOURCE\\memory\\hashtable.c", 196, key);
 
-	if (code_0010b270(table, key, &empty_index))
+	if (hashtable_search(table, key, &empty_index))
 	{
 		element_index = (empty_index + 1) & (table->elements.count - 1);
 		while (BIT_VECTOR_TEST_FLAG(table->used_slots, element_index))
@@ -292,7 +290,7 @@ boolean hashtable_grow(
 						old_element_index,
 						old_elements.element_size);
 					csmemcpy(
-						code_0010b630(table, old_element),
+						hashtable_capacious_put(table, old_element),
 						(byte *)old_element+table->key_size,
 						table->element_size);
 				}
@@ -336,12 +334,12 @@ void *hashtable_put(
 		return NULL;
 	}
 
-	return code_0010b630(table, key);
+	return hashtable_capacious_put(table, key);
 }
 
 /* ---------- private code */
 
-static boolean code_0010b270(
+static boolean hashtable_search(
 	struct hashtable *table,
 	const void *key,
 	short *element_index_reference)
@@ -407,7 +405,7 @@ done:
 	return result;
 }
 
-static void *code_0010b630(
+static void *hashtable_capacious_put(
 	struct hashtable *table,
 	const void *key)
 {
@@ -415,7 +413,7 @@ static void *code_0010b630(
 	void *element;
 	void *result = NULL;
 
-	if (code_0010b270(table, key, &element_index))
+	if (hashtable_search(table, key, &element_index))
 	{
 		match_vassert(
 			"c:\\halo\\SOURCE\\memory\\hashtable.c",

@@ -33,6 +33,8 @@ enum
 
 /* ---------- structures */
 
+struct contrail_definition;
+
 struct render_distant_light
 {
 	real_rgb_color color;
@@ -101,6 +103,11 @@ struct rendered_cluster *rendered_cluster_get(short rendered_cluster_index);
 
 /* ---------- prototypes/RENDER_CONTRAILS.C */
 
+real contrail_fade(
+	struct contrail_definition *definition,
+	short fade_mode,
+	real_point3d const *world_point,
+	real_vector3d const *world_normal);
 void render_contrails_ground_mapped(
 	void);
 void render_contrails_media_mapped(

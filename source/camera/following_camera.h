@@ -19,6 +19,9 @@ header included in hcex build.
 
 /* ---------- structures */
 
+struct following_camera_control;
+struct following_camera_result;
+
 struct following_camera
 {
 	boolean initialized;
@@ -42,6 +45,10 @@ void following_camera_deterministic(
 	long unit_index,
 	real_point3d *position,
 	real_vector3d *forward);
+void following_camera_update(
+	struct following_camera *camera,
+	struct following_camera_control const *controls,
+	struct following_camera_result *result);
 
 /* ---------- globals */
 

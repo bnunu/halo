@@ -32,6 +32,7 @@ symbols in this file:
 
 #include "cseries.h"
 #include "math/real_math.h"
+#include "units/biped_limp_noodle.h"
 
 /* ---------- constants */
 

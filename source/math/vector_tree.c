@@ -14,41 +14,31 @@ symbols in this file:
 	_vector_tree_find (0000)
 */
 
+/* ---------- headers */
+
 #include "cseries/cseries.h"
+#include "vector_tree.h"
 
-struct dynamic_array
-{
-	long element_size;
-	long count;
-	void *elements;
-};
+/* ---------- constants */
 
-struct vector_tree_node
-{
-	long value;
-	long lower_child_index;
-	long equal_child_index;
-	long upper_child_index;
-};
+/* ---------- macros */
 
-typedef void *(*vector_tree_get_vector)(void *context, long value);
-typedef long (*vector_tree_compare_component)(void *context, const void *vector, const void *other_vector, short component_index);
+/* ---------- structures */
 
-struct vector_tree
-{
-	long root_index;
-	struct dynamic_array nodes;
-	short component_count;
-	short pad;
-	void *context;
-	vector_tree_get_vector get_vector;
-	vector_tree_compare_component compare_component;
-};
+/* ---------- prototypes */
 
-void dynamic_array_new(struct dynamic_array *array, long element_size);
-void dynamic_array_delete(struct dynamic_array *array);
-long dynamic_array_add_element(struct dynamic_array *array);
-void *dynamic_array_get_element(struct dynamic_array *array, long index, long element_size);
+static boolean vectors_equal(
+	struct vector_tree *tree,
+	const void *vector,
+	const void *other_vector,
+	short component_index);
+static void vector_tree_add_node(
+	struct vector_tree *tree,
+	struct vector_tree_node **node_reference);
+
+/* ---------- globals */
+
+/* ---------- public code */
 
 void vector_tree_new(
 	struct vector_tree *tree,
@@ -76,7 +66,7 @@ void vector_tree_delete(
 	dynamic_array_delete(&tree->nodes);
 }
 
-static boolean code_00100040(
+static boolean vectors_equal(
 	struct vector_tree *tree,
 	const void *vector,
 	const void *other_vector,
@@ -93,7 +83,7 @@ static boolean code_00100040(
 	return TRUE;
 }
 
-static void code_00100080(
+static void vector_tree_add_node(
 	struct vector_tree *tree,
 	struct vector_tree_node **node_reference)
 {
@@ -141,7 +131,7 @@ boolean vector_tree_find(
 		else
 		{
 			component_index++;
-			if (code_00100040(tree, vector, other_vector, component_index))
+			if (vectors_equal(tree, vector, other_vector, component_index))
 			{
 				*index_reference = node;
 				return TRUE;
@@ -152,6 +142,6 @@ boolean vector_tree_find(
 	}
 
 	*node_index_reference = tree->nodes.count;
-	code_00100080(tree, index_reference);
+	vector_tree_add_node(tree, index_reference);
 	return FALSE;
 }

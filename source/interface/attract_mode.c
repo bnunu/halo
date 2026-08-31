@@ -34,10 +34,7 @@ extern short seed_random_range(unsigned long *seed, short lower_bound, short upp
 
 /* ---------- globals */
 
-static unsigned long bss_00453ad8;
-static char bss_00453ae8[128];
-
-short data_002e4c84 = NONE;
+static unsigned long attract_mode_countdown_timer;
 
 /* ---------- public code */
 
@@ -62,7 +59,7 @@ boolean attract_mode_should_start(
 		unsigned long current_time = system_milliseconds();
 		unsigned long time_since_last_event = event_manager_time_of_last_event();
 		
-		time_since_last_event = MAX(bss_00453ad8, time_since_last_event);
+		time_since_last_event = MAX(attract_mode_countdown_timer, time_since_last_event);
 		time_elapsed = current_time-time_since_last_event;
 	
 		if (time_elapsed>=ATTRACT_MODE_COUNTDOWN-MUSIC_FADE_TIME)
@@ -92,7 +89,7 @@ boolean attract_mode_should_start(
 void attract_mode_reset_timer(
 	void)
 {
-	bss_00453ad8 = system_milliseconds();
+	attract_mode_countdown_timer = system_milliseconds();
 
 	return;
 }
@@ -100,6 +97,7 @@ void attract_mode_reset_timer(
 const char *attract_mode_get_localized_movie_path(
 	short movie)
 {
+	static char path[128];
 	short attempted_languages = 0;
 	short language;
 
@@ -148,26 +146,26 @@ const char *attract_mode_get_localized_movie_path(
 		switch (movie)
 		{
 		case _bink_intro_movie:
-			_snprintf(bss_00453ae8, NUMBEROF(bss_00453ae8), "d:\\bink\\intro%s.bik", language_suffixes[language]);
+			_snprintf(path, NUMBEROF(path), "d:\\bink\\intro%s.bik", language_suffixes[language]);
 			break;
 		case _bink_outro_movie:
-			_snprintf(bss_00453ae8, NUMBEROF(bss_00453ae8), "d:\\bink\\credits%s.bik", language_suffixes[language]);
+			_snprintf(path, NUMBEROF(path), "d:\\bink\\credits%s.bik", language_suffixes[language]);
 			break;
 		case _bink_attract1_movie:
-			_snprintf(bss_00453ae8, NUMBEROF(bss_00453ae8), "d:\\bink\\attract1%s.bik", language_suffixes[language]);
+			_snprintf(path, NUMBEROF(path), "d:\\bink\\attract1%s.bik", language_suffixes[language]);
 			break;
 		case _bink_attract2_movie:
-			_snprintf(bss_00453ae8, NUMBEROF(bss_00453ae8), "d:\\bink\\attract2%s.bik", language_suffixes[language]);
+			_snprintf(path, NUMBEROF(path), "d:\\bink\\attract2%s.bik", language_suffixes[language]);
 			break;
 		case _bink_attract3_movie:
-			_snprintf(bss_00453ae8, NUMBEROF(bss_00453ae8), "d:\\bink\\attract3%s.bik", language_suffixes[language]);
+			_snprintf(path, NUMBEROF(path), "d:\\bink\\attract3%s.bik", language_suffixes[language]);
 			break;
 		default:
 			match_assert("c:\\halo\\SOURCE\\interface\\attract_mode.c", 198, !"unreachable");
 			break;
 		}
 
-		if (file_exists(file_reference_create_from_path(&movie_file, bss_00453ae8, FALSE)))
+		if (file_exists(file_reference_create_from_path(&movie_file, path, FALSE)))
 		{
 			break;
 		}
@@ -185,18 +183,19 @@ const char *attract_mode_get_localized_movie_path(
 		if (language==NUMBER_OF_SUPPORTED_LANGUAGES)
 		{
 			error(_error_silent, "unable to locate any movie for movie #%d (checked for all possible language variations)", movie);
-			bss_00453ae8[0] = '\0';
+			path[0] = '\0';
 
 			break;
 		}
 	}
 
-	return bss_00453ae8;
+	return path;
 }
 
 void attract_mode_start(
 	void)
 {
+	static short last_attract_movie = NONE;
 	short video_index;
 
 	while (TRUE)
@@ -204,9 +203,9 @@ void attract_mode_start(
 		video_index = seed_random_range(get_global_local_random_seed_address(), 0, NUMBER_OF_ATTRACT_MODE_MOVIES);
 		video_index = PIN(video_index, 0, _bink_attract3_movie);
 
-		if (video_index!=data_002e4c84)
+		if (video_index!=last_attract_movie)
 		{
-			data_002e4c84 = video_index;
+			last_attract_movie = video_index;
 			break;
 		}
 	}
@@ -217,7 +216,7 @@ void attract_mode_start(
 
 	if (!bink_playback_active())
 	{
-		bss_00453ad8 = system_milliseconds();
+		attract_mode_countdown_timer = system_milliseconds();
 	}
 
 	return;

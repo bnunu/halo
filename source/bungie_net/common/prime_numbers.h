@@ -21,7 +21,7 @@ struct qword_value;
 unsigned long randomprime(
 	unsigned long maximum);
 
-unsigned long *generate_prime_numbers(
+unsigned long *primegen(
 	unsigned long maximum,
 	unsigned long *num_primes);
 

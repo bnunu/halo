@@ -54,6 +54,7 @@ symbols in this file:
 
 #include "cseries/cseries.h"
 #include "bink/bink_playback.h"
+#include "cseries/cseries_windows.h"
 #include "cseries/errors.h"
 #include "input/input.h"
 #include "math/real_math.h"
@@ -111,9 +112,6 @@ typedef char verify_input_abstraction_runtime_globals_size[
 	sizeof(struct input_abstraction_runtime_globals) == 0xE0 ? 1 : -1];
 
 /* ---------- prototypes */
-
-unsigned long system_milliseconds(
-	void);
 
 /* ---------- globals */
 

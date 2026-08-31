@@ -52,6 +52,7 @@ symbols in this file:
 
 #include "cseries.h"
 #include "math/real_math.h"
+#include "physics/collision_debug.h"
 
 /* ---------- constants */
 

@@ -10,22 +10,31 @@ HALOAUTOTEST.C
 #include "integer_math.h"
 #include "input.h"
 
+/* ---------- constants */
+
+enum
+{
+	_HAT_mode_write = 3,
+	_HAT_mode_read,
+	_HAT_mode_loop
+};
+
 /* ---------- globals */
 
 static struct
 {
-	HANDLE __unknown00;
-	unsigned long __unknown04;
-} bss_004535b4;
+	HANDLE file;
+	unsigned long mode;
+} HAT_globals;
 
 /* ---------- public code */
 
 void HATCleanup(
 	void)
 {
-	if (bss_004535b4.__unknown00)
+	if (HAT_globals.file)
 	{
-		CloseHandle(bss_004535b4.__unknown00);
+		CloseHandle(HAT_globals.file);
 	}
 
 	return;
@@ -36,15 +45,15 @@ void HATReadMain(
 {
 	if (GetFileAttributesA("d:\\write.xts")!=-1)
 	{
-		bss_004535b4.__unknown04 = 0x03;
+		HAT_globals.mode = _HAT_mode_write;
 	}
 	else if (GetFileAttributesA("d:\\read.xts")!=-1)
 	{
-		bss_004535b4.__unknown04 = 0x04;
+		HAT_globals.mode = _HAT_mode_read;
 	}
 	else if (GetFileAttributesA("d:\\loop.xts")!=-1)
 	{
-		bss_004535b4.__unknown04 = 0x05;
+		HAT_globals.mode = _HAT_mode_loop;
 	}
 
 	return;
@@ -54,7 +63,7 @@ void HATRawRead(
 	struct gamepad_state *gamepad)
 {
 	DWORD number_of_bytes_read = 0;
-	ReadFile(bss_004535b4.__unknown00, gamepad, 0x28, &number_of_bytes_read, 0);
+	ReadFile(HAT_globals.file, gamepad, sizeof(struct gamepad_state), &number_of_bytes_read, 0);
 
 	return;
 }
@@ -63,12 +72,12 @@ void HATRawLoopRead(
 	struct gamepad_state *gamepad)
 {
 	DWORD number_of_bytes_read = 0;
-	ReadFile(bss_004535b4.__unknown00, gamepad, 0x28, &number_of_bytes_read, 0);
+	ReadFile(HAT_globals.file, gamepad, sizeof(struct gamepad_state), &number_of_bytes_read, 0);
 
 	if (number_of_bytes_read==0)
 	{
-		SetFilePointer(bss_004535b4.__unknown00, 0, 0, 0);
-		ReadFile(bss_004535b4.__unknown00, gamepad, 0x28, &number_of_bytes_read, 0);
+		SetFilePointer(HAT_globals.file, 0, 0, 0);
+		ReadFile(HAT_globals.file, gamepad, sizeof(struct gamepad_state), &number_of_bytes_read, 0);
 	}
 
 	return;
@@ -78,7 +87,7 @@ void HATRawWrite(
 	struct gamepad_state *gamepad)
 {
 	DWORD number_of_bytes_written = 0;
-	WriteFile(bss_004535b4.__unknown00, gamepad, 0x28, &number_of_bytes_written, 0);
+	WriteFile(HAT_globals.file, gamepad, sizeof(struct gamepad_state), &number_of_bytes_written, 0);
 
 	return;
 }
@@ -88,9 +97,9 @@ void HATInit(
 {
 	HATReadMain();
 
-	if (bss_004535b4.__unknown04==0x03)
+	if (HAT_globals.mode==_HAT_mode_write)
 	{
-		bss_004535b4.__unknown00 = CreateFileA(
+		HAT_globals.file = CreateFileA(
 			"d:\\state.data",
 			GENERIC_WRITE,
 			0,
@@ -99,9 +108,9 @@ void HATInit(
 			FILE_FLAG_SEQUENTIAL_SCAN,
 			NULL);
 	}
-	else if (bss_004535b4.__unknown04==0x04||bss_004535b4.__unknown04==0x05)
+	else if (HAT_globals.mode==_HAT_mode_read||HAT_globals.mode==_HAT_mode_loop)
 	{
-		bss_004535b4.__unknown00 = CreateFileA(
+		HAT_globals.file = CreateFileA(
 			"d:\\state.data",
 			GENERIC_READ,
 			0,
@@ -117,21 +126,21 @@ void HATInit(
 void HATRun(
 	struct gamepad_state *gamepad)
 {
-	switch (bss_004535b4.__unknown04)
+	switch (HAT_globals.mode)
 	{
-	case 0x03:
+	case _HAT_mode_write:
 	{
 		DWORD number_of_bytes_written = 0;
-		WriteFile(bss_004535b4.__unknown00, gamepad, 0x28, &number_of_bytes_written, 0);
+		WriteFile(HAT_globals.file, gamepad, sizeof(struct gamepad_state), &number_of_bytes_written, 0);
 		break;
 	}
-	case 0x04:
+	case _HAT_mode_read:
 	{
 		DWORD number_of_bytes_read = 0;
-		ReadFile(bss_004535b4.__unknown00, gamepad, 0x28, &number_of_bytes_read, 0);
+		ReadFile(HAT_globals.file, gamepad, sizeof(struct gamepad_state), &number_of_bytes_read, 0);
 		break;
 	}
-	case 0x05:
+	case _HAT_mode_loop:
 	{
 		HATRawLoopRead(gamepad);
 		break;

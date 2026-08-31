@@ -9,9 +9,9 @@ symbols in this file:
 0001DA80 0140:
 	_actor_get_vision_distances (0000)
 0001DBC0 0040:
-	_code_0001dbc0 (0000)
+	_actor_perception_qsort_compare_optional_props (0000)
 0001DC00 00f0:
-	_code_0001dc00 (0000)
+	_actor_perception_assess_suicide_danger (0000)
 0001DCF0 0230:
 	_actor_perception_desire_prop (0000)
 0001DF20 00a0:
@@ -45,11 +45,11 @@ symbols in this file:
 0001F320 0150:
 	_actor_emotion_flee_with_friends (0000)
 0001F470 0080:
-	_code_0001f470 (0000)
+	_actor_emotion_get_unopposable_enemy (0000)
 0001F4F0 0070:
-	_code_0001f4f0 (0000)
+	_actor_emotion_assess_unopposable_danger (0000)
 0001F560 04f0:
-	_code_0001f560 (0000)
+	_actor_emotion_unopposable_retreat (0000)
 0001FA50 00b0:
 	_actor_berserk (0000)
 0001FB00 0360:
@@ -59,11 +59,11 @@ symbols in this file:
 000200A0 0170:
 	_actor_perception_find_sense_position (0000)
 00020210 01f0:
-	_code_00020210 (0000)
+	_actor_perception_unit_from_swarm (0000)
 00020400 0380:
 	_prop_position_refresh (0000)
 00020780 0210:
-	_code_00020780 (0000)
+	_actor_perception_assess_vehicle_danger (0000)
 00020990 05c0:
 	_code_00020990 (0000)
 00020F50 0180:
@@ -83,11 +83,11 @@ symbols in this file:
 00021A50 0e60:
 	_prop_status_refresh (0000)
 000228B0 06d0:
-	_code_000228b0 (0000)
+	_actor_perception_refresh_test_object (0000)
 00022F80 0310:
 	_actor_perception_create_orphan_from_friend (0000)
 00023290 0970:
-	_code_00023290 (0000)
+	_actor_perception_refresh (0000)
 00023C00 1270:
 	_actor_perception_update (0000)
 00245AB8 0038:
@@ -242,7 +242,7 @@ symbols in this file:
 002462A8 002b:
 	??_C@_0CL@GMGBPAA@prop?9?$DOunopposable_casualties_inf@ (0000)
 002B6AE0 0004:
-	_data_002b6ae0 (0000)
+	_last_refresh_overflow_warning_time (0000)
 */
 
 /* ---------- headers */
@@ -829,7 +829,7 @@ struct actor_perception_refresh_entry
 };
 
 /*
- * code_00023290 maintains separate enemy and friend candidate lists on its
+ * actor_perception_refresh maintains separate enemy and friend candidate lists on its
  * stack. Each list has two 16-bit counters followed by 128 12-byte entries.
  */
 struct actor_perception_refresh_list
@@ -1131,7 +1131,7 @@ struct actor_perception_definition_view
 
 /* ---------- prototypes */
 
-long code_0001dbc0(
+long actor_perception_qsort_compare_optional_props(
 	void const *a,
 	void const *b);
 
@@ -1244,23 +1244,28 @@ void actor_stimulus_enter_combat_perceived_enemy(
 	long actor_index,
 	long prop_index);
 
-static long code_00020210(
+static long actor_perception_unit_from_swarm(
 	long swarm_actor_index,
 	long actor_index,
 	long existing_unit_index,
 	boolean mark,
 	struct actor_position_data const *position);
 
-static boolean code_00020780(
+static boolean actor_perception_assess_vehicle_danger(
 	long actor_index,
 	long vehicle_index,
 	boolean mark,
 	struct actor_position_data const *position);
 
-void code_00023290(
+void actor_perception_refresh(
 	long actor_index);
 
-void code_000228b0(
+void prop_status_refresh(
+	long actor_index,
+	long prop_index,
+	struct actor_position_data *position);
+
+void actor_perception_refresh_test_object(
 	long actor_index,
 	long object_index,
 	struct actor_perception_refresh_list *friend_list,
@@ -1317,7 +1322,7 @@ short actor_audibility_at_point(
 	real scale,
 	short line_of_sight);
 
-static boolean code_0001dc00(
+static boolean actor_perception_assess_suicide_danger(
 	long actor_index,
 	long object_index,
 	real suicide_radius,
@@ -1365,7 +1370,7 @@ short const global_acknowledgement_speeds[4][4] =
 	{ 0, 3, 4, 4 }
 };
 
-long data_002b6ae0 = NONE;
+long last_refresh_overflow_warning_time = NONE;
 
 /* ---------- public code */
 
@@ -2018,7 +2023,7 @@ typedef char actor_emotion_priority_prop_visibility_offset_assert[
 typedef char actor_emotion_priority_prop_friend_attacking_offset_assert[
 	offsetof(struct actor_emotion_priority_prop_view, friend_attacking) == 0x12F ? 1 : -1];
 
-static long code_0001f4f0(
+static long actor_emotion_assess_unopposable_danger(
 	long prop_index)
 {
 	struct actor_emotion_priority_prop_view *prop;
@@ -2140,7 +2145,7 @@ typedef char actor_emotion_prop_distance_offset_assert[
 typedef char actor_emotion_prop_driver_offset_assert[
 	offsetof(struct actor_emotion_prop_view, dangerous_vehicle_driver) == 0x136 ? 1 : -1];
 
-static short code_0001f470(
+static short actor_emotion_get_unopposable_enemy(
 	struct actor_emotion_target *targets,
 	long unit_index,
 	long actor_index,
@@ -2492,7 +2497,7 @@ short actor_audibility_at_point(
 	return result;
 }
 
-void code_0001f560(
+void actor_emotion_unopposable_retreat(
 	long actor_index)
 {
 	struct actor_emotion_target targets[16];
@@ -2519,7 +2524,7 @@ void code_0001f560(
 		while (prop != NULL)
 		{
 			short priority =
-				(short)code_0001f4f0(iterator.index);
+				(short)actor_emotion_assess_unopposable_danger(iterator.index);
 
 			if (priority > 0)
 				goto add_direct_emotion_target;
@@ -2528,7 +2533,7 @@ void code_0001f560(
 
 add_direct_emotion_target:
 			{
-				short target_index = (short)code_0001f470(
+				short target_index = (short)actor_emotion_get_unopposable_enemy(
 					targets,
 					prop->unit_index,
 					actor_index,
@@ -2587,7 +2592,7 @@ consider_friend_emotion_target:
 							target_prop->state <= _prop_state_acknowledged &&
 							target_prop->unopposable)
 						{
-							short target_index = (short)code_0001f470(
+							short target_index = (short)actor_emotion_get_unopposable_enemy(
 								targets,
 								friend_target_prop->unit_index,
 								actor_index,
@@ -3075,10 +3080,7 @@ void actor_perception_tried_to_uncover(
 		struct prop_datum *prop = prop_get(prop_index);
 
 		prop->tried_to_uncover = TRUE;
-		if (prop_index != actor->target.target_prop_index)
-		{
-		}
-		else
+		if (prop_index == actor->target.target_prop_index)
 		{
 			actor_situation_update_target_status(actor_index);
 			actor_situation_combat_status_update(actor_index);
@@ -3098,10 +3100,7 @@ void actor_perception_tried_to_search(
 		struct prop_datum *prop = prop_get(prop_index);
 
 		prop->tried_to_search = TRUE;
-		if (prop_index != actor->target.target_prop_index)
-		{
-		}
-		else
+		if (prop_index == actor->target.target_prop_index)
 		{
 			actor_situation_update_target_status(actor_index);
 			actor_situation_combat_status_update(actor_index);
@@ -3135,10 +3134,7 @@ void actor_perception_abandoned_search(
 			prop->state = _prop_state_inspected_orphan;
 
 		prop->abandoned_search = TRUE;
-		if (prop_index != actor->target.target_prop_index)
-		{
-		}
-		else
+		if (prop_index == actor->target.target_prop_index)
 		{
 			actor_situation_update_target_status(actor_index);
 			actor_situation_combat_status_update(actor_index);
@@ -3361,7 +3357,7 @@ void actor_perception_find_sense_position(
 	return;
 }
 
-static long code_00020210(
+static long actor_perception_unit_from_swarm(
 	long swarm_actor_index,
 	long actor_index,
 	long existing_unit_index,
@@ -3524,7 +3520,7 @@ void prop_position_refresh(
 
 				prop->swarm_unit_selected_time = current_time;
 				new_unit_index =
-					code_00020210(
+					actor_perception_unit_from_swarm(
 						prop->actor_index,
 						actor_index,
 						prop->unit_index,
@@ -3633,7 +3629,7 @@ update_actor_to_prop:
 	return;
 }
 
-static boolean code_00020780(
+static boolean actor_perception_assess_vehicle_danger(
 	long actor_index,
 	long vehicle_index,
 	boolean mark,
@@ -3732,13 +3728,13 @@ static boolean code_00020780(
 
 /*
  * January caller skeleton used while reconstructing the full status refresh.
- * Keep the real call expression active so VC7 can derive code_00020780's
+ * Keep the real call expression active so VC7 can derive actor_perception_assess_vehicle_danger's
  * private EAX argument from its actual translation-unit context.
  */
 
 
 
-void code_000228b0(
+void actor_perception_refresh_test_object(
 	long actor_index,
 	long object_index,
 	struct actor_perception_refresh_list *enemy_list,
@@ -3794,7 +3790,7 @@ void code_000228b0(
 				if (unit_actor_index != NONE)
 				{
 					unit_index =
-						code_00020210(
+						actor_perception_unit_from_swarm(
 							unit_actor_index,
 							actor_index,
 							NONE,
@@ -3851,7 +3847,7 @@ void code_000228b0(
 						unit->unit.animation.state ==
 							0x1E))
 				{
-					code_0001dc00(
+					actor_perception_assess_suicide_danger(
 						actor_index,
 						unit_index,
 						suicide_radius,
@@ -4008,7 +4004,7 @@ create_prop:
 
 				if (vehicle->unit.driver_object_index == NONE)
 				{
-					code_00020780(
+					actor_perception_assess_vehicle_danger(
 						actor_index,
 						object_index,
 						FALSE,
@@ -4111,7 +4107,7 @@ create_prop:
 object_done:
 		if (current_object->object.first_child_object_index != NONE)
 		{
-			code_000228b0(
+			actor_perception_refresh_test_object(
 				actor_index,
 				current_object->object.first_child_object_index,
 				enemy_list,
@@ -4419,7 +4415,7 @@ boolean actor_situation_try_new_target(
 
 /* ---------- private code */
 
-long code_0001dbc0(
+long actor_perception_qsort_compare_optional_props(
 	void const *a,
 	void const *b)
 {
@@ -4435,7 +4431,7 @@ long code_0001dbc0(
 	return 0;
 }
 
-static boolean code_0001dc00(
+static boolean actor_perception_assess_suicide_danger(
 	long actor_index,
 	long object_index,
 	real suicide_radius,

@@ -37,7 +37,7 @@ symbols in this file:
 002892E4 002f:
 	??_C@_0CP@ODBOIENA@?$CBpoints?$FLpoint_count?$CLsegment_poin@ (0000)
 00456E44 0004:
-	_bss_00456e44 (0000)
+	_lightning_globals (0000)
 */
 
 /* ---------- headers */
@@ -55,9 +55,14 @@ symbols in this file:
 
 /* ---------- prototypes */
 
+void lightning_offset_marker_position(
+	real_point3d *position,
+	real_matrix4x3 const *matrix,
+	real_vector3d const *random_position_bounds);
+
 /* ---------- globals */
 
-struct lightning_globals lightning_globals;
+struct lightning_globals lightning_globals = {0};
 
 /* ---------- public code */
 
@@ -121,3 +126,29 @@ void lightning_render(
 }
 
 /* ---------- private code */
+
+void lightning_offset_marker_position(
+	real_point3d *position,
+	real_matrix4x3 const *matrix,
+	real_vector3d const *random_position_bounds)
+{
+	real_point3d offset;
+
+	match_assert("c:\\halo\\SOURCE\\objects\\widgets\\lightning.c", 116, position);
+	match_assert("c:\\halo\\SOURCE\\objects\\widgets\\lightning.c", 117, matrix);
+	match_assert("c:\\halo\\SOURCE\\objects\\widgets\\lightning.c", 118, random_position_bounds);
+
+	set_real_point3d(
+		&offset,
+		(real_local_random() * 2.f - 1.f) * random_position_bounds->i,
+		(real_local_random() * 2.f - 1.f) * random_position_bounds->j,
+		(real_local_random() * 2.f - 1.f) * random_position_bounds->k);
+
+	matrix4x3_transform_vector(matrix, &offset, &offset);
+
+	position->x = offset.x + position->x;
+	position->y = offset.y + position->y;
+	position->z = offset.z + position->z;
+
+	return;
+}

@@ -13,7 +13,7 @@ symbols in this file:
 0007D8A0 0130:
 	_write_to_error_file (0000)
 0007D9D0 0010:
-	_code_0007d9d0 (0000)
+	_reset_error_state (0000)
 0007D9E0 0020:
 	_errors_initialize (0000)
 0007DA00 0270:
@@ -49,9 +49,9 @@ symbols in this file:
 00257E34 0020:
 	??_C@_0CA@JEDAOIGL@c?3?2halo?2SOURCE?2cseries?2errors?4c?$AA@ (0000)
 002DCD2C 0001:
-	_data_002dcd2c (0000)
+	?first_line@?1??write_to_error_file@@9@9 (0000)
 0031DF2C 0010:
-	_bss_0031df2c (0000)
+	_error_suppression_globals (0000)
 	_find_all_fucked_up_shit (0008)
 	_fucked_up_shit_count (000c)
 */
@@ -87,8 +87,7 @@ void stack_walk_dispose(
 
 /* ---------- globals */
 
-boolean data_002dcd2c = TRUE;
-struct error_suppression_globals bss_0031df2c = { 0, 0 };
+static struct error_suppression_globals error_suppression_globals = { 0, 0 };
 boolean find_all_fucked_up_shit = FALSE;
 long fucked_up_shit_count = 0;
 
@@ -128,12 +127,13 @@ void write_to_error_file(
 	char *string,
 	boolean date)
 {
+	static boolean first_line = TRUE;
 	char line[1024];
 	long time_value;
 
-	if (data_002dcd2c)
+	if (first_line)
 	{
-		data_002dcd2c = FALSE;
+		first_line = FALSE;
 		write_to_error_file("\r\n\r\n", FALSE);
 		write_to_error_file("halobeta xbox 01.01.14.2342(CACHE) ----------------------------------------------\r\n", TRUE);
 		sprintf(line, "reference function: %s\r\n", "_write_to_error_file");
@@ -179,7 +179,7 @@ void write_to_error_file(
 	return;
 }
 
-void code_0007d9d0(
+static void reset_error_state(
 	void)
 {
 	error_globals.delayed = FALSE;
@@ -193,8 +193,7 @@ void errors_initialize(
 {
 	error_globals.output_to_debug_file = TRUE;
 	error_globals.overflow_suppression = TRUE;
-	error_globals.delayed = FALSE;
-	error_globals.message_buffer_size = 0;
+	reset_error_state();
 	stack_walk_initialize();
 
 	return;
@@ -218,19 +217,19 @@ void error(
 	{
 		long time = system_milliseconds();
 
-		if (time > bss_0031df2c.last_error_time+900)
+		if (time > error_suppression_globals.last_error_time+900)
 		{
-			bss_0031df2c.error_count = 0;
+			error_suppression_globals.error_count = 0;
 		}
-		bss_0031df2c.last_error_time = time;
-		if (bss_0031df2c.error_count == 10)
+		error_suppression_globals.last_error_time = time;
+		if (error_suppression_globals.error_count == 10)
 		{
 			terminal_printf(
 				global_real_argb_white,
 				"too many errors, only printing to debug.txt");
 		}
-		bss_0031df2c.error_count++;
-		if (bss_0031df2c.error_count >= 10)
+		error_suppression_globals.error_count++;
+		if (error_suppression_globals.error_count >= 10)
 		{
 			priority = _error_log;
 		}
@@ -330,8 +329,7 @@ boolean errors_handle(
 {
 	boolean delayed = error_globals.delayed;
 
-	error_globals.delayed = FALSE;
-	error_globals.message_buffer_size = 0;
+	reset_error_state();
 
 	return delayed;
 }
@@ -339,8 +337,7 @@ boolean errors_handle(
 void errors_clear(
 	void)
 {
-	error_globals.delayed = FALSE;
-	error_globals.message_buffer_size = 0;
+	reset_error_state();
 
 	return;
 }

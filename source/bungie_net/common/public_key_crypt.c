@@ -3,11 +3,11 @@ PUBLIC_KEY_CRYPT.C
 
 symbols in this file:
 0006F630 00d0:
-	_code_0006f630 (0000)
+	_x_exp_y_mod_n (0000)
 0006F700 0080:
-	_code_0006f700 (0000)
+	_generate_diffie_hellman_public_key (0000)
 0006F780 0060:
-	_code_0006f780 (0000)
+	_generate_diffie_hellman_private_key (0000)
 0006F7E0 00e0:
 	_generate_key_parameters (0000)
 0006F8C0 00b0:
@@ -37,7 +37,9 @@ symbols in this file:
 /* ---------- headers */
 
 #include "cseries.h"
+#include "cseries/errors.h"
 #include "bungie_net/common/64bit_math.h"
+#include "bungie_net/common/prime_numbers.h"
 #include "bungie_net/common/public_key_crypt.h"
 #include "bungie_net/common/random_numbers.h"
 #include "memory/byte_swapping.h"
@@ -50,18 +52,15 @@ symbols in this file:
 
 /* ---------- prototypes */
 
-unsigned long randomprime(
-	unsigned long maximum);
-
-static unsigned long code_0006f630(
+static unsigned long x_exp_y_mod_n(
 	unsigned long base,
 	unsigned long exponent,
 	unsigned long modulus);
-static unsigned long code_0006f700(
+static unsigned long generate_diffie_hellman_public_key(
 	unsigned long p,
 	unsigned long x,
 	unsigned long g);
-static unsigned long code_0006f780(
+static unsigned long generate_diffie_hellman_private_key(
 	unsigned long public_key,
 	unsigned long p,
 	unsigned long x);
@@ -118,10 +117,10 @@ void generate_public_key(
 	long i;
 
 	for (i = 0; i < 2; i++)
-		public_key->dwords[i] = code_0006f700(p->dwords[i], x->dwords[i], g->dwords[i]);
+		public_key->dwords[i] = generate_diffie_hellman_public_key(p->dwords[i], x->dwords[i], g->dwords[i]);
 
 	error(
-		2,
+		_error_silent,
 		"p= %8lX%8lX\nx= %8lX%8lX\ng= %8lX%8lX\npublic key= %8lX%8lX\n\n",
 		p->dwords[0], p->dwords[1],
 		x->dwords[0], x->dwords[1],
@@ -141,7 +140,7 @@ void generate_private_key(
 
 	for (i = 0; i < 2; i++)
 	{
-		private_key->dwords[i] = code_0006f780(
+		private_key->dwords[i] = generate_diffie_hellman_private_key(
 			public_key->dwords[i],
 			p->dwords[i],
 			x->dwords[i]);
@@ -150,7 +149,7 @@ void generate_private_key(
 	}
 
 	error(
-		2,
+		_error_silent,
 		"public_key= %8lX%8lX\np= %8lX%8lX\nx= %8lX%8lX\nprivate key= %8lX%8lX\n\n",
 		public_key->dwords[0], public_key->dwords[1],
 		p->dwords[0], p->dwords[1],
@@ -162,7 +161,7 @@ void generate_private_key(
 
 /* ---------- private code */
 
-static unsigned long code_0006f630(
+static unsigned long x_exp_y_mod_n(
 	unsigned long base,
 	unsigned long exponent,
 	unsigned long modulus)
@@ -197,7 +196,7 @@ static unsigned long code_0006f630(
 	return (unsigned long)s.qword;
 }
 
-static unsigned long code_0006f700(
+static unsigned long generate_diffie_hellman_public_key(
 	unsigned long p,
 	unsigned long x,
 	unsigned long g)
@@ -206,10 +205,10 @@ static unsigned long code_0006f700(
 	match_assert("c:\\halo\\SOURCE\\bungie_net\\common\\public_key_crypt.c", 113, x<(p-1));
 	match_assert("c:\\halo\\SOURCE\\bungie_net\\common\\public_key_crypt.c", 114, g<p);
 
-	return code_0006f630(g, x, p);
+	return x_exp_y_mod_n(g, x, p);
 }
 
-static unsigned long code_0006f780(
+static unsigned long generate_diffie_hellman_private_key(
 	unsigned long public_key,
 	unsigned long p,
 	unsigned long x)
@@ -217,5 +216,5 @@ static unsigned long code_0006f780(
 	match_assert("c:\\halo\\SOURCE\\bungie_net\\common\\public_key_crypt.c", 133, p>2);
 	match_assert("c:\\halo\\SOURCE\\bungie_net\\common\\public_key_crypt.c", 134, x<(p-1));
 
-	return code_0006f630(public_key, x, p);
+	return x_exp_y_mod_n(public_key, x, p);
 }

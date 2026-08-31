@@ -1652,12 +1652,13 @@
 	{
 		"file_offset": 121792,
 		"flags": 32,
-		"name": "_code_0001dbc0"
+		"name": "_actor_perception_qsort_compare_optional_props"
 	},
 	{
 		"file_offset": 121856,
 		"flags": 32,
-		"name": "_code_0001dc00"
+		"name": "_actor_perception_assess_suicide_danger",
+		"static": true
 	},
 	{
 		"file_offset": 122096,
@@ -1742,17 +1743,19 @@
 	{
 		"file_offset": 128112,
 		"flags": 32,
-		"name": "_code_0001f470"
+		"name": "_actor_emotion_get_unopposable_enemy",
+		"static": true
 	},
 	{
 		"file_offset": 128240,
 		"flags": 32,
-		"name": "_code_0001f4f0"
+		"name": "_actor_emotion_assess_unopposable_danger",
+		"static": true
 	},
 	{
 		"file_offset": 128352,
 		"flags": 32,
-		"name": "_code_0001f560"
+		"name": "_actor_emotion_unopposable_retreat"
 	},
 	{
 		"file_offset": 129616,
@@ -1777,7 +1780,8 @@
 	{
 		"file_offset": 131600,
 		"flags": 32,
-		"name": "_code_00020210"
+		"name": "_actor_perception_unit_from_swarm",
+		"static": true
 	},
 	{
 		"file_offset": 132096,
@@ -1787,7 +1791,8 @@
 	{
 		"file_offset": 132992,
 		"flags": 32,
-		"name": "_code_00020780"
+		"name": "_actor_perception_assess_vehicle_danger",
+		"static": true
 	},
 	{
 		"file_offset": 133520,
@@ -1837,7 +1842,7 @@
 	{
 		"file_offset": 141488,
 		"flags": 32,
-		"name": "_code_000228b0"
+		"name": "_actor_perception_refresh_test_object"
 	},
 	{
 		"file_offset": 143232,
@@ -1847,7 +1852,7 @@
 	{
 		"file_offset": 144016,
 		"flags": 32,
-		"name": "_code_00023290"
+		"name": "_actor_perception_refresh"
 	},
 	{
 		"file_offset": 146432,
@@ -4827,12 +4832,14 @@
 	{
 		"file_offset": 341488,
 		"flags": 32,
-		"name": "_code_000535f0"
+		"name": "_findScheme",
+		"static": true
 	},
 	{
 		"file_offset": 341520,
 		"flags": 32,
-		"name": "_code_00053610"
+		"name": "_TIFFNoEncode",
+		"static": true
 	},
 	{
 		"file_offset": 341584,
@@ -6145,17 +6152,18 @@
 	{
 		"file_offset": 414224,
 		"flags": 32,
-		"name": "_code_00065210"
+		"name": "_postprocess_bitmap"
 	},
 	{
 		"file_offset": 414240,
 		"flags": 32,
-		"name": "_code_00065220"
+		"name": "_delete_bitmap"
 	},
 	{
 		"file_offset": 414272,
 		"flags": 32,
-		"name": "_code_00065240"
+		"name": "_postprocess_bitmap_group",
+		"static": true
 	},
 	{
 		"file_offset": 415328,
@@ -6737,12 +6745,13 @@
 	{
 		"file_offset": 455584,
 		"flags": 32,
-		"name": "_compare_prime_numbers_descending"
+		"name": "_compare_ulongs_descending",
+		"static": true
 	},
 	{
 		"file_offset": 455616,
 		"flags": 32,
-		"name": "_generate_prime_numbers"
+		"name": "_primegen"
 	},
 	{
 		"file_offset": 455968,
@@ -6757,17 +6766,20 @@
 	{
 		"file_offset": 456240,
 		"flags": 32,
-		"name": "_code_0006f630"
+		"name": "_x_exp_y_mod_n",
+		"static": true
 	},
 	{
 		"file_offset": 456448,
 		"flags": 32,
-		"name": "_code_0006f700"
+		"name": "_generate_diffie_hellman_public_key",
+		"static": true
 	},
 	{
 		"file_offset": 456576,
 		"flags": 32,
-		"name": "_code_0006f780"
+		"name": "_generate_diffie_hellman_private_key",
+		"static": true
 	},
 	{
 		"file_offset": 456672,
@@ -6797,12 +6809,14 @@
 	{
 		"file_offset": 457776,
 		"flags": 32,
-		"name": "_code_0006fc30"
+		"name": "_get_thread_from_pool",
+		"static": true
 	},
 	{
 		"file_offset": 457824,
 		"flags": 32,
-		"name": "_code_0006fc60"
+		"name": "_get_mutex_from_pool",
+		"static": true
 	},
 	{
 		"file_offset": 457888,
@@ -7536,7 +7550,8 @@
 	{
 		"file_offset": 488384,
 		"flags": 32,
-		"name": "_code_000773c0"
+		"name": "_first_person_camera_for_unit_and_vector",
+		"static": true
 	},
 	{
 		"file_offset": 489648,
@@ -7571,7 +7586,8 @@
 	{
 		"file_offset": 491296,
 		"flags": 32,
-		"name": "_code_00077f20"
+		"name": "_unit_camera_get",
+		"static": true
 	},
 	{
 		"file_offset": 491424,
@@ -7591,7 +7607,8 @@
 	{
 		"file_offset": 491808,
 		"flags": 32,
-		"name": "_code_00078120"
+		"name": "_camera_track_splut",
+		"static": true
 	},
 	{
 		"file_offset": 492144,
@@ -7606,7 +7623,8 @@
 	{
 		"file_offset": 493936,
 		"flags": 32,
-		"name": "_code_00078970"
+		"name": "_observer_get",
+		"static": true
 	},
 	{
 		"file_offset": 494000,
@@ -7616,7 +7634,8 @@
 	{
 		"file_offset": 494016,
 		"flags": 32,
-		"name": "_code_000789c0"
+		"name": "_observer_clear",
+		"static": true
 	},
 	{
 		"file_offset": 494320,
@@ -7646,12 +7665,14 @@
 	{
 		"file_offset": 494800,
 		"flags": 32,
-		"name": "_code_00078cd0"
+		"name": "_observer_update_accelerations",
+		"static": true
 	},
 	{
 		"file_offset": 495264,
 		"flags": 32,
-		"name": "_code_00078ea0"
+		"name": "_observer_update_velocities",
+		"static": true
 	},
 	{
 		"file_offset": 495776,
@@ -7666,17 +7687,20 @@
 	{
 		"file_offset": 496000,
 		"flags": 32,
-		"name": "_code_00079180"
+		"name": "_observer_apply_rotational_displacement",
+		"static": true
 	},
 	{
 		"file_offset": 496128,
 		"flags": 32,
-		"name": "_code_00079200"
+		"name": "_observer_collision_test_with_t",
+		"static": true
 	},
 	{
 		"file_offset": 496352,
 		"flags": 32,
-		"name": "_code_000792e0"
+		"name": "_observer_collision_test_differential",
+		"static": true
 	},
 	{
 		"file_offset": 496416,
@@ -7686,47 +7710,56 @@
 	{
 		"file_offset": 497360,
 		"flags": 32,
-		"name": "_code_000796d0"
+		"name": "_observer_update_command",
+		"static": true
 	},
 	{
 		"file_offset": 498400,
 		"flags": 32,
-		"name": "_code_00079ae0"
+		"name": "_observer_update_polynomial",
+		"static": true
 	},
 	{
 		"file_offset": 499840,
 		"flags": 32,
-		"name": "_code_0007a080"
+		"name": "_observer_update_positions",
+		"static": true
 	},
 	{
 		"file_offset": 501408,
 		"flags": 32,
-		"name": "_code_0007a6a0"
+		"name": "_observer_rotational_displacement",
+		"static": true
 	},
 	{
 		"file_offset": 501696,
 		"flags": 32,
-		"name": "_code_0007a7c0"
+		"name": "_observer_check_penetration",
+		"static": true
 	},
 	{
 		"file_offset": 502448,
 		"flags": 32,
-		"name": "_code_0007aab0"
+		"name": "_observer_find_displacement",
+		"static": true
 	},
 	{
 		"file_offset": 502560,
 		"flags": 32,
-		"name": "_code_0007ab20"
+		"name": "_observer_postcheck",
+		"static": true
 	},
 	{
 		"file_offset": 504672,
 		"flags": 32,
-		"name": "_code_0007b360"
+		"name": "_observer_update_displacements",
+		"static": true
 	},
 	{
 		"file_offset": 504752,
 		"flags": 32,
-		"name": "_code_0007b3b0"
+		"name": "_observer_pass_time",
+		"static": true
 	},
 	{
 		"file_offset": 504912,
@@ -8096,7 +8129,8 @@
 	{
 		"file_offset": 514512,
 		"flags": 32,
-		"name": "_code_0007d9d0"
+		"name": "_reset_error_state",
+		"static": true
 	},
 	{
 		"file_offset": 514528,
@@ -8564,52 +8598,62 @@
 	{
 		"file_offset": 532208,
 		"flags": 32,
-		"name": "_code_00081ef0"
+		"name": "_apply_animation_state",
+		"static": true
 	},
 	{
 		"file_offset": 532352,
 		"flags": 32,
-		"name": "_code_00081f80"
+		"name": "_apply_aiming_speed",
+		"static": true
 	},
 	{
 		"file_offset": 532496,
 		"flags": 32,
-		"name": "_code_00082010"
+		"name": "_apply_control_flags",
+		"static": true
 	},
 	{
 		"file_offset": 532640,
 		"flags": 32,
-		"name": "_code_000820a0"
+		"name": "_apply_weapon_index",
+		"static": true
 	},
 	{
 		"file_offset": 532784,
 		"flags": 32,
-		"name": "_code_00082130"
+		"name": "_apply_throttle",
+		"static": true
 	},
 	{
 		"file_offset": 532944,
 		"flags": 32,
-		"name": "_code_000821d0"
+		"name": "_update_controller_char",
+		"static": true
 	},
 	{
 		"file_offset": 533008,
 		"flags": 32,
-		"name": "_code_00082210"
+		"name": "_update_controller_short",
+		"static": true
 	},
 	{
 		"file_offset": 533072,
 		"flags": 32,
-		"name": "_code_00082250"
+		"name": "_uncompress_vector_from_controller",
+		"static": true
 	},
 	{
 		"file_offset": 533136,
 		"flags": 32,
-		"name": "_code_00082290"
+		"name": "_apply_vector_char_difference",
+		"static": true
 	},
 	{
 		"file_offset": 533648,
 		"flags": 32,
-		"name": "_code_00082490"
+		"name": "_apply_vector_short_difference",
+		"static": true
 	},
 	{
 		"file_offset": 534160,
@@ -8634,52 +8678,62 @@
 	{
 		"file_offset": 534800,
 		"flags": 32,
-		"name": "_code_00082910"
+		"name": "_apply_animation_state",
+		"static": true
 	},
 	{
 		"file_offset": 534976,
 		"flags": 32,
-		"name": "_code_000829c0"
+		"name": "_apply_aiming_speed",
+		"static": true
 	},
 	{
 		"file_offset": 535152,
 		"flags": 32,
-		"name": "_code_00082a70"
+		"name": "_apply_control_flags",
+		"static": true
 	},
 	{
 		"file_offset": 535328,
 		"flags": 32,
-		"name": "_code_00082b20"
+		"name": "_apply_weapon_index",
+		"static": true
 	},
 	{
 		"file_offset": 535504,
 		"flags": 32,
-		"name": "_code_00082bd0"
+		"name": "_apply_throttle",
+		"static": true
 	},
 	{
 		"file_offset": 535696,
 		"flags": 32,
-		"name": "_code_00082c90"
+		"name": "_apply_facing_vector",
+		"static": true
 	},
 	{
 		"file_offset": 535888,
 		"flags": 32,
-		"name": "_code_00082d50"
+		"name": "_apply_aiming_vector",
+		"static": true
 	},
 	{
 		"file_offset": 536080,
 		"flags": 32,
-		"name": "_code_00082e10"
+		"name": "_apply_looking_vector",
+		"static": true
 	},
 	{
 		"file_offset": 536272,
 		"flags": 32,
-		"name": "_code_00082ed0"
+		"name": "_apply_angle_vector",
+		"static": true
 	},
 	{
 		"file_offset": 536544,
 		"flags": 32,
-		"name": "_code_00082fe0"
+		"name": "_apply_multi_vector",
+		"static": true
 	},
 	{
 		"file_offset": 536800,
@@ -11696,12 +11750,14 @@
 	{
 		"file_offset": 660576,
 		"flags": 32,
-		"name": "_code_000a1460"
+		"name": "__game_engine_play_multiplayer_sound",
+		"static": true
 	},
 	{
 		"file_offset": 660672,
 		"flags": 32,
-		"name": "_code_000a14c0"
+		"name": "_push_queued_sound",
+		"static": true
 	},
 	{
 		"file_offset": 660704,
@@ -11711,7 +11767,8 @@
 	{
 		"file_offset": 660784,
 		"flags": 32,
-		"name": "_code_000a1530"
+		"name": "_get_sound_length_in_ticks",
+		"static": true
 	},
 	{
 		"file_offset": 660912,
@@ -12892,7 +12949,8 @@
 	{
 		"file_offset": 693760,
 		"flags": 32,
-		"name": "_code_000a9600"
+		"name": "_machine_add_player",
+		"static": true
 	},
 	{
 		"file_offset": 693840,
@@ -12987,12 +13045,14 @@
 	{
 		"file_offset": 695232,
 		"flags": 32,
-		"name": "_code_000a9bc0"
+		"name": "_is_player_in_trigger",
+		"static": true
 	},
 	{
 		"file_offset": 695296,
 		"flags": 32,
-		"name": "_code_000a9c00"
+		"name": "_player_pseudo_kill",
+		"static": true
 	},
 	{
 		"file_offset": 695520,
@@ -13017,22 +13077,25 @@
 	{
 		"file_offset": 696192,
 		"flags": 32,
-		"name": "_code_000a9f80"
+		"name": "_unit_create_starting_weapon",
+		"static": true
 	},
 	{
 		"file_offset": 696304,
 		"flags": 32,
-		"name": "_code_000a9ff0"
+		"name": "_players_compute_combined_pvs",
+		"static": true
 	},
 	{
 		"file_offset": 696672,
 		"flags": 32,
-		"name": "_code_000aa160"
+		"name": "_players_compute_local_player_count",
+		"static": true
 	},
 	{
 		"file_offset": 696704,
 		"flags": 32,
-		"name": "_code_000aa180"
+		"name": "_player_examine_nearby_unit"
 	},
 	{
 		"file_offset": 696720,
@@ -13042,42 +13105,50 @@
 	{
 		"file_offset": 696864,
 		"flags": 32,
-		"name": "_code_000aa220"
+		"name": "_player_reset_action_result",
+		"static": true
 	},
 	{
 		"file_offset": 696896,
 		"flags": 32,
-		"name": "_code_000aa240"
+		"name": "_player_handle_weapon_swap",
+		"static": true
 	},
 	{
 		"file_offset": 697088,
 		"flags": 32,
-		"name": "_code_000aa300"
+		"name": "_player_over_shield_screen_effect",
+		"static": true
 	},
 	{
 		"file_offset": 697264,
 		"flags": 32,
-		"name": "_code_000aa3b0"
+		"name": "_player_active_camo_screen_effect",
+		"static": true
 	},
 	{
 		"file_offset": 697440,
 		"flags": 32,
-		"name": "_code_000aa460"
+		"name": "_player_health_pack_screen_effect",
+		"static": true
 	},
 	{
 		"file_offset": 697584,
 		"flags": 32,
-		"name": "_code_000aa4f0"
+		"name": "_player_powerup_on",
+		"static": true
 	},
 	{
 		"file_offset": 697648,
 		"flags": 32,
-		"name": "_code_000aa530"
+		"name": "_player_powerup_additional",
+		"static": true
 	},
 	{
 		"file_offset": 697696,
 		"flags": 32,
-		"name": "_code_000aa560"
+		"name": "_player_powerup_off",
+		"static": true
 	},
 	{
 		"file_offset": 697744,
@@ -13112,7 +13183,7 @@
 	{
 		"file_offset": 698848,
 		"flags": 32,
-		"name": "_code_000aa9e0"
+		"name": "_player_teleport_internal"
 	},
 	{
 		"file_offset": 700144,
@@ -13127,17 +13198,20 @@
 	{
 		"file_offset": 700448,
 		"flags": 32,
-		"name": "_code_000ab020"
+		"name": "_player_spawn",
+		"static": true
 	},
 	{
 		"file_offset": 701264,
 		"flags": 32,
-		"name": "_code_000ab350"
+		"name": "_player_set_action_result",
+		"static": true
 	},
 	{
 		"file_offset": 701504,
 		"flags": 32,
-		"name": "_code_000ab440"
+		"name": "_player_handle_action",
+		"static": true
 	},
 	{
 		"file_offset": 702096,
@@ -13152,7 +13226,8 @@
 	{
 		"file_offset": 702496,
 		"flags": 32,
-		"name": "_code_000ab820"
+		"name": "_player_update_powerups",
+		"static": true
 	},
 	{
 		"file_offset": 702608,
@@ -13172,7 +13247,8 @@
 	{
 		"file_offset": 703632,
 		"flags": 32,
-		"name": "_code_000abc90"
+		"name": "_player_teleport_on_bsp_switch",
+		"static": true
 	},
 	{
 		"file_offset": 703952,
@@ -13182,17 +13258,19 @@
 	{
 		"file_offset": 704688,
 		"flags": 32,
-		"name": "_code_000ac0b0"
+		"name": "_player_examine_nearby_vehicle",
+		"static": true
 	},
 	{
 		"file_offset": 705136,
 		"flags": 32,
-		"name": "_code_000ac270"
+		"name": "_player_examine_nearby_device",
+		"static": true
 	},
 	{
 		"file_offset": 705312,
 		"flags": 32,
-		"name": "_code_000ac320"
+		"name": "_player_handle_powerup_equipment"
 	},
 	{
 		"file_offset": 705648,
@@ -13202,12 +13280,14 @@
 	{
 		"file_offset": 707408,
 		"flags": 32,
-		"name": "_code_000acb50"
+		"name": "_player_examine_nearby_item",
+		"static": true
 	},
 	{
 		"file_offset": 708208,
 		"flags": 32,
-		"name": "_code_000ace70"
+		"name": "_player_examine_nearby_objects",
+		"static": true
 	},
 	{
 		"file_offset": 708448,
@@ -16442,12 +16522,14 @@
 	{
 		"file_offset": 777312,
 		"flags": 32,
-		"name": "_code_000bdc60"
+		"name": "_local_player_is_piloting_aircraft",
+		"static": true
 	},
 	{
 		"file_offset": 777536,
 		"flags": 32,
-		"name": "_code_000bdd40"
+		"name": "_set_default_game_input_preferences",
+		"static": true
 	},
 	{
 		"file_offset": 777616,
@@ -17362,32 +17444,38 @@
 	{
 		"file_offset": 827744,
 		"flags": 32,
-		"name": "_code_000ca160"
+		"name": "_tiny_point2d_set",
+		"static": true
 	},
 	{
 		"file_offset": 827920,
 		"flags": 32,
-		"name": "_code_000ca210"
+		"name": "_tiny_point2d_get",
+		"static": true
 	},
 	{
 		"file_offset": 828000,
 		"flags": 32,
-		"name": "_code_000ca260"
+		"name": "_blip_type_get",
+		"static": true
 	},
 	{
 		"file_offset": 828352,
 		"flags": 32,
-		"name": "_code_000ca3c0"
+		"name": "_motion_sensor_blip_set_type_and_size",
+		"static": true
 	},
 	{
 		"file_offset": 828448,
 		"flags": 32,
-		"name": "_code_000ca420"
+		"name": "_blip_size_get",
+		"static": true
 	},
 	{
 		"file_offset": 828464,
 		"flags": 32,
-		"name": "_code_000ca430"
+		"name": "_get_motion_sensor_data",
+		"static": true
 	},
 	{
 		"file_offset": 828528,
@@ -17412,37 +17500,44 @@
 	{
 		"file_offset": 828736,
 		"flags": 32,
-		"name": "_code_000ca540"
+		"name": "_should_track_object",
+		"static": true
 	},
 	{
 		"file_offset": 828768,
 		"flags": 32,
-		"name": "_code_000ca560"
+		"name": "_blip_begin",
+		"static": true
 	},
 	{
 		"file_offset": 828880,
 		"flags": 32,
-		"name": "_code_000ca5d0"
+		"name": "_should_draw_object",
+		"static": true
 	},
 	{
 		"file_offset": 829104,
 		"flags": 32,
-		"name": "_code_000ca6b0"
+		"name": "_render_blip",
+		"static": true
 	},
 	{
 		"file_offset": 829504,
 		"flags": 32,
-		"name": "_code_000ca840"
+		"name": "_motion_sensor_update",
+		"static": true
 	},
 	{
 		"file_offset": 830672,
 		"flags": 32,
-		"name": "_code_000cacd0"
+		"name": "_update_motion_sensor",
+		"static": true
 	},
 	{
 		"file_offset": 831536,
 		"flags": 32,
-		"name": "_code_000cb030"
+		"name": "_render_motion_sensor",
+		"static": true
 	},
 	{
 		"file_offset": 832304,
@@ -17512,7 +17607,8 @@
 	{
 		"file_offset": 833616,
 		"flags": 32,
-		"name": "_code_000cb850"
+		"name": "_queue_event",
+		"static": true
 	},
 	{
 		"file_offset": 834384,
@@ -21016,12 +21112,14 @@
 	{
 		"file_offset": 994848,
 		"flags": 32,
-		"name": "_code_000f2e20"
+		"name": "_connected_geometry_find_or_add_vertex",
+		"static": true
 	},
 	{
 		"file_offset": 995040,
 		"flags": 32,
-		"name": "_code_000f2ee0"
+		"name": "_connected_geometry_find_or_add_edge",
+		"static": true
 	},
 	{
 		"file_offset": 995280,
@@ -21036,7 +21134,8 @@
 	{
 		"file_offset": 995872,
 		"flags": 32,
-		"name": "_code_000f3220"
+		"name": "_triangle_coplanar",
+		"static": true
 	},
 	{
 		"file_offset": 996256,
@@ -21161,7 +21260,8 @@
 	{
 		"file_offset": 1003600,
 		"flags": 32,
-		"name": "_code_000f5050"
+		"name": "_calculate_vertex",
+		"static": true
 	},
 	{
 		"file_offset": 1003936,
@@ -21171,7 +21271,8 @@
 	{
 		"file_offset": 1004704,
 		"flags": 32,
-		"name": "_code_000f54a0"
+		"name": "_points_dimension2d",
+		"static": true
 	},
 	{
 		"file_offset": 1004864,
@@ -21261,7 +21362,8 @@
 	{
 		"file_offset": 1013472,
 		"flags": 32,
-		"name": "_code_000f76e0"
+		"name": "_get_edge_vertex",
+		"static": true
 	},
 	{
 		"file_offset": 1013888,
@@ -21271,12 +21373,14 @@
 	{
 		"file_offset": 1014416,
 		"flags": 32,
-		"name": "_code_000f7a90"
+		"name": "_get_face_vertex",
+		"static": true
 	},
 	{
 		"file_offset": 1014816,
 		"flags": 32,
-		"name": "_code_000f7c20"
+		"name": "_subdivide_triangle",
+		"static": true
 	},
 	{
 		"file_offset": 1015760,
@@ -21591,17 +21695,19 @@
 	{
 		"file_offset": 1024080,
 		"flags": 32,
-		"name": "_code_000fa050"
+		"name": "_periodic_function_build_variable_period_x_table",
+		"static": true
 	},
 	{
 		"file_offset": 1024336,
 		"flags": 32,
-		"name": "_code_000fa150"
+		"name": "_transition_function_build_table",
+		"static": true
 	},
 	{
 		"file_offset": 1024640,
 		"flags": 32,
-		"name": "_code_000fa280"
+		"name": "_periodic_function_build_table"
 	},
 	{
 		"file_offset": 1025328,
@@ -22151,12 +22257,14 @@
 	{
 		"file_offset": 1048640,
 		"flags": 32,
-		"name": "_code_00100040"
+		"name": "_vectors_equal",
+		"static": true
 	},
 	{
 		"file_offset": 1048704,
 		"flags": 32,
-		"name": "_code_00100080"
+		"name": "_vector_tree_add_node",
+		"static": true
 	},
 	{
 		"file_offset": 1048784,
@@ -22731,7 +22839,8 @@
 	{
 		"file_offset": 1081360,
 		"flags": 32,
-		"name": "_code_00108010"
+		"name": "__byte_swap_data",
+		"static": true
 	},
 	{
 		"file_offset": 1082304,
@@ -22756,7 +22865,8 @@
 	{
 		"file_offset": 1082768,
 		"flags": 32,
-		"name": "_circular_queue_validate"
+		"name": "_circular_queue_verify",
+		"static": true
 	},
 	{
 		"file_offset": 1082880,
@@ -23022,17 +23132,20 @@
 	{
 		"file_offset": 1091056,
 		"flags": 32,
-		"name": "_code_0010a5f0"
+		"name": "__data_packet_verify",
+		"static": true
 	},
 	{
 		"file_offset": 1091520,
 		"flags": 32,
-		"name": "_code_0010a7c0"
+		"name": "__data_packet_encode",
+		"static": true
 	},
 	{
 		"file_offset": 1092288,
 		"flags": 32,
-		"name": "_code_0010aac0"
+		"name": "__data_packet_decode",
+		"static": true
 	},
 	{
 		"file_offset": 1092960,
@@ -23072,7 +23185,8 @@
 	{
 		"file_offset": 1094256,
 		"flags": 32,
-		"name": "_code_0010b270"
+		"name": "_hashtable_search",
+		"static": true
 	},
 	{
 		"file_offset": 1094544,
@@ -23087,7 +23201,8 @@
 	{
 		"file_offset": 1095216,
 		"flags": 32,
-		"name": "_code_0010b630"
+		"name": "_hashtable_capacious_put",
+		"static": true
 	},
 	{
 		"file_offset": 1095376,
@@ -23125,13 +23240,13 @@
 	{
 		"file_offset": 1096240,
 		"flags": 32,
-		"name": "_lra_block_verify",
+		"name": "_verify_lra_cache_block",
 		"static": true
 	},
 	{
 		"file_offset": 1096368,
 		"flags": 32,
-		"name": "_lra_verify",
+		"name": "_verify_lra_cache",
 		"static": true
 	},
 	{
@@ -23324,7 +23439,7 @@
 	{
 		"file_offset": 1101168,
 		"flags": 32,
-		"name": "_lruv_verify"
+		"name": "_lruv_cache_verify"
 	},
 	{
 		"file_offset": 1101728,
@@ -24656,7 +24771,8 @@
 	{
 		"file_offset": 1158912,
 		"flags": 32,
-		"name": "_code_0011af00"
+		"name": "_encode_network_game_message",
+		"static": true
 	},
 	{
 		"file_offset": 1158992,
@@ -25146,7 +25262,8 @@
 	{
 		"file_offset": 1180608,
 		"flags": 32,
-		"name": "_code_001203c0"
+		"name": "_process_telnet_client_buffer",
+		"static": true
 	},
 	{
 		"file_offset": 1181104,
@@ -25503,7 +25620,8 @@
 	{
 		"file_offset": 1199216,
 		"flags": 32,
-		"name": "_code_00124c70"
+		"name": "_lightning_offset_marker_position",
+		"static": true
 	},
 	{
 		"file_offset": 1199456,
@@ -27499,7 +27617,8 @@
 	{
 		"file_offset": 1326912,
 		"flags": 32,
-		"name": "_code_00143f40"
+		"name": "_physics_variable_position_get_seek_direction",
+		"static": true
 	},
 	{
 		"file_offset": 1327008,
@@ -30124,42 +30243,50 @@
 	{
 		"file_offset": 1488544,
 		"flags": 32,
-		"name": "_code_0016b6a0"
+		"name": "_shader_stage_color_input",
+		"static": true
 	},
 	{
 		"file_offset": 1488672,
 		"flags": 32,
-		"name": "_code_0016b720"
+		"name": "_shader_stage_color_output",
+		"static": true
 	},
 	{
 		"file_offset": 1488752,
 		"flags": 32,
-		"name": "_code_0016b770"
+		"name": "_shader_stage_color_output_flags",
+		"static": true
 	},
 	{
 		"file_offset": 1488976,
 		"flags": 32,
-		"name": "_code_0016b850"
+		"name": "_shader_stage_alpha_input",
+		"static": true
 	},
 	{
 		"file_offset": 1489104,
 		"flags": 32,
-		"name": "_code_0016b8d0"
+		"name": "_shader_stage_alpha_output",
+		"static": true
 	},
 	{
 		"file_offset": 1489184,
 		"flags": 32,
-		"name": "_code_0016b920"
+		"name": "_shader_stage_alpha_output_flags",
+		"static": true
 	},
 	{
 		"file_offset": 1489296,
 		"flags": 32,
-		"name": "_code_0016b990"
+		"name": "_shader_map_verify",
+		"static": true
 	},
 	{
 		"file_offset": 1489408,
 		"flags": 32,
-		"name": "_code_0016ba00"
+		"name": "_shader_stage_verify",
+		"static": true
 	},
 	{
 		"file_offset": 1489728,
@@ -30984,7 +31111,8 @@
 	{
 		"file_offset": 1500608,
 		"flags": 32,
-		"name": "_code_0016e5c0"
+		"name": "_eat_my_shorts",
+		"static": true
 	},
 	{
 		"file_offset": 1500640,
@@ -31609,12 +31737,14 @@
 	{
 		"file_offset": 1538144,
 		"flags": 32,
-		"name": "_code_00177860"
+		"name": "_render_contrail",
+		"static": true
 	},
 	{
 		"file_offset": 1540096,
 		"flags": 32,
-		"name": "_code_00178000"
+		"name": "_render_contrails",
+		"static": true
 	},
 	{
 		"file_offset": 1540272,
@@ -31649,27 +31779,32 @@
 	{
 		"file_offset": 1540976,
 		"flags": 32,
-		"name": "_code_00178370"
+		"name": "_render_debug_add_cache_string",
+		"static": true
 	},
 	{
 		"file_offset": 1541184,
 		"flags": 32,
-		"name": "_code_00178440"
+		"name": "_build_circle_points",
+		"static": true
 	},
 	{
 		"file_offset": 1541296,
 		"flags": 32,
-		"name": "_code_001784b0"
+		"name": "_build_height_matrix",
+		"static": true
 	},
 	{
 		"file_offset": 1541456,
 		"flags": 32,
-		"name": "_code_00178550"
+		"name": "_build_pill_points",
+		"static": true
 	},
 	{
 		"file_offset": 1541904,
 		"flags": 32,
-		"name": "_code_00178710"
+		"name": "_render_debug_add_cache_entry",
+		"static": true
 	},
 	{
 		"file_offset": 1542560,
@@ -31739,32 +31874,38 @@
 	{
 		"file_offset": 1545776,
 		"flags": 32,
-		"name": "_code_00179630"
+		"name": "_render_debug_camera",
+		"static": true
 	},
 	{
 		"file_offset": 1546320,
 		"flags": 32,
-		"name": "_code_00179850"
+		"name": "_render_debug_player",
+		"static": true
 	},
 	{
 		"file_offset": 1546592,
 		"flags": 32,
-		"name": "_code_00179960"
+		"name": "_render_debug_structure",
+		"static": true
 	},
 	{
 		"file_offset": 1546720,
 		"flags": 32,
-		"name": "_code_001799e0"
+		"name": "_render_debug_bsp",
+		"static": true
 	},
 	{
 		"file_offset": 1547200,
 		"flags": 32,
-		"name": "_code_00179bc0"
+		"name": "_render_debug_input",
+		"static": true
 	},
 	{
 		"file_offset": 1547312,
 		"flags": 32,
-		"name": "_code_00179c30"
+		"name": "_render_debug_structure_decals",
+		"static": true
 	},
 	{
 		"file_offset": 1547728,
@@ -31969,12 +32110,14 @@
 	{
 		"file_offset": 1558368,
 		"flags": 32,
-		"name": "_code_0017c760"
+		"name": "_build_sprite_transform_origin_and_direction",
+		"static": true
 	},
 	{
 		"file_offset": 1558672,
 		"flags": 32,
-		"name": "_code_0017c890"
+		"name": "_build_sprite_compute_scale",
+		"static": true
 	},
 	{
 		"file_offset": 1558784,
@@ -31984,7 +32127,8 @@
 	{
 		"file_offset": 1558928,
 		"flags": 32,
-		"name": "_code_0017c990"
+		"name": "_build_sprite_get_group",
+		"static": true
 	},
 	{
 		"file_offset": 1559312,
@@ -31999,7 +32143,8 @@
 	{
 		"file_offset": 1559776,
 		"flags": 32,
-		"name": "_code_0017cce0"
+		"name": "_build_sprite_compute_basis",
+		"static": true
 	},
 	{
 		"file_offset": 1560256,
@@ -32274,7 +32419,8 @@
 	{
 		"file_offset": 1570640,
 		"flags": 32,
-		"name": "_code_0017f750"
+		"name": "_wind_variance_get",
+		"static": true
 	},
 	{
 		"file_offset": 1570864,
@@ -32289,7 +32435,7 @@
 	{
 		"file_offset": 1571792,
 		"flags": 32,
-		"name": "_code_0017fbd0"
+		"name": "_wind_variance_initialize"
 	},
 	{
 		"file_offset": 1572176,
@@ -33909,12 +34055,14 @@
 	{
 		"file_offset": 1633680,
 		"flags": 32,
-		"name": "_code_0018ed90"
+		"name": "_biped_limp_noodle_valid_joint_rotation",
+		"static": true
 	},
 	{
 		"file_offset": 1634928,
 		"flags": 32,
-		"name": "_code_0018f270"
+		"name": "_biped_limp_noodle_move_relax_and_constrain_positions",
+		"static": true
 	},
 	{
 		"file_offset": 1636896,
@@ -33924,7 +34072,8 @@
 	{
 		"file_offset": 1637392,
 		"flags": 32,
-		"name": "_code_0018fc10"
+		"name": "_biped_limp_noodle_adjust_orientations",
+		"static": true
 	},
 	{
 		"file_offset": 1638096,
@@ -74223,7 +74372,8 @@
 	{
 		"file_offset": 2477784,
 		"flags": 0,
-		"name": "_rdata_0025ced8"
+		"name": "_adjustment_weights",
+		"static": true
 	},
 	{
 		"file_offset": 2477892,
@@ -82543,7 +82693,8 @@
 	{
 		"file_offset": 2552736,
 		"flags": 0,
-		"name": "_rdata_0026f3a0"
+		"name": "_stick_direction_angles",
+		"static": true
 	},
 	{
 		"file_offset": 2552756,
@@ -88123,7 +88274,8 @@
 	{
 		"file_offset": 2597560,
 		"flags": 0,
-		"name": "_rdata_0027a2b8"
+		"name": "_geosphere_primitive_vertices",
+		"static": true
 	},
 	{
 		"file_offset": 2597680,
@@ -98714,7 +98866,8 @@
 	{
 		"file_offset": 2736888,
 		"flags": 0,
-		"name": "_rdata_0029c2f8"
+		"name": "_vertex_shader_translation_tables",
+		"static": true
 	},
 	{
 		"file_offset": 2738208,
@@ -98854,7 +99007,8 @@
 	{
 		"file_offset": 2740048,
 		"flags": 0,
-		"name": "_rdata_0029cf50"
+		"name": "_shader_stage_color_input_registers",
+		"static": true
 	},
 	{
 		"file_offset": 2740600,
@@ -109379,7 +109533,7 @@
 	{
 		"file_offset": 2845408,
 		"flags": 0,
-		"name": "_data_002b6ae0"
+		"name": "_last_refresh_overflow_warning_time"
 	},
 	{
 		"file_offset": 2845412,
@@ -109544,7 +109698,7 @@
 	{
 		"file_offset": 2850552,
 		"flags": 0,
-		"name": "_data_002b7ef8"
+		"name": "_tif_compress_rcsid"
 	},
 	{
 		"file_offset": 2850696,
@@ -110015,7 +110169,8 @@
 	{
 		"file_offset": 3001644,
 		"flags": 0,
-		"name": "_data_002dcd2c"
+		"name": "?first_line@?1??write_to_error_file@@9@9",
+		"static": true
 	},
 	{
 		"file_offset": 3001648,
@@ -110050,12 +110205,14 @@
 	{
 		"file_offset": 3002144,
 		"flags": 0,
-		"name": "_data_002dcf20"
+		"name": "_apply_funcs",
+		"static": true
 	},
 	{
 		"file_offset": 3002416,
 		"flags": 0,
-		"name": "_data_002dd030"
+		"name": "_apply_funcs",
+		"static": true
 	},
 	{
 		"file_offset": 3002720,
@@ -110135,7 +110292,8 @@
 	{
 		"file_offset": 3007792,
 		"flags": 0,
-		"name": "_data_002de530"
+		"name": "_sound_is_queueable",
+		"static": true
 	},
 	{
 		"file_offset": 3007840,
@@ -110185,7 +110343,7 @@
 	{
 		"file_offset": 3010056,
 		"flags": 0,
-		"name": "_data_002dee08"
+		"name": "_players_static_data"
 	},
 	{
 		"file_offset": 3013152,
@@ -110310,7 +110468,8 @@
 	{
 		"file_offset": 3034244,
 		"flags": 0,
-		"name": "_data_002e4c84"
+		"name": "?last_attract_movie@?1??attract_mode_start@@9@9",
+		"static": true
 	},
 	{
 		"file_offset": 3034248,
@@ -110512,7 +110671,8 @@
 	{
 		"file_offset": 3176732,
 		"flags": 0,
-		"name": "_data_0030791c"
+		"name": "_global_periodic_functions_enum_strings",
+		"static": true
 	},
 	{
 		"file_offset": 3176780,
@@ -110737,7 +110897,8 @@
 	{
 		"file_offset": 3186088,
 		"flags": 0,
-		"name": "_data_00309da8"
+		"name": "_byte_bs_codes",
+		"static": true
 	},
 	{
 		"file_offset": 3186104,
@@ -110882,7 +111043,8 @@
 	{
 		"file_offset": 3189352,
 		"flags": 0,
-		"name": "_data_0030aa68"
+		"name": "_network_game_message_packet_definitions",
+		"static": true
 	},
 	{
 		"file_offset": 3191472,
@@ -111168,7 +111330,8 @@
 	{
 		"file_offset": 3199928,
 		"flags": 0,
-		"name": "_data_0030d3b8"
+		"name": "_vertex_shader_runtime_globals",
+		"static": true
 	},
 	{
 		"file_offset": 3199960,
@@ -111233,7 +111396,8 @@
 	{
 		"file_offset": 3204984,
 		"flags": 0,
-		"name": "_data_0030e778"
+		"name": "_sprite_render_orientation_names",
+		"static": true
 	},
 	{
 		"file_offset": 3204996,
@@ -112115,7 +112279,8 @@
 	{
 		"file_offset": 3262248,
 		"flags": 0,
-		"name": "_bss_0031c728"
+		"name": "_thread_globals",
+		"static": true
 	},
 	{
 		"file_offset": 3263792,
@@ -112160,12 +112325,14 @@
 	{
 		"file_offset": 3265720,
 		"flags": 0,
-		"name": "_bss_0031d4b8"
+		"name": "_observer_globals",
+		"static": true
 	},
 	{
 		"file_offset": 3268396,
 		"flags": 0,
-		"name": "_bss_0031df2c"
+		"name": "_error_suppression_globals",
+		"static": true
 	},
 	{
 		"file_offset": 3268404,
@@ -112316,12 +112483,12 @@
 	{
 		"file_offset": 4451192,
 		"flags": 0,
-		"name": "_bss_0043eb78"
+		"name": "_mp_sound_queue_count"
 	},
 	{
 		"file_offset": 4451196,
 		"flags": 0,
-		"name": "_bss_0043eb7c"
+		"name": "_mp_sound_queue"
 	},
 	{
 		"file_offset": 4451240,
@@ -112401,7 +112568,7 @@
 	{
 		"file_offset": 4535304,
 		"flags": 0,
-		"name": "_bss_00453408"
+		"name": "_machine_to_player_table"
 	},
 	{
 		"file_offset": 4535396,
@@ -112426,7 +112593,8 @@
 	{
 		"file_offset": 4535732,
 		"flags": 0,
-		"name": "_bss_004535b4"
+		"name": "_HAT_globals",
+		"static": true
 	},
 	{
 		"file_offset": 4535744,
@@ -112491,12 +112659,14 @@
 	{
 		"file_offset": 4537048,
 		"flags": 0,
-		"name": "_bss_00453ad8"
+		"name": "_attract_mode_countdown_timer",
+		"static": true
 	},
 	{
 		"file_offset": 4537056,
 		"flags": 0,
-		"name": "_bss_00453ae8"
+		"name": "?path@?1??attract_mode_get_localized_movie_path@@9@9",
+		"static": true
 	},
 	{
 		"file_offset": 4537184,
@@ -112666,7 +112836,8 @@
 	{
 		"file_offset": 4547004,
 		"flags": 0,
-		"name": "_bss_004561bc"
+		"name": "_periodic_functions_globals",
+		"static": true
 	},
 	{
 		"file_offset": 4547080,
@@ -112747,7 +112918,8 @@
 	{
 		"file_offset": 4548336,
 		"flags": 0,
-		"name": "_bss_004566f0"
+		"name": "_network_game_message_buffer",
+		"static": true
 	},
 	{
 		"file_offset": 4549876,
@@ -112757,7 +112929,8 @@
 	{
 		"file_offset": 4549888,
 		"flags": 0,
-		"name": "_bss_00456d00"
+		"name": "_telnet_console_globals",
+		"static": true
 	},
 	{
 		"file_offset": 4550032,
@@ -113030,7 +113203,8 @@
 	{
 		"file_offset": 4612896,
 		"flags": 0,
-		"name": "_bss_00466320"
+		"name": "_rasterizer_frame_statistics_private_globals",
+		"static": true
 	},
 	{
 		"file_offset": 4615040,
@@ -113105,7 +113279,8 @@
 	{
 		"file_offset": 4951104,
 		"flags": 0,
-		"name": "_bss_004b8c40"
+		"name": "_render_debug_globals",
+		"static": true
 	},
 	{
 		"file_offset": 4980812,
@@ -113131,7 +113306,8 @@
 	{
 		"file_offset": 4982040,
 		"flags": 0,
-		"name": "_bss_004c0518"
+		"name": "_build_sprite_vertex_allocation_failure_reported",
+		"static": true
 	},
 	{
 		"file_offset": 4982048,
@@ -113157,7 +113333,8 @@
 	{
 		"file_offset": 4982952,
 		"flags": 0,
-		"name": "_bss_004c08a8"
+		"name": "_faked_xbox_command_line",
+		"static": true
 	},
 	{
 		"file_offset": 4982960,
@@ -113207,7 +113384,8 @@
 	{
 		"file_offset": 4987912,
 		"flags": 0,
-		"name": "_bss_004c1c08"
+		"name": "_biped_limp_noodle_globals",
+		"static": true
 	},
 	{
 		"file_offset": 5032720,

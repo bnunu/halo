@@ -82,6 +82,6 @@ boolean decode_network_game_message(
 	short *encoded_message_size,
 	short *packet_type,
 	short *packet_version,
-	long expected_packet_class);
+	short expected_packet_class);
 
 #endif // __NETWORK_MESSAGES_H

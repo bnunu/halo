@@ -365,9 +365,13 @@ void object_set_garbage(long object_index, boolean garbage);
 void garbage_collect_now(void);
 void objects_information_get(struct objects_information *information);
 void object_pvs_set_object(long object_index);
+/* objects_get_activating_cluster_index() is deliberately NOT declared here: its one
+caller (players_compute_combined_pvs in game/players.c) stores the result with a
+plain 32-bit move and no sign extension, which only happens under the C89 implicit
+declaration.  The definition in objects.c really does return short - re-declaring it
+here makes that caller non-exact. */
 void object_pvs_set_camera_point(short camera_point_index);
 void object_pvs_clear(void);
-short objects_get_activating_cluster_index(void);
 void object_definition_predict(long definition_index);
 void object_predict(long object_index);
 void object_beautify(long object_index, boolean beautiful);

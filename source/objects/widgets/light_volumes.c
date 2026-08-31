@@ -241,7 +241,7 @@ void light_volume_render(
 		definition = light_volume_definition_get(light_volume->definition_index);
 		if (definition->count > 0 && definition->frames.count > 0)
 		{
-			real distance_fade = 1.f;
+			intensity = 1.f;
 
 			frame = light_volume_interpolate_frames(definition, object_index);
 			object_get_marker_by_name(object_index, definition->attachment_marker, &marker, 1);
@@ -249,11 +249,10 @@ void light_volume_render(
 			delta.y = marker.matrix.position.y - render.camera.position.y;
 			delta.z = marker.matrix.position.z - render.camera.position.z;
 
-			parallel_factor =
+			parallel_factor = ABS(
 				marker.matrix.forward.i * render.camera.forward.i +
-				(render.camera.forward.j * marker.matrix.forward.j +
-				render.camera.forward.k * marker.matrix.forward.k);
-			parallel_factor = ABS(parallel_factor);
+				(marker.matrix.forward.j * render.camera.forward.j +
+				marker.matrix.forward.k * render.camera.forward.k));
 
 			if (definition->far_fade_distance > 0.f)
 			{
@@ -265,7 +264,7 @@ void light_volume_render(
 					(depth - definition->far_fade_distance) /
 					(definition->near_fade_distance - definition->far_fade_distance);
 
-				distance_fade = PIN(fade, 0.f, 1.f);
+				intensity = PIN(fade, 0.f, 1.f);
 			}
 
 			angle_brightness =
@@ -273,7 +272,7 @@ void light_volume_render(
 				definition->parallel_brightness_scale * parallel_factor;
 			angle_brightness = PIN(angle_brightness, 0.f, 1.f);
 
-			intensity = angle_brightness * distance_fade;
+			intensity *= angle_brightness;
 			{
 				real function_value;
 

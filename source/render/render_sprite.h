@@ -35,6 +35,12 @@ typedef char build_sprite_data_size_assert[
 
 /* ---------- prototypes/RENDER_SPRITE.C */
 
+void build_sprite_prepare_for_window(
+	void);
+real build_sprite_compute_vertex_fade(
+	short mode,
+	real_point3d const *point,
+	real_vector3d const *normal);
 void build_sprites_begin(
 	struct build_sprite_data *data,
 	short maximum_sprite_count,
