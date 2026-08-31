@@ -351,9 +351,12 @@ symbols in this file:
 #include "cache/cache_files.h"
 #include "cache/predicted_resources.h"
 #include "interface/hud.h"
+#include "interface/terminal.h"
 #include "saved games/player_profile.h"
 #include "rasterizer/rasterizer.h"
+#include "bink/bink_playback.h"
 #include "main/d3d_intimacy.h"
+#include "networking/network_game_globals.h"
 #include "camera/director.h"
 #include "hs/hs.h"
 #include "render/render.h"
@@ -584,6 +587,8 @@ extern struct bitmap_data *bitmap_2d_new(
 	short height,
 	short mipmap_count,
 	short format);
+extern void bitmap_delete(
+	struct bitmap_data *bitmap);
 extern char const *tiff_export(
 	struct file_reference *file,
 	struct bitmap_data *bitmap);
@@ -594,6 +599,32 @@ extern void hs_runtime_initialize_for_new_map(
 extern void main_rasterizer_throttle(void);
 extern void main_pregame_render(void);
 extern void main_present_frame(void);
+extern void cheats_update(
+	void);
+extern void player_control_update(
+	real seconds_elapsed);
+extern void director_update(
+	real seconds_elapsed);
+extern void observer_update(
+	real seconds_elapsed);
+extern void collision_log_continue_period(
+	short period);
+extern void collision_log_end_period(
+	void);
+extern void hud_autosave(
+	boolean autosave);
+extern boolean network_game_client_start_frame(
+	void);
+extern boolean network_game_client_end_frame(
+	void);
+extern void profile_frame_start(
+	void);
+extern void profile_frame_end(
+	void);
+extern void profile_render_start(
+	void);
+extern void profile_render_end(
+	void);
 
 /* ---------- globals */
 
@@ -618,6 +649,13 @@ static char const *scenario_paths[10] =
 
 static struct _main_window_storage window_storage = { 0 };
 static struct _main_globals main_globals = { 0 };
+boolean debug_force_frame_rate_update = FALSE;
+boolean debug_no_drawing = FALSE;
+boolean debug_game_save = FALSE;
+boolean debug_frame_rate = FALSE;
+boolean display_framerate = FALSE;
+boolean display_vblank_deltas = FALSE;
+boolean display_precache_progress = FALSE;
 
 /* ---------- public code */
 
@@ -1427,13 +1465,17 @@ void main_loop_of_death(
 void main_loop(
 	void)
 {
+	boolean render_frame;
+	real precache_progress;
+	long connection;
+
 	if (!game_in_editor())
 	{
 		strncpy(main_globals.soloplayer_map_name, "levels\\b30\\b30", NUMBEROF(main_globals.soloplayer_map_name)-1);
 		main_globals.soloplayer_map_name[NUMBEROF(main_globals.soloplayer_map_name)-1] = '\0';
 	}
 
-	main_globals.want_to_be_at_main_menu = (game_in_editor()==FALSE);
+	main_globals.want_to_be_at_main_menu = !game_in_editor();
 	main_globals.switch_to_structure_bsp_index = NONE;
 	main_globals.halt_time_scale = TRUE;
 
@@ -1446,55 +1488,68 @@ void main_loop(
 
 	while (TRUE)
 	{
-		if (game_in_editor())
-		{
-			if (main_globals.reset_map)
-			{
-				main_reset_map_private();
-			}
-		}
-		else
+		if (!game_in_editor())
 		{
 			if (main_globals.switch_to_structure_bsp_index!=NONE)
 			{
 				scenario_switch_structure_bsp(main_globals.switch_to_structure_bsp_index);
 				main_globals.switch_to_structure_bsp_index = NONE;
-				hud_load(0);
+				hud_load(FALSE);
 			}
 
 			if (main_globals.lost_map)
 			{
-
+				if (!game_time_get_paused() && main_globals.loss_timer++>90)
+				{
+					main_globals.lost_map = FALSE;
+					main_globals.loss_timer = 0;
+					game_state_revert();
+				}
 			}
 
 			if (main_globals.won_map)
 			{
-
+				code_000f0850();
 			}
 
 			if (main_globals.respawn)
 			{
-
+				if (!game_time_get_paused() && !cinematic_in_progress() && main_globals.respawn_timer++>90 && players_respawn_coop())
+				{
+					main_globals.respawn = FALSE;
+					main_globals.respawn_timer = 0;
+				}
 			}
 
-			if (main_globals.saving_map)
+			if (main_globals.save_map_completed)
 			{
-
+				game_state_save();
+				hud_autosave(FALSE);
+				main_globals.save_map_completed = FALSE;
 			}
 
 			if (main_globals.defer_map_change)
 			{
-
+				code_000f0420();
 			}
 
 			if (main_globals.revert_map)
 			{
-
+				game_state_revert();
+				ui_widgets_disable_pause_game(30);
+				main_globals.revert_map = FALSE;
 			}
 
 			if (main_globals.skip_cinematic)
 			{
+				if (cinematic_can_be_skipped())
+				{
+					game_state_revert();
+					ui_widgets_disable_pause_game(30);
+					main_globals.revert_map = FALSE;
+				}
 
+				main_globals.skip_cinematic = FALSE;
 			}
 
 			if (main_globals.reset_map)
@@ -1504,13 +1559,13 @@ void main_loop(
 
 			if (main_globals.save_core)
 			{
-				//game_state_save_core(bss_00455750.__unknown125);
+				game_state_save_core(main_globals.core_name);
 				main_globals.save_core = FALSE;
 			}
 
 			if (main_globals.load_core)
 			{
-				//game_state_save_core(bss_00455750.__unknown125);
+				game_state_load_core(main_globals.core_name);
 				main_globals.load_core = FALSE;
 			}
 
@@ -1537,8 +1592,21 @@ void main_loop(
 
 			if (main_globals.queue_map)
 			{
-				//bss_00455750.queue_map = FALSE;
+				if (cache_files_precache_in_progress() && cache_files_precache_map_status(&precache_progress)==1)
+				{
+					cache_files_precache_map_end();
+				}
+
+				if (!cache_files_precache_in_progress())
+				{
+					cache_files_precache_map_begin(main_globals.queued_map_name, FALSE);
+					main_globals.queue_map = FALSE;
+				}
 			}
+		}
+		else if (main_globals.reset_map)
+		{
+			main_reset_map_private();
 		}
 
 		profile_frame_start();
@@ -1551,257 +1619,133 @@ void main_loop(
 
 		if (!shell_application_is_paused())
 		{
-			if (main_globals.connection==1)
-			{
+			render_frame = TRUE;
 
+			connection = main_globals.connection;
+			if (connection==_game_connection_network_client)
+			{
+				if (!network_game_client_start_frame())
+				{
+					display_error_when_main_menu_loaded(6);
+					error(_error_silent, "the game host went down");
+					network_game_abort();
+				}
+			}
+			else if (connection==_game_connection_network_server)
+			{
+				if (!network_game_client_start_frame())
+				{
+					display_error_when_main_menu_loaded(1);
+					error(_error_silent, "the game host went down");
+					network_game_abort();
+				}
+				else if (!network_game_server_start_frame())
+				{
+					display_error_when_main_menu_loaded(1);
+					error(_error_silent, "the game host went down");
+					network_game_abort();
+				}
+			}
+			else if (connection==_game_connection_film_playback)
+			{
+				break;
 			}
 
-//            int32_t eax_9 = (int32_t)data_85582c;
-//            (uint8_t)ebx = 1;
-//            
-//            if (eax_9 == 1)
-//            {
-//                if (!sub_519b20(ecx_1))
-//                {
-//                    sub_4d3c50(6);
-//                    var_1c = "the game host went down";
-//                    sub_47da00(2, "the game host went down");
-//                    sub_519fd0();
-//                }
-//            }
-//            else if (eax_9 == 2)
-//            {
-//                char eax_11 = sub_519b20(ecx_1);
-//                char eax_12;
-//                
-//                if (eax_11)
-//                    eax_12 = sub_519a60();
-//                
-//                if (!eax_11 || !eax_12)
-//                {
-//                    sub_4d3c50(1);
-//                    var_1c = "the game host went down";
-//                    sub_47da00(2, "the game host went down");
-//                    sub_519fd0();
-//                }
-//            }
-//            else if (eax_9 == 3)
-//            {
-//                sub_47da00(2, "end of saved film");
-//                int32_t eax_35 = (int32_t)data_85582c;
-//                
-//                if (eax_35 == 1)
-//                    sub_519af0();
-//                else if (eax_35 == 2)
-//                {
-//                    sub_519af0();
-//                    sub_519a30();
-//                }
-//                
-//                sub_4956c0();
-//                sub_495370();
-//                sub_4ef490();
-//                sub_4ef1d0();
-//                return;
-//            }
-//            
-//            sub_4f0bf0();
-//            sub_4d8bd0();
-//            sub_5b6360();
-//            
-//            if (sub_485e60())
-//            {
-//            label_4f2a3e:
-//                
-//                if (sub_485e80())
-//                    goto label_4f2a47;
-//            }
-//            else
-//            {
-//                if (!sub_4be900(0x55))
-//                {
-//                    if (sub_4be900(0))
-//                        goto label_4f2a47;
-//                    
-//                    goto label_4f2a3e;
-//                }
-//                
-//            label_4f2a47:
-//                void* eax_17 = data_855830;
-//                
-//                if (eax_17)
-//                {
-//                    sub_46af60(eax_17);
-//                    data_855830 = 0;
-//                }
-//                
-//                char eax_18 = sub_4974e0();
-//                
-//                if (!eax_18)
-//                {
-//                    data_855860 = 0xffff;
-//                    data_855848 = eax_18;
-//                    data_855844 = 1;
-//                    data_85585b = eax_18;
-//                }
-//            }
-//            
-//            if (!sub_4a4f50())
-//            {
-//                sub_47fb80();
-//                    sub_4f18b0(st0_1);
-//                top += 1;
-//                sub_47fbb0();
-//            }
-//            else
-//            {
-//                sub_4d3160();
-//                char eax_20;
-//                int32_t ecx_2;
-//                eax_20 = sub_4ef1f0();
-//                
-//                if (!eax_20 || data_85582c)
-//                {
-//                    sub_4ef4c0(ecx_2);
-//                    sub_494c90();
-//                    uint32_t ecx_3 = (uint32_t)data_855866;
-//                    uint32_t var_8_1 = ecx_3;
-//                    uint32_t var_18_4 = ecx_3;
-//                        /*   unimplemented  {fild st0, dword [ebp-0x4]} */
-//                        /*   unimplemented  {fmul st0, dword [&data_855828]} */
-//                        float var_18_5 = (float)/*   float var_18_5 =
-//                        fconvert.s(unimplemented  {fstp dword [esp], st0}) */;
-//                    /*   unimplemented  {fstp dword [esp], st0} */
-//                    int32_t ecx_4 = sub_4a7fe0(var_18_5);
-//                    int32_t eax_21 = (int32_t)data_85582c;
-//                    
-//                    if (eax_21 > 0 && eax_21 <= 2)
-//                    {
-//                        char eax_22;
-//                        eax_22 = sub_519d50();
-//                        
-//                        if (!eax_22)
-//                        {
-//                            ecx_4 = sub_4d3c50(1);
-//                            sub_519fd0();
-//                        }
-//                    }
-//                    
-//                    uint32_t var_8_2 = (uint32_t)data_855866;
-//                    int32_t var_18_6 = ecx_4;
-//                        /*   unimplemented  {fild st0, dword [ebp-0x4]} */
-//                        /*   unimplemented  {fmul st0, dword [&data_855828]} */
-//                        float var_18_7 = (float)/*   float var_18_7 =
-//                        fconvert.s(unimplemented  {fstp dword [esp], st0}) */;
-//                    /*   unimplemented  {fstp dword [esp], st0} */
-//                    sub_4a5390(var_18_7);
-//                    
-//                    if (data_855862)
-//                        (uint8_t)ebx = 1;
-//                    else if (!data_855866)
-//                        (uint8_t)ebx = 0;
-//                    else if (sub_4a4fa0())
-//                        (uint8_t)ebx = 1;
-//                    else if (sub_4a4e50() > 0)
-//                        (uint8_t)ebx = 1;
-//                    else
-//                    {
-//                            sub_4a5030();
-//                        /*   unimplemented  {call sub_4a5030} */
-//                          long double temp3_1 = (long double)1f;
-//                        /*   unimplemented  {fcomp st0, dword [&data_642f64[4]]}
-//                            f- temp3_1 */ - temp3_1;
-//                        bool c0_1 = /*   bool c0_1 =
-//                            unimplemented  {fcomp st0, dword [&data_642f64[4]]}
-//                            f< temp3_1 */ < temp3_1;
-//                        bool c2_1 = FCMP_UO(/*   bool c2_1 = is_unordered.t(
-//                            unimplemented  {fcomp st0, dword [&data_642f64[4]]}, 
-//                            temp3_1) */, temp3_1);
-//                        bool c3_1 = /*   bool c3_1 =
-//                            unimplemented  {fcomp st0, dword [&data_642f64[4]]}
-//                            f== temp3_1 */ == temp3_1;
-//                        /*   unimplemented  {fcomp st0, dword [&data_642f64[4]]} */
-//                        int32_t eax_26;
-//                        (uint16_t)eax_26 = (c0_1 ? 1 : 0) << 8 | (c2_1 ? 1 : 0) << 0xa
-//                            | (c3_1 ? 1 : 0) << 0xe | (top & 7) << 0xb;
-//                            bool p_1 = /*   bool p_1 = unimplemented  {test ah, 0x5} */;
-//                        
-//                        if (!p_1)
-//                            (uint8_t)ebx = 1;
-//                        else
-//                            (uint8_t)ebx = 0;
-//                    }
-//                    
-//                    char eax_27 = sub_4974e0();
-//                    int32_t eax_28;
-//                    
-//                    if (eax_27)
-//                        eax_28 = sub_4a4e10();
-//                    
-//                    char eax_29;
-//                    
-//                    eax_29 = !eax_27 || eax_28 >= 3 ? 1 : 0;
-//                    
-//                    (uint8_t)ebx &= eax_29;
-//                    sub_53c970(1);
-//                    uint32_t var_8_3 = (uint32_t)data_855866;
-//                        /*   unimplemented  {fild st0, dword [ebp-0x4]} */
-//                        /*   unimplemented  {fmul st0, dword [&data_855828]} */
-//                        float var_18_8 = (float)/*   float var_18_8 =
-//                        fconvert.s(unimplemented  {fstp dword [esp], st0}) */;
-//                    /*   unimplemented  {fstp dword [esp], st0} */
-//                    sub_475c60(var_18_8);
-//                    uint32_t var_8_4 = (uint32_t)data_855866;
-//                        /*   unimplemented  {fild st0, dword [ebp-0x4]} */
-//                        /*   unimplemented  {fmul st0, dword [&data_855828]} */
-//                        float var_18_9 = (float)/*   float var_18_9 =
-//                        fconvert.s(unimplemented  {fstp dword [esp], st0}) */;
-//                    /*   unimplemented  {fstp dword [esp], st0} */
-//                    sub_47b450(var_18_9);
-//                    sub_53c990();
-//                    uint32_t var_8_5 = (uint32_t)data_855866;
-//                        /*   unimplemented  {fild st0, dword [ebp-0x4]} */
-//                        /*   unimplemented  {fmul st0, dword [&data_855828]} */
-//                      float var_18_10 = (float)/*   float var_18_10 =
-//                        fconvert.s(unimplemented  {fstp dword [esp], st0}) */;
-//                    /*   unimplemented  {fstp dword [esp], st0} */
-//                    top = top;
-//                    sub_49b5c0(var_18_10);
-//                }
-//                
-//                if (data_855848)
-//                    sub_4f06c0();
-//                
-//                if ((uint8_t)ebx && !data_855e21)
-//                {
-//                    sub_47fb80();
-//                        /*   unimplemented  {fld st0, dword [&data_855828]} */
-//                      var_1c = (double)/*   var_1c.q =
-//                        fconvert.d(unimplemented  {fstp qword [esp], st0}) */;
-//                    /*   unimplemented  {fstp qword [esp], st0} */
-//                    sub_4f24a0();
-//                    sub_47fbb0();
-//                }
-//            }
-//            
-//            sub_4f1190();
-//            
-//            if ((uint8_t)ebx && !data_855e21)
-//                sub_4f1b90();
+			code_000f0bf0();
+			process_ui_widgets();
+			bink_playback_update();
+
+			if ((!game_in_editor() && (input_key_is_down(_key_end) || input_key_is_down(_key_escape))) || editor_should_exit())
+			{
+				main_movie_stop();
+
+				if (!game_engine_running())
+				{
+					main_reset_map();
+				}
+			}
+
+			if (game_in_progress())
+			{
+				terminal_update();
+
+				if (!console_update() || main_globals.connection!=_game_connection_local)
+				{
+					debug_keys_update();
+					cheats_update();
+					player_control_update((real)main_globals.halt_time_scale*main_globals.seconds_elapsed);
+
+					connection = main_globals.connection;
+					if (connection>_game_connection_local && connection<=_game_connection_network_server && !network_game_client_end_frame())
+					{
+						display_error_when_main_menu_loaded(1);
+						network_game_abort();
+					}
+
+					game_time_update((real)main_globals.halt_time_scale*main_globals.seconds_elapsed);
+
+					render_frame = main_globals.main_menu_scenario_loaded ||
+						(main_globals.halt_time_scale &&
+							(game_time_get_paused() || game_time_get_elapsed()>0 || game_time_get_speed()<1.0f));
+					render_frame &= !game_engine_running() || game_time_get()>=3;
+
+					collision_log_continue_period(1);
+					director_update((real)main_globals.halt_time_scale*main_globals.seconds_elapsed);
+					observer_update((real)main_globals.halt_time_scale*main_globals.seconds_elapsed);
+					collision_log_end_period();
+					game_engine_update_non_deterministic((real)main_globals.halt_time_scale*main_globals.seconds_elapsed);
+				}
+
+				if (main_globals.saving_map)
+				{
+					code_000f06c0();
+				}
+
+				if (render_frame && !debug_no_drawing)
+				{
+					profile_render_start();
+					code_000f24a0((double)main_globals.seconds_elapsed);
+					profile_render_end();
+				}
+			}
+			else
+			{
+				profile_render_start();
+				main_pregame_render();
+				profile_render_end();
+			}
+
+			main_rasterizer_throttle();
+
+			if (render_frame && !debug_no_drawing)
+			{
+				main_present_frame();
+			}
 		}
 
 		input_frame_end();
 		profile_frame_end();
 		code_000f0940();
-		
+
 		if (main_globals.restart_time)
 		{
-			//main_globals.__unknown117[0] = 0;
-			//*(_DWORD *)&main_globals.__unknown00[176] = system_milliseconds();
-			//*(_DWORD *)&main_globals.__unknown00[184] = dword_70D400;
-			//*(_DWORD *)&main_globals.__unknown00[188] = dword_70D404;
+			main_globals.restart_time = FALSE;
+			code_000f0bb0();
 			main_globals.halt_time_scale = TRUE;
 		}
+	}
+
+	error(_error_silent, "end of saved film");
+
+	switch (main_globals.connection)
+	{
+	case _game_connection_network_server:
+		dispose_global_network_game_client();
+		dispose_global_network_game_server();
+		break;
+	case _game_connection_network_client:
+		dispose_global_network_game_client();
+		break;
 	}
 
 	game_dispose_from_old_map();

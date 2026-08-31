@@ -134,14 +134,9 @@ void dead_camera_new(
 	player_index = local_player_get_player_index(local_player_index);
 	camera->player_index = player_index;
 
-	if (unit_index == NONE)
-	{
-		camera->unit_index = player_get(player_index)->dead_unit_index;
-	}
-	else
-	{
-		camera->unit_index = unit_index;
-	}
+	camera->unit_index = unit_index == NONE
+		? player_get(player_index)->dead_unit_index
+		: unit_index;
 	camera->current_player_index = camera->player_index;
 
 	return;
@@ -202,17 +197,13 @@ void dead_camera_update(
 			match_team);
 		camera->current_player_index = next_player_index;
 
+		/* NOTE: next_unit_index is deliberately left uninitialized when no
+		 * player is found; that is the shipped behavior. A corrected build
+		 * would set it to NONE here. */
 		if (next_player_index != NONE)
 		{
 			next_unit_index = player_get(next_player_index)->unit_index;
 		}
-		else
-		{
-			next_unit_index = (long)result;
-		}
-		/* January preserves the command pointer as the fallback object index
-		 * when no player is found. This is a bug; a corrected build should
-		 * initialize next_unit_index to NONE instead. */
 
 		if (next_unit_index != camera->unit_index && next_unit_index != NONE)
 		{

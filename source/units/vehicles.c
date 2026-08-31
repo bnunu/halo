@@ -1580,6 +1580,7 @@ static void code_001a7ac0(
 	real_matrix4x3 rotation;
 	real_quaternion quaternion;
 	real_vector3d facing;
+	real_vector2d velocity;
 	real_vector3d ground;
 	real_vector3d axis;
 	real_vector3d force;
@@ -1631,6 +1632,15 @@ static void code_001a7ac0(
 
 	dot = dot_product3d(&vehicle->object.translational_velocity, &vehicle->object.forward);
 
+	{
+		real *destination = velocity.n;
+		real const *source = vehicle->object.translational_velocity.n;
+		short component_index;
+
+		for (component_index = 0; component_index<2; component_index++)
+			destination[component_index] = source[component_index];
+	}
+
 	drive = (vehicle->vehicle.unknown42c-dot)*vehicle->vehicle.unknown448*physics->mass*0.05f;
 	lift = ((real)fabs(dot/definition->unknown2f8)*1.05f+
 		vehicle->vehicle.unknown444*1.3f)*global_gravity*physics->mass;
@@ -1639,8 +1649,7 @@ static void code_001a7ac0(
 	force.j = lift*vehicle->object.up.j+drive*vehicle->object.forward.j;
 	force.k = lift*vehicle->object.up.k+drive*vehicle->object.forward.k;
 
-	yaw = (vehicle->object.translational_velocity.j*facing.i-
-		vehicle->object.translational_velocity.i*facing.j)*(_pi/2)/
+	yaw = (velocity.j*facing.i-velocity.i*facing.j)*(_pi/2)/
 		(real)fabs(definition->unknown2f8);
 
 	yaw_vectors(&ground, &facing, sine(yaw), cosine(yaw));

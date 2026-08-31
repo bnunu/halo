@@ -649,9 +649,9 @@ boolean item_update(
 			cross_product3d(
 				&item->object.up,
 				&item->object.forward,
-				&vectors.velocity);
+				(real_vector3d *)&vectors.candidate);
 			cross_product3d(
-				&vectors.velocity,
+				(real_vector3d const *)&vectors.candidate,
 				&item->object.up,
 				&item->object.forward);
 			if (normalize3d(&item->object.forward) == 0.f)
@@ -682,6 +682,7 @@ boolean item_update(
 					&storage.scratch.collision.result))
 			{
 				struct collision_result *collision;
+				long impulse_sound_index;
 				real impact_scale;
 
 				collision = &storage.scratch.collision.result;
@@ -691,16 +692,13 @@ boolean item_update(
 
 				impact_scale = magnitude3d(&vectors.velocity);
 				impact_scale /= rdata_00278fb0;
-				if (impact_scale >= 0.f)
-				{
-					if (impact_scale > 1.f)
-					{
-						impact_scale = 1.f;
-					}
-				}
-				else
+				if (impact_scale < 0.f)
 				{
 					impact_scale = 0.f;
+				}
+				else if (impact_scale > 1.f)
+				{
+					impact_scale = 1.f;
 				}
 
 				if (definition->item.material_effects.index != NONE &&
@@ -716,7 +714,8 @@ boolean item_update(
 						impact_scale);
 				}
 
-				if (definition->item.collision_sound.index != NONE)
+				impulse_sound_index = definition->item.collision_sound.index;
+				if (impulse_sound_index != NONE)
 				{
 					storage.work.sound.location.position = vectors.candidate;
 					storage.work.sound.location.forward = collision->plane.n;
@@ -724,7 +723,7 @@ boolean item_update(
 						*global_zero_vector3d;
 					storage.work.sound.location.game_location = item->object.location;
 					unattached_impulse_sound_new(
-						definition->item.collision_sound.index,
+						impulse_sound_index,
 						&storage.work.sound.location,
 						impact_scale);
 				}
@@ -751,9 +750,9 @@ boolean item_update(
 					vectors.velocity.j = 0.f;
 					vectors.velocity.k = 0.f;
 					angular_dot =
-						item->object.angular_velocity.i * collision->plane.n.i +
-						(collision->plane.n.j * item->object.angular_velocity.j +
-							item->object.angular_velocity.k * collision->plane.n.k);
+						(collision->plane.n.i * item->object.angular_velocity.i +
+							collision->plane.n.j * item->object.angular_velocity.j) +
+						collision->plane.n.k * item->object.angular_velocity.k;
 					scale_vector3d(
 						&collision->plane.n,
 						angular_dot,
@@ -781,11 +780,11 @@ boolean item_update(
 						real_matrix4x3 const *support_matrix;
 
 						item->item.flags |= FLAG(_item_on_object_bit);
-						item->item.item_on_rest_object_index =
-							collision->object_index;
 						support_matrix = object_get_node_matrix(
 							collision->object_index,
 							0);
+						item->item.item_on_rest_object_index =
+							collision->object_index;
 						matrix4x3_inverse_transform_point(
 							support_matrix,
 							&collision->point,
@@ -809,14 +808,13 @@ boolean item_update(
 				{
 					real reflection;
 
-					reflection = -(
-						collision->plane.n.k * vectors.velocity.k * 1.4f -
-						(collision->plane.n.i * vectors.velocity.i * -1.4f -
-							collision->plane.n.j * vectors.velocity.j * 1.4f));
-					if (collision->type != _collision_result_structure &&
-						reflection >= 1.5f)
+					reflection =
+						collision->plane.n.i * vectors.velocity.i * -1.4f -
+						collision->plane.n.j * vectors.velocity.j * 1.4f -
+						collision->plane.n.k * vectors.velocity.k * 1.4f;
+					if (collision->type != _collision_result_structure)
 					{
-						reflection = 1.5f;
+						reflection = MIN(1.5f, reflection);
 					}
 					vectors.velocity.i += collision->plane.n.i * reflection;
 					vectors.velocity.j += collision->plane.n.j * reflection;
@@ -857,7 +855,7 @@ boolean item_update(
 				1);
 
 			if (TEST_FLAG(item->item.flags, _item_on_structure_bit) &&
-				(word)item->item.rested_surface_index != (word)NONE &&
+				item->item.rested_surface_index != NONE &&
 				item->item.bsp_index == global_structure_bsp_index_get())
 			{
 				struct collision_bsp *collision_bsp;
@@ -878,22 +876,15 @@ boolean item_update(
 						(real_vector3d *)&vectors.candidate);
 					item->item.flags &= ~FLAG(_item_on_structure_bit);
 					item->item.rested_surface_index = NONE;
-					goto accelerate;
+					item_accelerate(
+						item_index,
+						(real_vector3d const *)&vectors.candidate,
+						FALSE);
 				}
-				goto damp_angular;
 			}
 			else if (TEST_FLAG(item->item.flags, _item_on_object_bit))
 			{
-				if (!object_try_and_get(item->item.item_on_rest_object_index))
-				{
-					scale_vector3d(
-						global_down3d,
-						global_gravity,
-						(real_vector3d *)&vectors.candidate);
-					item->item.flags &= ~FLAG(_item_on_object_bit);
-					goto accelerate;
-				}
-				else
+				if (object_try_and_get(item->item.item_on_rest_object_index))
 				{
 					real_matrix4x3 const *support_matrix;
 
@@ -903,23 +894,27 @@ boolean item_update(
 					matrix4x3_transform_point(
 						support_matrix,
 						&item->item.item_rest_object_offset,
-						(real_point3d *)&vectors.velocity);
+						&vectors.candidate);
 					code_000e6900(
 						item_index,
 						&item->item.rotation_axis,
-						(real_point3d const *)&vectors.velocity,
+						&vectors.candidate,
 						NULL);
+				}
+				else
+				{
+					scale_vector3d(
+						global_down3d,
+						global_gravity,
+						(real_vector3d *)&vectors.candidate);
+					item->item.flags &= ~FLAG(_item_on_object_bit);
+					item_accelerate(
+						item_index,
+						(real_vector3d const *)&vectors.candidate,
+						FALSE);
 				}
 			}
 
-			goto damp_angular;
-		accelerate:
-			item_accelerate(
-				item_index,
-				(real_vector3d const *)&vectors.candidate,
-				FALSE);
-
-		damp_angular:
 			item->object.angular_velocity.i *= 0.9f;
 			item->object.angular_velocity.j *= 0.9f;
 			item->object.angular_velocity.k *= 0.9f;
@@ -982,9 +977,9 @@ boolean item_update(
 			cross_product3d(
 				&item->object.up,
 				&item->object.forward,
-				&vectors.velocity);
+				(real_vector3d *)&vectors.candidate);
 			cross_product3d(
-				&vectors.velocity,
+				(real_vector3d const *)&vectors.candidate,
 				&item->object.up,
 				&item->object.forward);
 			normalize3d(&item->object.forward);

@@ -1702,12 +1702,17 @@ static boolean code_000ab440(
 	return result;
 }
 
-/* NonMatching foundation: exact 0x510 padded size and all 61 relocation
-   identities, with residual register allocation and block-layout differences.
-   This semantic caller is retained because it authentically emits the exact
-   private code_000a9c00 helper, the exact header-inline random_direction3d
-   leaf, and references the exact source-owned rdata_0025ced8 table. The caller
-   body remains dormant from the exact-credit ledger. */
+/* NonMatching: all 61 relocation identities and January's 0x7c frame are
+   reproduced, and the branch topology now matches - January reaches the
+   unadjusted biped_fix_position call from BOTH the source_unit_index==NONE
+   and the already-a-root cases through one shared block, so the call is
+   written once rather than duplicated in two else arms.  The residual is a
+   register-allocation split: January leaves the source_unit_index parameter
+   in its home slot and spends the callee-saved registers on the loop-carried
+   unit indices, homing source_root_object at -0xc; current CL caches the
+   parameter in ESI instead and keeps source_root_object enregistered, which
+   costs the sixteen bytes of reload traffic January emits.  This body remains
+   dormant from the exact-credit ledger. */
 boolean code_000aa9e0(
 	long player_index,
 	long source_unit_index,
@@ -1726,7 +1731,7 @@ boolean code_000aa9e0(
 	real_vector3d const *adjustment_vector;
 	real_matrix4x3 placement_matrix;
 	real_vector3d best_adjustment_vector;
-	real_vector3d random_adjustment_vector;
+	real_vector3d vector;
 	real_point3d adjusted_position;
 	real_point3d random_adjusted_position;
 	long player_unit_index;
@@ -1741,44 +1746,40 @@ boolean code_000aa9e0(
 	pointers.biped = biped_get(player_unit_index);
 	result = FALSE;
 
-	if (*(volatile long *)&source_unit_index != NONE)
+	match_vassert(
+		"c:\\halo\\SOURCE\\game\\players.c",
+		0x4FB,
+		source_unit_index==NONE || local_player_count()>1,
+		"source_unit_index==NONE || local_player_count()>1");
+	if (source_unit_index != NONE &&
+		object_get_ultimate_parent(source_unit_index) != source_unit_index)
 	{
-		match_vassert(
-			"c:\\halo\\SOURCE\\game\\players.c",
-			0x4FB,
-			local_player_count()>1,
-			"source_unit_index==NONE || local_player_count()>1");
-		if (object_get_ultimate_parent(
-			*(volatile long *)&source_unit_index) !=
-			*(volatile long *)&source_unit_index)
+		real scale;
+		real collision_height;
+
+		source_root_object_index =
+			object_get_ultimate_parent(source_unit_index);
+		unit_get(source_unit_index);
+		pointers.source_root_object = object_get(source_root_object_index);
+
+		best_adjustment_vector =
+			pointers.source_root_object->object.translational_velocity;
+		best_adjustment_vector.k = 0.f;
+		source_unit_index = source_root_object_index;
+		if (!(magnitude_squared3d(&best_adjustment_vector) > 0.f))
 		{
-			real scale;
-			real collision_height;
-
-			source_root_object_index =
-				object_get_ultimate_parent(
-					*(volatile long *)&source_unit_index);
-			unit_get(*(volatile long *)&source_unit_index);
-			pointers.source_root_object = object_get(source_root_object_index);
-
-			best_adjustment_vector =
-				pointers.source_root_object->object.translational_velocity;
+			adjustment_vector =
+				pointers.source_root_object->object.forward.k < 0.70710677f
+					? &pointers.source_root_object->object.forward
+					: &pointers.source_root_object->object.up;
+			best_adjustment_vector = *adjustment_vector;
 			best_adjustment_vector.k = 0.f;
-			source_unit_index = source_root_object_index;
-			if (!(magnitude_squared3d(&best_adjustment_vector) > 0.f))
-			{
-				adjustment_vector =
-					pointers.source_root_object->object.forward.k < 0.70710677f
-						? &pointers.source_root_object->object.forward
-						: &pointers.source_root_object->object.up;
-				best_adjustment_vector = *adjustment_vector;
-				best_adjustment_vector.k = 0.f;
-			}
+		}
 
-			collision_height = biped_definition_get(
-				pointers.biped->definition_index)->biped.collision_height_standing;
-			scale = collision_height * 3.f +
-				pointers.source_root_object->object.bounding_sphere_radius;
+		collision_height = biped_definition_get(
+			pointers.biped->definition_index)->biped.collision_height_standing;
+		scale = collision_height * 3.f +
+			pointers.source_root_object->object.bounding_sphere_radius;
 		match_assert(
 			"c:\\halo\\SOURCE\\game\\players.c",
 			0x525,
@@ -1792,10 +1793,10 @@ boolean code_000aa9e0(
 			&best_adjustment_vector,
 			&best_adjustment_vector);
 		normalize3d(&best_adjustment_vector);
-			matrix4x3_from_point_and_vectors(
-				&placement_matrix,
-				&pointers.source_root_object->object.bounding_sphere_center,
-				&best_adjustment_vector,
+		matrix4x3_from_point_and_vectors(
+			&placement_matrix,
+			&pointers.source_root_object->object.bounding_sphere_center,
+			&best_adjustment_vector,
 			global_up3d);
 		placement_matrix.scale = scale;
 
@@ -1827,16 +1828,16 @@ boolean code_000aa9e0(
 					if (result)
 						break;
 
-					random_adjustment_vector = *global_zero_vector3d;
-					random_direction3d(&random_adjustment_vector);
+					vector = *global_zero_vector3d;
+					random_direction3d(&vector);
 					random_adjusted_position.x = adjusted_position.x +
-						random_adjustment_vector.i *
+						vector.i *
 						collision_height;
 					random_adjusted_position.y = adjusted_position.y +
-						random_adjustment_vector.j *
+						vector.j *
 						collision_height;
 					random_adjusted_position.z = adjusted_position.z +
-						random_adjustment_vector.k *
+						vector.k *
 						collision_height;
 					result = biped_fix_position(
 						player_unit_index,
@@ -1855,20 +1856,6 @@ boolean code_000aa9e0(
 			adjustment_index++;
 		}
 		while (adjustment_index < NUMBEROF(rdata_0025ced8));
-			goto placement_complete;
-		}
-		else
-		{
-			result = biped_fix_position(
-				player_unit_index,
-				source_unit_index,
-				(real_point3d *)position,
-				NULL,
-				2.f,
-				FALSE,
-				FALSE,
-				TRUE);
-		}
 	}
 	else
 	{
@@ -1882,8 +1869,6 @@ boolean code_000aa9e0(
 			FALSE,
 			TRUE);
 	}
-
-placement_complete:
 
 	(*(struct player_datum *volatile *)&player)->cluster_index = NONE;
 	if (!result)
@@ -1917,7 +1902,7 @@ placement_complete:
 	if (source_unit_index != NONE)
 	{
 		source_biped = biped_get(source_unit_index);
-		best_adjustment_vector = source_biped->object.forward;
+		vector = source_biped->object.forward;
 		source_biped = biped_try_and_get(source_unit_index);
 		if (source_biped && source_biped->biped.elevator_object_index != NONE)
 		{
@@ -1926,14 +1911,14 @@ placement_complete:
 			pointers.biped->biped.elevator_ticks = source_biped->biped.elevator_ticks;
 		}
 
-		pointers.biped->unit.desired_facing_vector = best_adjustment_vector;
-		pointers.biped->unit.desired_aiming_vector = best_adjustment_vector;
-		pointers.biped->unit.desired_looking_vector = best_adjustment_vector;
+		pointers.biped->unit.desired_facing_vector = vector;
+		pointers.biped->unit.desired_aiming_vector = vector;
+		pointers.biped->unit.desired_looking_vector = vector;
 		if (player->local_player_index != NONE)
 		{
 			player_control_set_facing(
 				player->local_player_index,
-				&best_adjustment_vector);
+				&vector);
 		}
 
 		player_information = TAG_BLOCK_GET_ELEMENT(

@@ -2014,8 +2014,6 @@ void game_engine_post_rasterize_post_game(
 	real_argb_color winner_color;
 	real_argb_color normal_color;
 	real_argb_color hilite_color;
-	rectangle2d bounds;
-	long entry_count;
 
 	if (!game_engine)
 		return;
@@ -2040,22 +2038,26 @@ void game_engine_post_rasterize_post_game(
 	draw_string_set_color(&winner_color);
 	draw_string_set_format(NONE, 0, 0);
 
-	bounds.x0 = 0;
-	bounds.y0 = 0;
-	bounds.x1 = 640;
-	bounds.y1 = 480;
 	{
+		rectangle2d bounds;
 		struct game_engine_postgame_hud_definition *hud_definition =
 			game_engine_postgame_hud_definition_get(
 				interface_get_tag_index(_interface_hud_globals));
-		long bitmap_group_index = hud_definition->bitmap_group_index;
-		struct bitmap_data *bitmap =
-			bitmap_group_try_and_get_bitmap(bitmap_group_index, 0);
+		struct bitmap_data *bitmap;
 
+		bounds.x0 = 0;
+		bounds.y0 = 0;
+		bounds.x1 = 640;
+		bounds.y1 = 480;
+		bitmap = bitmap_group_try_and_get_bitmap(
+			hud_definition->bitmap_group_index,
+			0);
 		if (bitmap)
 		{
 			draw_bitmap_in_rect(
-				bitmap_group_try_and_get_bitmap(bitmap_group_index, 0),
+				bitmap_group_try_and_get_bitmap(
+					hud_definition->bitmap_group_index,
+					0),
 				&bounds,
 				&bounds,
 				NULL,
@@ -2072,7 +2074,9 @@ void game_engine_post_rasterize_post_game(
 		wchar_t const *team_formats[2];
 		long string_list_index;
 		long team_row;
+		long red_team_won;
 
+		red_team_won = code_0009cb60(0);
 		string_list_index = tag_loaded('ustr', "ui\\multiplayer_game_text");
 		team_formats[0] =
 			string_list_index != NONE ?
@@ -2084,7 +2088,7 @@ void game_engine_post_rasterize_post_game(
 				unicode_string_list_get_string(string_list_index, 0x42) :
 				L"";
 
-		if (!code_0009cb60(0))
+		if (!red_team_won)
 		{
 			team_order[0] = 1;
 			team_order[1] = 0;
@@ -2103,6 +2107,7 @@ void game_engine_post_rasterize_post_game(
 				NUMBEROF(row_string),
 				team_formats[team_index],
 				score_string);
+			row_string[NUMBEROF(row_string) - 1] = 0;
 			code_00096ba0(row_string, 0, team_row + 4);
 		}
 	}
@@ -2153,108 +2158,112 @@ void game_engine_post_rasterize_post_game(
 		code_00096ba0(row_string, 0, 7);
 	}
 
-	entry_count = code_0009a490(0, NONE, entries, 12);
-	if (entry_count > 0)
 	{
-		long entry_index = 8;
-		struct postgame_statistic_entry *entry = entries;
+		long entry_count = code_0009a490(0, NONE, entries, 12);
 
-		do
+		if (entry_count > 0)
 		{
-			long draw_row = entry_index;
-			long player_index = entry->values[0];
-			struct player_datum *player = player_get(player_index);
-			real_argb_color red_team_color;
-			real_argb_color blue_team_color;
-			long place = PIN(entry->values[6] & 0x7F, 0, 15);
-			long string_list_index =
-				tag_loaded('ustr', "ui\\multiplayer_game_text");
-			wchar_t const *place_string =
-				string_list_index != NONE ?
-					unicode_string_list_get_string(string_list_index, place + 36) :
-					L"";
+			long entry_index = 8;
+			struct postgame_statistic_entry *entry = entries;
 
-			draw_string_set_color(
-				player->local_player_index == NONE ?
-					&winner_color :
-					&normal_color);
-			draw_string_set_tab_stops(tab_stops, NUMBEROF(tab_stops));
-			usnprintf(row_string, NUMBEROF(row_string), L" \t%s", place_string);
-			row_string[NUMBEROF(row_string) - 1] = 0;
-			code_00096ba0(row_string, 0, draw_row);
-			draw_string_set_color(&winner_color);
-
-			if (global_variant.has_teams)
+			do
 			{
-				red_team_color.alpha = 1.0f;
-				red_team_color.red = 0.8f;
-				red_team_color.green = 0.4f;
-				red_team_color.blue = 0.4f;
-				blue_team_color.alpha = 1.0f;
-				blue_team_color.red = 0.4f;
-				blue_team_color.green = 0.4f;
-				blue_team_color.blue = 0.8f;
+				long draw_row = entry_index;
+				long player_index = entry->values[0];
+				struct player_datum *player = player_get(player_index);
+				real_argb_color team_colors[2];
+				long place;
+				long string_list_index;
+				wchar_t const *place_string;
+
 				draw_string_set_color(
-					player->team_index <= 0 ?
-						&red_team_color :
-						&blue_team_color);
+					player->local_player_index == NONE ?
+						&winner_color :
+						&normal_color);
+				draw_string_set_tab_stops(tab_stops, NUMBEROF(tab_stops));
+				place = PIN(entry->values[6] & 0x7F, 0, 15);
+				string_list_index =
+					tag_loaded('ustr', "ui\\multiplayer_game_text");
+				place_string =
+					string_list_index != NONE ?
+						unicode_string_list_get_string(string_list_index, place + 36) :
+						L"";
+				usnprintf(row_string, NUMBEROF(row_string), L" \t%s", place_string);
+				row_string[NUMBEROF(row_string) - 1] = 0;
+				code_00096ba0(row_string, 0, draw_row);
+				draw_string_set_color(&winner_color);
+
+				if (global_variant.has_teams)
+				{
+					team_colors[0].alpha = 1.0f;
+					team_colors[0].red = 0.8f;
+					team_colors[0].green = 0.4f;
+					team_colors[0].blue = 0.4f;
+					team_colors[1].alpha = 1.0f;
+					team_colors[1].red = 0.4f;
+					team_colors[1].green = 0.4f;
+					team_colors[1].blue = 0.8f;
+					draw_string_set_color(
+						&team_colors[PIN(player->team_index, 0, 1)]);
+				}
+				usnprintf(row_string, NUMBEROF(row_string), L" \t \t%s", player->name);
+				row_string[NUMBEROF(row_string) - 1] = 0;
+				code_00096ba0(row_string, 0, draw_row);
+				draw_string_set_color(&winner_color);
+
+				if (!postgame_statistic_get_rating(player_index, 1, 0))
+					draw_string_set_color(&hilite_color);
+				game_engine->format_player_score(
+					player_index,
+					score_string);
+				usnprintf(row_string, NUMBEROF(row_string), L" \t \t \t%s", score_string);
+				row_string[NUMBEROF(row_string) - 1] = 0;
+				code_00096ba0(row_string, 0, draw_row);
+				draw_string_set_color(&winner_color);
+
+				if (!postgame_statistic_get_rating(player_index, 2, 0))
+					draw_string_set_color(&hilite_color);
+				usnprintf(
+					row_string,
+					NUMBEROF(row_string),
+					L" \t \t \t \t%d",
+					(long)player->statistics.kills[0]);
+				row_string[NUMBEROF(row_string) - 1] = 0;
+				code_00096ba0(row_string, 0, draw_row);
+				draw_string_set_color(&winner_color);
+
+				if (!postgame_statistic_get_rating(player_index, 3, 0))
+					draw_string_set_color(&hilite_color);
+				usnprintf(
+					row_string,
+					NUMBEROF(row_string),
+					L" \t \t \t \t \t%d",
+					(long)player->statistics.assists[0]);
+				row_string[NUMBEROF(row_string) - 1] = 0;
+				code_00096ba0(row_string, 0, draw_row);
+				draw_string_set_color(&winner_color);
+
+				if (!postgame_statistic_get_rating(player_index, 4, 0))
+					draw_string_set_color(&hilite_color);
+				usnprintf(
+					row_string,
+					NUMBEROF(row_string),
+					L" \t \t \t \t \t \t%d",
+					(long)player->statistics.deaths);
+				row_string[NUMBEROF(row_string) - 1] = 0;
+				code_00096ba0(row_string, 0, draw_row);
+				draw_string_set_tab_stops(tab_stops, NUMBEROF(tab_stops));
+
+				entry++;
+				entry_index++;
+				entry_count--;
 			}
-			usnprintf(row_string, NUMBEROF(row_string), L" \t \t%s", player->name);
-			row_string[NUMBEROF(row_string) - 1] = 0;
-			code_00096ba0(row_string, 0, draw_row);
-			draw_string_set_color(&winner_color);
-
-			if (!postgame_statistic_get_rating(player_index, 1, 0))
-				draw_string_set_color(&hilite_color);
-			game_engine->format_player_score(
-				player_index,
-				score_string);
-			usnprintf(row_string, NUMBEROF(row_string), L" \t \t \t%s", score_string);
-			row_string[NUMBEROF(row_string) - 1] = 0;
-			code_00096ba0(row_string, 0, draw_row);
-			draw_string_set_color(&winner_color);
-
-			if (!postgame_statistic_get_rating(player_index, 2, 0))
-				draw_string_set_color(&hilite_color);
-			usnprintf(
-				row_string,
-				NUMBEROF(row_string),
-				L" \t \t \t \t%d",
-				(long)player->statistics.kills[0]);
-			row_string[NUMBEROF(row_string) - 1] = 0;
-			code_00096ba0(row_string, 0, draw_row);
-			draw_string_set_color(&winner_color);
-
-			if (!postgame_statistic_get_rating(player_index, 3, 0))
-				draw_string_set_color(&hilite_color);
-			usnprintf(
-				row_string,
-				NUMBEROF(row_string),
-				L" \t \t \t \t \t%d",
-				(long)player->statistics.assists[0]);
-			row_string[NUMBEROF(row_string) - 1] = 0;
-			code_00096ba0(row_string, 0, draw_row);
-			draw_string_set_color(&winner_color);
-
-			if (!postgame_statistic_get_rating(player_index, 4, 0))
-				draw_string_set_color(&hilite_color);
-			usnprintf(
-				row_string,
-				NUMBEROF(row_string),
-				L" \t \t \t \t \t \t%d",
-				(long)player->statistics.deaths);
-			row_string[NUMBEROF(row_string) - 1] = 0;
-			code_00096ba0(row_string, 0, draw_row);
-			draw_string_set_tab_stops(tab_stops, NUMBEROF(tab_stops));
-
-			entry++;
-			entry_index++;
-			entry_count--;
+			while (entry_count != 0);
 		}
-		while (entry_count != 0);
 	}
 
 	{
+		rectangle2d bounds;
 		real_argb_color prompt_color = winner_color;
 		long string_list_index;
 		wchar_t const *prompt;
@@ -2262,10 +2271,8 @@ void game_engine_post_rasterize_post_game(
 
 		prompt_color.alpha = game_engine_globals.postgame_progress;
 		bounds = render.camera.window_bounds;
-		bounds.x0 = 70;
 		bounds.y0 = 410;
-		bounds.x1 = 640;
-		bounds.y1 = 480;
+		bounds.x0 = 70;
 		offset_rectangle2d(
 			&bounds,
 			-render.camera.viewport_bounds.x0,
@@ -2276,7 +2283,7 @@ void game_engine_post_rasterize_post_game(
 		server = global_network_game_server_get();
 		if (server)
 		{
-			bounds.y0 = 380;
+			bounds.x0 = 380;
 			string_list_index =
 				tag_loaded('ustr', "ui\\multiplayer_game_text");
 			if (string_list_index != NONE)
@@ -2294,7 +2301,7 @@ void game_engine_post_rasterize_post_game(
 			return;
 		}
 
-		bounds.y0 = 520;
+		bounds.x0 = 520;
 		string_list_index = tag_loaded('ustr', "ui\\multiplayer_game_text");
 		if (string_list_index != NONE)
 			prompt = unicode_string_list_get_string(string_list_index, 0x49);
@@ -3687,7 +3694,6 @@ static void code_0009bdf0(
 
 		{
 			struct collision_feature_list features;
-			struct collision_plane point_test_result;
 			struct player_datum *unit_player;
 			real_point3d position;
 			real height;
@@ -3709,55 +3715,59 @@ static void code_0009bdf0(
 					height,
 					radius,
 					NONE,
-					&features) &&
-				collision_features_test_point(
-					&features,
-					&position,
-					&point_test_result))
+					&features))
 			{
-				if (point_test_result.object_index != NONE)
+				struct collision_plane point_test_result;
+
+				if (collision_features_test_point(
+						&features,
+						&position,
+						&point_test_result))
 				{
-					if (TEST_FLAG(
-							_object_mask_unit,
-							object_get(
-								point_test_result.object_index)
-								->object.type))
+					if (point_test_result.object_index != NONE)
 					{
-						struct unit_datum *blocking_unit = unit_get(
-							point_test_result.object_index);
-						if (blocking_unit->unit.player_index != NONE)
+						if (TEST_FLAG(
+								_object_mask_unit,
+								object_get(
+									point_test_result.object_index)
+									->object.type))
 						{
-							struct player_datum *blocking_player =
-								player_get(blocking_unit->unit.player_index);
-							blocking_player->unknown_d0 = TRUE;
-							blocking_player->unknown_c8++;
+							struct unit_datum *blocking_unit = unit_get(
+								point_test_result.object_index);
+							if (blocking_unit->unit.player_index != NONE)
+							{
+								struct player_datum *blocking_player =
+									player_get(blocking_unit->unit.player_index);
+								blocking_player->unknown_d0 = TRUE;
+								blocking_player->unknown_c8++;
+							}
 						}
 					}
-				}
 
-				if (game_engine_teleport_message_ticks > 0)
-				{
-					game_engine_teleport_message_ticks--;
+					if (game_engine_teleport_message_ticks > 0)
+					{
+						game_engine_teleport_message_ticks--;
+						return;
+					}
+
+					game_engine_teleport_message_ticks = 120;
+					{
+						long string_list_index =
+							tag_loaded('ustr', "ui\\multiplayer_game_text");
+						wchar_t const *message;
+
+						if (string_list_index != NONE)
+							message = unicode_string_list_get_string(
+								string_list_index,
+								0x65);
+						else
+							message = L"";
+						hud_print_message(
+							unit_get_local_player_index(unit_player->unit_index),
+							message);
+					}
 					return;
 				}
-
-				game_engine_teleport_message_ticks = 120;
-				{
-					long string_list_index =
-						tag_loaded('ustr', "ui\\multiplayer_game_text");
-					wchar_t const *message;
-
-					if (string_list_index != NONE)
-						message = unicode_string_list_get_string(
-							string_list_index,
-							0x65);
-					else
-						message = L"";
-					hud_print_message(
-						unit_get_local_player_index(unit_player->unit_index),
-						message);
-				}
-				return;
 			}
 		}
 

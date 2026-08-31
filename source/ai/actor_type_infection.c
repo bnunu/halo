@@ -90,6 +90,14 @@ enum
 
 enum
 {
+	_obey_directmovement_facing_forward = 0,
+	_obey_directmovement_facing_backward,
+	_obey_directmovement_facing_left,
+	_obey_directmovement_facing_right,
+};
+
+enum
+{
 	_obey_simple_directmovement_bit = 0,
 	_obey_simple_directmovement_update_continuously_bit,
 	_obey_simple_jump_bit,
@@ -161,10 +169,14 @@ struct unit_control_data
 	real_vector3d looking_vector;
 };
 
-struct projectile_aim_direction
+union projectile_aim_direction
 {
-	real_vector2d horizontal;
-	real vertical;
+	real_vector3d vector;
+	struct
+	{
+		real_vector2d horizontal;
+		real vertical;
+	};
 };
 
 typedef char swarm_component_datum_size_check[
@@ -184,7 +196,7 @@ typedef char unit_control_data_throttle_offset_check[
 typedef char unit_control_data_facing_offset_check[
 	offsetof(struct unit_control_data, facing_vector) == 0x1C ? 1 : -1];
 typedef char projectile_aim_direction_size_check[
-	sizeof(struct projectile_aim_direction) == sizeof(real_vector3d) ? 1 : -1];
+	sizeof(union projectile_aim_direction) == sizeof(real_vector3d) ? 1 : -1];
 
 /* ---------- prototypes */
 
@@ -204,7 +216,7 @@ boolean projectile_aim_ballistic(
 	real *target_ballistic_fraction_min,
 	real *forced_velocity,
 	boolean lob,
-	struct projectile_aim_direction *result_aim_direction,
+	real_vector3d *result_aim_direction,
 	real *result_velocity,
 	real *result_ticks,
 	real *result_distance,
@@ -360,45 +372,44 @@ void code_00027470(
 	short intermittent_action_member = NONE;
 	short member_index;
 
-	if (swarm->swarm_intermittent_action_timer < 1)
-	{
-		if (actor->state.action == _actor_action_search ||
-			actor->state.action == _actor_action_charge)
-		{
-			real cooldown = real_seed_random_range(
-				get_global_random_seed_address(),
-				6.f,
-				8.f) / swarm->unit_count * TICKS_PER_SECOND;
-
-			if (cooldown <= 6.f)
-				cooldown = 6.f;
-
-			swarm->swarm_intermittent_action_timer = (short)(long)cooldown;
-			intermittent_action_member = seed_random_range(
-				get_global_random_seed_address(),
-				0,
-				swarm->unit_count);
-		}
-	}
-	else
+	if (swarm->swarm_intermittent_action_timer > 0)
 	{
 		swarm->swarm_intermittent_action_timer--;
 	}
+	else
+	{
+		switch (actor->state.action)
+		{
+		case _actor_action_search:
+		case _actor_action_charge:
+			{
+				real cooldown = real_seed_random_range(
+					get_global_random_seed_address(),
+					6.f,
+					8.f) / swarm->unit_count * TICKS_PER_SECOND;
 
-	if (swarm->unit_count < 1)
-		return;
+				cooldown = MAX(cooldown, 6.f);
+				swarm->swarm_intermittent_action_timer = (short)(long)cooldown;
+				intermittent_action_member = seed_random_range(
+					get_global_random_seed_address(),
+					0,
+					swarm->unit_count);
+			}
+			break;
+		}
+	}
 
 	for (member_index = 0; member_index < swarm->unit_count; member_index++)
 	{
 		long unit_index = swarm->unit_indices[member_index];
-		struct biped_datum *biped = biped_get(unit_index);
+		struct unit_datum *unit = unit_get(unit_index);
 		struct swarm_component_datum *swarm_component = swarm_component_get(
 			swarm->component_indices[member_index]);
 		struct prop_datum *best_prop = NULL;
 		long movement_target_prop_index = NONE;
 		short movement_type = _swarm_movement_none;
-		char animation_state = _unit_animation_state_in_combat;
-		char aiming_speed = _unit_aiming_speed_casual;
+		short animation_state = _unit_animation_state_in_combat;
+		short aiming_speed = _unit_aiming_speed_casual;
 		boolean target_in_melee_range = FALSE;
 		boolean has_direction = FALSE;
 		boolean facing_target = FALSE;
@@ -407,19 +418,17 @@ void code_00027470(
 		real_vector3d up;
 		real_vector3d direction;
 
-		up = biped->object.up;
-		if (biped->object.type == _object_type_biped)
+		up = unit->object.up;
+		if (unit->object.type == _object_type_biped)
 		{
+			struct biped_datum *biped = (struct biped_datum *)unit;
+
 			if (biped->biped.support_surface_index != NONE)
 				up = biped->biped.ground_plane.n;
 			biped_airborne = TEST_FLAG(biped->biped.flags, _biped_airborne_bit);
 		}
 
-		if (actor->state.combat_status < _actor_combat_status_definite)
-		{
-			swarm_component->combat_target_prop_index = NONE;
-		}
-		else
+		if (actor->state.combat_status >= _actor_combat_status_definite)
 		{
 			struct prop_iterator iterator;
 			real best_score = 0.f;
@@ -435,13 +444,14 @@ void code_00027470(
 				{
 					real_vector3d delta;
 					real distance;
-					real score = 0.f;
+					real score;
 
 					vector_from_points3d(
 						&prop->body_position,
 						&swarm_component->position,
 						&delta);
 					distance = square_root(magnitude_squared3d(&delta));
+					score = 0.f;
 					if (distance < combat_range)
 						score = (1.f - distance / combat_range) * 10.f;
 
@@ -476,6 +486,10 @@ void code_00027470(
 				target_in_melee_range = TRUE;
 			}
 		}
+		else
+		{
+			swarm_component->combat_target_prop_index = NONE;
+		}
 
 		switch (actor->state.action)
 		{
@@ -487,17 +501,6 @@ void code_00027470(
 		case _actor_action_alert:
 			movement_type = _swarm_movement_wander_noncombat;
 			animation_state = _unit_animation_state_alert;
-			break;
-
-		case _actor_action_flee:
-			animation_state = actor->state.action_data.flee.panic_type > _actor_panic_none
-				? _unit_animation_state_flee
-				: _unit_animation_state_in_combat;
-			if (actor->state.action_data.flee.flee_prop_index != NONE)
-			{
-				movement_type = _swarm_movement_away_from_prop;
-				movement_target_prop_index = actor->state.action_data.flee.flee_prop_index;
-			}
 			break;
 
 		case _actor_action_guard:
@@ -516,46 +519,71 @@ void code_00027470(
 			{
 				movement_type = _swarm_movement_wander_combat;
 			}
+			animation_state = _unit_animation_state_in_combat;
+			break;
+
+		case _actor_action_flee:
+			animation_state = actor->state.action_data.flee.panic_type > _actor_panic_none
+				? _unit_animation_state_flee
+				: _unit_animation_state_in_combat;
+			if (actor->state.action_data.flee.flee_prop_index != NONE)
+			{
+				movement_type = _swarm_movement_away_from_prop;
+				movement_target_prop_index = actor->state.action_data.flee.flee_prop_index;
+			}
 			break;
 
 		case _actor_action_charge:
 		case _actor_action_obey:
+			animation_state = _unit_animation_state_in_combat;
 			if (actor->state.action == _actor_action_obey &&
 				TEST_FLAG(swarm_component->flags, _swarm_component_obey_bit))
 			{
 				movement_type = _swarm_movement_obey;
 			}
-			else if (swarm_component->combat_target_prop_index == NONE)
-			{
-				movement_type = _swarm_movement_wander_combat;
-			}
-			else
+			else if (swarm_component->combat_target_prop_index != NONE)
 			{
 				movement_target_prop_index = swarm_component->combat_target_prop_index;
 				aiming_speed = _unit_aiming_speed_alert;
-				movement_type = swarm_component->attack_delay_ticks
+				movement_type = swarm_component->attack_delay_ticks > 0
 					? _swarm_movement_away_from_prop
 					: _swarm_movement_towards_prop;
+			}
+			else
+			{
+				movement_type = _swarm_movement_wander_combat;
 			}
 			break;
 		}
 
-		if (biped->object.parent_object_index == NONE)
+		if (unit->object.parent_object_index == NONE)
 		{
 			swarm_component->attached_to_unit_ticks = 0;
-			if (swarm_component->attack_delay_ticks)
+			if (swarm_component->attack_delay_ticks > 0)
 				swarm_component->attack_delay_ticks--;
 		}
 		else
 		{
-			struct unit_datum *parent_unit = unit_get(biped->object.parent_object_index);
+			struct unit_datum *parent_unit = unit_get(unit->object.parent_object_index);
 			boolean parent_is_dead = TEST_FLAG(parent_unit->object.damage_flags, _object_dead_bit);
 			boolean detach = FALSE;
 
-			if (swarm_component->attached_to_unit_ticks != 255)
+			if (swarm_component->attached_to_unit_ticks < 255)
 				swarm_component->attached_to_unit_ticks++;
 
-			if (!parent_is_dead)
+			if (parent_is_dead)
+			{
+				if (parent_unit->unit.time_of_death != NONE &&
+					parent_unit->unit.time_of_death + 75 < game_time_get() &&
+					best_prop &&
+					best_prop->unit_index != unit->object.parent_object_index &&
+					best_prop->state >= _prop_state_becoming_unacknowledged &&
+					best_prop->state <= _prop_state_acknowledged)
+				{
+					detach = TRUE;
+				}
+			}
+			else
 			{
 				struct unit_definition *parent_definition = unit_definition_get(
 					parent_unit->definition_index);
@@ -569,15 +597,6 @@ void code_00027470(
 					swarm_component->attack_delay_ticks = 45;
 					detach = TRUE;
 				}
-			}
-			else if (parent_unit->unit.time_of_death != NONE &&
-				parent_unit->unit.time_of_death + 75 < game_time_get() &&
-				best_prop &&
-				best_prop->unit_index != biped->object.parent_object_index &&
-				best_prop->state >= _prop_state_becoming_unacknowledged &&
-				best_prop->state <= _prop_state_acknowledged)
-			{
-				detach = TRUE;
 			}
 
 			if (detach)
@@ -596,11 +615,17 @@ void code_00027470(
 			}
 		}
 
-		if (biped->object.parent_object_index == NONE)
+		if (unit->object.parent_object_index == NONE)
 		{
-			if (!biped_airborne)
+			if (biped_airborne)
 			{
-				if (swarm_component->ground_ticks != 255)
+				SET_FLAG(swarm_component->flags, _swarm_component_attached_to_unit_bit, FALSE);
+				swarm_component->ground_ticks = 0;
+			}
+			}
+			else
+			{
+				if (swarm_component->ground_ticks < 255)
 					swarm_component->ground_ticks++;
 
 				swarm_component->flags &= ~(FLAG(_swarm_component_attacking_in_melee_bit) |
@@ -618,9 +643,31 @@ void code_00027470(
 						SET_FLAG(swarm_component->flags, _swarm_component_wander_bit, TRUE);
 					}
 
-					if (!swarm_component->wander.move_ticks)
+					if (swarm_component->wander.move_ticks > 0)
 					{
-						if (swarm_component->wander.pause_ticks)
+						swarm_component->wander.move_ticks--;
+						if (!swarm_component->wander.move_ticks)
+						{
+							swarm_component->wander.pause_ticks = (byte)code_000273b0(movement_type);
+						}
+						else
+						{
+							real angle_damping = swarm_component->wander.angle * -0.06666667f;
+							real angle = real_random_range(-0.020943951f, 0.020943951f) +
+								swarm_component->wander.angle +
+								angle_damping;
+
+							swarm_component->wander.angle = angle;
+							rotate_vector_about_axis(
+								&swarm_component->wander.vector,
+								&up,
+								sine(angle),
+								cosine(angle));
+						}
+					}
+					else
+					{
+						if (swarm_component->wander.pause_ticks > 0)
 							swarm_component->wander.pause_ticks--;
 
 						if (!swarm_component->wander.pause_ticks)
@@ -635,16 +682,17 @@ void code_00027470(
 								&swarm->swarm_center,
 								&to_center);
 							distance_squared = magnitude_squared3d(&to_center);
-							if (distance_squared >= 0.25f)
+							if (distance_squared < 0.25f)
 							{
-								real angle_range = 0.5f / square_root(distance_squared) * _pi;
-								angle = real_random_range(-angle_range, angle_range);
-								swarm_component->wander.vector = to_center;
+								angle = real_random_range(-_pi, _pi);
+								swarm_component->wander.vector = unit->object.forward;
 							}
 							else
 							{
-								angle = real_random_range(-_pi, _pi);
-								swarm_component->wander.vector = biped->object.forward;
+								real angle_range = 0.5f / square_root(distance_squared) * _pi;
+
+								angle = real_random_range(-angle_range, angle_range);
+								swarm_component->wander.vector = to_center;
 							}
 							rotate_vector_about_axis(
 								&swarm_component->wander.vector,
@@ -652,26 +700,6 @@ void code_00027470(
 								sine(angle),
 								cosine(angle));
 							swarm_component->wander.angle = 0.f;
-						}
-					}
-					else
-					{
-						swarm_component->wander.move_ticks--;
-						if (!swarm_component->wander.move_ticks)
-						{
-							swarm_component->wander.pause_ticks = (byte)code_000273b0(movement_type);
-						}
-						else
-						{
-							real angle = real_random_range(-0.020943952f, 0.020943952f) +
-								swarm_component->wander.angle * -0.06666667f +
-								swarm_component->wander.angle;
-							swarm_component->wander.angle = angle;
-							rotate_vector_about_axis(
-								&swarm_component->wander.vector,
-								&up,
-								sine(angle),
-								cosine(angle));
 						}
 					}
 
@@ -713,20 +741,29 @@ void code_00027470(
 						swarm_component->obey.simple_control_flags,
 						_obey_simple_directmovement_bit))
 					{
-						short facing = swarm_component->obey.directmovement.facing;
+						has_direction = TRUE;
+						switch (swarm_component->obey.directmovement.facing)
+						{
+						case _obey_directmovement_facing_left:
+						case _obey_directmovement_facing_right:
+							cross_product3d(
+								&up,
+								&swarm_component->obey.directmovement.vector,
+								&direction);
+							break;
 
-						if (facing >= 2 && facing <= 3)
-							cross_product3d(&up, &swarm_component->obey.directmovement.vector, &direction);
-						else
+						default:
 							direction = swarm_component->obey.directmovement.vector;
+							break;
+						}
 
-						if (facing == 1 || facing == 3)
+						if (swarm_component->obey.directmovement.facing == _obey_directmovement_facing_backward ||
+							swarm_component->obey.directmovement.facing == _obey_directmovement_facing_right)
 						{
 							direction.i = -direction.i;
 							direction.j = -direction.j;
 							direction.k = -direction.k;
 						}
-						has_direction = TRUE;
 					}
 
 					if (TEST_FLAG(
@@ -748,7 +785,7 @@ void code_00027470(
 								_obey_simple_jump_jumped_bit,
 								TRUE);
 						}
-						direction = biped->object.forward;
+						direction = unit->object.forward;
 						has_direction = TRUE;
 					}
 					break;
@@ -764,16 +801,16 @@ void code_00027470(
 					if (facing_dot > 0.9f)
 						facing_target = TRUE;
 
-					if (facing_dot >= -0.9f)
+					if (facing_dot < -0.9f)
+					{
+						direction = unit->object.forward;
+					}
+					else
 					{
 						cross_product3d(&up, &direction, &cross);
 						cross_product3d(&cross, &up, &direction);
 						if (normalize3d(&direction) == 0.f)
-							direction = biped->object.forward;
-					}
-					else
-					{
-						direction = biped->object.forward;
+							direction = unit->object.forward;
 					}
 
 					if (movement_type != _swarm_movement_obey)
@@ -808,12 +845,10 @@ void code_00027470(
 
 									if (forward_dot > 0.5f)
 									{
-										real weight = (forward_dot - 0.5f) * 0.5f;
-
-										if (dot_product3d(&delta, &right) <= 0.f)
-											separation += weight;
+										if (dot_product3d(&delta, &right) > 0.f)
+											separation -= (forward_dot - 0.5f) * 0.5f;
 										else
-											separation -= weight;
+											separation += (forward_dot - 0.5f) * 0.5f;
 									}
 								}
 							}
@@ -821,7 +856,7 @@ void code_00027470(
 
 						if (separation != 0.f)
 						{
-							real angle = MIN(MAX(separation, -1.f), 1.f) * (_pi / 2.f);
+							real angle = MAX(MIN(separation, 1.f), -1.f) * (_pi / 2.f);
 							rotate_vector_about_axis(
 								&direction,
 								&up,
@@ -837,16 +872,10 @@ void code_00027470(
 						if (normalize3d(&right) != 0.f)
 							cross_product3d(&right, &up, &direction);
 						else
-							direction = biped->object.forward;
+							direction = unit->object.forward;
 					}
 				}
 			}
-			else
-			{
-				SET_FLAG(swarm_component->flags, _swarm_component_attached_to_unit_bit, FALSE);
-				swarm_component->ground_ticks = 0;
-			}
-		}
 
 		if (TEST_FLAG(swarm_component->flags, _swarm_component_obey_desire_jump_bit) ||
 			(has_direction &&
@@ -860,7 +889,7 @@ void code_00027470(
 
 		if (TEST_FLAG(swarm_component->flags, _swarm_component_attached_to_unit_bit))
 		{
-			biped->unit.melee_attack_state = TEST_FLAG(
+			unit->unit.melee_attack_state = TEST_FLAG(
 				swarm_component->flags,
 				_swarm_component_attacking_in_melee_bit)
 				? _unit_melee_attack_continuous
@@ -874,14 +903,14 @@ void code_00027470(
 				target_in_melee_range && !swarm_component->attack_delay_ticks);
 			if (TEST_FLAG(swarm_component->flags, _swarm_component_attacking_in_melee_bit))
 			{
-				biped->unit.melee_attack_state = _unit_melee_attack_impact;
-				biped->biped.impact_target_object_index = best_prop
+				unit->unit.melee_attack_state = _unit_melee_attack_impact;
+				((struct biped_datum *)unit)->biped.impact_target_object_index = best_prop
 					? best_prop->unit_index
 					: NONE;
 			}
 			else
 			{
-				biped->unit.melee_attack_state = _unit_melee_attack_none;
+				unit->unit.melee_attack_state = _unit_melee_attack_none;
 			}
 		}
 
@@ -904,7 +933,7 @@ void code_00027470(
 			else
 			{
 				control.throttle = *global_zero_vector3d;
-				facing = biped->object.forward;
+				facing = unit->object.forward;
 			}
 			control.facing_vector = facing;
 			control.aiming_vector = facing;
@@ -948,7 +977,7 @@ void infection_swarm_aim_jump(
 					swarm_component->combat_target_prop_index);
 				real target_velocity_min = 0.06f;
 				real target_ballistic_fraction_min = 0.8f;
-				struct projectile_aim_direction aim_direction;
+				union projectile_aim_direction aim_direction;
 				real vertical_velocity;
 				real horizontal_velocity;
 
@@ -963,7 +992,7 @@ void infection_swarm_aim_jump(
 					&target_ballistic_fraction_min,
 					NULL,
 					FALSE,
-					&aim_direction,
+					&aim_direction.vector,
 					NULL,
 					NULL,
 					NULL,
@@ -974,14 +1003,10 @@ void infection_swarm_aim_jump(
 
 					if (normalize2d(&aim_direction.horizontal) == 0.f)
 					{
-						aim_direction.horizontal.i = actor->input.facing_vector.i;
-						aim_direction.horizontal.j = actor->input.facing_vector.j;
-						aim_direction.vertical = actor->input.facing_vector.k;
+						aim_direction.vector = actor->input.facing_vector;
 						if (normalize2d(&aim_direction.horizontal) == 0.f)
 						{
-							aim_direction.horizontal.i = global_forward3d->i;
-							aim_direction.horizontal.j = global_forward3d->j;
-							aim_direction.vertical = global_forward3d->k;
+							aim_direction.vector = *global_forward3d;
 						}
 					}
 

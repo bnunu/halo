@@ -58,21 +58,7 @@ enum
 
 /* ---------- macros */
 
-#define NORMALIZE_DIRECTION2D(vector, magnitude)                         \
-	do                                                                    \
-	{                                                                     \
-		(magnitude) = (real)sqrt(                                          \
-			(vector)->i*(vector)->i + (vector)->j*(vector)->j);              \
-		if (!(_real_epsilon > fabs((magnitude) - 0.0f)))                   \
-		{                                                                 \
-			(vector)->i = (vector)->i*(1.0f / (magnitude));                  \
-			(vector)->j = (vector)->j*(1.0f / (magnitude));                  \
-		}                                                                 \
-		else                                                              \
-		{                                                                 \
-			(magnitude) = 0.0f;                                             \
-		}                                                                 \
-	} while (FALSE)
+#define NORMALIZE_DIRECTION2D(vector, magnitude, inverse)                  	do                                                                     	{                                                                      		(magnitude) = (real)sqrt(                                           			(vector)->i*(vector)->i + (vector)->j*(vector)->j);               		if (!(_real_epsilon > fabs((magnitude) - 0.0f)))                    		{                                                                  			(inverse) = 1.0f / (magnitude);                                   			(vector)->i = (vector)->i*(inverse);                              			(vector)->j = (vector)->j*(inverse);                              		}                                                                  		else                                                               		{                                                                  			(magnitude) = 0.0f;                                              		}                                                                  	} while (FALSE)
 
 /* ---------- structures */
 
@@ -146,11 +132,10 @@ static void code_00051210(
 {
 	real_vector2d center_to_point;
 	real distance_squared;
-	real tangent_length;
+	real tangent_length = 0.0f;
 	real inverse_distance_squared;
-	real magnitude;
 	real_point2d tangent_points[2];
-	boolean cross_positive;
+	real_vector2d point_to_tangents[2];
 	long tangent_point_index;
 
 	center_to_point.i = point[0] - center[0];
@@ -172,17 +157,21 @@ static void code_00051210(
 		tangent_points[1].y =
 			(center_to_point.i*tangent_length + center_to_point.j*radius)*inverse_distance_squared + center[1];
 
-		cross_positive =
-			(tangent_points[1].y - point[1])*(tangent_points[0].x - point[0]) -
-			(tangent_points[1].x - point[0])*(tangent_points[0].y - point[1]) > 0.0f;
-		tangent_point_index = cross_positive != clockwise;
+		point_to_tangents[0].i = tangent_points[0].x - point[0];
+		point_to_tangents[0].j = tangent_points[0].y - point[1];
+		point_to_tangents[1].i = tangent_points[1].x - point[0];
+		point_to_tangents[1].j = tangent_points[1].y - point[1];
+		tangent_point_index =
+			(cross_product2d(&point_to_tangents[0], &point_to_tangents[1]) > 0.0f) !=
+			clockwise;
 		tangent_point[0] = tangent_points[tangent_point_index].x;
 		tangent_point[1] = tangent_points[tangent_point_index].y;
 	}
 	else
 	{
-		NORMALIZE_DIRECTION2D(&center_to_point, magnitude);
-		if (magnitude == 0.0f)
+		center_to_point.i = point[0] - center[0];
+		center_to_point.j = point[1] - center[1];
+		if (normalize2d(&center_to_point) == 0.0f)
 			center_to_point = *global_left2d;
 
 		tangent_point[0] = center_to_point.i*radius + center[0];
@@ -193,47 +182,47 @@ static void code_00051210(
 }
 
 static void code_00051360(
-	real const *tangent_points,
-	real const *center,
-	real const *start_point,
+	real_point2d const *tangent_points,
+	real_point2d const *center,
+	real_point2d const *start_point,
 	real radius,
-	real *avoidance_point)
+	real_point2d *avoidance_point)
 {
-	real dx0;
-	real dy0;
-	real dx1;
-	real dy1;
+	real_vector2d center_to_tangents[2];
 	real cross;
 	real scale;
 	real magnitude;
+	real inverse = 0.0f;
 	real_vector2d direction;
 
-	dx0 = tangent_points[0] - center[0];
-	dy0 = tangent_points[1] - center[1];
-	dx1 = tangent_points[2] - center[0];
-	dy1 = tangent_points[3] - center[1];
-	cross = dy1*dx0 - dy0*dx1;
+	center_to_tangents[0].i = tangent_points[0].x - center->x;
+	center_to_tangents[0].j = tangent_points[0].y - center->y;
+	center_to_tangents[1].i = tangent_points[1].x - center->x;
+	center_to_tangents[1].j = tangent_points[1].y - center->y;
+	cross = center_to_tangents[1].j*center_to_tangents[0].i - center_to_tangents[0].j*center_to_tangents[1].i;
 
 	if (!(fabs(cross) < _real_epsilon))
 	{
 		scale = radius*radius / cross;
-		avoidance_point[1] = (tangent_points[0] - tangent_points[2])*scale + center[1];
-		avoidance_point[0] = center[0] - (dy0 - dy1)*scale;
+		set_real_point2d(
+			avoidance_point,
+			center->x - (center_to_tangents[0].j - center_to_tangents[1].j)*scale,
+			(center_to_tangents[0].i - center_to_tangents[1].i)*scale + center->y);
 
-		direction.i = avoidance_point[0] - center[0];
-		direction.j = avoidance_point[1] - center[1];
-		if (direction.i*direction.i + direction.j*direction.j <= radius*radius*4.0f)
+		direction.i = avoidance_point->x - center->x;
+		direction.j = avoidance_point->y - center->y;
+		if (!(direction.i*direction.i + direction.j*direction.j > radius*radius*4.0f))
 			return;
 	}
 
-	direction.i = tangent_points[0] - start_point[0];
-	direction.j = tangent_points[1] - start_point[1];
-	NORMALIZE_DIRECTION2D(&direction, magnitude);
+	direction.i = tangent_points[0].x - start_point->x;
+	direction.j = tangent_points[0].y - start_point->y;
+	NORMALIZE_DIRECTION2D(&direction, magnitude, inverse);
 	if (magnitude == 0.0f)
 		direction = *global_left2d;
 
-	avoidance_point[0] = direction.i*radius + tangent_points[0];
-	avoidance_point[1] = direction.j*radius + tangent_points[1];
+	avoidance_point->x = direction.i*radius + tangent_points[0].x;
+	avoidance_point->y = direction.j*radius + tangent_points[0].y;
 
 	return;
 }
@@ -255,30 +244,31 @@ static boolean code_00051480(
 	real clockwise_turn;
 	real counterclockwise_turn;
 	real magnitude;
+	real inverse = 0.0f;
 
 	start_to_clockwise.i = start_point[0] - clockwise_turning_point[0];
 	start_to_clockwise.j = start_point[1] - clockwise_turning_point[1];
-	NORMALIZE_DIRECTION2D(&start_to_clockwise, magnitude);
+	NORMALIZE_DIRECTION2D(&start_to_clockwise, magnitude, inverse);
 
 	clockwise_to_unobstructed.i = unobstructed_path_point[0] - clockwise_turning_point[0];
 	clockwise_to_unobstructed.j = unobstructed_path_point[1] - clockwise_turning_point[1];
-	NORMALIZE_DIRECTION2D(&clockwise_to_unobstructed, magnitude);
+	NORMALIZE_DIRECTION2D(&clockwise_to_unobstructed, magnitude, inverse);
 
 	clockwise_to_obstructed.i = obstructed_path_point[0] - clockwise_turning_point[0];
 	clockwise_to_obstructed.j = obstructed_path_point[1] - clockwise_turning_point[1];
-	NORMALIZE_DIRECTION2D(&clockwise_to_obstructed, magnitude);
+	NORMALIZE_DIRECTION2D(&clockwise_to_obstructed, magnitude, inverse);
 
 	start_to_counterclockwise.i = start_point[0] - counterclockwise_turning_point[0];
 	start_to_counterclockwise.j = start_point[1] - counterclockwise_turning_point[1];
-	NORMALIZE_DIRECTION2D(&start_to_counterclockwise, magnitude);
+	NORMALIZE_DIRECTION2D(&start_to_counterclockwise, magnitude, inverse);
 
 	counterclockwise_to_unobstructed.i = unobstructed_path_point[0] - counterclockwise_turning_point[0];
 	counterclockwise_to_unobstructed.j = unobstructed_path_point[1] - counterclockwise_turning_point[1];
-	NORMALIZE_DIRECTION2D(&counterclockwise_to_unobstructed, magnitude);
+	NORMALIZE_DIRECTION2D(&counterclockwise_to_unobstructed, magnitude, inverse);
 
 	counterclockwise_to_obstructed.i = obstructed_path_point[0] - counterclockwise_turning_point[0];
 	counterclockwise_to_obstructed.j = obstructed_path_point[1] - counterclockwise_turning_point[1];
-	NORMALIZE_DIRECTION2D(&counterclockwise_to_obstructed, magnitude);
+	NORMALIZE_DIRECTION2D(&counterclockwise_to_obstructed, magnitude, inverse);
 
 	clockwise_turn =
 		signed_angle_between_vectors2d(&clockwise_to_unobstructed, &clockwise_to_obstructed) +
@@ -286,31 +276,31 @@ static boolean code_00051480(
 	counterclockwise_turn =
 		signed_angle_between_vectors2d(&counterclockwise_to_unobstructed, &counterclockwise_to_obstructed);
 
-	if (clockwise_turn <=
+	if (clockwise_turn >
 		-(counterclockwise_turn +
 			signed_angle_between_vectors2d(
 				&start_to_counterclockwise,
 				&counterclockwise_to_unobstructed)))
 	{
-		result[0] = counterclockwise_turning_point[0];
-		result[1] = counterclockwise_turning_point[1];
-		return FALSE;
+		result[0] = clockwise_turning_point[0];
+		result[1] = clockwise_turning_point[1];
+		return TRUE;
 	}
 
-	result[0] = clockwise_turning_point[0];
-	result[1] = clockwise_turning_point[1];
+	result[0] = counterclockwise_turning_point[0];
+	result[1] = counterclockwise_turning_point[1];
 
-	return TRUE;
+	return FALSE;
 }
 
 static boolean code_000516a0(
 	struct structure_bsp const *structure,
-	real const *point,
+	real_point2d const *point,
 	real radius,
 	long first_edge_index,
 	boolean clockwise,
 	boolean ignore_broken_surfaces,
-	real *result)
+	real_point2d *result)
 {
 	struct collision_bsp const *bsp;
 	byte const *pathfinding_surfaces;
@@ -321,23 +311,25 @@ static boolean code_000516a0(
 	real edge_dx;
 	real edge_dy;
 	real magnitude;
+	real inverse;
+	real negative_radius;
 	real_vector2d edge_direction;
 	real_point2d positive_point;
 	real_point2d negative_point;
+	real_vector2d positive_to_vertex;
+	real_vector2d negative_to_vertex;
 	boolean side_flag;
 	boolean valid;
-	boolean side_test;
-	boolean xor_flag;
+	long side_test;
+	long xor_flag;
 	boolean matches_end;
 	boolean refined_side;
 	long starting_vertex_index;
 	long loop_reference_vertex_index;
-	long vertex_a_index;
-	long vertex_b_index;
 	long next_vertex_index;
+	long edge_index;
 	long chain_start_edge_index;
 	long candidate_surface_index;
-	long next_edge_index;
 
 	bsp = TAG_BLOCK_GET_ELEMENT(
 		&structure->collision_bsp,
@@ -345,18 +337,20 @@ static boolean code_000516a0(
 		struct collision_bsp);
 	pathfinding_surfaces = structure->pathfinding_surfaces.address;
 	breakable_surface_flags = breakable_surface_flags_get();
+	starting_vertex_index = NONE;
+	loop_reference_vertex_index = NONE;
 #line 511 "c:\\halo\\SOURCE\\ai\\path_smoothing.c"
 	assert(clockwise==TRUE || clockwise==FALSE);
 
-	starting_vertex_index = NONE;
-	loop_reference_vertex_index = NONE;
-	current_edge = TAG_BLOCK_GET_ELEMENT(
-		&bsp->edges,
-		first_edge_index,
-		struct collision_edge);
+	negative_radius = -radius;
+	edge_index = first_edge_index;
 
 	while (TRUE)
 	{
+		current_edge = TAG_BLOCK_GET_ELEMENT(
+			&bsp->edges,
+			edge_index,
+			struct collision_edge);
 		side_flag = code_00051190(
 			pathfinding_surfaces,
 			bsp,
@@ -364,43 +358,49 @@ static boolean code_000516a0(
 			current_edge->surface_indices[0],
 			ignore_broken_surfaces);
 
-		vertex_a_index = current_edge->vertex_indices[side_flag];
-		vertex_b_index = current_edge->vertex_indices[!side_flag];
 		vertex_a = TAG_BLOCK_GET_ELEMENT(
 			&bsp->vertices,
-			vertex_a_index,
+			current_edge->vertex_indices[side_flag],
 			struct collision_vertex);
 		vertex_b = TAG_BLOCK_GET_ELEMENT(
 			&bsp->vertices,
-			vertex_b_index,
+			current_edge->vertex_indices[!side_flag],
 			struct collision_vertex);
 
+		valid = FALSE;
 		edge_dx = vertex_b->point.x - vertex_a->point.x;
 		edge_dy = vertex_b->point.y - vertex_a->point.y;
-		edge_direction.i = -edge_dx;
-		edge_direction.j = edge_dy;
-		NORMALIZE_DIRECTION2D(&edge_direction, magnitude);
+		edge_direction.i = edge_dy;
+		edge_direction.j = -edge_dx;
+		NORMALIZE_DIRECTION2D(&edge_direction, magnitude, inverse);
 
-		positive_point.x = point[0] + edge_direction.j*radius;
-		positive_point.y = point[1] + edge_direction.i*radius;
-		negative_point.x = point[0] - edge_direction.j*radius;
-		negative_point.y = point[1] - edge_direction.i*radius;
+		point_from_line2d(
+			point,
+			&edge_direction,
+			radius,
+			&positive_point);
+		point_from_line2d(
+			point,
+			&edge_direction,
+			negative_radius,
+			&negative_point);
 
-		valid = FALSE;
+		positive_to_vertex.i = vertex_a->point.x - positive_point.x;
+		positive_to_vertex.j = vertex_a->point.y - positive_point.y;
+		negative_to_vertex.i = vertex_a->point.x - negative_point.x;
+		negative_to_vertex.j = vertex_a->point.y - negative_point.y;
+
 		side_test =
-			(vertex_a->point.y - positive_point.y)*edge_dy +
-			(vertex_a->point.x - positive_point.x)*edge_dx < 0.0f;
+			positive_to_vertex.j*edge_dy + positive_to_vertex.i*edge_dx < 0.0f;
 		if (side_test == clockwise)
 		{
-			if ((vertex_a->point.x - positive_point.x)*edge_dy -
-				(vertex_a->point.y - positive_point.y)*edge_dx < 0.0f)
+			if (positive_to_vertex.i*edge_dy - positive_to_vertex.j*edge_dx < 0.0f)
 			{
 				valid = TRUE;
 			}
 		}
 
-		if ((vertex_a->point.x - negative_point.x)*edge_dy -
-			(vertex_a->point.y - negative_point.y)*edge_dx < 0.0f)
+		if (negative_to_vertex.i*edge_dy - negative_to_vertex.j*edge_dx < 0.0f)
 		{
 			valid = TRUE;
 		}
@@ -408,11 +408,8 @@ static boolean code_000516a0(
 		if (starting_vertex_index == NONE)
 			valid = TRUE;
 
-		xor_flag = side_flag != valid;
-		next_vertex_index =
-			clockwise == xor_flag ?
-			current_edge->vertex_indices[1] :
-			current_edge->vertex_indices[0];
+		xor_flag = valid != side_flag;
+		next_vertex_index = current_edge->vertex_indices[xor_flag == clockwise];
 
 		if (next_vertex_index == loop_reference_vertex_index)
 		{
@@ -420,8 +417,8 @@ static boolean code_000516a0(
 				&bsp->vertices,
 				next_vertex_index,
 				struct collision_vertex);
-			result[0] = vertex_a->point.x;
-			result[1] = vertex_a->point.y;
+			result->x = vertex_a->point.x;
+			result->y = vertex_a->point.y;
 			return TRUE;
 		}
 
@@ -431,7 +428,7 @@ static boolean code_000516a0(
 		if (starting_vertex_index == NONE)
 			starting_vertex_index = next_vertex_index;
 
-		chain_start_edge_index = first_edge_index;
+		chain_start_edge_index = edge_index;
 		while (TRUE)
 		{
 			matches_end = next_vertex_index == current_edge->vertex_indices[1];
@@ -446,14 +443,14 @@ static boolean code_000516a0(
 			if (refined_side == clockwise)
 				break;
 
-			next_edge_index = current_edge->edge_indices[!matches_end];
-			if (next_edge_index == chain_start_edge_index)
-				return FALSE;
-
+			edge_index = current_edge->edge_indices[!matches_end];
 			current_edge = TAG_BLOCK_GET_ELEMENT(
 				&bsp->edges,
-				next_edge_index,
+				edge_index,
 				struct collision_edge);
+			if (edge_index == chain_start_edge_index)
+				return FALSE;
+
 #line 631 "c:\\halo\\SOURCE\\ai\\path_smoothing.c"
 			assert(current_edge->vertex_indices[0] == next_vertex_index || current_edge->vertex_indices[1] == next_vertex_index);
 		}
@@ -486,7 +483,7 @@ void path_smooth(
 	boolean smoothed_path_finishes;
 	short i;
 	struct path_collision_result collision_result;
-	struct path_step const *collision_step;
+	struct path_step *smoothed_step;
 	real_point2d clockwise_turning_point;
 	real_point2d counterclockwise_turning_point;
 	real_point2d chosen_center;
@@ -501,19 +498,15 @@ void path_smooth(
 	assert(smoothed_steps);
 	assert(steps_finish_path);
 
-	if (raw_step_count <= 1)
+	if (raw_step_count > 1)
 	{
-		*smoothed_step_count = 1;
-		*smoothed_steps = *raw_steps;
-		return;
-	}
 
+	smoothed_count = 0;
+	smoothed_path_finishes = FALSE;
 	current_position.x = state->input.start_point.x;
 	current_position.y = state->input.start_point.y;
 	current_surface_index = state->input.start_surface_index;
-	smoothed_count = 0;
 	step_index = 1;
-	smoothed_path_finishes = FALSE;
 
 	while (TRUE)
 	{
@@ -554,30 +547,29 @@ void path_smooth(
 
 		found_clockwise = code_000516a0(
 			state->structure,
-			current_position.n,
+			&current_position,
 			0.3f,
 			collision_edge_index,
 			TRUE,
 			state->input.ignore_broken_surfaces,
-			clockwise_turning_point.n);
+			&clockwise_turning_point);
 		found_counterclockwise = code_000516a0(
 			state->structure,
-			current_position.n,
+			&current_position,
 			0.3f,
 			collision_edge_index,
 			FALSE,
 			state->input.ignore_broken_surfaces,
-			counterclockwise_turning_point.n);
-		if (!found_clockwise || !found_counterclockwise)
+			&counterclockwise_turning_point);
+		if (!found_counterclockwise || !found_clockwise)
 			goto bail_out;
 
-		collision_step = &raw_steps[collision_step_index];
 		chose_clockwise = code_00051480(
 			current_position.n,
 			clockwise_turning_point.n,
 			counterclockwise_turning_point.n,
-			collision_step[-1].point.n,
-			collision_step->point.n,
+			raw_steps[collision_step_index - 1].point.n,
+			raw_steps[collision_step_index].point.n,
 			chosen_center.n);
 
 		code_00051210(
@@ -587,17 +579,17 @@ void path_smooth(
 			chose_clockwise,
 			tangent_points[0].n);
 		code_00051210(
-			collision_step->point.n,
+			raw_steps[collision_step_index].point.n,
 			chosen_center.n,
 			0.35f,
 			!chose_clockwise,
 			tangent_points[1].n);
 		code_00051360(
-			tangent_points[0].n,
-			chosen_center.n,
-			current_position.n,
+			tangent_points,
+			&chosen_center,
+			&current_position,
 			0.35f,
-			avoidance_point.n);
+			&avoidance_point);
 
 		known_point = current_position;
 		current_position = avoidance_point;
@@ -608,6 +600,8 @@ void path_smooth(
 			current_surface_index,
 			&current_position);
 
+		smoothed_step = &smoothed_steps[smoothed_count];
+		smoothed_count++;
 		collision_surface_project_point2d(
 			TAG_BLOCK_GET_ELEMENT(
 				&state->structure->collision_bsp,
@@ -617,9 +611,8 @@ void path_smooth(
 			_z,
 			TRUE,
 			&current_position,
-			&smoothed_steps[smoothed_count].point);
-		smoothed_steps[smoothed_count].surface_index = current_surface_index;
-		smoothed_count++;
+			&smoothed_step->point);
+		smoothed_step->surface_index = current_surface_index;
 
 		if (smoothed_count >= 4)
 			goto bail_out;
@@ -635,6 +628,12 @@ bail_out:
 	*smoothed_step_count = smoothed_count;
 	if (!smoothed_path_finishes)
 		*steps_finish_path = FALSE;
+	}
+	else
+	{
+		*smoothed_step_count = 1;
+		*smoothed_steps = *raw_steps;
+	}
 
 	return;
 }

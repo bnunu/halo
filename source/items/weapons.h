@@ -95,6 +95,28 @@ enum
 
 enum
 {
+	_weapon_function_none = 0,
+	_weapon_function_heat,
+	_weapon_function_primary_ammunition,
+	_weapon_function_secondary_ammunition,
+	_weapon_function_primary_rate_of_fire,
+	_weapon_function_secondary_rate_of_fire,
+	_weapon_function_ready,
+	_weapon_function_primary_ejection_port,
+	_weapon_function_secondary_ejection_port,
+	_weapon_function_overheated,
+	_weapon_function_primary_charged,
+	_weapon_function_secondary_charged,
+	_weapon_function_illumination,
+	_weapon_function_age,
+	_weapon_function_integrated_light,
+	_weapon_function_primary_firing,
+	_weapon_function_secondary_firing,
+	NUMBER_OF_WEAPON_FUNCTIONS,
+};
+
+enum
+{
 	_first_person_weapon_animation_idle = 0,
 	_first_person_weapon_animation_posing,
 	_first_person_weapon_animation_primary_fire,
@@ -221,6 +243,26 @@ boolean weapon_put_away(long weapon_index, boolean immediate);
 void weapon_set_integrated_light_power(long weapon_index, real light_power);
 
 void weapon_owner_update(long weapon_index, word control_flags, real primary_trigger);
+
+struct weapon_interface_state;
+
+boolean weapon_handle_potential_inventory_item(long weapon_index, long item_object_index, short player_index, short *rounds_added);
+
+void weapon_export_function_values(long weapon_index);
+
+boolean weapon_new(long weapon_index);
+
+void weapon_set_total_rounds(long weapon_index, short *rounds_array);
+
+void weapon_build_weapon_interface_state(long weapon_index, struct weapon_interface_state *state);
+
+void weapon_set_current_amount(long weapon_index, real amount);
+
+boolean weapon_reloading(long weapon_index);
+
+short weapon_rotate_zoom_level(long weapon_index, short zoom_level);
+
+real weapon_get_field_of_view(long weapon_index, real field_of_view, short zoom_level);
 
 boolean weapon_can_be_fired(long weapon_index);
 

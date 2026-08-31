@@ -223,8 +223,46 @@ symbols in this file:
 
 /* ---------- structures */
 
+struct weapon_magazine_interface_state
+{
+	boolean reloading;
+	boolean idle;
+	short rounds_loaded;
+	short rounds_loaded_maximum;
+	short rounds_total;
+	short rounds_total_maximum;
+};
+
+struct weapon_interface_state
+{
+	real heat;
+	real age;
+	boolean overheated;
+	byte pad;
+	short magazine_count;
+	struct weapon_magazine_interface_state magazines[2];
+};
+
+struct weapon_magazine_ammunition_object
+{
+	short rounds;
+	word pad;
+	long unused[2];
+	struct tag_reference equipment;
+};
+
+struct animation_graph_weapon_animation
+{
+	long unused[4];
+	struct tag_block animations;
+};
+
 /* ---------- prototypes */
 
+long game_time_get(
+	void);
+void equipment_definition_handle_pickup(
+	long equipment_definition_index);
 boolean game_engine_running(
 	void);
 real projectile_estimate_time_to_target(
@@ -236,7 +274,15 @@ real transition_function_evaluate(
 void unit_handle_weapon_state_change(
 	long object_index,
 	short new_state);
+short animation_update_internal(
+	short animation_type,
+	long animation_graph_index,
+	struct animation_state *state,
+	long *sound_index);
 
+static real code_000ead20(
+	long weapon_index,
+	short trigger_index);
 static struct weapon_trigger *weapon_trigger_get(
 	struct weapon_datum *weapon,
 	short trigger_index);
@@ -259,6 +305,27 @@ static long weapon_effect_new(
 	real effect_error);
 static void weapon_reset(
 	long weapon_index);
+
+static real code_000ead20(
+	long weapon_index,
+	short trigger_index)
+{
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_trigger *trigger = weapon_trigger_get(weapon, trigger_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+	struct weapon_trigger_definition *trigger_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.triggers, trigger_index, struct weapon_trigger_definition);
+
+	switch (trigger->state)
+	{
+	case _trigger_charging:
+		return 1.0f-(trigger->state_timer*(1.0f/TICKS_PER_SECOND))/trigger_definition->charging_time;
+
+	case _trigger_charged:
+		return 1.0f;
+	}
+
+	return 0.0f;
+}
 
 static boolean weapon_state_interruptable(
 	short old_state,
@@ -293,6 +360,25 @@ struct weapons_globals data_00307140 =
 };
 
 /* ---------- public code */
+
+/* January lowers this unit's float-to-integer conversions through the
+   in-line x87 store rather than the runtime __ftol2 helper.  The helper is
+   kept local to this translation unit so that adding an __inline to a shared
+   header cannot perturb unrelated objects.  Admitted by owner ruling
+   2026-08-30. */
+static __inline long fast_ftol(
+	real d)
+{
+	long result;
+
+	__asm
+	{
+		fld d
+		fistp result
+	}
+
+	return result;
+}
 
 void weapons_initialize(
 	void)
@@ -417,6 +503,30 @@ char const *weapon_get_label(
 	return label;
 }
 
+boolean weapon_can_be_fired(
+	long weapon_index)
+{
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+
+	if (weapon->weapon.age>=1.0f)
+		return FALSE;
+
+	if (game_engine_running() && weapon_definition->weapon.magazines.count>0)
+	{
+		struct weapon_magazine_definition *magazine_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, 0, struct weapon_magazine_definition);
+
+		if (magazine_definition->rounds_loaded_maximum>0 &&
+			weapon->weapon.magazines[0].rounds_loaded==0 &&
+			weapon->weapon.magazines[0].rounds_total==0)
+		{
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
+
 boolean weapon_useful(
 	long weapon_index)
 {
@@ -481,6 +591,282 @@ void weapon_melee_attack(
 	return;
 }
 
+boolean weapon_new(
+	long weapon_index)
+{
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+	short magazine_index;
+	short trigger_index;
+
+	weapon->weapon.state = _weapon_state_idle;
+	weapon->weapon.overheated_effect_index = NONE;
+
+	for (magazine_index = 0; magazine_index<weapon_definition->weapon.magazines.count; ++magazine_index)
+	{
+		struct weapon_magazine *magazine = weapon_magazine_get(weapon, magazine_index);
+		struct weapon_magazine_definition *magazine_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, magazine_index, struct weapon_magazine_definition);
+
+		magazine->rounds_loaded = MIN(magazine_definition->rounds_total_initial, magazine_definition->rounds_loaded_maximum);
+		magazine->rounds_total = magazine_definition->rounds_total_initial-magazine->rounds_loaded;
+	}
+
+	for (trigger_index = 0; trigger_index<weapon_definition->weapon.triggers.count; ++trigger_index)
+	{
+		struct weapon_trigger *trigger = weapon_trigger_get(weapon, trigger_index);
+		struct weapon_trigger_definition *trigger_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.triggers, trigger_index, struct weapon_trigger_definition);
+
+		trigger->charging_effect_index = NONE;
+		trigger->idle_ticks = 127;
+	}
+
+	return TRUE;
+}
+
+void weapon_set_total_rounds(
+	long weapon_index,
+	short *rounds_array)
+{
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+	short magazine_index;
+
+	match_assert("c:\\halo\\SOURCE\\items\\weapons.c", 3082, rounds_array);
+
+	for (magazine_index = 0; magazine_index<weapon_definition->weapon.magazines.count; ++magazine_index)
+	{
+		struct weapon_magazine *magazine = weapon_magazine_get(weapon, magazine_index);
+		struct weapon_magazine_definition *magazine_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, magazine_index, struct weapon_magazine_definition);
+
+		magazine->rounds_total = MIN(magazine_definition->rounds_total_maximum, rounds_array[magazine_index]);
+		magazine->rounds_loaded = MIN(magazine->rounds_loaded, magazine->rounds_total);
+	}
+
+	return;
+}
+
+void weapon_export_function_values(
+	long weapon_index)
+{
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+	struct object_datum *object = (struct object_datum *)weapon;
+	real *function_values;
+	short *function_modes;
+	long function_index;
+
+	while (TEST_FLAG(object->object.flags, 0) && object->object.parent_object_index!=NONE)
+		object = object_get(object->object.parent_object_index);
+
+	function_values = object->object.incoming_function_values;
+	function_modes = weapon_definition->weapon.function_modes;
+
+	for (function_index = NUMBER_OF_INCOMING_OBJECT_FUNCTIONS; function_index; --function_index, ++function_modes, ++function_values)
+	{
+		if (*function_modes!=_weapon_function_none)
+		{
+			real function_value = 0.0f;
+
+			switch (*function_modes)
+			{
+			case _weapon_function_ready:
+				function_value = 1.0f;
+				break;
+
+			case _weapon_function_heat:
+				function_value = weapon->weapon.heat;
+				break;
+
+			case _weapon_function_overheated:
+				if (TEST_FLAG(weapon->weapon.flags, 0) && weapon_definition->weapon.heat_recovery_threshold!=1.0f)
+					function_value = (weapon->weapon.heat-weapon_definition->weapon.heat_recovery_threshold)/(1.0f-weapon_definition->weapon.heat_recovery_threshold);
+				break;
+
+			case _weapon_function_illumination:
+				{
+					short trigger_index;
+
+					for (trigger_index = 0; trigger_index<weapon_definition->weapon.triggers.count; ++trigger_index)
+					{
+						struct weapon_trigger_definition *trigger_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.triggers, trigger_index, struct weapon_trigger_definition);
+						struct weapon_trigger *trigger = weapon_trigger_get(weapon, trigger_index);
+
+						if (trigger_definition->charging_time>0.0f)
+						{
+							real charged_illumination = code_000ead20(weapon_index, trigger_index)*trigger_definition->charged_illumination;
+
+							function_value = MAX(function_value, charged_illumination);
+						}
+
+						if (trigger->state==_trigger_charged)
+							function_value = MAX(function_value, (1.0f-trigger_definition->charged_illumination)*weapon->weapon.overcharged+trigger_definition->charged_illumination);
+
+						function_value = MAX(function_value, trigger->illumination);
+
+						trigger->illumination = function_value;
+					}
+
+					function_value = MAX(function_value, weapon_definition->weapon.heat_illumination*weapon->weapon.heat);
+				}
+				break;
+
+			case _weapon_function_primary_ammunition:
+			case _weapon_function_secondary_ammunition:
+				{
+					short magazine_index = (short)(*function_modes-_weapon_function_primary_ammunition);
+
+					if (magazine_index<weapon_definition->weapon.magazines.count)
+					{
+						struct weapon_magazine_definition *magazine_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, magazine_index, struct weapon_magazine_definition);
+
+						if (magazine_definition->rounds_loaded_maximum)
+							function_value = (real)weapon->weapon.magazines[magazine_index].rounds_loaded/magazine_definition->rounds_loaded_maximum;
+					}
+				}
+				break;
+
+			case _weapon_function_primary_ejection_port:
+			case _weapon_function_secondary_ejection_port:
+				{
+					short trigger_index = (short)(*function_modes-_weapon_function_primary_ejection_port);
+
+					if (trigger_index<weapon_definition->weapon.triggers.count)
+						function_value = weapon->weapon.triggers[trigger_index].ejection_port_position;
+				}
+				break;
+
+			case _weapon_function_primary_rate_of_fire:
+			case _weapon_function_secondary_rate_of_fire:
+				{
+					short trigger_index = (short)(*function_modes-_weapon_function_primary_rate_of_fire);
+
+					if (trigger_index<weapon_definition->weapon.triggers.count)
+						function_value = weapon->weapon.triggers[trigger_index].rate_of_fire;
+				}
+				break;
+
+			case _weapon_function_primary_firing:
+			case _weapon_function_secondary_firing:
+				{
+					short trigger_index = (short)(*function_modes-_weapon_function_primary_firing);
+
+					if (trigger_index<weapon_definition->weapon.triggers.count)
+					{
+						function_value = weapon->weapon.triggers[trigger_index].rate_of_fire;
+
+						if (game_time_get()-weapon->weapon.game_time_last_fired>1)
+							function_value = 0.0f;
+					}
+				}
+				break;
+
+			case _weapon_function_primary_charged:
+			case _weapon_function_secondary_charged:
+				{
+					short trigger_index = (short)(*function_modes-_weapon_function_primary_charged);
+
+					if (trigger_index<weapon_definition->weapon.triggers.count)
+					{
+						struct weapon_trigger_definition *trigger_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.triggers, trigger_index, struct weapon_trigger_definition);
+						struct weapon_trigger *trigger = weapon_trigger_get(weapon, trigger_index);
+
+						function_value = code_000ead20(weapon_index, trigger_index);
+					}
+				}
+				break;
+
+			case _weapon_function_integrated_light:
+				function_value = weapon->weapon.integrated_light_power;
+				break;
+
+			case _weapon_function_age:
+				function_value = weapon->weapon.age;
+				break;
+			}
+
+			*function_values = function_value;
+		}
+	}
+
+	return;
+}
+
+boolean weapon_handle_potential_inventory_item(
+	long weapon_index,
+	long item_object_index,
+	short player_index,
+	short *rounds_added)
+{
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+	struct item_datum *item = item_get(item_object_index);
+	long item_definition_index = item->definition_index;
+	boolean handled = FALSE;
+	short magazine_index;
+
+	for (magazine_index = 0; magazine_index<weapon_definition->weapon.magazines.count; ++magazine_index)
+	{
+		struct weapon_magazine *magazine = weapon_magazine_get(weapon, magazine_index);
+		struct weapon_magazine_definition *magazine_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, magazine_index, struct weapon_magazine_definition);
+
+		if (magazine->rounds_total<magazine_definition->rounds_total_maximum)
+		{
+			short rounds_needed = magazine_definition->rounds_total_maximum-magazine->rounds_total;
+			short rounds_taken = 0;
+
+			if (weapon->definition_index==item_definition_index)
+			{
+				struct weapon_datum *item_weapon = weapon_get(item_object_index);
+				struct weapon_magazine *item_magazine = weapon_magazine_get(item_weapon, magazine_index);
+
+				rounds_taken = MIN(item_magazine->rounds_total, rounds_needed);
+
+				if (rounds_taken>0)
+				{
+					item_magazine->rounds_total -= rounds_taken;
+
+					if (weapon_definition->weapon.pickup_sound.index!=NONE && player_index!=NONE)
+						unspatialized_impulse_sound_new(weapon_definition->weapon.pickup_sound.index, 1.0f);
+
+					if (item_magazine->rounds_total==0)
+						object_delete(item_object_index);
+				}
+
+				handled = TRUE;
+			}
+			else
+			{
+				short ammunition_index;
+
+				for (ammunition_index = 0; ammunition_index<magazine_definition->ammunition_objects.count; ++ammunition_index)
+				{
+					struct weapon_magazine_ammunition_object *ammunition_object = TAG_BLOCK_GET_ELEMENT(&magazine_definition->ammunition_objects, ammunition_index, struct weapon_magazine_ammunition_object);
+
+					if (ammunition_object->equipment.index==item_definition_index)
+					{
+						rounds_taken = MIN(ammunition_object->rounds, rounds_needed);
+
+						if (rounds_taken>0)
+						{
+							if (player_index!=NONE)
+								equipment_definition_handle_pickup(ammunition_object->equipment.index);
+
+							object_delete(item_object_index);
+							handled = TRUE;
+							break;
+						}
+					}
+				}
+			}
+
+			magazine->rounds_total += rounds_taken;
+			*rounds_added = rounds_taken;
+		}
+	}
+
+	return handled;
+}
+
 void weapon_delete(
 	long weapon_index)
 {
@@ -510,6 +896,223 @@ short animation_convert_frame_to_pal(
 	short frame_index)
 {
 	return frame_index;
+}
+
+short animation_update(
+	long animation_graph_index,
+	struct animation_state *state,
+	long *sound_index)
+{
+	return animation_update_internal(1, animation_graph_index, state, sound_index);
+}
+
+short weapon_rotate_zoom_level(
+	long weapon_index,
+	short zoom_level)
+{
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+
+	if (!weapon_reloading(weapon_index))
+	{
+		if (zoom_level>=0 && zoom_level<weapon_definition->weapon.zoom_level_count-1)
+			zoom_level++;
+		else
+			zoom_level = zoom_level==weapon_definition->weapon.zoom_level_count-1 ? NONE : 0;
+	}
+
+	return zoom_level;
+}
+
+real weapon_get_zoom_magnification(
+	long weapon_index,
+	short zoom_level)
+{
+	real magnification = 1.0f;
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+
+	if (zoom_level>=0 && zoom_level<weapon_definition->weapon.zoom_level_count)
+	{
+		real zoom_fraction = weapon_definition->weapon.zoom_level_count>1 ? (real)zoom_level/(weapon_definition->weapon.zoom_level_count-1) : 0.0f;
+		real minimum_magnification = weapon_definition->weapon.zoom_magnification_minimum>0.0f ? weapon_definition->weapon.zoom_magnification_minimum : 1.0f;
+		real maximum_magnification = weapon_definition->weapon.zoom_magnification_maximum>0.0f ? weapon_definition->weapon.zoom_magnification_maximum : 1.0f;
+
+		magnification = power(maximum_magnification/minimum_magnification, zoom_fraction)*minimum_magnification;
+
+		match_assert_valid_real("c:\\halo\\SOURCE\\items\\weapons.c", 1442, magnification);
+		match_assert("c:\\halo\\SOURCE\\items\\weapons.c", 1443, magnification>0.0f);
+	}
+
+	return magnification;
+}
+
+real weapon_get_field_of_view(
+	long weapon_index,
+	real field_of_view,
+	short zoom_level)
+{
+	real result = field_of_view;
+	real magnification = weapon_get_zoom_magnification(weapon_index, zoom_level);
+
+	if (magnification!=1.0f)
+	{
+		real zoom_field_of_view = field_of_view/magnification;
+
+		if (zoom_field_of_view>_pi/100.f && zoom_field_of_view<_pi-_pi/100.f)
+			result = zoom_field_of_view;
+	}
+
+	return result;
+}
+
+void weapon_build_weapon_interface_state(
+	long weapon_index,
+	struct weapon_interface_state *state)
+{
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+	short magazine_index;
+
+	state->heat = weapon->weapon.heat;
+	state->age = weapon->weapon.age;
+	state->overheated = TEST_FLAG(weapon->weapon.flags, 0);
+	state->magazine_count = (short)weapon_definition->weapon.magazines.count;
+
+	for (magazine_index = 0; magazine_index<weapon_definition->weapon.magazines.count; ++magazine_index)
+	{
+		struct weapon_magazine *magazine = weapon_magazine_get(weapon, magazine_index);
+		struct weapon_magazine_definition *magazine_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, magazine_index, struct weapon_magazine_definition);
+		long reloading = magazine->state==_magazine_reloading || magazine->state==_magazine_chambering;
+
+		state->magazines[magazine_index].reloading = reloading;
+		state->magazines[magazine_index].idle = magazine->state==_magazine_idle;
+		state->magazines[magazine_index].rounds_loaded = magazine->rounds_loaded;
+		state->magazines[magazine_index].rounds_loaded_maximum = magazine_definition->rounds_loaded_maximum;
+		state->magazines[magazine_index].rounds_total = magazine->rounds_total;
+		state->magazines[magazine_index].rounds_total_maximum = magazine_definition->rounds_total_maximum;
+	}
+
+	return;
+}
+
+void weapon_set_current_amount(
+	long weapon_index,
+	real amount)
+{
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+	boolean uses_age = FALSE;
+
+	if (weapon_definition->weapon.magazines.count==0)
+	{
+		uses_age = TRUE;
+	}
+	else
+	{
+		short trigger_index;
+
+		for (trigger_index = 0; trigger_index<weapon_definition->weapon.triggers.count; ++trigger_index)
+		{
+			struct weapon_trigger_definition *trigger_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.triggers, trigger_index, struct weapon_trigger_definition);
+
+			if (trigger_definition->age_generated_per_round>0.0f)
+			{
+				uses_age = TRUE;
+				break;
+			}
+		}
+	}
+
+	if (amount<0.0f)
+		amount = 0.0f;
+	else if (amount>1.0f)
+		amount = 1.0f;
+
+	if (uses_age)
+	{
+		weapon->weapon.age = 1.0f-amount;
+	}
+	else if (weapon_definition->weapon.magazines.count>0)
+	{
+		struct weapon_magazine_definition *magazine_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, 0, struct weapon_magazine_definition);
+		struct weapon_magazine *magazine = weapon_magazine_get(weapon, 0);
+		short rounds_loaded;
+
+		amount = magazine_definition->rounds_loaded_maximum*amount;
+		rounds_loaded = (short)fast_ftol(amount);
+
+		magazine->rounds_total += rounds_loaded-magazine->rounds_loaded;
+		magazine->rounds_loaded = rounds_loaded;
+	}
+
+	return;
+}
+
+short weapon_get_first_person_animation_time(
+	long weapon_index,
+	short mode,
+	short animation_type,
+	short shotgun_reload_type)
+{
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+	short time = 0;
+
+	if (weapon_definition->weapon.interface_definition.first_person_animations.index!=NONE)
+	{
+		struct animation_graph *animation_graph = animation_graph_definition_get(weapon_definition->weapon.interface_definition.first_person_animations.index);
+
+		if (animation_graph->first_person_weapon_animations.count)
+		{
+			struct animation_graph_weapon_animation *weapon_animation = TAG_BLOCK_GET_ELEMENT(&animation_graph->first_person_weapon_animations, 0, struct animation_graph_weapon_animation);
+
+			if (weapon_animation && animation_type>=0 && animation_type<weapon_animation->animations.count)
+			{
+				short animation_index = animation_graph_animation_index_get(&weapon_animation->animations)[animation_type].animation_index;
+
+				if (animation_index!=NONE)
+				{
+					struct animation *animation = TAG_BLOCK_GET_ELEMENT(&animation_graph->animations, animation_index, struct animation);
+
+					switch (mode)
+					{
+					case 0:
+						time = animation->frame_count;
+						break;
+
+					case 1:
+						time = animation->private_key_frame_index;
+						break;
+
+					default:
+						match_vassert("c:\\halo\\SOURCE\\items\\weapons.c", 1588, FALSE, NULL);
+						break;
+					}
+
+					if (mode==0 && weapon_definition->weapon.weapon_type==1)
+					{
+						struct animation *shotgun_enter = TAG_BLOCK_GET_ELEMENT(&animation_graph->animations, _first_person_weapon_animation_shotgun_enter<weapon_animation->animations.count ? animation_graph_animation_index_get(&weapon_animation->animations)[_first_person_weapon_animation_shotgun_enter].animation_index : NONE, struct animation);
+						struct animation *shotgun_exit_empty = TAG_BLOCK_GET_ELEMENT(&animation_graph->animations, _first_person_weapon_animation_shotgun_exit_empty<weapon_animation->animations.count ? animation_graph_animation_index_get(&weapon_animation->animations)[_first_person_weapon_animation_shotgun_exit_empty].animation_index : NONE, struct animation);
+						struct animation *shotgun_exit_full = TAG_BLOCK_GET_ELEMENT(&animation_graph->animations, _first_person_weapon_animation_shotgun_exit_full<weapon_animation->animations.count ? animation_graph_animation_index_get(&weapon_animation->animations)[_first_person_weapon_animation_shotgun_exit_full].animation_index : NONE, struct animation);
+
+						switch (shotgun_reload_type)
+						{
+						case 0:
+							time = shotgun_enter->frame_count;
+							break;
+
+						case 2:
+							time = shotgun_enter->frame_count;
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return time;
 }
 
 boolean weapon_reloading(
@@ -850,12 +1453,6 @@ static boolean weapon_state_interruptable(
 
 	return interruptable;
 }
-
-struct animation_graph_weapon_animation
-{
-	long unused[4];
-	struct tag_block animations;
-};
 
 void weapon_preprocess_node_orientations(
 	long weapon_index)
