@@ -285,6 +285,44 @@
 				},
 				"objdiff_percent": 100.0
 			}
+		},
+		{
+			"unit": "source/bitmaps/bitmaps_quantitize",
+			"function": "_bitmap_quantitize_dither_row",
+			"class": "instruction-scheduling",
+			"evidence": "Equal size and relocations with 177/177 instructions; the whole function is identical except the order of two adjacent increments in the third do-while. January emits inc eax (channel_index), add ebx,2 (minimum_channel), add ecx,2 (the compiler's induction variable for next_source[CHANNEL_COUNT + channel_index]); we emit add ebx,2, inc eax, add ecx,2. The two user increments follow source statement order, but the generated induction variable does not follow either: source order minimum_channel++/channel_index++ emits min,idx,iv while channel_index++/minimum_channel++ emits idx,iv,min. January's idx,min,iv is not reachable from either. Measured inert: all seven positions of minimum_channel in the block declaration list, moving channel_index into the for-body block. Measured worse: comma-operator increments in both orders (lcsd 4), channel_index as short (170/177 insns), and replacing the minimum_channel walker with minimum_error[channel_index] indexing (170/177), which confirms the hand-written walker is correct.",
+			"measurements": {
+				"target": {
+					"size": 464,
+					"relocation_count": 0,
+					"normalized_sha256": "a5feef0c98bc8565991a9cf9722e0258d2bd556e23fc0326891aa0ce0ebca5db"
+				},
+				"base": {
+					"size": 464,
+					"relocation_count": 0,
+					"normalized_sha256": "7afe02e297bf06dd682a9c44bfd00aacf39c2f7ea0c0f45acce838dc9b696da4"
+				},
+				"objdiff_percent": 98.809525
+			}
+		},
+		{
+			"unit": "source/camera/dead_camera",
+			"function": "_dead_camera_new",
+			"class": "instruction-scheduling",
+			"evidence": "Equal size and relocations with 105/105 instructions; the function differs only in where the integer load of dead_camera_constants.dead_timer is scheduled relative to the x87 negate/store of camera->facing.pitch. January emits mov edx,[dead_camera_constants]; fchs; add esp,0xc; fstp [esi+0x10]; we emit fchs; fstp [esi+0x10]; mov edx,[dead_camera_constants]; add esp,0xc. Both then store [esi+0x1c],edx at the same offset. Measured inert: giving camera->timer a named local to match the style of every other field in the function (distance, yaw, pitch, switch_timer, player_index, new_unit_index all go through one), and negating at the assignment instead of at the store. Measured worse: inlining the pitch temporary (blocks 3->4), moving the timer store ahead of the pitch store (lcsd 14), both together (lcsd 34), and assigning the timer local before the random call (100/105 instructions).",
+			"measurements": {
+				"target": {
+					"size": 288,
+					"relocation_count": 19,
+					"normalized_sha256": "3888f6d2d64af9d4aa78c1a68bab50d348c84ad23b511750616259f2aae8daaf"
+				},
+				"base": {
+					"size": 288,
+					"relocation_count": 19,
+					"normalized_sha256": "b4f9f6c6950152e429520ea4e2774ca5c79c61a07a18cf1c2e1c4a18f98b466f"
+				},
+				"objdiff_percent": 95.74468
+			}
 		}
 	]
 }
