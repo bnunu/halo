@@ -272,3 +272,78 @@ Final validation on 2026-07-29:
   added and no existing credit was weakened.
 
 Reopen only with source evidence that preserves the target’s `EBX=odd_count`, `ESI=num_primes`, and `EDI=i` entry plan while forcing the target’s three distinct stack-lifetime slots. Required acceptance is strict equality of size, normalized hash, and relocation address/type/destination for all four functions, plus the TU’s non-code data/metadata comparison and the campaign regression manifest.
+
+## 2026-08-30 reopen - E28, the pre-allocation `k` store
+
+The 2026-07-29 disposition declared evidence exhaustion with the production
+source at objdiff `81.61%` and a two-slot `sub esp, 8` frame. This section
+records a measured improvement to the *retained production shape*, not a
+closure.
+
+### The change
+
+`k = 3` is initialized after the assertion and the `maximum < 2` early return,
+immediately before `total_count = odd_count + 1` and the allocation. This is a
+distinct program point from the two already ruled out: it is not entry
+initialization (E18/E22, "store timing is wrong") and it is not the
+pre-`sqrt` site inside `if (primes)` (do-not-repeat #1, "breaks the otherwise
+matching initial register plan").
+
+Because `k` is now live across the `debug_malloc` call it can no longer take a
+caller-saved register, so VC7 stack-homes it and the frame grows to the target
+three slots.
+
+### Result
+
+| | frame | entry plan | objdiff |
+| --- | --- | --- | --- |
+| retained baseline (2026-07-29) | `sub esp, 8` | `EBX/ESI/EDI` correct | 81.614815% |
+| **E28 (this shape)** | **`sub esp, 0xc`** | `EBX/ESI/EDI` correct | **91.148150%** |
+
+Still `352/352` bytes and `12/12` relocations, all destinations and order
+correct. The three exact siblings remain exact. Whole-board rebuild shows no
+other object moved.
+
+### How E28 relates to E22
+
+E22 and E28 each capture a different half of the target, and neither captures
+both:
+
+| | frame | stack homes | `fill = 3` store site |
+| --- | --- | --- | --- |
+| January | `0xc` | scan `-4`, fill `-8`, total `-0xc` | `+0x83`, after allocation |
+| E22 (aggregate, entry-live) | `0xc` | **correct** | `+0x1c`, far too early |
+| E28 (this shape) | `0xc` | **swapped**: scan `-8`, fill `-4` | `+0x6e`, before the call |
+
+E28 is closer than E22 on store timing and worse than E22 on the physical
+homes. That is the sharpest statement of the remaining blocker: no probed
+source shape has ever produced the correct homes *and* a late store together.
+
+### The mechanism behind the swap
+
+January pins `EDI` to zero across the prologue and spends that zero three
+times - `mov [esi], edi` for the `*num_primes = 0` early return, `push edi` for
+the `debug_malloc` flag argument, and `cmp esi, edi` for the allocation test.
+Pinning a zero consumes the third callee-saved register, which is *why* the
+fill value is stack-homed in January. Our build rematerialises the zero as an
+immediate at all three sites, so it stack-homes the fill value for a different
+reason - liveness across a call - and assigns the two homes in the opposite
+order.
+
+E20 already refuted the direct attack on this ("source aliases for constant
+zero, alone or together"), and the earlier ledger records that writing
+`*num_primes = i` folds to identical code. Both remain do-not-repeat.
+
+### Honest note
+
+E28 reaches January's *outcome* for the frame by a different *route* than
+January's. That is why it does not also fix the homes. It is retained because
+it is a strictly measured improvement on every axis that moved, not because it
+is believed to be the original shape.
+
+### Disposition
+
+Parked as `register-allocation` in `config/parked.json` with the measured
+`91.148150%`. The 2026-07-29 reopen criteria stand unchanged, refined by the
+table above: a candidate must produce the correct homes *and* a post-allocation
+store, which is precisely the combination E22 and E28 split between them.

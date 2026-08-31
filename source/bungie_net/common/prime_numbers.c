@@ -105,6 +105,7 @@ unsigned long *generate_prime_numbers(
 		return NULL;
 	}
 
+	k = 3;
 	total_count = odd_count + 1;
 	*num_primes = total_count;
 	primes = match_malloc(
@@ -115,7 +116,6 @@ unsigned long *generate_prime_numbers(
 	if (primes)
 	{
 		sqrt_max = (unsigned long)sqrt((double)maximum);
-		k = 3;
 
 		while (i < odd_count)
 		{

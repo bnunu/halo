@@ -285,6 +285,25 @@
         },
         "objdiff_percent": 94.8
       }
+    },
+    {
+      "unit": "source/bungie_net/common/prime_numbers",
+      "function": "_generate_prime_numbers",
+      "class": "register-allocation",
+      "evidence": "Target and candidate agree on 352-byte padded size, all 12 relocation identities and order, and the three-slot 0xc frame. January pins EDI to zero across the prologue and spends it three times (*num_primes=0 early return, debug_malloc flag argument, allocation test); that pinning consumes the third callee-saved register and is why the fill value is stack-homed. Our build rematerialises the zero as an immediate at all three sites, stack-homes the fill value instead for liveness across the allocation call, and therefore assigns the two homes in the opposite order (scan -8/fill -4 against January's scan -4/fill -8). Prior campaign E17-E27 exhausted 27 legal-C families; E22 reached the correct homes via an entry-live aggregate but stored fill=3 at +0x1c instead of +0x83, and E20 refuted source aliases for the constant zero. E28 (2026-08-30) moved the k initialisation to the pre-allocation point, which reproduces the three-slot frame while keeping EBX=odd_count/ESI=num_primes/EDI=i and lifts objdiff from 81.614815% to 91.148150%. Closure needs the correct homes AND a post-allocation store together, which no probed shape has produced.",
+      "measurements": {
+        "target": {
+          "size": 352,
+          "relocation_count": 12,
+          "normalized_sha256": "2428a7a00be6ab6f96efe9dda273d824a0cc9829aeeb2dd5f4c9b35b2b7992b1"
+        },
+        "base": {
+          "size": 352,
+          "relocation_count": 12,
+          "normalized_sha256": "281849914052c14fca1dcda353b03747d4bbc77194b1e4f61567ac687bfc68fb"
+        },
+        "objdiff_percent": 91.14815
+      }
     }
   ]
 }
