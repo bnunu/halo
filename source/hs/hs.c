@@ -3,787 +3,787 @@ HS.C
 
 symbols in this file:
 000AD290 0050:
-	_code_000ad290 (0000)
+	_hs_not_evaluate (0000)
 000AD2E0 0040:
-	_code_000ad2e0 (0000)
+	_hs_print_evaluate (0000)
 000AD320 0020:
-	_code_000ad320 (0000)
+	_hs_players_evaluate (0000)
 000AD340 0040:
-	_code_000ad340 (0000)
+	_hs_teleport_players_not_in_trigger_volume_evaluate (0000)
 000AD380 0050:
-	_code_000ad380 (0000)
+	_scenario_trigger_volume_test_object_evaluate (0000)
 000AD3D0 0050:
-	_code_000ad3d0 (0000)
+	_hs_trigger_volume_test_objects_any_evaluate (0000)
 000AD420 0050:
-	_code_000ad420 (0000)
+	_hs_trigger_volume_test_objects_all_evaluate (0000)
 000AD470 0040:
-	_code_000ad470 (0000)
+	_hs_object_create_evaluate (0000)
 000AD4B0 0040:
-	_code_000ad4b0 (0000)
+	_hs_object_destroy_evaluate (0000)
 000AD4F0 0040:
-	_code_000ad4f0 (0000)
+	_hs_object_create_anew_evaluate (0000)
 000AD530 0040:
-	_code_000ad530 (0000)
+	_hs_object_create_containing_evaluate (0000)
 000AD570 0040:
-	_code_000ad570 (0000)
+	_hs_object_create_anew_containing_evaluate (0000)
 000AD5B0 0040:
-	_code_000ad5b0 (0000)
+	_hs_object_destroy_containing_evaluate (0000)
 000AD5F0 0020:
-	_code_000ad5f0 (0000)
+	_hs_object_destroy_all_evaluate (0000)
 000AD610 0040:
-	_code_000ad610 (0000)
+	_hs_object_teleport_evaluate (0000)
 000AD650 0040:
-	_code_000ad650 (0000)
+	_hs_object_set_facing_evaluate (0000)
 000AD690 0040:
-	_code_000ad690 (0000)
+	_hs_object_set_shield_evaluate (0000)
 000AD6D0 0040:
-	_code_000ad6d0 (0000)
+	_hs_object_set_permutation_evaluate (0000)
 000AD710 0040:
-	_code_000ad710 (0000)
+	_hs_object_list_get_element_evaluate (0000)
 000AD750 0050:
-	_code_000ad750 (0000)
+	_object_list_count_evaluate (0000)
 000AD7A0 0040:
-	_code_000ad7a0 (0000)
+	_hs_effect_new_evaluate (0000)
 000AD7E0 0040:
-	_code_000ad7e0 (0000)
+	_hs_effect_new_from_object_marker_evaluate (0000)
 000AD820 0040:
-	_code_000ad820 (0000)
+	_hs_damage_new_evaluate (0000)
 000AD860 0040:
-	_code_000ad860 (0000)
+	_hs_damage_object_evaluate (0000)
 000AD8A0 0050:
-	_code_000ad8a0 (0000)
+	_hs_objects_can_see_object_evaluate (0000)
 000AD8F0 0050:
-	_code_000ad8f0 (0000)
+	_hs_objects_can_see_flag_evaluate (0000)
 000AD940 0040:
-	_code_000ad940 (0000)
+	_hs_objects_delete_by_definition_evaluate (0000)
 000AD980 0040:
-	_code_000ad980 (0000)
+	_hs_sound_set_gain_evaluate (0000)
 000AD9C0 0040:
-	_code_000ad9c0 (0000)
+	_hs_sound_get_gain_evaluate (0000)
 000ADA00 0040:
-	_code_000ada00 (0000)
+	_numeric_countdown_timer_set_evaluate (0000)
 000ADA40 0050:
-	_code_000ada40 (0000)
+	_numeric_countdown_timer_get_evaluate (0000)
 000ADA90 0020:
-	_code_000ada90 (0000)
+	_numeric_countdown_timer_stop_evaluate (0000)
 000ADAB0 0020:
-	_code_000adab0 (0000)
+	_numeric_countdown_timer_restart_evaluate (0000)
 000ADAD0 0040:
-	_code_000adad0 (0000)
+	_breakable_surfaces_enable_evaluate (0000)
 000ADB10 0050:
-	_code_000adb10 (0000)
+	_recorded_animation_play_evaluate (0000)
 000ADB60 0050:
-	_code_000adb60 (0000)
+	_recorded_animation_play_and_delete_evaluate (0000)
 000ADBB0 0050:
-	_code_000adbb0 (0000)
+	_recorded_animation_play_and_hover_evaluate (0000)
 000ADC00 0040:
-	_code_000adc00 (0000)
+	_recorded_animation_kill_evaluate (0000)
 000ADC40 0050:
-	_code_000adc40 (0000)
+	_recorded_animation_get_time_left_evaluate (0000)
 000ADC90 0040:
-	_code_000adc90 (0000)
+	_object_set_ranged_attack_inhibited_evaluate (0000)
 000ADCD0 0040:
-	_code_000adcd0 (0000)
+	_object_set_melee_attack_inhibited_evaluate (0000)
 000ADD10 0020:
-	_code_000add10 (0000)
+	_objects_dump_memory_evaluate (0000)
 000ADD30 0040:
-	_code_000add30 (0000)
+	_object_scripting_set_collideable_evaluate (0000)
 000ADD70 0040:
-	_code_000add70 (0000)
+	_objects_scripting_set_scale_evaluate (0000)
 000ADDB0 0040:
-	_code_000addb0 (0000)
+	_objects_scripting_attach_evaluate (0000)
 000ADDF0 0040:
-	_code_000addf0 (0000)
+	_objects_scripting_detach_evaluate (0000)
 000ADE30 0020:
-	_code_000ade30 (0000)
+	_garbage_collect_now_evaluate (0000)
 000ADE50 0040:
-	_code_000ade50 (0000)
+	_object_cannot_take_damage_evaluate (0000)
 000ADE90 0040:
-	_code_000ade90 (0000)
+	_object_can_take_damage_evaluate (0000)
 000ADED0 0040:
-	_code_000aded0 (0000)
+	_object_beautify_evaluate (0000)
 000ADF10 0040:
-	_code_000adf10 (0000)
+	_hs_objects_predict_evaluate (0000)
 000ADF50 0040:
-	_code_000adf50 (0000)
+	_object_definition_predict_evaluate (0000)
 000ADF90 0040:
-	_code_000adf90 (0000)
+	_object_pvs_set_object_evaluate (0000)
 000ADFD0 0040:
-	_code_000adfd0 (0000)
+	_object_pvs_set_camera_point_evaluate (0000)
 000AE010 0020:
-	_code_000ae010 (0000)
+	_object_pvs_clear_evaluate (0000)
 000AE030 0040:
-	_code_000ae030 (0000)
+	_object_pvs_activate_evaluate (0000)
 000AE070 0050:
-	_code_000ae070 (0000)
+	_lights_enable_evaluate (0000)
 000AE0C0 0050:
-	_code_000ae0c0 (0000)
+	_scenery_get_animation_time_evaluate (0000)
 000AE110 0040:
-	_code_000ae110 (0000)
+	_scenery_animation_start_evaluate (0000)
 000AE150 0050:
-	_code_000ae150 (0000)
+	_scenery_animation_start_at_frame_evaluate (0000)
 000AE1A0 0040:
-	_code_000ae1a0 (0000)
+	_render_effects_evaluate (0000)
 000AE1E0 0040:
-	_code_000ae1e0 (0000)
+	_unit_scripting_can_blink_evaluate (0000)
 000AE220 0040:
-	_code_000ae220 (0000)
+	_unit_open_evaluate (0000)
 000AE260 0040:
-	_code_000ae260 (0000)
+	_unit_close_evaluate (0000)
 000AE2A0 0040:
-	_code_000ae2a0 (0000)
+	_unit_kill_evaluate (0000)
 000AE2E0 0040:
-	_code_000ae2e0 (0000)
+	_unit_kill_silent_evaluate (0000)
 000AE320 0050:
-	_code_000ae320 (0000)
+	_unit_get_custom_animation_time_evaluate (0000)
 000AE370 0040:
-	_code_000ae370 (0000)
+	_unit_stop_custom_animation_evaluate (0000)
 000AE3B0 0050:
-	_code_000ae3b0 (0000)
+	_unit_start_user_animation_evaluate (0000)
 000AE400 0050:
-	_code_000ae400 (0000)
+	_unit_scripting_start_user_animation_list_evaluate (0000)
 000AE450 0060:
-	_code_000ae450 (0000)
+	_unit_custom_animation_at_frame_evaluate (0000)
 000AE4B0 0050:
-	_code_000ae4b0 (0000)
+	_unit_is_playing_custom_animation_evaluate (0000)
 000AE500 0040:
-	_code_000ae500 (0000)
+	_unit_aim_without_turning_evaluate (0000)
 000AE540 0040:
-	_code_000ae540 (0000)
+	_unit_set_emotion_evaluate (0000)
 000AE580 0040:
-	_code_000ae580 (0000)
+	_unit_set_enterable_by_player_evaluate (0000)
 000AE5C0 0040:
-	_code_000ae5c0 (0000)
+	_unit_scripting_enter_vehicle_evaluate (0000)
 000AE600 0050:
-	_code_000ae600 (0000)
+	_unit_scripting_vehicle_test_seat_list_evaluate (0000)
 000AE650 0050:
-	_code_000ae650 (0000)
+	_unit_scripting_vehicle_test_seat_evaluate (0000)
 000AE6A0 0040:
-	_code_000ae6a0 (0000)
+	_unit_scripting_set_emotion_animation_evaluate (0000)
 000AE6E0 0040:
-	_code_000ae6e0 (0000)
+	_unit_scripting_exit_vehicle_evaluate (0000)
 000AE720 0050:
-	_code_000ae720 (0000)
+	_unit_scripting_set_maximum_vitality_evaluate (0000)
 000AE770 0050:
-	_code_000ae770 (0000)
+	_units_scripting_set_maximum_vitality_evaluate (0000)
 000AE7C0 0050:
-	_code_000ae7c0 (0000)
+	_unit_scripting_set_current_vitality_evaluate (0000)
 000AE810 0050:
-	_code_000ae810 (0000)
+	_units_scripting_set_current_vitality_evaluate (0000)
 000AE860 0050:
-	_code_000ae860 (0000)
+	_vehicle_scripting_load_magic_evaluate (0000)
 000AE8B0 0050:
-	_code_000ae8b0 (0000)
+	_vehicle_scripting_unload_evaluate (0000)
 000AE900 0040:
-	_code_000ae900 (0000)
+	_scripting_set_magic_base_seat_evaluate (0000)
 000AE940 0040:
-	_code_000ae940 (0000)
+	_unit_scripting_set_seat_evaluate (0000)
 000AE980 0020:
-	_code_000ae980 (0000)
+	_scripting_magic_melee_attack_evaluate (0000)
 000AE9A0 0040:
-	_code_000ae9a0 (0000)
+	_unit_scripting_unit_riders_evaluate (0000)
 000AE9E0 0040:
-	_code_000ae9e0 (0000)
+	_unit_scripting_unit_driver_evaluate (0000)
 000AEA20 0040:
-	_code_000aea20 (0000)
+	_unit_scripting_unit_gunner_evaluate (0000)
 000AEA60 0040:
-	_code_000aea60 (0000)
+	_unit_scripting_get_health_evaluate (0000)
 000AEAA0 0040:
-	_code_000aeaa0 (0000)
+	_unit_scripting_get_shield_evaluate (0000)
 000AEAE0 0050:
-	_code_000aeae0 (0000)
+	_unit_scripting_get_grenade_count_evaluate (0000)
 000AEB30 0050:
-	_code_000aeb30 (0000)
+	_unit_scripting_has_weapon_evaluate (0000)
 000AEB80 0050:
-	_code_000aeb80 (0000)
+	_unit_scripting_has_weapon_readied_evaluate (0000)
 000AEBD0 0040:
-	_code_000aebd0 (0000)
+	_unit_scripting_doesnt_drop_items_evaluate (0000)
 000AEC10 0040:
-	_code_000aec10 (0000)
+	_unit_scripting_impervious_evaluate (0000)
 000AEC50 0040:
-	_code_000aec50 (0000)
+	_unit_scripting_suspended_evaluate (0000)
 000AEC90 0030:
-	_code_000aec90 (0000)
+	_unit_solo_player_integrated_night_vision_is_active_evaluate (0000)
 000AECC0 0040:
-	_code_000aecc0 (0000)
+	_units_set_desired_flashlight_state_evaluate (0000)
 000AED00 0040:
-	_code_000aed00 (0000)
+	_unit_set_desired_flashlight_state_evaluate (0000)
 000AED40 0050:
-	_code_000aed40 (0000)
+	_unit_get_current_flashlight_state_evaluate (0000)
 000AED90 0040:
-	_code_000aed90 (0000)
+	_device_set_never_appears_locked_evaluate (0000)
 000AEDD0 0040:
-	_code_000aedd0 (0000)
+	_device_set_power_evaluate (0000)
 000AEE10 0040:
-	_code_000aee10 (0000)
+	_device_get_power_evaluate (0000)
 000AEE50 0050:
-	_code_000aee50 (0000)
+	_device_set_desired_position_evaluate (0000)
 000AEEA0 0040:
-	_code_000aeea0 (0000)
+	_device_get_position_evaluate (0000)
 000AEEE0 0040:
-	_code_000aeee0 (0000)
+	_device_set_actual_position_evaluate (0000)
 000AEF20 0040:
-	_code_000aef20 (0000)
+	_device_group_get_value_evaluate (0000)
 000AEF60 0050:
-	_code_000aef60 (0000)
+	_device_group_set_desired_value_evaluate (0000)
 000AEFB0 0040:
-	_code_000aefb0 (0000)
+	_device_group_set_actual_value_evaluate (0000)
 000AEFF0 0040:
-	_code_000aeff0 (0000)
+	_device_one_sided_set_evaluate (0000)
 000AF030 0040:
-	_code_000af030 (0000)
+	_device_operates_automatically_set_evaluate (0000)
 000AF070 0040:
-	_code_000af070 (0000)
+	_device_group_change_only_once_more_set_evaluate (0000)
 000AF0B0 0020:
-	_code_000af0b0 (0000)
+	_breakable_surfaces_reset_evaluate (0000)
 000AF0D0 0020:
-	_code_000af0d0 (0000)
+	_cheat_all_powerups_evaluate (0000)
 000AF0F0 0020:
-	_code_000af0f0 (0000)
+	_cheat_all_weapons_evaluate (0000)
 000AF110 0020:
-	_code_000af110 (0000)
+	_cheat_all_vehicles_evaluate (0000)
 000AF130 0020:
-	_code_000af130 (0000)
+	_cheat_teleport_to_camera_evaluate (0000)
 000AF150 0020:
-	_code_000af150 (0000)
+	_cheat_active_camouflage_evaluate (0000)
 000AF170 0040:
-	_code_000af170 (0000)
+	_cheat_active_camouflage_local_player_evaluate (0000)
 000AF1B0 0020:
-	_code_000af1b0 (0000)
+	_cheats_load_evaluate (0000)
 000AF1D0 0040:
-	_code_000af1d0 (0000)
+	_ai_globals_ai_active_evaluate (0000)
 000AF210 0040:
-	_code_000af210 (0000)
+	_ai_globals_dialogue_triggers_enabled_evaluate (0000)
 000AF250 0040:
-	_code_000af250 (0000)
+	_ai_globals_grenades_enabled_evaluate (0000)
 000AF290 0040:
-	_code_000af290 (0000)
+	_ai_scripting_free_evaluate (0000)
 000AF2D0 0040:
-	_code_000af2d0 (0000)
+	_ai_scripting_free_units_evaluate (0000)
 000AF310 0040:
-	_code_000af310 (0000)
+	_ai_scripting_attach_unit_evaluate (0000)
 000AF350 0040:
-	_code_000af350 (0000)
+	_ai_scripting_attach_units_evaluate (0000)
 000AF390 0040:
-	_code_000af390 (0000)
+	_ai_scripting_attach_free_evaluate (0000)
 000AF3D0 0040:
-	_code_000af3d0 (0000)
+	_ai_scripting_detach_unit_evaluate (0000)
 000AF410 0040:
-	_code_000af410 (0000)
+	_ai_scripting_detach_units_evaluate (0000)
 000AF450 0040:
-	_code_000af450 (0000)
+	_ai_scripting_place_evaluate (0000)
 000AF490 0040:
-	_code_000af490 (0000)
+	_ai_scripting_kill_evaluate (0000)
 000AF4D0 0040:
-	_code_000af4d0 (0000)
+	_ai_scripting_kill_silent_evaluate (0000)
 000AF510 0040:
-	_code_000af510 (0000)
+	_ai_scripting_erase_evaluate (0000)
 000AF550 0020:
-	_code_000af550 (0000)
+	_ai_scripting_erase_all_evaluate (0000)
 000AF570 0040:
-	_code_000af570 (0000)
+	_ai_scripting_select_evaluate (0000)
 000AF5B0 0020:
-	_code_000af5b0 (0000)
+	_ai_scripting_deselect_evaluate (0000)
 000AF5D0 0040:
-	_code_000af5d0 (0000)
+	_ai_scripting_spawn_actor_evaluate (0000)
 000AF610 0040:
-	_code_000af610 (0000)
+	_ai_scripting_set_respawn_evaluate (0000)
 000AF650 0040:
-	_code_000af650 (0000)
+	_ai_scripting_set_deaf_evaluate (0000)
 000AF690 0040:
-	_code_000af690 (0000)
+	_ai_scripting_set_blind_evaluate (0000)
 000AF6D0 0040:
-	_code_000af6d0 (0000)
+	_ai_scripting_magically_see_encounter_evaluate (0000)
 000AF710 0040:
-	_code_000af710 (0000)
+	_ai_scripting_magically_see_players_evaluate (0000)
 000AF750 0040:
-	_code_000af750 (0000)
+	_ai_scripting_magically_see_unit_evaluate (0000)
 000AF790 0040:
-	_code_000af790 (0000)
+	_ai_scripting_magically_see_units_evaluate (0000)
 000AF7D0 0040:
-	_code_000af7d0 (0000)
+	_ai_scripting_timer_start_evaluate (0000)
 000AF810 0040:
-	_code_000af810 (0000)
+	_ai_scripting_timer_expire_evaluate (0000)
 000AF850 0040:
-	_code_000af850 (0000)
+	_ai_scripting_attack_evaluate (0000)
 000AF890 0040:
-	_code_000af890 (0000)
+	_ai_scripting_defend_evaluate (0000)
 000AF8D0 0040:
-	_code_000af8d0 (0000)
+	_ai_scripting_retreat_evaluate (0000)
 000AF910 0040:
-	_code_000af910 (0000)
+	_ai_scripting_maneuver_evaluate (0000)
 000AF950 0040:
-	_code_000af950 (0000)
+	_ai_scripting_maneuver_enable_evaluate (0000)
 000AF990 0040:
-	_code_000af990 (0000)
+	_ai_scripting_migrate_evaluate (0000)
 000AF9D0 0040:
-	_code_000af9d0 (0000)
+	_ai_scripting_migrate_and_speak_evaluate (0000)
 000AFA10 0040:
-	_code_000afa10 (0000)
+	_ai_scripting_migrate_by_unit_evaluate (0000)
 000AFA50 0040:
-	_code_000afa50 (0000)
+	_ai_scripting_allegiance_evaluate (0000)
 000AFA90 0040:
-	_code_000afa90 (0000)
+	_ai_scripting_allegiance_remove_evaluate (0000)
 000AFAD0 0040:
-	_code_000afad0 (0000)
+	_ai_scripting_go_to_vehicle_evaluate (0000)
 000AFB10 0040:
-	_code_000afb10 (0000)
+	_ai_scripting_go_to_vehicle_override_evaluate (0000)
 000AFB50 0040:
-	_code_000afb50 (0000)
+	_ai_scripting_exit_vehicle_evaluate (0000)
 000AFB90 0040:
-	_code_000afb90 (0000)
+	_ai_scripting_braindead_evaluate (0000)
 000AFBD0 0040:
-	_code_000afbd0 (0000)
+	_ai_scripting_braindead_by_unit_evaluate (0000)
 000AFC10 0040:
-	_code_000afc10 (0000)
+	_ai_scripting_ignore_evaluate (0000)
 000AFC50 0040:
-	_code_000afc50 (0000)
+	_ai_scripting_prefer_target_evaluate (0000)
 000AFC90 0040:
-	_code_000afc90 (0000)
+	_ai_scripting_teleport_starting_location_evaluate (0000)
 000AFCD0 0040:
-	_code_000afcd0 (0000)
+	_ai_scripting_teleport_starting_location_if_unsupported_evaluate (0000)
 000AFD10 0040:
-	_code_000afd10 (0000)
+	_ai_scripting_renew_evaluate (0000)
 000AFD50 0040:
-	_code_000afd50 (0000)
+	_ai_scripting_try_to_fight_nothing_evaluate (0000)
 000AFD90 0040:
-	_code_000afd90 (0000)
+	_ai_scripting_try_to_fight_evaluate (0000)
 000AFDD0 0040:
-	_code_000afdd0 (0000)
+	_ai_scripting_try_to_fight_player_evaluate (0000)
 000AFE10 0040:
-	_code_000afe10 (0000)
+	_ai_scripting_command_list_evaluate (0000)
 000AFE50 0040:
-	_code_000afe50 (0000)
+	_ai_scripting_command_list_by_unit_evaluate (0000)
 000AFE90 0040:
-	_code_000afe90 (0000)
+	_ai_scripting_command_list_advance_evaluate (0000)
 000AFED0 0040:
-	_code_000afed0 (0000)
+	_ai_scripting_command_list_advance_by_unit_evaluate (0000)
 000AFF10 0040:
-	_code_000aff10 (0000)
+	_ai_scripting_force_active_evaluate (0000)
 000AFF50 0040:
-	_code_000aff50 (0000)
+	_ai_scripting_force_active_by_unit_evaluate (0000)
 000AFF90 0040:
-	_code_000aff90 (0000)
+	_ai_scripting_set_return_state_evaluate (0000)
 000AFFD0 0040:
-	_code_000affd0 (0000)
+	_ai_scripting_set_current_state_evaluate (0000)
 000B0010 0040:
-	_code_000b0010 (0000)
+	_ai_scripting_playfight_evaluate (0000)
 000B0050 0020:
-	_code_000b0050 (0000)
+	_ai_scripting_reconnect_evaluate (0000)
 000B0070 0040:
-	_code_000b0070 (0000)
+	_ai_scripting_vehicle_encounter_evaluate (0000)
 000B00B0 0040:
-	_code_000b00b0 (0000)
+	_ai_scripting_vehicle_enterable_distance_evaluate (0000)
 000B00F0 0040:
-	_code_000b00f0 (0000)
+	_ai_scripting_vehicle_enterable_team_evaluate (0000)
 000B0130 0040:
-	_code_000b0130 (0000)
+	_ai_scripting_vehicle_enterable_actor_type_evaluate (0000)
 000B0170 0040:
-	_code_000b0170 (0000)
+	_ai_scripting_vehicle_enterable_actors_evaluate (0000)
 000B01B0 0040:
-	_code_000b01b0 (0000)
+	_ai_scripting_vehicle_enterable_disable_evaluate (0000)
 000B01F0 0040:
-	_code_000b01f0 (0000)
+	_ai_scripting_look_at_object_evaluate (0000)
 000B0230 0040:
-	_code_000b0230 (0000)
+	_ai_scripting_stop_looking_evaluate (0000)
 000B0270 0040:
-	_code_000b0270 (0000)
+	_ai_scripting_automatic_migration_target_evaluate (0000)
 000B02B0 0040:
-	_code_000b02b0 (0000)
+	_ai_scripting_follow_target_disable_evaluate (0000)
 000B02F0 0040:
-	_code_000b02f0 (0000)
+	_ai_scripting_follow_target_players_evaluate (0000)
 000B0330 0040:
-	_code_000b0330 (0000)
+	_ai_scripting_follow_target_unit_evaluate (0000)
 000B0370 0040:
-	_code_000b0370 (0000)
+	_ai_scripting_follow_target_ai_evaluate (0000)
 000B03B0 0040:
-	_code_000b03b0 (0000)
+	_ai_scripting_follow_distance_evaluate (0000)
 000B03F0 0040:
-	_code_000b03f0 (0000)
+	_ai_scripting_conversation_stop_evaluate (0000)
 000B0430 0040:
-	_code_000b0430 (0000)
+	_ai_scripting_conversation_advance_evaluate (0000)
 000B0470 0040:
-	_code_000b0470 (0000)
+	_ai_scripting_link_activation_evaluate (0000)
 000B04B0 0040:
-	_code_000b04b0 (0000)
+	_ai_scripting_berserk_evaluate (0000)
 000B04F0 0040:
-	_code_000b04f0 (0000)
+	_ai_scripting_set_team_evaluate (0000)
 000B0530 0040:
-	_code_000b0530 (0000)
+	_ai_scripting_allow_charge_evaluate (0000)
 000B0570 0040:
-	_code_000b0570 (0000)
+	_ai_scripting_allow_dormant_evaluate (0000)
 000B05B0 0050:
-	_code_000b05b0 (0000)
+	_ai_scripting_is_attacking_evaluate (0000)
 000B0600 0050:
-	_code_000b0600 (0000)
+	_ai_scripting_command_list_status_evaluate (0000)
 000B0650 0050:
-	_code_000b0650 (0000)
+	_ai_scripting_going_to_vehicle_evaluate (0000)
 000B06A0 0050:
-	_code_000b06a0 (0000)
+	_ai_scripting_living_count_evaluate (0000)
 000B06F0 0040:
-	_code_000b06f0 (0000)
+	_ai_scripting_living_fraction_evaluate (0000)
 000B0730 0040:
-	_code_000b0730 (0000)
+	_ai_scripting_strength_evaluate (0000)
 000B0770 0050:
-	_code_000b0770 (0000)
+	_ai_scripting_swarm_count_evaluate (0000)
 000B07C0 0050:
-	_code_000b07c0 (0000)
+	_ai_scripting_nonswarm_count_evaluate (0000)
 000B0810 0040:
-	_code_000b0810 (0000)
+	_object_list_from_ai_reference_evaluate (0000)
 000B0850 0050:
-	_code_000b0850 (0000)
+	_ai_scripting_status_evaluate (0000)
 000B08A0 0050:
-	_code_000b08a0 (0000)
+	_ai_scripting_conversation_evaluate (0000)
 000B08F0 0050:
-	_code_000b08f0 (0000)
+	_ai_scripting_conversation_line_evaluate (0000)
 000B0940 0050:
-	_code_000b0940 (0000)
+	_ai_scripting_conversation_status_evaluate (0000)
 000B0990 0050:
-	_code_000b0990 (0000)
+	_ai_scripting_allegiance_broken_evaluate (0000)
 000B09E0 0040:
-	_code_000b09e0 (0000)
+	_director_script_camera_evaluate (0000)
 000B0A20 0040:
-	_code_000b0a20 (0000)
+	_scripted_camera_set_absolute_evaluate (0000)
 000B0A60 0040:
-	_code_000b0a60 (0000)
+	_scripted_camera_set_evaluate (0000)
 000B0AA0 0040:
-	_code_000b0aa0 (0000)
+	_scripted_camera_set_animation_evaluate (0000)
 000B0AE0 0040:
-	_code_000b0ae0 (0000)
+	_scripted_camera_set_first_person_evaluate (0000)
 000B0B20 0040:
-	_code_000b0b20 (0000)
+	_scripted_camera_set_dead_evaluate (0000)
 000B0B60 0030:
-	_code_000b0b60 (0000)
+	_scripted_camera_time_evaluate (0000)
 000B0B90 0020:
-	_code_000b0b90 (0000)
+	_director_save_camera_evaluate (0000)
 000B0BB0 0020:
-	_code_000b0bb0 (0000)
+	_director_load_camera_evaluate (0000)
 000B0BD0 0040:
-	_code_000b0bd0 (0000)
+	_game_time_set_speed_evaluate (0000)
 000B0C10 0040:
-	_code_000b0c10 (0000)
+	_game_set_game_variant_from_name_evaluate (0000)
 000B0C50 0020:
-	_code_000b0c50 (0000)
+	_game_time_get_evaluate (0000)
 000B0C70 0030:
-	_code_000b0c70 (0000)
+	_game_difficulty_level_get_ignore_easy_evaluate (0000)
 000B0CA0 0030:
-	_code_000b0ca0 (0000)
+	_game_difficulty_level_get_evaluate (0000)
 000B0CD0 0020:
-	_code_000b0cd0 (0000)
+	_players_unzoom_all_evaluate (0000)
 000B0CF0 0040:
-	_code_000b0cf0 (0000)
+	_player_input_enable_evaluate (0000)
 000B0D30 0050:
-	_code_000b0d30 (0000)
+	_scripted_player_control_set_camera_control_evaluate (0000)
 000B0D80 0020:
-	_code_000b0d80 (0000)
+	_player_control_action_test_reset_evaluate (0000)
 000B0DA0 0030:
-	_code_000b0da0 (0000)
+	_player_control_action_test_jump_evaluate (0000)
 000B0DD0 0030:
-	_code_000b0dd0 (0000)
+	_player_control_action_test_primary_trigger_evaluate (0000)
 000B0E00 0030:
-	_code_000b0e00 (0000)
+	_player_control_action_test_grenade_trigger_evaluate (0000)
 000B0E30 0030:
-	_code_000b0e30 (0000)
+	_player_control_action_test_zoom_evaluate (0000)
 000B0E60 0030:
-	_code_000b0e60 (0000)
+	_player_control_action_test_action_evaluate (0000)
 000B0E90 0030:
-	_code_000b0e90 (0000)
+	_player_control_action_test_accept_evaluate (0000)
 000B0EC0 0030:
-	_code_000b0ec0 (0000)
+	_player_control_action_test_back_evaluate (0000)
 000B0EF0 0030:
-	_code_000b0ef0 (0000)
+	_player_control_action_test_look_relative_up_evaluate (0000)
 000B0F20 0030:
-	_code_000b0f20 (0000)
+	_player_control_action_test_look_relative_down_evaluate (0000)
 000B0F50 0030:
-	_code_000b0f50 (0000)
+	_player_control_action_test_look_relative_left_evaluate (0000)
 000B0F80 0030:
-	_code_000b0f80 (0000)
+	_player_control_action_test_look_relative_right_evaluate (0000)
 000B0FB0 0030:
-	_code_000b0fb0 (0000)
+	_player_control_action_test_look_relative_all_directions_evaluate (0000)
 000B0FE0 0030:
-	_code_000b0fe0 (0000)
+	_player_control_action_test_move_relative_all_directions_evaluate (0000)
 000B1010 0040:
-	_code_000b1010 (0000)
+	_player_add_equipment_evaluate (0000)
 000B1050 0040:
-	_code_000b1050 (0000)
+	_debug_player_teleport_evaluate (0000)
 000B1090 0020:
-	_code_000b1090 (0000)
+	_main_reset_map_evaluate (0000)
 000B10B0 0040:
-	_code_000b10b0 (0000)
+	_main_set_map_name_evaluate (0000)
 000B10F0 0040:
-	_code_000b10f0 (0000)
+	_main_set_multiplayer_map_name_evaluate (0000)
 000B1130 0040:
-	_code_000b1130 (0000)
+	_main_set_difficulty_evaluate (0000)
 000B1170 0040:
-	_code_000b1170 (0000)
+	_main_crash_evaluate (0000)
 000B11B0 0040:
-	_code_000b11b0 (0000)
+	_scenario_switch_structure_bsp_evaluate (0000)
 000B11F0 0030:
-	_code_000b11f0 (0000)
+	_global_structure_bsp_index_get_evaluate (0000)
 000B1220 0020:
-	_code_000b1220 (0000)
+	_main_print_version_evaluate (0000)
 000B1240 0020:
-	_code_000b1240 (0000)
+	_main_set_game_connection_to_film_playback_evaluate (0000)
 000B1260 0020:
-	_code_000b1260 (0000)
+	_texture_cache_flush_evaluate (0000)
 000B1280 0020:
-	_code_000b1280 (0000)
+	_sound_cache_flush_evaluate (0000)
 000B12A0 0020:
-	_code_000b12a0 (0000)
+	_debug_dump_memory_evaluate (0000)
 000B12C0 0020:
-	_code_000b12c0 (0000)
+	_debug_dump_memory_by_file_evaluate (0000)
 000B12E0 0040:
-	_code_000b12e0 (0000)
+	_debug_dump_memory_for_file_evaluate (0000)
 000B1320 0020:
-	_code_000b1320 (0000)
+	_tag_groups_dump_memory_evaluate (0000)
 000B1340 0020:
-	_code_000b1340 (0000)
+	_profile_initialize_evaluate (0000)
 000B1360 0040:
-	_code_000b1360 (0000)
+	_profile_dump_to_file_evaluate (0000)
 000B13A0 0040:
-	_code_000b13a0 (0000)
+	_profile_sections_activate_evaluate (0000)
 000B13E0 0040:
-	_code_000b13e0 (0000)
+	_profile_sections_deactivate_evaluate (0000)
 000B1420 0040:
-	_code_000b1420 (0000)
+	_profile_graph_toggle_evaluate (0000)
 000B1460 0040:
-	_code_000b1460 (0000)
+	_debug_pvs_evaluate (0000)
 000B14A0 0020:
-	_code_000b14a0 (0000)
+	_radiosity_start_evaluate (0000)
 000B14C0 0020:
-	_code_000b14c0 (0000)
+	_radiosity_save_evaluate (0000)
 000B14E0 0020:
-	_code_000b14e0 (0000)
+	_radiosity_debug_point_evaluate (0000)
 000B1500 0020:
-	_code_000b1500 (0000)
+	_ai_profile_change_render_spray_evaluate (0000)
 000B1520 0020:
-	_code_000b1520 (0000)
+	_ai_debug_sound_point_set_evaluate (0000)
 000B1540 0040:
-	_code_000b1540 (0000)
+	_ai_debug_vocalize_evaluate (0000)
 000B1580 0040:
-	_code_000b1580 (0000)
+	_ai_debug_teleport_to_evaluate (0000)
 000B15C0 0040:
-	_code_000b15c0 (0000)
+	_ai_debug_speak_evaluate (0000)
 000B1600 0040:
-	_code_000b1600 (0000)
+	_ai_debug_speak_list_evaluate (0000)
 000B1640 0050:
-	_code_000b1640 (0000)
+	_player_effect_screen_fade_in_evaluate (0000)
 000B1690 0050:
-	_code_000b1690 (0000)
+	_player_effect_screen_fade_out_evaluate (0000)
 000B16E0 0020:
-	_code_000b16e0 (0000)
+	_cinematic_start_evaluate (0000)
 000B1700 0020:
-	_code_000b1700 (0000)
+	_cinematic_stop_evaluate (0000)
 000B1720 0020:
-	_code_000b1720 (0000)
+	_cinematic_skip_start_evaluate (0000)
 000B1740 0020:
-	_code_000b1740 (0000)
+	_cinematic_skip_stop_evaluate (0000)
 000B1760 0040:
-	_code_000b1760 (0000)
+	_cinematic_show_letterbox_evaluate (0000)
 000B17A0 0040:
-	_code_000b17a0 (0000)
+	_cinematic_set_title_evaluate (0000)
 000B17E0 0040:
-	_code_000b17e0 (0000)
+	_cinematic_set_title_delayed_evaluate (0000)
 000B1820 0040:
-	_code_000b1820 (0000)
+	_cinematic_suppress_bsp_object_creation_evaluate (0000)
 000B1860 0020:
-	_code_000b1860 (0000)
+	_attract_mode_start_evaluate (0000)
 000B1880 0020:
-	_code_000b1880 (0000)
+	_main_won_map_evaluate (0000)
 000B18A0 0020:
-	_code_000b18a0 (0000)
+	_main_lost_map_evaluate (0000)
 000B18C0 0030:
-	_code_000b18c0 (0000)
+	_game_safe_to_save_evaluate (0000)
 000B18F0 0030:
-	_code_000b18f0 (0000)
+	_game_all_quiet_evaluate (0000)
 000B1920 0030:
-	_code_000b1920 (0000)
+	_game_safe_to_speak_evaluate (0000)
 000B1950 0030:
-	_code_000b1950 (0000)
+	_game_is_cooperative_evaluate (0000)
 000B1980 0020:
-	_code_000b1980 (0000)
+	_main_save_map_safe_evaluate (0000)
 000B19A0 0020:
-	_code_000b19a0 (0000)
+	_main_save_cancel_evaluate (0000)
 000B19C0 0020:
-	_code_000b19c0 (0000)
+	_main_save_map_no_timeout_evaluate (0000)
 000B19E0 0020:
-	_code_000b19e0 (0000)
+	_main_save_map_nonsafe_evaluate (0000)
 000B1A00 0030:
-	_code_000b1a00 (0000)
+	_main_saving_map_evaluate (0000)
 000B1A30 0020:
-	_code_000b1a30 (0000)
+	_main_revert_map_evaluate (0000)
 000B1A50 0020:
-	_code_000b1a50 (0000)
+	_main_load_core_evaluate (0000)
 000B1A70 0020:
-	_code_000b1a70 (0000)
+	_main_load_core_at_startup_evaluate (0000)
 000B1A90 0040:
-	_code_000b1a90 (0000)
+	_main_load_core_name_evaluate (0000)
 000B1AD0 0040:
-	_code_000b1ad0 (0000)
+	_main_load_core_name_at_startup_evaluate (0000)
 000B1B10 0020:
-	_code_000b1b10 (0000)
+	_main_save_core_evaluate (0000)
 000B1B30 0040:
-	_code_000b1b30 (0000)
+	_main_save_core_name_evaluate (0000)
 000B1B70 0040:
-	_code_000b1b70 (0000)
+	_main_skip_evaluate (0000)
 000B1BB0 0030:
-	_code_000b1bb0 (0000)
+	_game_state_reverted_evaluate (0000)
 000B1BE0 0040:
-	_code_000b1be0 (0000)
+	_scripted_sound_new_evaluate (0000)
 000B1C20 0040:
-	_code_000b1c20 (0000)
+	_scripted_sound_time_evaluate (0000)
 000B1C60 0040:
-	_code_000b1c60 (0000)
+	_scripted_sound_stop_evaluate (0000)
 000B1CA0 0040:
-	_code_000b1ca0 (0000)
+	_scripted_foley_predict_evaluate (0000)
 000B1CE0 0040:
-	_code_000b1ce0 (0000)
+	_scripted_looping_sound_start_evaluate (0000)
 000B1D20 0040:
-	_code_000b1d20 (0000)
+	_scripted_looping_sound_stop_evaluate (0000)
 000B1D60 0040:
-	_code_000b1d60 (0000)
+	_scripted_looping_sound_set_scale_evaluate (0000)
 000B1DA0 0040:
-	_code_000b1da0 (0000)
+	_scripted_looping_sound_set_alternate_evaluate (0000)
 000B1DE0 0040:
-	_code_000b1de0 (0000)
+	_debug_sound_classes_enable_evaluate (0000)
 000B1E20 0050:
-	_code_000b1e20 (0000)
+	_debug_sound_classes_set_distances_evaluate (0000)
 000B1E70 0040:
-	_code_000b1e70 (0000)
+	_debug_sound_classes_set_wet_evaluate (0000)
 000B1EB0 0040:
-	_code_000b1eb0 (0000)
+	_sound_class_set_gain_evaluate (0000)
 000B1EF0 0040:
-	_code_000b1ef0 (0000)
+	_sound_enable_evaluate (0000)
 000B1F30 0040:
-	_code_000b1f30 (0000)
+	_vehicle_hover_evaluate (0000)
 000B1F70 0050:
-	_code_000b1f70 (0000)
+	_scripted_show_hud_evaluate (0000)
 000B1FC0 0050:
-	_code_000b1fc0 (0000)
+	_scripted_show_hud_help_text_evaluate (0000)
 000B2010 0040:
-	_code_000b2010 (0000)
+	_scripted_hud_set_flashing_state_evaluate (0000)
 000B2050 0020:
-	_code_000b2050 (0000)
+	_scripted_hud_restart_flashing_evaluate (0000)
 000B2070 0050:
-	_code_000b2070 (0000)
+	_hud_unit_activate_nav_point_with_flag_evaluate (0000)
 000B20C0 0050:
-	_code_000b20c0 (0000)
+	_hud_unit_activate_nav_point_with_object_evaluate (0000)
 000B2110 0050:
-	_code_000b2110 (0000)
+	_hud_activate_team_nav_point_with_flag_evaluate (0000)
 000B2160 0050:
-	_code_000b2160 (0000)
+	_hud_activate_team_nav_point_with_object_evaluate (0000)
 000B21B0 0040:
-	_code_000b21b0 (0000)
+	_hud_unit_deactivate_nav_point_with_flag_evaluate (0000)
 000B21F0 0040:
-	_code_000b21f0 (0000)
+	_hud_unit_deactivate_nav_point_with_object_evaluate (0000)
 000B2230 0040:
-	_code_000b2230 (0000)
+	_hud_deactivate_team_nav_point_with_flag_evaluate (0000)
 000B2270 0040:
-	_code_000b2270 (0000)
+	_hud_deactivate_team_nav_point_with_object_evaluate (0000)
 000B22B0 0020:
-	_code_000b22b0 (0000)
+	_terminal_clear_evaluate (0000)
 000B22D0 0040:
-	_code_000b22d0 (0000)
+	_errors_overflow_suppression_enable_evaluate (0000)
 000B2310 0020:
-	_code_000b2310 (0000)
+	_structure_lens_flares_place_evaluate (0000)
 000B2330 0050:
-	_code_000b2330 (0000)
+	_scripted_player_effect_set_translation_evaluate (0000)
 000B2380 0050:
-	_code_000b2380 (0000)
+	_scripted_player_effect_set_rotation_evaluate (0000)
 000B23D0 0040:
-	_code_000b23d0 (0000)
+	_scripted_player_effect_set_rumble_evaluate (0000)
 000B2410 0040:
-	_code_000b2410 (0000)
+	_scripted_player_effect_start_evaluate (0000)
 000B2450 0040:
-	_code_000b2450 (0000)
+	_scripted_player_effect_stop_evaluate (0000)
 000B2490 0040:
-	_code_000b2490 (0000)
+	_scripted_hud_show_health_evaluate (0000)
 000B24D0 0040:
-	_code_000b24d0 (0000)
+	_scripted_hud_blink_health_evaluate (0000)
 000B2510 0040:
-	_code_000b2510 (0000)
+	_scripted_hud_show_shield_evaluate (0000)
 000B2550 0040:
-	_code_000b2550 (0000)
+	_scripted_hud_blink_shield_evaluate (0000)
 000B2590 0040:
-	_code_000b2590 (0000)
+	_scripted_hud_show_motion_sensor_evaluate (0000)
 000B25D0 0040:
-	_code_000b25d0 (0000)
+	_scripted_hud_blink_motion_sensor_evaluate (0000)
 000B2610 0040:
-	_code_000b2610 (0000)
+	_scripted_hud_show_crosshair_evaluate (0000)
 000B2650 0020:
-	_code_000b2650 (0000)
+	_scripted_hud_messages_clear_evaluate (0000)
 000B2670 0040:
-	_code_000b2670 (0000)
+	_scripted_hud_set_state_message_evaluate (0000)
 000B26B0 0040:
-	_code_000b26b0 (0000)
+	_scripted_hud_set_objective_evaluate (0000)
 000B26F0 0040:
-	_code_000b26f0 (0000)
+	_scripted_hud_set_timer_time_evaluate (0000)
 000B2730 0040:
-	_code_000b2730 (0000)
+	_scripted_hud_set_timer_warning_cutoff_evaluate (0000)
 000B2770 0050:
-	_code_000b2770 (0000)
+	_scripted_hud_set_timer_position_evaluate (0000)
 000B27C0 0040:
-	_code_000b27c0 (0000)
+	_scripted_hud_show_timer_evaluate (0000)
 000B2800 0040:
-	_code_000b2800 (0000)
+	_scripted_hud_pause_timer_evaluate (0000)
 000B2840 0030:
-	_code_000b2840 (0000)
+	_scripted_hud_get_timer_ticks_evaluate (0000)
 000B2870 0040:
-	_code_000b2870 (0000)
+	_scripted_hud_time_code_show_evaluate (0000)
 000B28B0 0040:
-	_code_000b28b0 (0000)
+	_scripted_hud_time_code_start_evaluate (0000)
 000B28F0 0020:
-	_code_000b28f0 (0000)
+	_scripted_hud_time_code_reset_evaluate (0000)
 000B2910 0020:
-	_code_000b2910 (0000)
+	_rasterizer_decals_flush_evaluate (0000)
 000B2930 0020:
-	_code_000b2930 (0000)
+	_rasterizer_fps_accumulate_evaluate (0000)
 000B2950 0050:
-	_code_000b2950 (0000)
+	_rasterizer_model_ambient_reflection_tint_evaluate (0000)
 000B29A0 0020:
-	_code_000b29a0 (0000)
+	_rasterizer_lights_reset_for_new_map_evaluate (0000)
 000B29C0 0040:
-	_code_000b29c0 (0000)
+	_rasterizer_script_screen_effect_set_value_evaluate (0000)
 000B2A00 0040:
-	_code_000b2a00 (0000)
+	_rasterizer_screen_effect_start_evaluate (0000)
 000B2A40 0060:
-	_code_000b2a40 (0000)
+	_rasterizer_screen_effect_set_convolution_evaluate (0000)
 000B2AA0 0060:
-	_code_000b2aa0 (0000)
+	_rasterizer_screen_effect_set_filter_evaluate (0000)
 000B2B00 0050:
-	_code_000b2b00 (0000)
+	_rasterizer_screen_effect_set_filter_desaturation_tint_evaluate (0000)
 000B2B50 0040:
-	_code_000b2b50 (0000)
+	_rasterizer_screen_effect_set_video_evaluate (0000)
 000B2B90 0020:
-	_code_000b2b90 (0000)
+	_rasterizer_screen_effect_stop_evaluate (0000)
 000B2BB0 0040:
-	_code_000b2bb0 (0000)
+	_rasterizer_set_near_clip_distance_evaluate (0000)
 000B2BF0 0020:
-	_code_000b2bf0 (0000)
+	_enumerate_memory_units_test_evaluate (0000)
 000B2C10 0020:
-	_code_000b2c10 (0000)
+	_saved_game_files_delete_all_custom_profiles_evaluate (0000)
 000B2C30 0020:
-	_code_000b2c30 (0000)
+	_player_ui_fast_setup_network_server_evaluate (0000)
 000B2C50 0020:
-	_code_000b2c50 (0000)
+	_player_ui_activate_all_solo_levels_evaluate (0000)
 000B2C70 0040:
-	_code_000b2c70 (0000)
+	_player0_look_invert_pitch_evaluate (0000)
 000B2CB0 0030:
-	_code_000b2cb0 (0000)
+	_player0_look_pitch_is_inverted_evaluate (0000)
 000B2CE0 0030:
-	_code_000b2ce0 (0000)
+	_player0_joystick_set_is_normal_evaluate (0000)
 000B2D10 0040:
-	_code_000b2d10 (0000)
+	_ui_widget_debug_show_path_evaluate (0000)
 000B2D50 0040:
-	_code_000b2d50 (0000)
+	_display_scenario_help_evaluate (0000)
 000B2D90 0020:
-	_code_000b2d90 (0000)
+	_network_game_client_request_immediate_start_evaluate (0000)
 000B2DB0 0040:
-	_code_000b2db0 (0000)
+	_xbox_set_machine_name_evaluate (0000)
 000B2DF0 0110:
 	_hs_scenario_merge (0000)
 000B2F00 00d0:
-	_code_000b2f00 (0000)
+	_hs_allocate (0000)
 000B2FD0 0010:
 	_hs_dispose (0000)
 000B2FE0 0010:
@@ -809,75 +809,75 @@ symbols in this file:
 000B3360 0050:
 	_hs_find_function_by_name (0000)
 000B33B0 0020:
-	_code_000b33b0 (0000)
+	_alphabetize (0000)
 000B33D0 0080:
-	_code_000b33d0 (0000)
+	_hs_tokens_enumerate_add_string (0000)
 000B3450 0040:
-	_code_000b3450 (0000)
+	_hs_enumerate_from_string_list (0000)
 000B3490 0040:
-	_code_000b3490 (0000)
+	_hs_enumerate_block_data (0000)
 000B34D0 0030:
-	_code_000b34d0 (0000)
+	_hs_enumerate_scenario_data (0000)
 000B3500 0020:
-	_code_000b3500 (0000)
+	_hs_enumerate_special_form_names (0000)
 000B3520 0030:
-	_code_000b3520 (0000)
+	_hs_enumerate_script_type_names (0000)
 000B3550 0030:
-	_code_000b3550 (0000)
+	_hs_enumerate_type_names (0000)
 000B3580 0060:
-	_code_000b3580 (0000)
+	_hs_enumerate_function_names (0000)
 000B35E0 0030:
-	_code_000b35e0 (0000)
+	_hs_enumerate_script_names (0000)
 000B3610 00b0:
-	_code_000b3610 (0000)
+	_hs_enumerate_variable_names (0000)
 000B36C0 0030:
-	_code_000b36c0 (0000)
+	_hs_enumerate_ai_names (0000)
 000B36F0 0030:
-	_code_000b36f0 (0000)
+	_hs_enumerate_ai_command_list_names (0000)
 000B3720 0030:
-	_code_000b3720 (0000)
+	_hs_enumerate_starting_profile_names (0000)
 000B3750 0030:
-	_code_000b3750 (0000)
+	_hs_enumerate_conversation_names (0000)
 000B3780 0030:
-	_code_000b3780 (0000)
+	_hs_enumerate_object_names (0000)
 000B37B0 0030:
-	_code_000b37b0 (0000)
+	_hs_enumerate_trigger_volume_names (0000)
 000B37E0 0030:
-	_code_000b37e0 (0000)
+	_hs_enumerate_cutscene_flag_names (0000)
 000B3810 0030:
-	_code_000b3810 (0000)
+	_hs_enumerate_cutscene_camera_point_names (0000)
 000B3840 0030:
-	_code_000b3840 (0000)
+	_hs_enumerate_cutscene_title_names (0000)
 000B3870 0030:
-	_code_000b3870 (0000)
+	_hs_enumerate_cutscene_recording_names (0000)
 000B38A0 0040:
-	_code_000b38a0 (0000)
+	_hs_enumerate_navpoints (0000)
 000B38E0 0040:
-	_code_000b38e0 (0000)
+	_hs_enumerate_hud_messages (0000)
 000B3920 00e0:
 	_hs_tokens_enumerate (0000)
 000B3A00 0110:
-	_code_000b3a00 (0000)
+	_hs_rebuild_source_file (0000)
 000B3B10 0050:
-	_code_000b3b10 (0000)
+	_alphabetize_file_references (0000)
 000B3B60 0140:
-	_code_000b3b60 (0000)
+	_hs_rebuild_source (0000)
 000B3CA0 0070:
-	_code_000b3ca0 (0000)
+	_hs_compile_source_error (0000)
 000B3D10 00d0:
-	_code_000b3d10 (0000)
+	_hs_compile_source (0000)
 000B3DE0 00a0:
-	_code_000b3de0 (0000)
+	_hs_get_function_parameters_string (0000)
 000B3E80 0020:
-	_code_000b3e80 (0000)
+	_hs_get_function_documentation_string (0000)
 000B3EA0 0040:
 	_hs_evaluate_by_name (0000)
 000B3EE0 0020:
-	_code_000b3ee0 (0000)
+	_hs_recompile_evaluate (0000)
 000B3F00 0050:
-	_code_000b3f00 (0000)
+	_random_range_evaluate (0000)
 000B3F50 0060:
-	_code_000b3f50 (0000)
+	_real_random_range_evaluate (0000)
 000B3FB0 0180:
 	_hs_scenario_postprocess (0000)
 000B4130 0040:
@@ -891,9 +891,9 @@ symbols in this file:
 000B4330 0060:
 	_hs_hack (0000)
 000B4390 0020:
-	_code_000b4390 (0000)
+	_hs_doc_evaluate (0000)
 000B43B0 0040:
-	_code_000b43b0 (0000)
+	_hs_help_evaluate (0000)
 000B43F0 0070:
 	_hs_initialize (0000)
 000B4460 0250:
@@ -3564,7 +3564,7 @@ void console_printf(
 	boolean clear,
 	char const *format,
 	...);
-long code_000b33b0(
+long alphabetize(
 	char const **left,
 	char const **right);
 struct scenario *global_scenario_get(
@@ -4550,7 +4550,7 @@ long hs_compile(
 	char const *source,
 	char const **error_source,
 	char const **error_message);
-long code_000b3b10(
+long alphabetize_file_references(
 	struct file_reference const *left,
 	struct file_reference const *right);
 boolean tag_data_resize(
@@ -4574,11 +4574,11 @@ int isspace(
 boolean hs_scenario_merge(
 	struct scenario *scenario,
 	struct scenario *source_scenario);
-void code_000b2f00(
+void hs_allocate(
 	void);
-boolean code_000b3b60(
+boolean hs_rebuild_source(
 	void);
-boolean code_000b3d10(
+boolean hs_compile_source(
 	void);
 boolean hs_scenario_postprocess(
 	boolean restore_syntax_data);
@@ -4678,7 +4678,7 @@ boolean hs_scenario_merge(
 	return success;
 }
 
-void code_000b2f00(
+void hs_allocate(
 	void)
 {
 	struct scenario *scenario;
@@ -4740,7 +4740,7 @@ void hs_initialize(
 	object_lists_initialize();
 	hs_runtime_initialize();
 	scenario = global_scenario_index != NONE ? global_scenario_get() : NULL;
-	code_000b2f00();
+	hs_allocate();
 	if (scenario && scenario->hs_syntax_data.size)
 		hs_scenario_postprocess(FALSE);
 	object_lists_initialize_for_new_map();
@@ -4753,12 +4753,12 @@ void hs_hack(
 {
 	struct scenario *scenario;
 
-	if (code_000b3b60())
+	if (hs_rebuild_source())
 	{
-		code_000b3d10();
+		hs_compile_source();
 		hs_dispose_from_old_map();
 		scenario = global_scenario_index != NONE ? global_scenario_get() : NULL;
-		code_000b2f00();
+		hs_allocate();
 		if (scenario && scenario->hs_syntax_data.size)
 			hs_scenario_postprocess(FALSE);
 		object_lists_initialize_for_new_map();
@@ -4767,7 +4767,7 @@ void hs_hack(
 	return;
 }
 
-static void code_000b3ca0(
+static void hs_compile_source_error(
 	struct hs_source_file const *source_file,
 	char *error_message,
 	char const *source,
@@ -4801,7 +4801,7 @@ static void code_000b3ca0(
 	return;
 }
 
-boolean code_000b3d10(
+boolean hs_compile_source(
 	void)
 {
 	struct scenario *scenario;
@@ -4839,7 +4839,7 @@ boolean code_000b3d10(
 				&source_file->source,
 				0,
 				source_file->source.size);
-			code_000b3ca0(
+			hs_compile_source_error(
 				source_file,
 				(char *)error_message,
 				source,
@@ -4855,7 +4855,7 @@ boolean code_000b3d10(
 	return success;
 }
 
-static boolean code_000b3a00(
+static boolean hs_rebuild_source_file(
 	struct file_reference *file)
 {
 	struct scenario *scenario;
@@ -4902,7 +4902,7 @@ static boolean code_000b3a00(
 	return FALSE;
 }
 
-boolean code_000b3b60(
+boolean hs_rebuild_source(
 	void)
 {
 	boolean success = TRUE;
@@ -4922,7 +4922,7 @@ boolean code_000b3b60(
 		"data\\global_scripts.hsc",
 		FALSE);
 	if (file_exists(&global_scripts))
-		success = code_000b3a00(&global_scripts);
+		success = hs_rebuild_source_file(&global_scripts);
 
 	file_reference_create_from_path(&scripts_directory, scenario_path, TRUE);
 	source_file_count = (short)find_files(
@@ -4934,7 +4934,7 @@ boolean code_000b3b60(
 		source_files,
 		source_file_count,
 		sizeof(struct file_reference),
-		(int (__cdecl *)(void const *, void const *))code_000b3b10);
+		(int (__cdecl *)(void const *, void const *))alphabetize_file_references);
 	for (source_file_index = 0; source_file_index<source_file_count; source_file_index++)
 	{
 		file_reference_get_name(
@@ -4942,7 +4942,7 @@ boolean code_000b3b60(
 			FLAG(_name_extension_bit),
 			extension);
 		if (csstrcmp(extension, "hsc") == 0 &&
-			!code_000b3a00(&source_files[source_file_index]))
+			!hs_rebuild_source_file(&source_files[source_file_index]))
 		{
 			success = FALSE;
 		}
@@ -4985,7 +4985,7 @@ void hs_initialize_for_new_map(
 	struct scenario *scenario;
 
 	scenario = global_scenario_index != NONE ? global_scenario_get() : NULL;
-	code_000b2f00();
+	hs_allocate();
 	if (scenario && scenario->hs_syntax_data.size)
 		hs_scenario_postprocess(FALSE);
 	object_lists_initialize_for_new_map();
@@ -5178,7 +5178,7 @@ boolean hs_evaluate_by_name(
 	return FALSE;
 }
 
-static void code_000b3de0(
+static void hs_get_function_parameters_string(
 	short function_index,
 	char *result)
 {
@@ -5204,7 +5204,7 @@ static void code_000b3de0(
 	return;
 }
 
-static void code_000b3e80(
+static void hs_get_function_documentation_string(
 	short function_index,
 	char *result)
 {
@@ -5222,9 +5222,9 @@ void hs_help(
 	function_index = hs_find_function_by_name(function_name);
 	if (function_index != NONE)
 	{
-		code_000b3de0(function_index, result);
+		hs_get_function_parameters_string(function_index, result);
 		console_printf(FALSE, result);
-		code_000b3e80(function_index, result);
+		hs_get_function_documentation_string(function_index, result);
 		console_printf(FALSE, result);
 	}
 	return;
@@ -5241,7 +5241,7 @@ void hs_doc(
 	for (function_index = 0; function_index<hs_function_table_count; function_index++)
 	{
 		hs_function_get(function_index);
-		code_000b3de0(function_index, result);
+		hs_get_function_parameters_string(function_index, result);
 		fprintf(file, "%s\r\n", result);
 		csstrcpy(result, hs_function_get(function_index)->help);
 		fprintf(file, "%s\r\n\r\n", result);
@@ -5283,12 +5283,12 @@ short hs_tokens_enumerate(
 		(void *)results,
 		hs_enumeration_result_count,
 		sizeof(*results),
-		(int (__cdecl *)(void const *, void const *))code_000b33b0);
+		(int (__cdecl *)(void const *, void const *))alphabetize);
 	enumeration_results = NULL;
 	return hs_enumeration_result_count;
 }
 
-static void code_000b33d0(
+static void hs_tokens_enumerate_add_string(
 	char const *token)
 {
 	match_assert(
@@ -5309,7 +5309,7 @@ static void code_000b33d0(
 	return;
 }
 
-static void code_000b3490(
+static void hs_enumerate_block_data(
 	struct tag_block const *block,
 	short name_offset,
 	long element_size)
@@ -5324,12 +5324,12 @@ static void code_000b3490(
 			block,
 			element_index,
 			element_size);
-		code_000b33d0((char const *)(element + name_offset));
+		hs_tokens_enumerate_add_string((char const *)(element + name_offset));
 	}
 	return;
 }
 
-void code_000b34d0(
+void hs_enumerate_scenario_data(
 	short block_offset,
 	short name_offset,
 	long element_size)
@@ -5339,12 +5339,12 @@ void code_000b34d0(
 		struct tag_block const *block;
 
 		block = (struct tag_block const *)((byte const *)global_scenario_get() + block_offset);
-		code_000b3490(block, name_offset, element_size);
+		hs_enumerate_block_data(block, name_offset, element_size);
 	}
 	return;
 }
 
-static void code_000b3450(
+static void hs_enumerate_from_string_list(
 	char const **names,
 	short first,
 	short last)
@@ -5352,43 +5352,43 @@ static void code_000b3450(
 	short index;
 
 	for (index = first; index<last; index++)
-		code_000b33d0(names[index]);
+		hs_tokens_enumerate_add_string(names[index]);
 	return;
 }
 
-void code_000b3500(
+void hs_enumerate_special_form_names(
 	void)
 {
-	code_000b33d0("script");
-	code_000b33d0("global");
+	hs_tokens_enumerate_add_string("script");
+	hs_tokens_enumerate_add_string("global");
 	return;
 }
 
-void code_000b3520(
+void hs_enumerate_script_type_names(
 	void)
 {
-	code_000b3450(hs_script_type_names, 0, 5);
+	hs_enumerate_from_string_list(hs_script_type_names, 0, 5);
 	return;
 }
 
-void code_000b3550(
+void hs_enumerate_type_names(
 	void)
 {
-	code_000b3450(hs_type_names, 4, 49);
+	hs_enumerate_from_string_list(hs_type_names, 4, 49);
 	return;
 }
 
-void code_000b3580(
+void hs_enumerate_function_names(
 	void)
 {
 	short function_index;
 
 	for (function_index = 0; function_index<hs_function_table_count; function_index++)
-		code_000b33d0(hs_function_get(function_index)->name);
+		hs_tokens_enumerate_add_string(hs_function_get(function_index)->name);
 	return;
 }
 
-void code_000b35e0(
+void hs_enumerate_script_names(
 	void)
 {
 	if (global_scenario_index != NONE)
@@ -5399,18 +5399,18 @@ void code_000b35e0(
 		scenario = global_scenario_get();
 		scripts = (struct tag_block const *)scenario;
 		scripts = (struct tag_block const *)((byte const *)scripts + offsetof(struct scenario, hs_scripts));
-		code_000b3490(scripts, 0, sizeof(struct hs_script));
+		hs_enumerate_block_data(scripts, 0, sizeof(struct hs_script));
 	}
 	return;
 }
 
-void code_000b3610(
+void hs_enumerate_variable_names(
 	void)
 {
 	short global_index;
 
 	for (global_index = 0; global_index<hs_external_global_count; global_index++)
-		code_000b33d0(hs_global_external_get(global_index)->name);
+		hs_tokens_enumerate_add_string(hs_global_external_get(global_index)->name);
 
 	if (global_scenario_index != NONE)
 	{
@@ -5424,13 +5424,13 @@ void code_000b3610(
 			struct hs_global const *global;
 
 			global = TAG_BLOCK_GET_ELEMENT(globals, global_index, struct hs_global);
-			code_000b33d0(global->name);
+			hs_tokens_enumerate_add_string(global->name);
 		}
 	}
 	return;
 }
 
-void code_000b36c0(
+void hs_enumerate_ai_names(
 	void)
 {
 	if (global_scenario_index != NONE)
@@ -5441,12 +5441,12 @@ void code_000b36c0(
 		scenario = global_scenario_get();
 		encounters = (struct tag_block const *)scenario;
 		encounters = (struct tag_block const *)((byte const *)encounters + offsetof(struct scenario, ai_encounters));
-		code_000b3490(encounters, 0, sizeof(struct encounter_definition));
+		hs_enumerate_block_data(encounters, 0, sizeof(struct encounter_definition));
 	}
 	return;
 }
 
-void code_000b36f0(
+void hs_enumerate_ai_command_list_names(
 	void)
 {
 	if (global_scenario_index != NONE)
@@ -5457,12 +5457,12 @@ void code_000b36f0(
 		scenario = global_scenario_get();
 		command_lists = (struct tag_block const *)scenario;
 		command_lists = (struct tag_block const *)((byte const *)command_lists + offsetof(struct scenario, ai_command_lists));
-		code_000b3490(command_lists, 0, sizeof(struct ai_command_list_definition));
+		hs_enumerate_block_data(command_lists, 0, sizeof(struct ai_command_list_definition));
 	}
 	return;
 }
 
-void code_000b3720(
+void hs_enumerate_starting_profile_names(
 	void)
 {
 	if (global_scenario_index != NONE)
@@ -5473,12 +5473,12 @@ void code_000b3720(
 		scenario = global_scenario_get();
 		starting_profiles = (struct tag_block const *)scenario;
 		starting_profiles = (struct tag_block const *)((byte const *)starting_profiles + offsetof(struct scenario, starting_profiles));
-		code_000b3490(starting_profiles, 0, scenario_starting_profile_size);
+		hs_enumerate_block_data(starting_profiles, 0, scenario_starting_profile_size);
 	}
 	return;
 }
 
-void code_000b3750(
+void hs_enumerate_conversation_names(
 	void)
 {
 	if (global_scenario_index != NONE)
@@ -5489,12 +5489,12 @@ void code_000b3750(
 		scenario = global_scenario_get();
 		conversations = (struct tag_block const *)scenario;
 		conversations = (struct tag_block const *)((byte const *)conversations + offsetof(struct scenario, ai_conversations));
-		code_000b3490(conversations, 0, scenario_conversation_definition_size);
+		hs_enumerate_block_data(conversations, 0, scenario_conversation_definition_size);
 	}
 	return;
 }
 
-void code_000b3780(
+void hs_enumerate_object_names(
 	void)
 {
 	if (global_scenario_index != NONE)
@@ -5505,12 +5505,12 @@ void code_000b3780(
 		scenario = global_scenario_get();
 		object_names = (struct tag_block const *)scenario;
 		object_names = (struct tag_block const *)((byte const *)object_names + offsetof(struct scenario, object_names));
-		code_000b3490(object_names, 0, sizeof(struct scenario_object_name));
+		hs_enumerate_block_data(object_names, 0, sizeof(struct scenario_object_name));
 	}
 	return;
 }
 
-void code_000b37b0(
+void hs_enumerate_trigger_volume_names(
 	void)
 {
 	if (global_scenario_index != NONE)
@@ -5521,12 +5521,12 @@ void code_000b37b0(
 		scenario = global_scenario_get();
 		trigger_volumes = (struct tag_block const *)scenario;
 		trigger_volumes = (struct tag_block const *)((byte const *)trigger_volumes + offsetof(struct scenario, trigger_volumes));
-		code_000b3490(trigger_volumes, 4, sizeof(struct scenario_trigger_volume));
+		hs_enumerate_block_data(trigger_volumes, 4, sizeof(struct scenario_trigger_volume));
 	}
 	return;
 }
 
-void code_000b37e0(
+void hs_enumerate_cutscene_flag_names(
 	void)
 {
 	if (global_scenario_index != NONE)
@@ -5537,12 +5537,12 @@ void code_000b37e0(
 		scenario = global_scenario_get();
 		cutscene_flags = (struct tag_block const *)scenario;
 		cutscene_flags = (struct tag_block const *)((byte const *)cutscene_flags + offsetof(struct scenario, cutscene_flags));
-		code_000b3490(cutscene_flags, 4, scenario_cutscene_flag_size);
+		hs_enumerate_block_data(cutscene_flags, 4, scenario_cutscene_flag_size);
 	}
 	return;
 }
 
-void code_000b3810(
+void hs_enumerate_cutscene_camera_point_names(
 	void)
 {
 	if (global_scenario_index != NONE)
@@ -5553,12 +5553,12 @@ void code_000b3810(
 		scenario = global_scenario_get();
 		camera_points = (struct tag_block const *)scenario;
 		camera_points = (struct tag_block const *)((byte const *)camera_points + offsetof(struct scenario, cutscene_camera_points));
-		code_000b3490(camera_points, 4, sizeof(struct scenario_cutscene_camera_point));
+		hs_enumerate_block_data(camera_points, 4, sizeof(struct scenario_cutscene_camera_point));
 	}
 	return;
 }
 
-void code_000b3840(
+void hs_enumerate_cutscene_title_names(
 	void)
 {
 	if (global_scenario_index != NONE)
@@ -5569,12 +5569,12 @@ void code_000b3840(
 		scenario = global_scenario_get();
 		chapter_titles = (struct tag_block const *)scenario;
 		chapter_titles = (struct tag_block const *)((byte const *)chapter_titles + offsetof(struct scenario, cutscene_chapter_titles));
-		code_000b3490(chapter_titles, 4, scenario_cutscene_chapter_title_size);
+		hs_enumerate_block_data(chapter_titles, 4, scenario_cutscene_chapter_title_size);
 	}
 	return;
 }
 
-void code_000b3870(
+void hs_enumerate_cutscene_recording_names(
 	void)
 {
 	if (global_scenario_index != NONE)
@@ -5585,12 +5585,12 @@ void code_000b3870(
 		scenario = global_scenario_get();
 		recorded_animations = (struct tag_block const *)scenario;
 		recorded_animations = (struct tag_block const *)((byte const *)recorded_animations + offsetof(struct scenario, recorded_animations));
-		code_000b3490(recorded_animations, 0, sizeof(struct recorded_animation_definition));
+		hs_enumerate_block_data(recorded_animations, 0, sizeof(struct recorded_animation_definition));
 	}
 	return;
 }
 
-void code_000b38a0(
+void hs_enumerate_navpoints(
 	void)
 {
 	long hud_globals_index;
@@ -5602,7 +5602,7 @@ void code_000b38a0(
 
 		hud_globals = hud_globals_definition_get(
 			interface_get_tag_index(_interface_hud_globals));
-		code_000b3490(
+		hs_enumerate_block_data(
 			&hud_globals->waypoint_arrows,
 			0,
 			sizeof(struct hud_waypoint_arrow_definition));
@@ -5610,7 +5610,7 @@ void code_000b38a0(
 	return;
 }
 
-void code_000b38e0(
+void hs_enumerate_hud_messages(
 	void)
 {
 	if (global_scenario_get()->hud_messages.index != NONE)
@@ -5619,12 +5619,12 @@ void code_000b38e0(
 
 		hud_messages = hud_message_text_definition_get(
 			global_scenario_get()->hud_messages.index);
-		code_000b3490(&hud_messages->messages, 0, sizeof(struct hud_message_definition));
+		hs_enumerate_block_data(&hud_messages->messages, 0, sizeof(struct hud_message_definition));
 	}
 	return;
 }
 
-long code_000b3b10(
+long alphabetize_file_references(
 	struct file_reference const *left,
 	struct file_reference const *right)
 {
@@ -5636,212 +5636,212 @@ long code_000b3b10(
 	return _stricmp(left_name, right_name);
 }
 
-long code_000b33b0(
+long alphabetize(
 	char const **left,
 	char const **right)
 {
 	return _stricmp(*left, *right);
 }
 
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b18c0, game_safe_to_save)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b18f0, game_all_quiet)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b1920, game_safe_to_speak)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b1950, game_is_cooperative)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b1a00, main_saving_map)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b1bb0, game_state_reverted)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(game_safe_to_save_evaluate, game_safe_to_save)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(game_all_quiet_evaluate, game_all_quiet)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(game_safe_to_speak_evaluate, game_safe_to_speak)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(game_is_cooperative_evaluate, game_is_cooperative)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(main_saving_map_evaluate, main_saving_map)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(game_state_reverted_evaluate, game_state_reverted)
 
-HS_EVALUATE_NO_ARGUMENTS(code_000ad5f0, hs_object_destroy_all)
-HS_EVALUATE_NO_ARGUMENTS(code_000ada90, numeric_countdown_timer_stop)
-HS_EVALUATE_NO_ARGUMENTS(code_000adab0, numeric_countdown_timer_restart)
-HS_EVALUATE_NO_ARGUMENTS(code_000add10, objects_dump_memory)
-HS_EVALUATE_NO_ARGUMENTS(code_000ade30, garbage_collect_now)
-HS_EVALUATE_NO_ARGUMENTS(code_000ae010, object_pvs_clear)
-HS_EVALUATE_NO_ARGUMENTS(code_000af0b0, breakable_surfaces_reset)
-HS_EVALUATE_NO_ARGUMENTS(code_000af0d0, cheat_all_powerups)
-HS_EVALUATE_NO_ARGUMENTS(code_000af0f0, cheat_all_weapons)
-HS_EVALUATE_NO_ARGUMENTS(code_000af110, cheat_all_vehicles)
-HS_EVALUATE_NO_ARGUMENTS(code_000af130, cheat_teleport_to_camera)
-HS_EVALUATE_NO_ARGUMENTS(code_000af150, cheat_active_camouflage)
-HS_EVALUATE_NO_ARGUMENTS(code_000ae980, scripting_magic_melee_attack)
-HS_EVALUATE_NO_ARGUMENTS(code_000af1b0, cheats_load)
-HS_EVALUATE_NO_ARGUMENTS(code_000af550, ai_scripting_erase_all)
-HS_EVALUATE_NO_ARGUMENTS(code_000af5b0, ai_scripting_deselect)
-HS_EVALUATE_NO_ARGUMENTS(code_000b0050, ai_scripting_reconnect)
-HS_EVALUATE_NO_ARGUMENTS(code_000b0b90, director_save_camera)
-HS_EVALUATE_NO_ARGUMENTS(code_000b0bb0, director_load_camera)
-HS_EVALUATE_NO_ARGUMENTS(code_000b0cd0, players_unzoom_all)
-HS_EVALUATE_NO_ARGUMENTS(code_000b0d80, player_control_action_test_reset)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1090, main_reset_map)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1220, main_print_version)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1240, main_set_game_connection_to_film_playback)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1260, texture_cache_flush)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1280, sound_cache_flush)
-HS_EVALUATE_NO_ARGUMENTS(code_000b12a0, debug_dump_memory)
-HS_EVALUATE_NO_ARGUMENTS(code_000b12c0, debug_dump_memory_by_file)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1340, profile_initialize)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1500, ai_profile_change_render_spray)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1520, ai_debug_sound_point_set)
-HS_EVALUATE_NO_ARGUMENTS(code_000b16e0, cinematic_start)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1700, cinematic_stop)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1720, cinematic_skip_start)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1740, cinematic_skip_stop)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1860, attract_mode_start)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1880, main_won_map)
-HS_EVALUATE_NO_ARGUMENTS(code_000b18a0, main_lost_map)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1980, main_save_map_safe)
-HS_EVALUATE_NO_ARGUMENTS(code_000b19a0, main_save_cancel)
-HS_EVALUATE_NO_ARGUMENTS(code_000b19c0, main_save_map_no_timeout)
-HS_EVALUATE_NO_ARGUMENTS(code_000b19e0, main_save_map_nonsafe)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1a30, main_revert_map)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1a50, main_load_core)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1a70, main_load_core_at_startup)
-HS_EVALUATE_NO_ARGUMENTS(code_000b1b10, main_save_core)
-HS_EVALUATE_NO_ARGUMENTS(code_000b2050, scripted_hud_restart_flashing)
-HS_EVALUATE_NO_ARGUMENTS(code_000b22b0, terminal_clear)
-HS_EVALUATE_NO_ARGUMENTS(code_000b2310, structure_lens_flares_place)
-HS_EVALUATE_NO_ARGUMENTS(code_000b2650, scripted_hud_messages_clear)
-HS_EVALUATE_NO_ARGUMENTS(code_000b28f0, scripted_hud_time_code_reset)
-HS_EVALUATE_NO_ARGUMENTS(code_000b2910, rasterizer_decals_flush)
-HS_EVALUATE_NO_ARGUMENTS(code_000b2930, rasterizer_fps_accumulate)
-HS_EVALUATE_NO_ARGUMENTS(code_000b29a0, rasterizer_lights_reset_for_new_map)
-HS_EVALUATE_NO_ARGUMENTS(code_000b2b90, rasterizer_screen_effect_stop)
-HS_EVALUATE_NO_ARGUMENTS(code_000b2bf0, enumerate_memory_units_test)
-HS_EVALUATE_NO_ARGUMENTS(code_000b2c10, saved_game_files_delete_all_custom_profiles)
-HS_EVALUATE_NO_ARGUMENTS(code_000b2c30, player_ui_fast_setup_network_server)
-HS_EVALUATE_NO_ARGUMENTS(code_000b2c50, player_ui_activate_all_solo_levels)
-HS_EVALUATE_NO_ARGUMENTS(code_000b2d90, network_game_client_request_immediate_start)
-HS_EVALUATE_NO_ARGUMENTS(code_000b4390, hs_doc)
-HS_EVALUATE_NO_OP(code_000b1320)
-HS_EVALUATE_NO_OP(code_000b14a0)
-HS_EVALUATE_NO_OP(code_000b14c0)
-HS_EVALUATE_NO_OP(code_000b14e0)
-HS_EVALUATE_RETURN_LONG(code_000ad320, hs_players)
-HS_EVALUATE_RETURN_LONG(code_000b0c50, game_time_get)
-HS_EVALUATE_RETURN_SHORT(code_000b0b60, scripted_camera_time)
-HS_EVALUATE_RETURN_SHORT(code_000b0c70, game_difficulty_level_get_ignore_easy)
-HS_EVALUATE_RETURN_SHORT(code_000b0ca0, game_difficulty_level_get)
-HS_EVALUATE_RETURN_SHORT(code_000b11f0, global_structure_bsp_index_get)
-HS_EVALUATE_RETURN_SHORT(code_000b2840, scripted_hud_get_timer_ticks)
-HS_EVALUATE_SHORT_FROM_LONG(code_000ad750, object_list_count)
-HS_EVALUATE_SHORT_FROM_UNSIGNED_SHORT(code_000ada40, numeric_countdown_timer_get)
-HS_EVALUATE_SHORT_FROM_LONG(code_000adc40, recorded_animation_get_time_left)
-HS_EVALUATE_SHORT_FROM_LONG(code_000ae0c0, scenery_get_animation_time)
-HS_EVALUATE_SHORT_FROM_LONG(code_000ae320, unit_get_custom_animation_time)
-HS_EVALUATE_SHORT_FROM_LONG(code_000aeae0, unit_scripting_get_grenade_count)
-HS_EVALUATE_SHORT_FROM_LONG(code_000b0600, ai_scripting_command_list_status)
-HS_EVALUATE_SHORT_FROM_LONG(code_000b0650, ai_scripting_going_to_vehicle)
-HS_EVALUATE_SHORT_FROM_LONG(code_000b06a0, ai_scripting_living_count)
-HS_EVALUATE_SHORT_FROM_LONG(code_000b0770, ai_scripting_swarm_count)
-HS_EVALUATE_SHORT_FROM_LONG(code_000b07c0, ai_scripting_nonswarm_count)
-HS_EVALUATE_SHORT_FROM_LONG(code_000b0850, ai_scripting_status)
-HS_EVALUATE_SHORT_FROM_UNSIGNED_SHORT(code_000b08f0, ai_scripting_conversation_line)
-HS_EVALUATE_SHORT_FROM_UNSIGNED_SHORT(code_000b0940, ai_scripting_conversation_status)
-HS_EVALUATE_RETURN_SHORT_FROM_ARGUMENTS(code_000ae860, struct hs_arguments_long_long_long, (vehicle_scripting_load_magic(arguments->value0, arguments->value1, arguments->value2)))
-HS_EVALUATE_RETURN_SHORT_FROM_ARGUMENTS(code_000ae8b0, struct hs_arguments_long_long, (vehicle_scripting_unload(arguments->value0, (char const *)arguments->value1)))
-HS_EVALUATE_LONG_FROM_LONG(code_000ae9a0, unit_scripting_unit_riders)
-HS_EVALUATE_LONG_FROM_LONG(code_000ae9e0, unit_scripting_unit_driver)
-HS_EVALUATE_LONG_FROM_LONG(code_000aea20, unit_scripting_unit_gunner)
-HS_EVALUATE_LONG_FROM_LONG(code_000b0810, object_list_from_ai_reference)
-HS_EVALUATE_LONG_FROM_LONG(code_000b1c20, scripted_sound_time)
-HS_EVALUATE_VOID_LONG(code_000ad4b0, hs_object_destroy)
-HS_EVALUATE_VOID_LONG(code_000adc00, recorded_animation_kill)
-HS_EVALUATE_VOID_LONG(code_000ade50, object_cannot_take_damage)
-HS_EVALUATE_VOID_LONG(code_000ade90, object_can_take_damage)
-HS_EVALUATE_VOID_LONG(code_000adf10, hs_objects_predict)
-HS_EVALUATE_VOID_LONG(code_000adf50, object_definition_predict)
-HS_EVALUATE_VOID_LONG(code_000adf90, object_pvs_set_object)
-HS_EVALUATE_VOID_LONG(code_000ae030, object_pvs_activate)
-HS_EVALUATE_VOID_LONG(code_000ae220, unit_open)
-HS_EVALUATE_VOID_LONG(code_000ae260, unit_close)
-HS_EVALUATE_VOID_LONG(code_000ae2a0, unit_kill)
-HS_EVALUATE_VOID_LONG(code_000ae2e0, unit_kill_silent)
-HS_EVALUATE_VOID_LONG(code_000ae370, unit_stop_custom_animation)
-HS_EVALUATE_VOID_LONG(code_000ae6e0, unit_scripting_exit_vehicle)
-HS_EVALUATE_VOID_LONG(code_000aebd0, unit_scripting_doesnt_drop_items)
-HS_EVALUATE_VOID_LONG(code_000af290, ai_scripting_free)
-HS_EVALUATE_VOID_LONG(code_000af2d0, ai_scripting_free_units)
-HS_EVALUATE_VOID_LONG(code_000af3d0, ai_scripting_detach_unit)
-HS_EVALUATE_VOID_LONG(code_000af410, ai_scripting_detach_units)
-HS_EVALUATE_VOID_LONG(code_000af450, ai_scripting_place)
-HS_EVALUATE_VOID_LONG(code_000af490, ai_scripting_kill)
-HS_EVALUATE_VOID_LONG(code_000af4d0, ai_scripting_kill_silent)
-HS_EVALUATE_VOID_LONG(code_000af510, ai_scripting_erase)
-HS_EVALUATE_VOID_LONG(code_000af570, ai_scripting_select)
-HS_EVALUATE_VOID_LONG(code_000af5d0, ai_scripting_spawn_actor)
-HS_EVALUATE_VOID_LONG(code_000af710, ai_scripting_magically_see_players)
-HS_EVALUATE_VOID_LONG(code_000af7d0, ai_scripting_timer_start)
-HS_EVALUATE_VOID_LONG(code_000af810, ai_scripting_timer_expire)
-HS_EVALUATE_VOID_LONG(code_000af850, ai_scripting_attack)
-HS_EVALUATE_VOID_LONG(code_000af890, ai_scripting_defend)
-HS_EVALUATE_VOID_LONG(code_000af8d0, ai_scripting_retreat)
-HS_EVALUATE_VOID_UNSIGNED_SHORT(code_000ad470, hs_object_create)
-HS_EVALUATE_VOID_UNSIGNED_SHORT(code_000ad4f0, hs_object_create_anew)
-HS_EVALUATE_VOID_UNSIGNED_SHORT(code_000adfd0, object_pvs_set_camera_point)
-HS_EVALUATE_VOID_UNSIGNED_SHORT(code_000af170, cheat_active_camouflage_local_player)
-HS_EVALUATE_VOID_BOOLEAN(code_000adad0, breakable_surfaces_enable)
-HS_EVALUATE_VOID_BOOLEAN(code_000ae1a0, render_effects)
-HS_EVALUATE_VOID_BOOLEAN(code_000af1d0, ai_globals_ai_active)
-HS_EVALUATE_VOID_BOOLEAN(code_000af210, ai_globals_dialogue_triggers_enabled)
-HS_EVALUATE_VOID_BOOLEAN(code_000af250, ai_globals_grenades_enabled)
-HS_EVALUATE_VOID_STRING(code_000ad2e0, hs_print)
-HS_EVALUATE_VOID_STRING(code_000ad530, hs_object_create_containing)
-HS_EVALUATE_VOID_STRING(code_000ad570, hs_object_create_anew_containing)
-HS_EVALUATE_VOID_STRING(code_000ad5b0, hs_object_destroy_containing)
-HS_EVALUATE_VOID_LONG(code_000ad940, hs_objects_delete_by_definition)
-HS_EVALUATE_VOID_STRING(code_000ae900, scripting_set_magic_base_seat)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000adc90, object_set_ranged_attack_inhibited)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000adcd0, object_set_melee_attack_inhibited)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000add30, object_scripting_set_collideable)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000ae1e0, unit_scripting_can_blink)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000ae500, unit_aim_without_turning)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000ae580, unit_set_enterable_by_player)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000aec10, unit_scripting_impervious)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000aec50, unit_scripting_suspended)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000aecc0, units_set_desired_flashlight_state)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000aed00, unit_set_desired_flashlight_state)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000aed90, device_set_never_appears_locked)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000aeff0, device_one_sided_set)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000af030, device_operates_automatically_set)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000af610, ai_scripting_set_respawn)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000af650, ai_scripting_set_deaf)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000af690, ai_scripting_set_blind)
-HS_EVALUATE_VOID_LONG_LONG(code_000ad860, hs_damage_object)
-HS_EVALUATE_VOID_LONG_LONG(code_000addf0, objects_scripting_detach)
-HS_EVALUATE_VOID_LONG_LONG(code_000af310, ai_scripting_attach_unit)
-HS_EVALUATE_VOID_LONG_LONG(code_000af350, ai_scripting_attach_units)
-HS_EVALUATE_VOID_LONG_LONG(code_000af390, ai_scripting_attach_free)
-HS_EVALUATE_VOID_LONG_LONG(code_000af6d0, ai_scripting_magically_see_encounter)
-HS_EVALUATE_VOID_LONG_LONG(code_000af750, ai_scripting_magically_see_unit)
-HS_EVALUATE_VOID_LONG_LONG(code_000af790, ai_scripting_magically_see_units)
-HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(code_000ad610, hs_object_teleport)
-HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(code_000ad650, hs_object_set_facing)
-HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(code_000ad7a0, hs_effect_new)
-HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(code_000ad820, hs_damage_new)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000ada00, numeric_countdown_timer_set)
-HS_EVALUATE_VOID_LONG_STRING(code_000ae6a0, unit_scripting_set_emotion_animation)
-HS_EVALUATE_VOID_LONG_STRING(code_000ae940, unit_scripting_set_seat)
-HS_EVALUATE_VOID_SHORT_BOOLEAN(code_000af070, device_group_change_only_once_more_set)
-HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(code_000ae540, unit_set_emotion)
-HS_EVALUATE_VOID_LONG_LONG_STRING(code_000ae5c0, unit_scripting_enter_vehicle)
+HS_EVALUATE_NO_ARGUMENTS(hs_object_destroy_all_evaluate, hs_object_destroy_all)
+HS_EVALUATE_NO_ARGUMENTS(numeric_countdown_timer_stop_evaluate, numeric_countdown_timer_stop)
+HS_EVALUATE_NO_ARGUMENTS(numeric_countdown_timer_restart_evaluate, numeric_countdown_timer_restart)
+HS_EVALUATE_NO_ARGUMENTS(objects_dump_memory_evaluate, objects_dump_memory)
+HS_EVALUATE_NO_ARGUMENTS(garbage_collect_now_evaluate, garbage_collect_now)
+HS_EVALUATE_NO_ARGUMENTS(object_pvs_clear_evaluate, object_pvs_clear)
+HS_EVALUATE_NO_ARGUMENTS(breakable_surfaces_reset_evaluate, breakable_surfaces_reset)
+HS_EVALUATE_NO_ARGUMENTS(cheat_all_powerups_evaluate, cheat_all_powerups)
+HS_EVALUATE_NO_ARGUMENTS(cheat_all_weapons_evaluate, cheat_all_weapons)
+HS_EVALUATE_NO_ARGUMENTS(cheat_all_vehicles_evaluate, cheat_all_vehicles)
+HS_EVALUATE_NO_ARGUMENTS(cheat_teleport_to_camera_evaluate, cheat_teleport_to_camera)
+HS_EVALUATE_NO_ARGUMENTS(cheat_active_camouflage_evaluate, cheat_active_camouflage)
+HS_EVALUATE_NO_ARGUMENTS(scripting_magic_melee_attack_evaluate, scripting_magic_melee_attack)
+HS_EVALUATE_NO_ARGUMENTS(cheats_load_evaluate, cheats_load)
+HS_EVALUATE_NO_ARGUMENTS(ai_scripting_erase_all_evaluate, ai_scripting_erase_all)
+HS_EVALUATE_NO_ARGUMENTS(ai_scripting_deselect_evaluate, ai_scripting_deselect)
+HS_EVALUATE_NO_ARGUMENTS(ai_scripting_reconnect_evaluate, ai_scripting_reconnect)
+HS_EVALUATE_NO_ARGUMENTS(director_save_camera_evaluate, director_save_camera)
+HS_EVALUATE_NO_ARGUMENTS(director_load_camera_evaluate, director_load_camera)
+HS_EVALUATE_NO_ARGUMENTS(players_unzoom_all_evaluate, players_unzoom_all)
+HS_EVALUATE_NO_ARGUMENTS(player_control_action_test_reset_evaluate, player_control_action_test_reset)
+HS_EVALUATE_NO_ARGUMENTS(main_reset_map_evaluate, main_reset_map)
+HS_EVALUATE_NO_ARGUMENTS(main_print_version_evaluate, main_print_version)
+HS_EVALUATE_NO_ARGUMENTS(main_set_game_connection_to_film_playback_evaluate, main_set_game_connection_to_film_playback)
+HS_EVALUATE_NO_ARGUMENTS(texture_cache_flush_evaluate, texture_cache_flush)
+HS_EVALUATE_NO_ARGUMENTS(sound_cache_flush_evaluate, sound_cache_flush)
+HS_EVALUATE_NO_ARGUMENTS(debug_dump_memory_evaluate, debug_dump_memory)
+HS_EVALUATE_NO_ARGUMENTS(debug_dump_memory_by_file_evaluate, debug_dump_memory_by_file)
+HS_EVALUATE_NO_ARGUMENTS(profile_initialize_evaluate, profile_initialize)
+HS_EVALUATE_NO_ARGUMENTS(ai_profile_change_render_spray_evaluate, ai_profile_change_render_spray)
+HS_EVALUATE_NO_ARGUMENTS(ai_debug_sound_point_set_evaluate, ai_debug_sound_point_set)
+HS_EVALUATE_NO_ARGUMENTS(cinematic_start_evaluate, cinematic_start)
+HS_EVALUATE_NO_ARGUMENTS(cinematic_stop_evaluate, cinematic_stop)
+HS_EVALUATE_NO_ARGUMENTS(cinematic_skip_start_evaluate, cinematic_skip_start)
+HS_EVALUATE_NO_ARGUMENTS(cinematic_skip_stop_evaluate, cinematic_skip_stop)
+HS_EVALUATE_NO_ARGUMENTS(attract_mode_start_evaluate, attract_mode_start)
+HS_EVALUATE_NO_ARGUMENTS(main_won_map_evaluate, main_won_map)
+HS_EVALUATE_NO_ARGUMENTS(main_lost_map_evaluate, main_lost_map)
+HS_EVALUATE_NO_ARGUMENTS(main_save_map_safe_evaluate, main_save_map_safe)
+HS_EVALUATE_NO_ARGUMENTS(main_save_cancel_evaluate, main_save_cancel)
+HS_EVALUATE_NO_ARGUMENTS(main_save_map_no_timeout_evaluate, main_save_map_no_timeout)
+HS_EVALUATE_NO_ARGUMENTS(main_save_map_nonsafe_evaluate, main_save_map_nonsafe)
+HS_EVALUATE_NO_ARGUMENTS(main_revert_map_evaluate, main_revert_map)
+HS_EVALUATE_NO_ARGUMENTS(main_load_core_evaluate, main_load_core)
+HS_EVALUATE_NO_ARGUMENTS(main_load_core_at_startup_evaluate, main_load_core_at_startup)
+HS_EVALUATE_NO_ARGUMENTS(main_save_core_evaluate, main_save_core)
+HS_EVALUATE_NO_ARGUMENTS(scripted_hud_restart_flashing_evaluate, scripted_hud_restart_flashing)
+HS_EVALUATE_NO_ARGUMENTS(terminal_clear_evaluate, terminal_clear)
+HS_EVALUATE_NO_ARGUMENTS(structure_lens_flares_place_evaluate, structure_lens_flares_place)
+HS_EVALUATE_NO_ARGUMENTS(scripted_hud_messages_clear_evaluate, scripted_hud_messages_clear)
+HS_EVALUATE_NO_ARGUMENTS(scripted_hud_time_code_reset_evaluate, scripted_hud_time_code_reset)
+HS_EVALUATE_NO_ARGUMENTS(rasterizer_decals_flush_evaluate, rasterizer_decals_flush)
+HS_EVALUATE_NO_ARGUMENTS(rasterizer_fps_accumulate_evaluate, rasterizer_fps_accumulate)
+HS_EVALUATE_NO_ARGUMENTS(rasterizer_lights_reset_for_new_map_evaluate, rasterizer_lights_reset_for_new_map)
+HS_EVALUATE_NO_ARGUMENTS(rasterizer_screen_effect_stop_evaluate, rasterizer_screen_effect_stop)
+HS_EVALUATE_NO_ARGUMENTS(enumerate_memory_units_test_evaluate, enumerate_memory_units_test)
+HS_EVALUATE_NO_ARGUMENTS(saved_game_files_delete_all_custom_profiles_evaluate, saved_game_files_delete_all_custom_profiles)
+HS_EVALUATE_NO_ARGUMENTS(player_ui_fast_setup_network_server_evaluate, player_ui_fast_setup_network_server)
+HS_EVALUATE_NO_ARGUMENTS(player_ui_activate_all_solo_levels_evaluate, player_ui_activate_all_solo_levels)
+HS_EVALUATE_NO_ARGUMENTS(network_game_client_request_immediate_start_evaluate, network_game_client_request_immediate_start)
+HS_EVALUATE_NO_ARGUMENTS(hs_doc_evaluate, hs_doc)
+HS_EVALUATE_NO_OP(tag_groups_dump_memory_evaluate)
+HS_EVALUATE_NO_OP(radiosity_start_evaluate)
+HS_EVALUATE_NO_OP(radiosity_save_evaluate)
+HS_EVALUATE_NO_OP(radiosity_debug_point_evaluate)
+HS_EVALUATE_RETURN_LONG(hs_players_evaluate, hs_players)
+HS_EVALUATE_RETURN_LONG(game_time_get_evaluate, game_time_get)
+HS_EVALUATE_RETURN_SHORT(scripted_camera_time_evaluate, scripted_camera_time)
+HS_EVALUATE_RETURN_SHORT(game_difficulty_level_get_ignore_easy_evaluate, game_difficulty_level_get_ignore_easy)
+HS_EVALUATE_RETURN_SHORT(game_difficulty_level_get_evaluate, game_difficulty_level_get)
+HS_EVALUATE_RETURN_SHORT(global_structure_bsp_index_get_evaluate, global_structure_bsp_index_get)
+HS_EVALUATE_RETURN_SHORT(scripted_hud_get_timer_ticks_evaluate, scripted_hud_get_timer_ticks)
+HS_EVALUATE_SHORT_FROM_LONG(object_list_count_evaluate, object_list_count)
+HS_EVALUATE_SHORT_FROM_UNSIGNED_SHORT(numeric_countdown_timer_get_evaluate, numeric_countdown_timer_get)
+HS_EVALUATE_SHORT_FROM_LONG(recorded_animation_get_time_left_evaluate, recorded_animation_get_time_left)
+HS_EVALUATE_SHORT_FROM_LONG(scenery_get_animation_time_evaluate, scenery_get_animation_time)
+HS_EVALUATE_SHORT_FROM_LONG(unit_get_custom_animation_time_evaluate, unit_get_custom_animation_time)
+HS_EVALUATE_SHORT_FROM_LONG(unit_scripting_get_grenade_count_evaluate, unit_scripting_get_grenade_count)
+HS_EVALUATE_SHORT_FROM_LONG(ai_scripting_command_list_status_evaluate, ai_scripting_command_list_status)
+HS_EVALUATE_SHORT_FROM_LONG(ai_scripting_going_to_vehicle_evaluate, ai_scripting_going_to_vehicle)
+HS_EVALUATE_SHORT_FROM_LONG(ai_scripting_living_count_evaluate, ai_scripting_living_count)
+HS_EVALUATE_SHORT_FROM_LONG(ai_scripting_swarm_count_evaluate, ai_scripting_swarm_count)
+HS_EVALUATE_SHORT_FROM_LONG(ai_scripting_nonswarm_count_evaluate, ai_scripting_nonswarm_count)
+HS_EVALUATE_SHORT_FROM_LONG(ai_scripting_status_evaluate, ai_scripting_status)
+HS_EVALUATE_SHORT_FROM_UNSIGNED_SHORT(ai_scripting_conversation_line_evaluate, ai_scripting_conversation_line)
+HS_EVALUATE_SHORT_FROM_UNSIGNED_SHORT(ai_scripting_conversation_status_evaluate, ai_scripting_conversation_status)
+HS_EVALUATE_RETURN_SHORT_FROM_ARGUMENTS(vehicle_scripting_load_magic_evaluate, struct hs_arguments_long_long_long, (vehicle_scripting_load_magic(arguments->value0, arguments->value1, arguments->value2)))
+HS_EVALUATE_RETURN_SHORT_FROM_ARGUMENTS(vehicle_scripting_unload_evaluate, struct hs_arguments_long_long, (vehicle_scripting_unload(arguments->value0, (char const *)arguments->value1)))
+HS_EVALUATE_LONG_FROM_LONG(unit_scripting_unit_riders_evaluate, unit_scripting_unit_riders)
+HS_EVALUATE_LONG_FROM_LONG(unit_scripting_unit_driver_evaluate, unit_scripting_unit_driver)
+HS_EVALUATE_LONG_FROM_LONG(unit_scripting_unit_gunner_evaluate, unit_scripting_unit_gunner)
+HS_EVALUATE_LONG_FROM_LONG(object_list_from_ai_reference_evaluate, object_list_from_ai_reference)
+HS_EVALUATE_LONG_FROM_LONG(scripted_sound_time_evaluate, scripted_sound_time)
+HS_EVALUATE_VOID_LONG(hs_object_destroy_evaluate, hs_object_destroy)
+HS_EVALUATE_VOID_LONG(recorded_animation_kill_evaluate, recorded_animation_kill)
+HS_EVALUATE_VOID_LONG(object_cannot_take_damage_evaluate, object_cannot_take_damage)
+HS_EVALUATE_VOID_LONG(object_can_take_damage_evaluate, object_can_take_damage)
+HS_EVALUATE_VOID_LONG(hs_objects_predict_evaluate, hs_objects_predict)
+HS_EVALUATE_VOID_LONG(object_definition_predict_evaluate, object_definition_predict)
+HS_EVALUATE_VOID_LONG(object_pvs_set_object_evaluate, object_pvs_set_object)
+HS_EVALUATE_VOID_LONG(object_pvs_activate_evaluate, object_pvs_activate)
+HS_EVALUATE_VOID_LONG(unit_open_evaluate, unit_open)
+HS_EVALUATE_VOID_LONG(unit_close_evaluate, unit_close)
+HS_EVALUATE_VOID_LONG(unit_kill_evaluate, unit_kill)
+HS_EVALUATE_VOID_LONG(unit_kill_silent_evaluate, unit_kill_silent)
+HS_EVALUATE_VOID_LONG(unit_stop_custom_animation_evaluate, unit_stop_custom_animation)
+HS_EVALUATE_VOID_LONG(unit_scripting_exit_vehicle_evaluate, unit_scripting_exit_vehicle)
+HS_EVALUATE_VOID_LONG(unit_scripting_doesnt_drop_items_evaluate, unit_scripting_doesnt_drop_items)
+HS_EVALUATE_VOID_LONG(ai_scripting_free_evaluate, ai_scripting_free)
+HS_EVALUATE_VOID_LONG(ai_scripting_free_units_evaluate, ai_scripting_free_units)
+HS_EVALUATE_VOID_LONG(ai_scripting_detach_unit_evaluate, ai_scripting_detach_unit)
+HS_EVALUATE_VOID_LONG(ai_scripting_detach_units_evaluate, ai_scripting_detach_units)
+HS_EVALUATE_VOID_LONG(ai_scripting_place_evaluate, ai_scripting_place)
+HS_EVALUATE_VOID_LONG(ai_scripting_kill_evaluate, ai_scripting_kill)
+HS_EVALUATE_VOID_LONG(ai_scripting_kill_silent_evaluate, ai_scripting_kill_silent)
+HS_EVALUATE_VOID_LONG(ai_scripting_erase_evaluate, ai_scripting_erase)
+HS_EVALUATE_VOID_LONG(ai_scripting_select_evaluate, ai_scripting_select)
+HS_EVALUATE_VOID_LONG(ai_scripting_spawn_actor_evaluate, ai_scripting_spawn_actor)
+HS_EVALUATE_VOID_LONG(ai_scripting_magically_see_players_evaluate, ai_scripting_magically_see_players)
+HS_EVALUATE_VOID_LONG(ai_scripting_timer_start_evaluate, ai_scripting_timer_start)
+HS_EVALUATE_VOID_LONG(ai_scripting_timer_expire_evaluate, ai_scripting_timer_expire)
+HS_EVALUATE_VOID_LONG(ai_scripting_attack_evaluate, ai_scripting_attack)
+HS_EVALUATE_VOID_LONG(ai_scripting_defend_evaluate, ai_scripting_defend)
+HS_EVALUATE_VOID_LONG(ai_scripting_retreat_evaluate, ai_scripting_retreat)
+HS_EVALUATE_VOID_UNSIGNED_SHORT(hs_object_create_evaluate, hs_object_create)
+HS_EVALUATE_VOID_UNSIGNED_SHORT(hs_object_create_anew_evaluate, hs_object_create_anew)
+HS_EVALUATE_VOID_UNSIGNED_SHORT(object_pvs_set_camera_point_evaluate, object_pvs_set_camera_point)
+HS_EVALUATE_VOID_UNSIGNED_SHORT(cheat_active_camouflage_local_player_evaluate, cheat_active_camouflage_local_player)
+HS_EVALUATE_VOID_BOOLEAN(breakable_surfaces_enable_evaluate, breakable_surfaces_enable)
+HS_EVALUATE_VOID_BOOLEAN(render_effects_evaluate, render_effects)
+HS_EVALUATE_VOID_BOOLEAN(ai_globals_ai_active_evaluate, ai_globals_ai_active)
+HS_EVALUATE_VOID_BOOLEAN(ai_globals_dialogue_triggers_enabled_evaluate, ai_globals_dialogue_triggers_enabled)
+HS_EVALUATE_VOID_BOOLEAN(ai_globals_grenades_enabled_evaluate, ai_globals_grenades_enabled)
+HS_EVALUATE_VOID_STRING(hs_print_evaluate, hs_print)
+HS_EVALUATE_VOID_STRING(hs_object_create_containing_evaluate, hs_object_create_containing)
+HS_EVALUATE_VOID_STRING(hs_object_create_anew_containing_evaluate, hs_object_create_anew_containing)
+HS_EVALUATE_VOID_STRING(hs_object_destroy_containing_evaluate, hs_object_destroy_containing)
+HS_EVALUATE_VOID_LONG(hs_objects_delete_by_definition_evaluate, hs_objects_delete_by_definition)
+HS_EVALUATE_VOID_STRING(scripting_set_magic_base_seat_evaluate, scripting_set_magic_base_seat)
+HS_EVALUATE_VOID_LONG_BOOLEAN(object_set_ranged_attack_inhibited_evaluate, object_set_ranged_attack_inhibited)
+HS_EVALUATE_VOID_LONG_BOOLEAN(object_set_melee_attack_inhibited_evaluate, object_set_melee_attack_inhibited)
+HS_EVALUATE_VOID_LONG_BOOLEAN(object_scripting_set_collideable_evaluate, object_scripting_set_collideable)
+HS_EVALUATE_VOID_LONG_BOOLEAN(unit_scripting_can_blink_evaluate, unit_scripting_can_blink)
+HS_EVALUATE_VOID_LONG_BOOLEAN(unit_aim_without_turning_evaluate, unit_aim_without_turning)
+HS_EVALUATE_VOID_LONG_BOOLEAN(unit_set_enterable_by_player_evaluate, unit_set_enterable_by_player)
+HS_EVALUATE_VOID_LONG_BOOLEAN(unit_scripting_impervious_evaluate, unit_scripting_impervious)
+HS_EVALUATE_VOID_LONG_BOOLEAN(unit_scripting_suspended_evaluate, unit_scripting_suspended)
+HS_EVALUATE_VOID_LONG_BOOLEAN(units_set_desired_flashlight_state_evaluate, units_set_desired_flashlight_state)
+HS_EVALUATE_VOID_LONG_BOOLEAN(unit_set_desired_flashlight_state_evaluate, unit_set_desired_flashlight_state)
+HS_EVALUATE_VOID_LONG_BOOLEAN(device_set_never_appears_locked_evaluate, device_set_never_appears_locked)
+HS_EVALUATE_VOID_LONG_BOOLEAN(device_one_sided_set_evaluate, device_one_sided_set)
+HS_EVALUATE_VOID_LONG_BOOLEAN(device_operates_automatically_set_evaluate, device_operates_automatically_set)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_set_respawn_evaluate, ai_scripting_set_respawn)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_set_deaf_evaluate, ai_scripting_set_deaf)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_set_blind_evaluate, ai_scripting_set_blind)
+HS_EVALUATE_VOID_LONG_LONG(hs_damage_object_evaluate, hs_damage_object)
+HS_EVALUATE_VOID_LONG_LONG(objects_scripting_detach_evaluate, objects_scripting_detach)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_attach_unit_evaluate, ai_scripting_attach_unit)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_attach_units_evaluate, ai_scripting_attach_units)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_attach_free_evaluate, ai_scripting_attach_free)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_magically_see_encounter_evaluate, ai_scripting_magically_see_encounter)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_magically_see_unit_evaluate, ai_scripting_magically_see_unit)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_magically_see_units_evaluate, ai_scripting_magically_see_units)
+HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(hs_object_teleport_evaluate, hs_object_teleport)
+HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(hs_object_set_facing_evaluate, hs_object_set_facing)
+HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(hs_effect_new_evaluate, hs_effect_new)
+HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(hs_damage_new_evaluate, hs_damage_new)
+HS_EVALUATE_VOID_LONG_BOOLEAN(numeric_countdown_timer_set_evaluate, numeric_countdown_timer_set)
+HS_EVALUATE_VOID_LONG_STRING(unit_scripting_set_emotion_animation_evaluate, unit_scripting_set_emotion_animation)
+HS_EVALUATE_VOID_LONG_STRING(unit_scripting_set_seat_evaluate, unit_scripting_set_seat)
+HS_EVALUATE_VOID_SHORT_BOOLEAN(device_group_change_only_once_more_set_evaluate, device_group_change_only_once_more_set)
+HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(unit_set_emotion_evaluate, unit_set_emotion)
+HS_EVALUATE_VOID_LONG_LONG_STRING(unit_scripting_enter_vehicle_evaluate, unit_scripting_enter_vehicle)
 
 HS_EVALUATE_VOID_FROM_ARGUMENTS(
-	code_000ad340,
+	hs_teleport_players_not_in_trigger_volume_evaluate,
 	struct hs_arguments_short_word,
 	hs_teleport_players_not_in_trigger_volume(arguments->value0, arguments->value1))
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000ad690,
+	hs_object_set_shield_evaluate,
 	union hs_evaluation_argument,
 	1,
 	hs_object_set_shield(arguments[0].long_value, real_argument))
 HS_EVALUATE_VOID_FROM_ARGUMENTS(
-	code_000ad6d0,
+	hs_object_set_permutation_evaluate,
 	struct hs_arguments_long_string_string,
 	hs_object_set_permutation(arguments->value0, arguments->value1, arguments->value2))
 HS_EVALUATE_VOID_FROM_ARGUMENTS(
-	code_000ad7e0,
+	hs_effect_new_from_object_marker_evaluate,
 	struct hs_arguments_long_long_string,
 	hs_effect_new_from_object_marker(arguments->value0, arguments->value1, arguments->value2))
-void code_000ad8a0(
+void hs_objects_can_see_object_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -5861,7 +5861,7 @@ void code_000ad8a0(
 
 	return;
 }
-void code_000ad8f0(
+void hs_objects_can_see_flag_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -5882,11 +5882,11 @@ void code_000ad8f0(
 	return;
 }
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000ad980,
+	hs_sound_set_gain_evaluate,
 	union hs_evaluation_argument,
 	1,
 	hs_sound_set_gain(arguments[0].long_value, real_argument))
-void code_000add70(
+void objects_scripting_set_scale_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -5905,19 +5905,19 @@ void code_000add70(
 	return;
 }
 HS_EVALUATE_VOID_FROM_ARGUMENTS(
-	code_000addb0,
+	objects_scripting_attach_evaluate,
 	struct hs_arguments_long_string_long_string,
 	objects_scripting_attach(arguments->value0, arguments->value1, arguments->value2, arguments->value3))
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000aded0, object_beautify)
+HS_EVALUATE_VOID_LONG_BOOLEAN(object_beautify_evaluate, object_beautify)
 HS_EVALUATE_VOID_FROM_ARGUMENTS(
-	code_000ae110,
+	scenery_animation_start_evaluate,
 	struct hs_arguments_long_long_string,
 	scenery_animation_start(arguments->value0, arguments->value1, arguments->value2))
 HS_EVALUATE_VOID_FROM_ARGUMENTS(
-	code_000ae150,
+	scenery_animation_start_at_frame_evaluate,
 	struct hs_arguments_long_long_string_word,
 	scenery_animation_start_at_frame(arguments->value0, arguments->value1, arguments->value2, arguments->value3))
-void code_000ae720(
+void unit_scripting_set_maximum_vitality_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -5936,7 +5936,7 @@ void code_000ae720(
 
 	return;
 }
-void code_000ae770(
+void units_scripting_set_maximum_vitality_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -5955,7 +5955,7 @@ void code_000ae770(
 
 	return;
 }
-void code_000ae7c0(
+void unit_scripting_set_current_vitality_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -5974,7 +5974,7 @@ void code_000ae7c0(
 
 	return;
 }
-void code_000ae810(
+void units_scripting_set_current_vitality_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -5994,11 +5994,11 @@ void code_000ae810(
 	return;
 }
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000aedd0,
+	device_set_power_evaluate,
 	union hs_evaluation_argument,
 	1,
 	device_set_power(arguments[0].long_value, real_argument))
-void code_000aee50(
+void device_set_desired_position_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6019,11 +6019,11 @@ void code_000aee50(
 	return;
 }
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000aeee0,
+	device_set_actual_position_evaluate,
 	union hs_evaluation_argument,
 	1,
 	device_set_actual_position(arguments[0].long_value, real_argument))
-void code_000aef60(
+void device_group_set_desired_value_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6044,21 +6044,21 @@ void code_000aef60(
 	return;
 }
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000aefb0,
+	device_group_set_actual_value_evaluate,
 	union hs_evaluation_argument,
 	1,
 	device_group_set_actual_value(arguments[0].short_value, real_argument))
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000b00b0,
+	ai_scripting_vehicle_enterable_distance_evaluate,
 	union hs_evaluation_argument,
 	1,
 	ai_scripting_vehicle_enterable_distance(arguments[0].long_value, real_argument))
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000b03b0,
+	ai_scripting_follow_distance_evaluate,
 	union hs_evaluation_argument,
 	1,
 	ai_scripting_follow_distance(arguments[0].long_value, real_argument))
-void code_000b1640(
+void player_effect_screen_fade_in_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6077,7 +6077,7 @@ void code_000b1640(
 
 	return;
 }
-void code_000b1690(
+void player_effect_screen_fade_out_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6097,26 +6097,26 @@ void code_000b1690(
 	return;
 }
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000b17e0,
+	cinematic_set_title_delayed_evaluate,
 	union hs_evaluation_argument,
 	1,
 	cinematic_set_title_delayed(arguments[0].short_value, real_argument))
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000b1be0,
+	scripted_sound_new_evaluate,
 	union hs_evaluation_argument,
 	2,
 	scripted_sound_new(arguments[0].long_value, arguments[1].long_value, real_argument))
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000b1ce0,
+	scripted_looping_sound_start_evaluate,
 	union hs_evaluation_argument,
 	2,
 	scripted_looping_sound_start(arguments[0].long_value, arguments[1].long_value, real_argument))
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000b1d60,
+	scripted_looping_sound_set_scale_evaluate,
 	union hs_evaluation_argument,
 	1,
 	scripted_looping_sound_set_scale(arguments[0].long_value, real_argument))
-void code_000b1e20(
+void debug_sound_classes_set_distances_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6136,11 +6136,11 @@ void code_000b1e20(
 	return;
 }
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000b1e70,
+	debug_sound_classes_set_wet_evaluate,
 	union hs_evaluation_argument,
 	1,
 	debug_sound_classes_set_wet((char const *)arguments[0].long_value, real_argument))
-void code_000b1eb0(
+void sound_class_set_gain_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6159,26 +6159,26 @@ void code_000b1eb0(
 	return;
 }
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000b2070,
+	hud_unit_activate_nav_point_with_flag_evaluate,
 	union hs_evaluation_argument,
 	3,
 	hud_unit_activate_nav_point_with_flag(arguments[0].unsigned_short_value, arguments[1].long_value, arguments[2].unsigned_short_value, real_argument))
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000b20c0,
+	hud_unit_activate_nav_point_with_object_evaluate,
 	union hs_evaluation_argument,
 	3,
 	hud_unit_activate_nav_point_with_object(arguments[0].unsigned_short_value, arguments[1].long_value, arguments[2].long_value, real_argument))
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000b2110,
+	hud_activate_team_nav_point_with_flag_evaluate,
 	union hs_evaluation_argument,
 	3,
 	hud_activate_team_nav_point_with_flag(arguments[0].unsigned_short_value, arguments[1].unsigned_short_value, arguments[2].unsigned_short_value, real_argument))
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000b2160,
+	hud_activate_team_nav_point_with_object_evaluate,
 	union hs_evaluation_argument,
 	3,
 	hud_activate_team_nav_point_with_object(arguments[0].unsigned_short_value, arguments[1].unsigned_short_value, arguments[2].long_value, real_argument))
-void code_000b2330(
+void scripted_player_effect_set_translation_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6197,7 +6197,7 @@ void code_000b2330(
 
 	return;
 }
-void code_000b2380(
+void scripted_player_effect_set_rotation_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6216,7 +6216,7 @@ void code_000b2380(
 
 	return;
 }
-void code_000b23d0(
+void scripted_player_effect_set_rumble_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6234,7 +6234,7 @@ void code_000b23d0(
 
 	return;
 }
-void code_000b2410(
+void scripted_player_effect_start_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6252,7 +6252,7 @@ void code_000b2410(
 
 	return;
 }
-void code_000b2950(
+void rasterizer_model_ambient_reflection_tint_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6273,11 +6273,11 @@ void code_000b2950(
 	return;
 }
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000b29c0,
+	rasterizer_script_screen_effect_set_value_evaluate,
 	union hs_evaluation_argument,
 	1,
 	rasterizer_script_screen_effect_set_value(arguments[0].unsigned_short_value, real_argument))
-void code_000b2a40(
+void rasterizer_screen_effect_set_convolution_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6297,7 +6297,7 @@ void code_000b2a40(
 
 	return;
 }
-void code_000b2aa0(
+void rasterizer_screen_effect_set_filter_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6318,7 +6318,7 @@ void code_000b2aa0(
 
 	return;
 }
-void code_000b2b00(
+void rasterizer_screen_effect_set_filter_desaturation_tint_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6338,12 +6338,12 @@ void code_000b2b00(
 	return;
 }
 HS_EVALUATE_VOID_FROM_ARGUMENTS_WITH_REAL(
-	code_000b2b50,
+	rasterizer_screen_effect_set_video_evaluate,
 	union hs_evaluation_argument,
 	1,
 	rasterizer_screen_effect_set_video(arguments[0].unsigned_short_value, real_argument))
 
-void code_000ad710(
+void hs_object_list_get_element_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6361,173 +6361,173 @@ void code_000ad710(
 	return;
 }
 
-HS_EVALUATE_REAL_FROM_LONG(code_000ad9c0, hs_sound_get_gain)
-HS_EVALUATE_REAL_FROM_LONG(code_000aea60, unit_scripting_get_health)
-HS_EVALUATE_REAL_FROM_LONG(code_000aeaa0, unit_scripting_get_shield)
-HS_EVALUATE_REAL_FROM_LONG(code_000aee10, device_get_power)
-HS_EVALUATE_REAL_FROM_LONG(code_000aeea0, device_get_position)
-HS_EVALUATE_REAL_FROM_UNSIGNED_SHORT(code_000aef20, device_group_get_value)
-HS_EVALUATE_REAL_FROM_LONG(code_000b06f0, ai_scripting_living_fraction)
-HS_EVALUATE_REAL_FROM_LONG(code_000b0730, ai_scripting_strength)
-HS_EVALUATE_VOID_LONG(code_000af910, ai_scripting_maneuver)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000af950, ai_scripting_maneuver_enable)
-HS_EVALUATE_VOID_LONG_LONG(code_000af990, ai_scripting_migrate)
-HS_EVALUATE_VOID_LONG_LONG_LONG(code_000af9d0, ai_scripting_migrate_and_speak)
-HS_EVALUATE_VOID_LONG_LONG(code_000afa10, ai_scripting_migrate_by_unit)
-HS_EVALUATE_VOID_SHORT_SHORT(code_000afa50, ai_scripting_allegiance)
-HS_EVALUATE_VOID_SHORT_SHORT(code_000afa90, ai_scripting_allegiance_remove)
-HS_EVALUATE_VOID_LONG_LONG_LONG(code_000afad0, ai_scripting_go_to_vehicle)
-HS_EVALUATE_VOID_LONG_LONG_LONG(code_000afb10, ai_scripting_go_to_vehicle_override)
-HS_EVALUATE_VOID_LONG(code_000afb50, ai_scripting_exit_vehicle)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000afb90, ai_scripting_braindead)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000afbd0, ai_scripting_braindead_by_unit)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000afc10, ai_scripting_ignore)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000afc50, ai_scripting_prefer_target)
-HS_EVALUATE_VOID_LONG(code_000afc90, ai_scripting_teleport_starting_location)
-HS_EVALUATE_VOID_LONG(code_000afcd0, ai_scripting_teleport_starting_location_if_unsupported)
-HS_EVALUATE_VOID_LONG(code_000afd10, ai_scripting_renew)
-HS_EVALUATE_VOID_LONG(code_000afd50, ai_scripting_try_to_fight_nothing)
-HS_EVALUATE_VOID_LONG_LONG(code_000afd90, ai_scripting_try_to_fight)
-HS_EVALUATE_VOID_LONG(code_000afdd0, ai_scripting_try_to_fight_player)
-HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(code_000afe10, ai_scripting_command_list)
-HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(code_000afe50, ai_scripting_command_list_by_unit)
-HS_EVALUATE_VOID_LONG(code_000afe90, ai_scripting_command_list_advance)
-HS_EVALUATE_VOID_LONG(code_000afed0, ai_scripting_command_list_advance_by_unit)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000aff10, ai_scripting_force_active)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000aff50, ai_scripting_force_active_by_unit)
-HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(code_000aff90, ai_scripting_set_return_state)
-HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(code_000affd0, ai_scripting_set_current_state)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000b0010, ai_scripting_playfight)
-HS_EVALUATE_VOID_LONG_LONG(code_000b0070, ai_scripting_vehicle_encounter)
-HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(code_000b00f0, ai_scripting_vehicle_enterable_team)
-HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(code_000b0130, ai_scripting_vehicle_enterable_actor_type)
-HS_EVALUATE_VOID_LONG_LONG(code_000b0170, ai_scripting_vehicle_enterable_actors)
-HS_EVALUATE_VOID_LONG(code_000b01b0, ai_scripting_vehicle_enterable_disable)
-HS_EVALUATE_VOID_LONG_LONG(code_000b01f0, ai_scripting_look_at_object)
-HS_EVALUATE_VOID_LONG(code_000b0230, ai_scripting_stop_looking)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000b0270, ai_scripting_automatic_migration_target)
-HS_EVALUATE_VOID_LONG(code_000b02b0, ai_scripting_follow_target_disable)
-HS_EVALUATE_VOID_LONG(code_000b02f0, ai_scripting_follow_target_players)
-HS_EVALUATE_VOID_LONG_LONG(code_000b0330, ai_scripting_follow_target_unit)
-HS_EVALUATE_VOID_LONG_LONG(code_000b0370, ai_scripting_follow_target_ai)
-HS_EVALUATE_VOID_UNSIGNED_SHORT(code_000b03f0, ai_scripting_conversation_stop)
-HS_EVALUATE_VOID_UNSIGNED_SHORT(code_000b0430, ai_scripting_conversation_advance)
-HS_EVALUATE_VOID_LONG_LONG(code_000b0470, ai_scripting_link_activation)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000b04b0, ai_scripting_berserk)
-HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(code_000b04f0, ai_scripting_set_team)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000b0530, ai_scripting_allow_charge)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000b0570, ai_scripting_allow_dormant)
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b09e0, struct hs_arguments_boolean, (director_script_camera(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b0a20, struct hs_arguments_short_word, (scripted_camera_set_absolute(arguments->value0, arguments->value1)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b0a60, struct hs_arguments_word_word_long, (scripted_camera_set(arguments->value0, arguments->value1, arguments->value2)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b0aa0, struct hs_arguments_long_long, (scripted_camera_set_animation(arguments->value0, arguments->value1)))
-HS_EVALUATE_VOID_LONG(code_000b0ae0, scripted_camera_set_first_person)
-HS_EVALUATE_VOID_LONG(code_000b0b20, scripted_camera_set_dead)
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b0bd0, struct hs_arguments_real, (game_time_set_speed(arguments->value)))
-HS_EVALUATE_VOID_STRING(code_000b0c10, game_set_game_variant_from_name)
-HS_EVALUATE_VOID_BOOLEAN(code_000b0cf0, player_input_enable)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b0da0, player_control_action_test_jump)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b0dd0, player_control_action_test_primary_trigger)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b0e00, player_control_action_test_grenade_trigger)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b0e30, player_control_action_test_zoom)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b0e60, player_control_action_test_action)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b0e90, player_control_action_test_accept)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b0ec0, player_control_action_test_back)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b0ef0, player_control_action_test_look_relative_up)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b0f20, player_control_action_test_look_relative_down)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b0f50, player_control_action_test_look_relative_left)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b0f80, player_control_action_test_look_relative_right)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b0fb0, player_control_action_test_look_relative_all_directions)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b0fe0, player_control_action_test_move_relative_all_directions)
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b1010, struct hs_arguments_long_word_boolean, (player_add_equipment(arguments->value0, arguments->value1, arguments->value2)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b1050, struct hs_arguments_short_word, (debug_player_teleport(arguments->value0, arguments->value1)))
-HS_EVALUATE_VOID_STRING(code_000b10b0, main_set_map_name)
-HS_EVALUATE_VOID_STRING(code_000b10f0, main_set_multiplayer_map_name)
-HS_EVALUATE_VOID_UNSIGNED_SHORT(code_000b1130, main_set_difficulty)
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b11b0, struct hs_arguments_word, (scenario_switch_structure_bsp(arguments->value)))
-HS_EVALUATE_VOID_STRING(code_000b1170, main_crash)
-HS_EVALUATE_VOID_STRING(code_000b12e0, debug_dump_memory_for_file)
-HS_EVALUATE_VOID_STRING(code_000b1360, profile_dump_to_file)
-HS_EVALUATE_VOID_STRING(code_000b13a0, profile_sections_activate)
-HS_EVALUATE_VOID_STRING(code_000b13e0, profile_sections_deactivate)
-HS_EVALUATE_VOID_STRING(code_000b1420, profile_graph_toggle)
-HS_EVALUATE_VOID_BOOLEAN(code_000b1460, debug_pvs)
-HS_EVALUATE_VOID_LONG_STRING(code_000b1540, ai_debug_vocalize)
-HS_EVALUATE_VOID_LONG(code_000b1580, ai_debug_teleport_to)
-HS_EVALUATE_VOID_STRING(code_000b15c0, ai_debug_speak)
-HS_EVALUATE_VOID_STRING(code_000b1600, ai_debug_speak_list)
-HS_EVALUATE_VOID_BOOLEAN(code_000b1760, cinematic_show_letterbox)
-HS_EVALUATE_VOID_UNSIGNED_SHORT(code_000b17a0, cinematic_set_title)
-HS_EVALUATE_VOID_BOOLEAN(code_000b1820, cinematic_suppress_bsp_object_creation)
-HS_EVALUATE_VOID_STRING(code_000b1a90, main_load_core_name)
-HS_EVALUATE_VOID_STRING(code_000b1ad0, main_load_core_name_at_startup)
-HS_EVALUATE_VOID_STRING(code_000b1b30, main_save_core_name)
-HS_EVALUATE_VOID_UNSIGNED_SHORT(code_000b1b70, main_skip)
-HS_EVALUATE_VOID_LONG(code_000b1c60, scripted_sound_stop)
-HS_EVALUATE_VOID_LONG(code_000b1ca0, scripted_foley_predict)
-HS_EVALUATE_VOID_LONG(code_000b1d20, scripted_looping_sound_stop)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000b1da0, scripted_looping_sound_set_alternate)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000b1de0, debug_sound_classes_enable)
-HS_EVALUATE_VOID_BOOLEAN(code_000b1ef0, sound_enable)
-HS_EVALUATE_VOID_LONG_BOOLEAN(code_000b1f30, vehicle_hover)
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2010, struct hs_arguments_boolean, (scripted_hud_set_flashing_state(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b21b0, struct hs_arguments_long_word, (hud_unit_deactivate_nav_point_with_flag(arguments->value0, arguments->value1)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b21f0, struct hs_arguments_long_long, (hud_unit_deactivate_nav_point_with_object(arguments->value0, arguments->value1)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2230, struct hs_arguments_short_word, (hud_deactivate_team_nav_point_with_flag(arguments->value0, arguments->value1)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2270, struct hs_arguments_short_long, (hud_deactivate_team_nav_point_with_object(arguments->value0, arguments->value1)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b22d0, struct hs_arguments_boolean, (errors_overflow_suppression_enable(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2450, struct hs_arguments_real, (scripted_player_effect_stop(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2490, struct hs_arguments_boolean, (scripted_hud_show_health(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b24d0, struct hs_arguments_boolean, (scripted_hud_blink_health(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2510, struct hs_arguments_boolean, (scripted_hud_show_shield(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2550, struct hs_arguments_boolean, (scripted_hud_blink_shield(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2590, struct hs_arguments_boolean, (scripted_hud_show_motion_sensor(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b25d0, struct hs_arguments_boolean, (scripted_hud_blink_motion_sensor(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2610, struct hs_arguments_boolean, (scripted_hud_show_crosshair(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2670, struct hs_arguments_word, (scripted_hud_set_state_message(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b26b0, struct hs_arguments_word, (scripted_hud_set_objective(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b26f0, struct hs_arguments_short_word, (scripted_hud_set_timer_time(arguments->value0, arguments->value1)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2730, struct hs_arguments_short_word, (scripted_hud_set_timer_warning_cutoff(arguments->value0, arguments->value1)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2770, struct hs_arguments_word_word_word, (scripted_hud_set_timer_position(arguments->value0, arguments->value1, arguments->value2)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b27c0, struct hs_arguments_boolean, (scripted_hud_show_timer(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2800, struct hs_arguments_boolean, (scripted_hud_pause_timer(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2870, struct hs_arguments_boolean, (scripted_hud_time_code_show(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b28b0, struct hs_arguments_boolean, (scripted_hud_time_code_start(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2a00, struct hs_arguments_boolean, (rasterizer_screen_effect_start(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2bb0, struct hs_arguments_real, (rasterizer_set_near_clip_distance(arguments->value)))
-HS_EVALUATE_VOID_FROM_ARGUMENTS(code_000b2c70, struct hs_arguments_boolean, (player0_look_invert_pitch(arguments->value)))
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b2cb0, player0_look_pitch_is_inverted)
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000b2ce0, player0_joystick_set_is_normal)
-HS_EVALUATE_VOID_BOOLEAN(code_000b2d10, ui_widget_debug_show_path)
-HS_EVALUATE_VOID_UNSIGNED_SHORT(code_000b2d50, display_scenario_help)
-HS_EVALUATE_VOID_STRING(code_000b2db0, xbox_set_machine_name)
-HS_EVALUATE_VOID_STRING(code_000b43b0, hs_help)
-HS_EVALUATE_RETURN_BOOLEAN(code_000ad290, struct hs_arguments_boolean, (hs_not(arguments->value)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000ad380, struct hs_arguments_short_long, (scenario_trigger_volume_test_object(arguments->value0, arguments->value1)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000ad3d0, struct hs_arguments_short_long, (hs_trigger_volume_test_objects_any(arguments->value0, arguments->value1)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000ad420, struct hs_arguments_short_long, (hs_trigger_volume_test_objects_all(arguments->value0, arguments->value1)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000adb10, struct hs_arguments_long_word, (recorded_animation_play(arguments->value0, arguments->value1)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000adb60, struct hs_arguments_long_word, (recorded_animation_play_and_delete(arguments->value0, arguments->value1)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000adbb0, struct hs_arguments_long_word, (recorded_animation_play_and_hover(arguments->value0, arguments->value1)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000ae070, struct hs_arguments_boolean, (lights_enable(arguments->value)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000ae3b0, struct hs_arguments_long_long_long_boolean, (unit_start_user_animation(arguments->value0, arguments->value1, arguments->value2, arguments->value3)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000ae400, struct hs_arguments_long_long_long_boolean, (unit_scripting_start_user_animation_list(arguments->value0, arguments->value1, arguments->value2, arguments->value3)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000ae450, struct hs_arguments_long_long_long_boolean_word, (unit_custom_animation_at_frame(arguments->value0, arguments->value1, arguments->value2, arguments->value3, arguments->value4)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000ae4b0, struct hs_arguments_long, (unit_is_playing_custom_animation(arguments->value)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000ae600, struct hs_arguments_long_long_long, (unit_scripting_vehicle_test_seat_list(arguments->value0, arguments->value1, arguments->value2)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000ae650, struct hs_arguments_long_long_long, (unit_scripting_vehicle_test_seat(arguments->value0, arguments->value1, arguments->value2)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000aeb30, struct hs_arguments_long_long, (unit_scripting_has_weapon(arguments->value0, arguments->value1)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000aeb80, struct hs_arguments_long_long, (unit_scripting_has_weapon_readied(arguments->value0, arguments->value1)))
-HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(code_000aec90, unit_solo_player_integrated_night_vision_is_active)
-HS_EVALUATE_RETURN_BOOLEAN(code_000aed40, struct hs_arguments_long, (unit_get_current_flashlight_state(arguments->value)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000b05b0, struct hs_arguments_long, (ai_scripting_is_attacking(arguments->value)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000b08a0, struct hs_arguments_word, (ai_scripting_conversation(arguments->value)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000b0990, struct hs_arguments_short_word, (ai_scripting_allegiance_broken(arguments->value0, arguments->value1)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000b0d30, struct hs_arguments_boolean, (scripted_player_control_set_camera_control(arguments->value)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000b1f70, struct hs_arguments_boolean, (scripted_show_hud(arguments->value)))
-HS_EVALUATE_RETURN_BOOLEAN(code_000b1fc0, struct hs_arguments_boolean, (scripted_show_hud_help_text(arguments->value)))
+HS_EVALUATE_REAL_FROM_LONG(hs_sound_get_gain_evaluate, hs_sound_get_gain)
+HS_EVALUATE_REAL_FROM_LONG(unit_scripting_get_health_evaluate, unit_scripting_get_health)
+HS_EVALUATE_REAL_FROM_LONG(unit_scripting_get_shield_evaluate, unit_scripting_get_shield)
+HS_EVALUATE_REAL_FROM_LONG(device_get_power_evaluate, device_get_power)
+HS_EVALUATE_REAL_FROM_LONG(device_get_position_evaluate, device_get_position)
+HS_EVALUATE_REAL_FROM_UNSIGNED_SHORT(device_group_get_value_evaluate, device_group_get_value)
+HS_EVALUATE_REAL_FROM_LONG(ai_scripting_living_fraction_evaluate, ai_scripting_living_fraction)
+HS_EVALUATE_REAL_FROM_LONG(ai_scripting_strength_evaluate, ai_scripting_strength)
+HS_EVALUATE_VOID_LONG(ai_scripting_maneuver_evaluate, ai_scripting_maneuver)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_maneuver_enable_evaluate, ai_scripting_maneuver_enable)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_migrate_evaluate, ai_scripting_migrate)
+HS_EVALUATE_VOID_LONG_LONG_LONG(ai_scripting_migrate_and_speak_evaluate, ai_scripting_migrate_and_speak)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_migrate_by_unit_evaluate, ai_scripting_migrate_by_unit)
+HS_EVALUATE_VOID_SHORT_SHORT(ai_scripting_allegiance_evaluate, ai_scripting_allegiance)
+HS_EVALUATE_VOID_SHORT_SHORT(ai_scripting_allegiance_remove_evaluate, ai_scripting_allegiance_remove)
+HS_EVALUATE_VOID_LONG_LONG_LONG(ai_scripting_go_to_vehicle_evaluate, ai_scripting_go_to_vehicle)
+HS_EVALUATE_VOID_LONG_LONG_LONG(ai_scripting_go_to_vehicle_override_evaluate, ai_scripting_go_to_vehicle_override)
+HS_EVALUATE_VOID_LONG(ai_scripting_exit_vehicle_evaluate, ai_scripting_exit_vehicle)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_braindead_evaluate, ai_scripting_braindead)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_braindead_by_unit_evaluate, ai_scripting_braindead_by_unit)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_ignore_evaluate, ai_scripting_ignore)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_prefer_target_evaluate, ai_scripting_prefer_target)
+HS_EVALUATE_VOID_LONG(ai_scripting_teleport_starting_location_evaluate, ai_scripting_teleport_starting_location)
+HS_EVALUATE_VOID_LONG(ai_scripting_teleport_starting_location_if_unsupported_evaluate, ai_scripting_teleport_starting_location_if_unsupported)
+HS_EVALUATE_VOID_LONG(ai_scripting_renew_evaluate, ai_scripting_renew)
+HS_EVALUATE_VOID_LONG(ai_scripting_try_to_fight_nothing_evaluate, ai_scripting_try_to_fight_nothing)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_try_to_fight_evaluate, ai_scripting_try_to_fight)
+HS_EVALUATE_VOID_LONG(ai_scripting_try_to_fight_player_evaluate, ai_scripting_try_to_fight_player)
+HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(ai_scripting_command_list_evaluate, ai_scripting_command_list)
+HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(ai_scripting_command_list_by_unit_evaluate, ai_scripting_command_list_by_unit)
+HS_EVALUATE_VOID_LONG(ai_scripting_command_list_advance_evaluate, ai_scripting_command_list_advance)
+HS_EVALUATE_VOID_LONG(ai_scripting_command_list_advance_by_unit_evaluate, ai_scripting_command_list_advance_by_unit)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_force_active_evaluate, ai_scripting_force_active)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_force_active_by_unit_evaluate, ai_scripting_force_active_by_unit)
+HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(ai_scripting_set_return_state_evaluate, ai_scripting_set_return_state)
+HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(ai_scripting_set_current_state_evaluate, ai_scripting_set_current_state)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_playfight_evaluate, ai_scripting_playfight)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_vehicle_encounter_evaluate, ai_scripting_vehicle_encounter)
+HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(ai_scripting_vehicle_enterable_team_evaluate, ai_scripting_vehicle_enterable_team)
+HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(ai_scripting_vehicle_enterable_actor_type_evaluate, ai_scripting_vehicle_enterable_actor_type)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_vehicle_enterable_actors_evaluate, ai_scripting_vehicle_enterable_actors)
+HS_EVALUATE_VOID_LONG(ai_scripting_vehicle_enterable_disable_evaluate, ai_scripting_vehicle_enterable_disable)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_look_at_object_evaluate, ai_scripting_look_at_object)
+HS_EVALUATE_VOID_LONG(ai_scripting_stop_looking_evaluate, ai_scripting_stop_looking)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_automatic_migration_target_evaluate, ai_scripting_automatic_migration_target)
+HS_EVALUATE_VOID_LONG(ai_scripting_follow_target_disable_evaluate, ai_scripting_follow_target_disable)
+HS_EVALUATE_VOID_LONG(ai_scripting_follow_target_players_evaluate, ai_scripting_follow_target_players)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_follow_target_unit_evaluate, ai_scripting_follow_target_unit)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_follow_target_ai_evaluate, ai_scripting_follow_target_ai)
+HS_EVALUATE_VOID_UNSIGNED_SHORT(ai_scripting_conversation_stop_evaluate, ai_scripting_conversation_stop)
+HS_EVALUATE_VOID_UNSIGNED_SHORT(ai_scripting_conversation_advance_evaluate, ai_scripting_conversation_advance)
+HS_EVALUATE_VOID_LONG_LONG(ai_scripting_link_activation_evaluate, ai_scripting_link_activation)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_berserk_evaluate, ai_scripting_berserk)
+HS_EVALUATE_VOID_LONG_UNSIGNED_SHORT(ai_scripting_set_team_evaluate, ai_scripting_set_team)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_allow_charge_evaluate, ai_scripting_allow_charge)
+HS_EVALUATE_VOID_LONG_BOOLEAN(ai_scripting_allow_dormant_evaluate, ai_scripting_allow_dormant)
+HS_EVALUATE_VOID_FROM_ARGUMENTS(director_script_camera_evaluate, struct hs_arguments_boolean, (director_script_camera(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_camera_set_absolute_evaluate, struct hs_arguments_short_word, (scripted_camera_set_absolute(arguments->value0, arguments->value1)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_camera_set_evaluate, struct hs_arguments_word_word_long, (scripted_camera_set(arguments->value0, arguments->value1, arguments->value2)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_camera_set_animation_evaluate, struct hs_arguments_long_long, (scripted_camera_set_animation(arguments->value0, arguments->value1)))
+HS_EVALUATE_VOID_LONG(scripted_camera_set_first_person_evaluate, scripted_camera_set_first_person)
+HS_EVALUATE_VOID_LONG(scripted_camera_set_dead_evaluate, scripted_camera_set_dead)
+HS_EVALUATE_VOID_FROM_ARGUMENTS(game_time_set_speed_evaluate, struct hs_arguments_real, (game_time_set_speed(arguments->value)))
+HS_EVALUATE_VOID_STRING(game_set_game_variant_from_name_evaluate, game_set_game_variant_from_name)
+HS_EVALUATE_VOID_BOOLEAN(player_input_enable_evaluate, player_input_enable)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player_control_action_test_jump_evaluate, player_control_action_test_jump)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player_control_action_test_primary_trigger_evaluate, player_control_action_test_primary_trigger)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player_control_action_test_grenade_trigger_evaluate, player_control_action_test_grenade_trigger)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player_control_action_test_zoom_evaluate, player_control_action_test_zoom)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player_control_action_test_action_evaluate, player_control_action_test_action)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player_control_action_test_accept_evaluate, player_control_action_test_accept)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player_control_action_test_back_evaluate, player_control_action_test_back)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player_control_action_test_look_relative_up_evaluate, player_control_action_test_look_relative_up)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player_control_action_test_look_relative_down_evaluate, player_control_action_test_look_relative_down)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player_control_action_test_look_relative_left_evaluate, player_control_action_test_look_relative_left)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player_control_action_test_look_relative_right_evaluate, player_control_action_test_look_relative_right)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player_control_action_test_look_relative_all_directions_evaluate, player_control_action_test_look_relative_all_directions)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player_control_action_test_move_relative_all_directions_evaluate, player_control_action_test_move_relative_all_directions)
+HS_EVALUATE_VOID_FROM_ARGUMENTS(player_add_equipment_evaluate, struct hs_arguments_long_word_boolean, (player_add_equipment(arguments->value0, arguments->value1, arguments->value2)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(debug_player_teleport_evaluate, struct hs_arguments_short_word, (debug_player_teleport(arguments->value0, arguments->value1)))
+HS_EVALUATE_VOID_STRING(main_set_map_name_evaluate, main_set_map_name)
+HS_EVALUATE_VOID_STRING(main_set_multiplayer_map_name_evaluate, main_set_multiplayer_map_name)
+HS_EVALUATE_VOID_UNSIGNED_SHORT(main_set_difficulty_evaluate, main_set_difficulty)
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scenario_switch_structure_bsp_evaluate, struct hs_arguments_word, (scenario_switch_structure_bsp(arguments->value)))
+HS_EVALUATE_VOID_STRING(main_crash_evaluate, main_crash)
+HS_EVALUATE_VOID_STRING(debug_dump_memory_for_file_evaluate, debug_dump_memory_for_file)
+HS_EVALUATE_VOID_STRING(profile_dump_to_file_evaluate, profile_dump_to_file)
+HS_EVALUATE_VOID_STRING(profile_sections_activate_evaluate, profile_sections_activate)
+HS_EVALUATE_VOID_STRING(profile_sections_deactivate_evaluate, profile_sections_deactivate)
+HS_EVALUATE_VOID_STRING(profile_graph_toggle_evaluate, profile_graph_toggle)
+HS_EVALUATE_VOID_BOOLEAN(debug_pvs_evaluate, debug_pvs)
+HS_EVALUATE_VOID_LONG_STRING(ai_debug_vocalize_evaluate, ai_debug_vocalize)
+HS_EVALUATE_VOID_LONG(ai_debug_teleport_to_evaluate, ai_debug_teleport_to)
+HS_EVALUATE_VOID_STRING(ai_debug_speak_evaluate, ai_debug_speak)
+HS_EVALUATE_VOID_STRING(ai_debug_speak_list_evaluate, ai_debug_speak_list)
+HS_EVALUATE_VOID_BOOLEAN(cinematic_show_letterbox_evaluate, cinematic_show_letterbox)
+HS_EVALUATE_VOID_UNSIGNED_SHORT(cinematic_set_title_evaluate, cinematic_set_title)
+HS_EVALUATE_VOID_BOOLEAN(cinematic_suppress_bsp_object_creation_evaluate, cinematic_suppress_bsp_object_creation)
+HS_EVALUATE_VOID_STRING(main_load_core_name_evaluate, main_load_core_name)
+HS_EVALUATE_VOID_STRING(main_load_core_name_at_startup_evaluate, main_load_core_name_at_startup)
+HS_EVALUATE_VOID_STRING(main_save_core_name_evaluate, main_save_core_name)
+HS_EVALUATE_VOID_UNSIGNED_SHORT(main_skip_evaluate, main_skip)
+HS_EVALUATE_VOID_LONG(scripted_sound_stop_evaluate, scripted_sound_stop)
+HS_EVALUATE_VOID_LONG(scripted_foley_predict_evaluate, scripted_foley_predict)
+HS_EVALUATE_VOID_LONG(scripted_looping_sound_stop_evaluate, scripted_looping_sound_stop)
+HS_EVALUATE_VOID_LONG_BOOLEAN(scripted_looping_sound_set_alternate_evaluate, scripted_looping_sound_set_alternate)
+HS_EVALUATE_VOID_LONG_BOOLEAN(debug_sound_classes_enable_evaluate, debug_sound_classes_enable)
+HS_EVALUATE_VOID_BOOLEAN(sound_enable_evaluate, sound_enable)
+HS_EVALUATE_VOID_LONG_BOOLEAN(vehicle_hover_evaluate, vehicle_hover)
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_set_flashing_state_evaluate, struct hs_arguments_boolean, (scripted_hud_set_flashing_state(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(hud_unit_deactivate_nav_point_with_flag_evaluate, struct hs_arguments_long_word, (hud_unit_deactivate_nav_point_with_flag(arguments->value0, arguments->value1)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(hud_unit_deactivate_nav_point_with_object_evaluate, struct hs_arguments_long_long, (hud_unit_deactivate_nav_point_with_object(arguments->value0, arguments->value1)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(hud_deactivate_team_nav_point_with_flag_evaluate, struct hs_arguments_short_word, (hud_deactivate_team_nav_point_with_flag(arguments->value0, arguments->value1)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(hud_deactivate_team_nav_point_with_object_evaluate, struct hs_arguments_short_long, (hud_deactivate_team_nav_point_with_object(arguments->value0, arguments->value1)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(errors_overflow_suppression_enable_evaluate, struct hs_arguments_boolean, (errors_overflow_suppression_enable(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_player_effect_stop_evaluate, struct hs_arguments_real, (scripted_player_effect_stop(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_show_health_evaluate, struct hs_arguments_boolean, (scripted_hud_show_health(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_blink_health_evaluate, struct hs_arguments_boolean, (scripted_hud_blink_health(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_show_shield_evaluate, struct hs_arguments_boolean, (scripted_hud_show_shield(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_blink_shield_evaluate, struct hs_arguments_boolean, (scripted_hud_blink_shield(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_show_motion_sensor_evaluate, struct hs_arguments_boolean, (scripted_hud_show_motion_sensor(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_blink_motion_sensor_evaluate, struct hs_arguments_boolean, (scripted_hud_blink_motion_sensor(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_show_crosshair_evaluate, struct hs_arguments_boolean, (scripted_hud_show_crosshair(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_set_state_message_evaluate, struct hs_arguments_word, (scripted_hud_set_state_message(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_set_objective_evaluate, struct hs_arguments_word, (scripted_hud_set_objective(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_set_timer_time_evaluate, struct hs_arguments_short_word, (scripted_hud_set_timer_time(arguments->value0, arguments->value1)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_set_timer_warning_cutoff_evaluate, struct hs_arguments_short_word, (scripted_hud_set_timer_warning_cutoff(arguments->value0, arguments->value1)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_set_timer_position_evaluate, struct hs_arguments_word_word_word, (scripted_hud_set_timer_position(arguments->value0, arguments->value1, arguments->value2)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_show_timer_evaluate, struct hs_arguments_boolean, (scripted_hud_show_timer(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_pause_timer_evaluate, struct hs_arguments_boolean, (scripted_hud_pause_timer(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_time_code_show_evaluate, struct hs_arguments_boolean, (scripted_hud_time_code_show(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(scripted_hud_time_code_start_evaluate, struct hs_arguments_boolean, (scripted_hud_time_code_start(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(rasterizer_screen_effect_start_evaluate, struct hs_arguments_boolean, (rasterizer_screen_effect_start(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(rasterizer_set_near_clip_distance_evaluate, struct hs_arguments_real, (rasterizer_set_near_clip_distance(arguments->value)))
+HS_EVALUATE_VOID_FROM_ARGUMENTS(player0_look_invert_pitch_evaluate, struct hs_arguments_boolean, (player0_look_invert_pitch(arguments->value)))
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player0_look_pitch_is_inverted_evaluate, player0_look_pitch_is_inverted)
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(player0_joystick_set_is_normal_evaluate, player0_joystick_set_is_normal)
+HS_EVALUATE_VOID_BOOLEAN(ui_widget_debug_show_path_evaluate, ui_widget_debug_show_path)
+HS_EVALUATE_VOID_UNSIGNED_SHORT(display_scenario_help_evaluate, display_scenario_help)
+HS_EVALUATE_VOID_STRING(xbox_set_machine_name_evaluate, xbox_set_machine_name)
+HS_EVALUATE_VOID_STRING(hs_help_evaluate, hs_help)
+HS_EVALUATE_RETURN_BOOLEAN(hs_not_evaluate, struct hs_arguments_boolean, (hs_not(arguments->value)))
+HS_EVALUATE_RETURN_BOOLEAN(scenario_trigger_volume_test_object_evaluate, struct hs_arguments_short_long, (scenario_trigger_volume_test_object(arguments->value0, arguments->value1)))
+HS_EVALUATE_RETURN_BOOLEAN(hs_trigger_volume_test_objects_any_evaluate, struct hs_arguments_short_long, (hs_trigger_volume_test_objects_any(arguments->value0, arguments->value1)))
+HS_EVALUATE_RETURN_BOOLEAN(hs_trigger_volume_test_objects_all_evaluate, struct hs_arguments_short_long, (hs_trigger_volume_test_objects_all(arguments->value0, arguments->value1)))
+HS_EVALUATE_RETURN_BOOLEAN(recorded_animation_play_evaluate, struct hs_arguments_long_word, (recorded_animation_play(arguments->value0, arguments->value1)))
+HS_EVALUATE_RETURN_BOOLEAN(recorded_animation_play_and_delete_evaluate, struct hs_arguments_long_word, (recorded_animation_play_and_delete(arguments->value0, arguments->value1)))
+HS_EVALUATE_RETURN_BOOLEAN(recorded_animation_play_and_hover_evaluate, struct hs_arguments_long_word, (recorded_animation_play_and_hover(arguments->value0, arguments->value1)))
+HS_EVALUATE_RETURN_BOOLEAN(lights_enable_evaluate, struct hs_arguments_boolean, (lights_enable(arguments->value)))
+HS_EVALUATE_RETURN_BOOLEAN(unit_start_user_animation_evaluate, struct hs_arguments_long_long_long_boolean, (unit_start_user_animation(arguments->value0, arguments->value1, arguments->value2, arguments->value3)))
+HS_EVALUATE_RETURN_BOOLEAN(unit_scripting_start_user_animation_list_evaluate, struct hs_arguments_long_long_long_boolean, (unit_scripting_start_user_animation_list(arguments->value0, arguments->value1, arguments->value2, arguments->value3)))
+HS_EVALUATE_RETURN_BOOLEAN(unit_custom_animation_at_frame_evaluate, struct hs_arguments_long_long_long_boolean_word, (unit_custom_animation_at_frame(arguments->value0, arguments->value1, arguments->value2, arguments->value3, arguments->value4)))
+HS_EVALUATE_RETURN_BOOLEAN(unit_is_playing_custom_animation_evaluate, struct hs_arguments_long, (unit_is_playing_custom_animation(arguments->value)))
+HS_EVALUATE_RETURN_BOOLEAN(unit_scripting_vehicle_test_seat_list_evaluate, struct hs_arguments_long_long_long, (unit_scripting_vehicle_test_seat_list(arguments->value0, arguments->value1, arguments->value2)))
+HS_EVALUATE_RETURN_BOOLEAN(unit_scripting_vehicle_test_seat_evaluate, struct hs_arguments_long_long_long, (unit_scripting_vehicle_test_seat(arguments->value0, arguments->value1, arguments->value2)))
+HS_EVALUATE_RETURN_BOOLEAN(unit_scripting_has_weapon_evaluate, struct hs_arguments_long_long, (unit_scripting_has_weapon(arguments->value0, arguments->value1)))
+HS_EVALUATE_RETURN_BOOLEAN(unit_scripting_has_weapon_readied_evaluate, struct hs_arguments_long_long, (unit_scripting_has_weapon_readied(arguments->value0, arguments->value1)))
+HS_EVALUATE_RETURN_BOOLEAN_NO_ARGUMENTS(unit_solo_player_integrated_night_vision_is_active_evaluate, unit_solo_player_integrated_night_vision_is_active)
+HS_EVALUATE_RETURN_BOOLEAN(unit_get_current_flashlight_state_evaluate, struct hs_arguments_long, (unit_get_current_flashlight_state(arguments->value)))
+HS_EVALUATE_RETURN_BOOLEAN(ai_scripting_is_attacking_evaluate, struct hs_arguments_long, (ai_scripting_is_attacking(arguments->value)))
+HS_EVALUATE_RETURN_BOOLEAN(ai_scripting_conversation_evaluate, struct hs_arguments_word, (ai_scripting_conversation(arguments->value)))
+HS_EVALUATE_RETURN_BOOLEAN(ai_scripting_allegiance_broken_evaluate, struct hs_arguments_short_word, (ai_scripting_allegiance_broken(arguments->value0, arguments->value1)))
+HS_EVALUATE_RETURN_BOOLEAN(scripted_player_control_set_camera_control_evaluate, struct hs_arguments_boolean, (scripted_player_control_set_camera_control(arguments->value)))
+HS_EVALUATE_RETURN_BOOLEAN(scripted_show_hud_evaluate, struct hs_arguments_boolean, (scripted_show_hud(arguments->value)))
+HS_EVALUATE_RETURN_BOOLEAN(scripted_show_hud_help_text_evaluate, struct hs_arguments_boolean, (scripted_show_hud_help_text(arguments->value)))
 
-void code_000b3ee0(
+void hs_recompile_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6537,7 +6537,7 @@ void code_000b3ee0(
 	return;
 }
 
-void code_000b3f00(
+void random_range_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6558,7 +6558,7 @@ void code_000b3f00(
 	return;
 }
 
-void code_000b3f50(
+void real_random_range_evaluate(
 	short function_index,
 	long thread_index,
 	boolean initialize)
@@ -6593,7 +6593,7 @@ boolean hs_scenario_postprocess(
 
 	scenario = global_scenario_get();
 	saved_syntax_data = hs_syntax_data;
-	code_000b2f00();
+	hs_allocate();
 	recompile = scenario->hs_scripts.count == 0 && scenario->hs_source_files.count>0;
 	hs_syntax_data = (struct data_array *)scenario->hs_syntax_data.address;
 	hs_syntax_data->data = (char *)hs_syntax_data+sizeof(struct data_array);
@@ -6617,7 +6617,7 @@ boolean hs_scenario_postprocess(
 		else
 			error(0, "%s: %s", error_source, error_message);
 
-		if (code_000b3d10() && hs_compile_postprocess(&error_message, &error_source))
+		if (hs_compile_source() && hs_compile_postprocess(&error_message, &error_source))
 		{
 			success = TRUE;
 		}
@@ -6662,10 +6662,8 @@ boolean hs_compile_and_evaluate(
 			{
 			short type;
 			long expression_index;
-			char const *source;
 
 			type = 0;
-			source = expression;
 			hs_compile_initialize(FALSE);
 			if (buffer[0] != '(')
 			{
@@ -6687,18 +6685,18 @@ boolean hs_compile_and_evaluate(
 				break;
 			case 1:
 				sprintf(expanded, "(%s)", buffer);
-				source = expanded;
+				expression = expanded;
 				break;
 			case 2:
 				sprintf(expanded, "(set %s)", buffer);
-				source = expanded;
+				expression = expanded;
 				break;
 			default:
 				display_assert(NULL, "c:\\halo\\SOURCE\\hs\\hs.c", 1287, TRUE);
 				system_exit(-1);
 				break;
 			}
-			expression_index = hs_compile_expression(csstrlen(source), source, &error_source, &error_message);
+			expression_index = hs_compile_expression(csstrlen(expression), expression, &error_source, &error_message);
 			if (expression_index != NONE)
 			{
 				success = TRUE;
@@ -6724,11 +6722,11 @@ boolean hs_compile_and_evaluate(
 	}
 	if (bss_00453468[0x10])
 	{
-		if (code_000b3b60())
+		if (hs_rebuild_source())
 		{
 			struct scenario *scenario;
 
-			code_000b3d10();
+			hs_compile_source();
 			if (hs_syntax_data)
 			{
 				hs_node_gc();
@@ -6743,7 +6741,7 @@ boolean hs_compile_and_evaluate(
 			hs_runtime_dispose_from_old_map();
 			object_lists_dispose_from_old_map();
 			scenario = global_scenario_index != NONE ? global_scenario_get() : NULL;
-			code_000b2f00();
+			hs_allocate();
 			if (scenario && scenario->hs_syntax_data.size)
 				hs_scenario_postprocess(FALSE);
 			object_lists_initialize_for_new_map();

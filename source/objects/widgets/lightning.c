@@ -132,13 +132,13 @@ void lightning_offset_marker_position(
 	real_matrix4x3 const *matrix,
 	real_vector3d const *random_position_bounds)
 {
-	real_point3d offset;
+	real_vector3d offset;
 
 	match_assert("c:\\halo\\SOURCE\\objects\\widgets\\lightning.c", 116, position);
 	match_assert("c:\\halo\\SOURCE\\objects\\widgets\\lightning.c", 117, matrix);
 	match_assert("c:\\halo\\SOURCE\\objects\\widgets\\lightning.c", 118, random_position_bounds);
 
-	set_real_point3d(
+	set_real_vector3d(
 		&offset,
 		(real_local_random() * 2.f - 1.f) * random_position_bounds->i,
 		(real_local_random() * 2.f - 1.f) * random_position_bounds->j,
@@ -146,9 +146,9 @@ void lightning_offset_marker_position(
 
 	matrix4x3_transform_vector(matrix, &offset, &offset);
 
-	position->x = offset.x + position->x;
-	position->y = offset.y + position->y;
-	position->z = offset.z + position->z;
+	position->x = offset.i + position->x;
+	position->y = offset.j + position->y;
+	position->z = offset.k + position->z;
 
 	return;
 }

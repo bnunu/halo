@@ -71,7 +71,7 @@
 	},
 	{
 		"unit": "source/memory/zlib/deflate",
-		"symbol": "_data_003079f8",
+		"symbol": "_my_version",
 		"reason": "the complete zlib 1.1.3 object owns an exact relocated data word that objdiff does not fully credit",
 		"measurements": {
 			"size": 4,
@@ -222,7 +222,7 @@
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"symbol": "_data_00305ee0",
+		"symbol": "_event_handler_function_list",
 		"reason": "the complete rebuilt object owns the exact 934-byte event-handler table; normalized bytes, relocation addresses and types, and independently resolved destinations are exact despite objdiff's csplit symbol attribution",
 		"measurements": {
 			"size": 934,

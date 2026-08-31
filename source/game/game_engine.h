@@ -8,6 +8,8 @@ header included in hcex build.
 #define __GAME_ENGINE_H
 #pragma once
 
+#include "math/real_math.h"
+
 /* ---------- constants */
 
 enum
@@ -61,7 +63,7 @@ struct game_variant
 	long unknown30;
 	long unknown34;
 	long maximum_lives;
-	float unknown3C;
+	real unknown3C;
 	long unknown40;
 	long unknown44;
 	long unknown48;
@@ -140,7 +142,7 @@ struct game_engine
 		long parameter2,
 		wchar_t *message,
 		long message_character_count);
-	float (*starting_location_rating)(
+	real (*starting_location_rating)(
 		long player_index,
 		struct player_starting_location const *starting_location);
 	void (*prespawn_player_update)(
@@ -212,7 +214,7 @@ long game_engine_get_team_score(
 long players_in_game(
 	void);
 
-float get_blink_alpha(
+real get_blink_alpha(
 	void);
 
 long game_engine_player_get_team_index(
@@ -270,7 +272,7 @@ void game_engine_nonplayer_post_rasterize(
 	void);
 
 void game_engine_update_non_deterministic(
-	float delta_seconds);
+	real delta_seconds);
 
 boolean match_game_type(
 	long game_type,
@@ -283,7 +285,7 @@ void game_engine_initialize(
 void game_engine_initialize_for_new_map(
 	void);
 
-float game_engine_get_distance_rating_for_spawn(
+real game_engine_get_distance_rating_for_spawn(
 	long player_index,
 	union real_point3d const *position);
 
@@ -330,7 +332,7 @@ boolean game_engine_get_goal_in_use(
 void game_engine_set_goal_position(
 	short goal_index,
 	union real_point3d const *position,
-	float height,
+	real height,
 	char const *name,
 	long target_object_index,
 	short team_index,
@@ -378,8 +380,8 @@ union real_rgb_color *game_engine_player_get_change_color(
 
 long find_netgame_flags(
 	union real_point3d const *position,
-	float radius,
-	float height,
+	real radius,
+	real height,
 	short type,
 	short index,
 	long maximum_count,
@@ -387,8 +389,8 @@ long find_netgame_flags(
 
 long find_netgame_flag(
 	union real_point3d const *position,
-	float radius,
-	float height,
+	real radius,
+	real height,
 	short type,
 	short index);
 

@@ -266,6 +266,25 @@
 				},
 				"objdiff_percent": 99.29274
 			}
+		},
+		{
+			"unit": "source/bungie_net/common/thread_win32",
+			"function": "_get_mutex_from_pool",
+			"class": "csplit-relocation-alias",
+			"evidence": "Not a codegen difference. The loop bound is &thread_globals.mutex_references[MAXIMUM_MUTEX_REFERENCES].in_use, which is one past the end of the static thread_globals object (image 3262248, 1544 bytes) and therefore falls inside the next .bss symbol, transport_address_string (image 3263792, defined in source/bungie_net/network/transport_address.c). csplit recovers the target from the linked image and must attribute the destination to the symbol that contains it, so it spells relocation 2 as _transport_address_string+36; VC7 forms the same address from a C expression rooted in thread_globals and necessarily spells it _thread_globals+1580. Both resolve to image 3263828. Everything else is identical: size 64, 3 relocations at addresses 5/27/40 all of type 6, equal normalized bytes (3b67f561...), and all three resolved image destinations equal (3262548, 3263828, 3262512). No C source makes VC7 emit csplit's spelling; naming transport_address_string here would be a false declaration of an unrelated char[256] from another translation unit.",
+			"measurements": {
+				"target": {
+					"size": 64,
+					"relocation_count": 3,
+					"normalized_sha256": "3b67f561243fc178ef970c0e26668272cdfd5b49b5f94800b85cbeeb4e051c6f"
+				},
+				"base": {
+					"size": 64,
+					"relocation_count": 3,
+					"normalized_sha256": "3b67f561243fc178ef970c0e26668272cdfd5b49b5f94800b85cbeeb4e051c6f"
+				},
+				"objdiff_percent": 100.0
+			}
 		}
 	]
 }

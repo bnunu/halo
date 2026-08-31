@@ -35,13 +35,13 @@ symbols in this file:
 0000B0A0 00a0:
 	_actor_action_deny_transition (0000)
 0000B140 0040:
-	_code_0000b140 (0000)
+	_actor_action_allowed_to_enter_vehicle (0000)
 0000B180 0150:
 	_actor_action_handle_vehicle_exit (0000)
 0000B2D0 00e0:
 	_actor_action_allow_cover_seeking (0000)
 0000B3B0 0170:
-	_code_0000b3b0 (0000)
+	_actor_action_determine_pursuit_options (0000)
 0000B520 0090:
 	_actor_action_can_stop_guarding (0000)
 0000B5B0 0090:
@@ -59,7 +59,7 @@ symbols in this file:
 0000BB00 0040:
 	_actor_get_pursuit_location (0000)
 0000BB40 0090:
-	_code_0000bb40 (0000)
+	_actor_pursuit_consider_nearby_actor (0000)
 0000BBD0 0030:
 	_actor_action_name (0000)
 0000BC00 0030:
@@ -91,7 +91,7 @@ symbols in this file:
 0000C5B0 03c0:
 	_actor_action_handle_vehicle_entry (0000)
 0000C970 03a0:
-	_code_0000c970 (0000)
+	_actor_action_find_escape_from_danger (0000)
 0000CD10 01a0:
 	_actor_action_handle_active_cover_seeking (0000)
 0000CEB0 06f0:
@@ -571,12 +571,6 @@ void encounter_actor_iterator_new(
 struct actor_datum *encounter_actor_iterator_next(
 	struct actions_encounter_actor_iterator *iterator);
 
-long prop_get_base_by_unit_index(
-	long actor_index,
-	long unit_index,
-	boolean create_if_missing,
-	boolean update_status);
-
 boolean actor_action_test_grenade(
 	long actor_index);
 
@@ -935,7 +929,7 @@ void action_avoid_control(
 void action_avoid_end(
 	long actor_index);
 
-static boolean code_0000b140(
+static boolean actor_action_allowed_to_enter_vehicle(
 	long actor_index,
 	long vehicle_index);
 
@@ -1876,7 +1870,7 @@ boolean actor_action_deny_transition(
 	return deny_transition;
 }
 
-static void code_0000b3b0(
+static void actor_action_determine_pursuit_options(
 	long actor_index,
 	short desire_target_search,
 	short desire_pursuit,
@@ -2044,7 +2038,7 @@ boolean actor_action_can_stop_conversing(
 	return result;
 }
 
-static boolean code_0000bb40(
+static boolean actor_pursuit_consider_nearby_actor(
 	long actor_index,
 	boolean pursuit_controller,
 	long friend_actor_index)
@@ -2442,7 +2436,7 @@ long actor_pursuit_find_nearby_actors(
 				prop->actor_index != NONE &&
 				(!pursuit_controller ||
 					(prop->state >= 2 && prop->state <= 3)) &&
-				code_0000bb40(
+				actor_pursuit_consider_nearby_actor(
 					actor_index,
 					pursuit_controller,
 					prop->actor_index))
@@ -2470,7 +2464,7 @@ long actor_pursuit_find_nearby_actors(
 			friend_actor = encounter_actor_iterator_next(&actor_iterator))
 		{
 			if (friend_actor->meta.unit_index != NONE &&
-				code_0000bb40(
+				actor_pursuit_consider_nearby_actor(
 					actor_index,
 					pursuit_controller,
 					actor_iterator.actor_index))
@@ -3212,7 +3206,7 @@ boolean actor_action_handle_lost_contact(
 				}
 			}
 
-			code_0000b3b0(
+			actor_action_determine_pursuit_options(
 				actor_index,
 				desire_target_search,
 				desire_pursuit,
@@ -4261,7 +4255,7 @@ boolean actor_action_try_to_enter_vehicle(
 	return FALSE;
 }
 
-static boolean code_0000b140(
+static boolean actor_action_allowed_to_enter_vehicle(
 	long actor_index,
 	long vehicle_index)
 {
@@ -4331,7 +4325,7 @@ boolean actor_action_handle_vehicle_entry(
 				prop->player &&
 				!prop->enemy &&
 				prop->vehicle_index != NONE &&
-				code_0000b140(actor_index, prop->vehicle_index))
+				actor_action_allowed_to_enter_vehicle(actor_index, prop->vehicle_index))
 			{
 				struct unit_datum *vehicle =
 					vehicle_try_and_get(prop->vehicle_index);
@@ -4386,7 +4380,7 @@ boolean actor_action_handle_vehicle_entry(
 			short actor_type_bitmask;
 
 			if (!vehicle_try_and_get(enterable->vehicle_index) ||
-				!code_0000b140(actor_index, enterable->vehicle_index))
+				!actor_action_allowed_to_enter_vehicle(actor_index, enterable->vehicle_index))
 			{
 				continue;
 			}
@@ -4489,7 +4483,7 @@ result_exit:
 	return result;
 }
 
-static boolean code_0000c970(
+static boolean actor_action_find_escape_from_danger(
 	long actor_index,
 	short *escape_direction_reference,
 	real *escape_distance_reference,
@@ -5160,7 +5154,7 @@ boolean actor_action_handle_danger_avoidance(
 			boolean escape_found;
 			boolean escape_is_ledge;
 
-			escape_found = code_0000c970(
+			escape_found = actor_action_find_escape_from_danger(
 				actor_index,
 				&escape_direction,
 				&escape_distance,

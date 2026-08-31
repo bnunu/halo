@@ -5,203 +5,203 @@ symbols in this file:
 000D8F90 0090:
 	_ui_widget_event_handler_function_invoke (0000)
 000D9020 0010:
-	_code_000d9020 (0000)
+	_widget_event_function_null (0000)
 000D9030 0010:
 	_reset_last_player1_profile_index (0000)
 000D9040 01a0:
-	_code_000d9040 (0000)
+	_solo_level_initialize_list_coop (0000)
 000D91E0 0030:
-	_code_000d91e0 (0000)
+	_solo_level_dispose_list (0000)
 000D9210 0140:
-	_code_000d9210 (0000)
+	_solo_level_set_next_map_name (0000)
 000D9350 0060:
-	_code_000d9350 (0000)
+	_difficulty_set (0000)
 000D93B0 0030:
-	_code_000d93b0 (0000)
+	_start_new_game (0000)
 000D93E0 0010:
-	_code_000d93e0 (0000)
+	_pause_game_restart_at_checkpoint (0000)
 000D93F0 0010:
-	_code_000d93f0 (0000)
+	_pause_game_restart_level (0000)
 000D9400 0010:
-	_code_000d9400 (0000)
+	_pause_game_quit_to_main_menu (0000)
 000D9410 0020:
-	_code_000d9410 (0000)
+	_clear_multiplayer_player_joins (0000)
 000D9430 0050:
-	_code_000d9430 (0000)
+	_player_wants_to_join_multiplayer_game (0000)
 000D9480 0040:
-	_code_000d9480 (0000)
+	_network_game_server_list_initialize (0000)
 000D94C0 0090:
-	_code_000d94c0 (0000)
+	_network_game_start_new_server (0000)
 000D9550 0200:
-	_code_000d9550 (0000)
+	_network_game_join_game_from_server_list (0000)
 000D9750 0020:
-	_code_000d9750 (0000)
+	_network_server_list_dispose (0000)
 000D9770 0020:
-	_code_000d9770 (0000)
+	_network_game_cancel (0000)
 000D9790 0070:
-	_code_000d9790 (0000)
+	_split_screen_game_initialize (0000)
 000D9800 0010:
-	_code_000d9800 (0000)
+	_coop_game_initialize (0000)
 000D9810 0040:
-	_code_000d9810 (0000)
+	_main_menu_initialize (0000)
 000D9850 0010:
-	_code_000d9850 (0000)
+	_multiplayer_type_menu_initialize (0000)
 000D9860 0020:
-	_code_000d9860 (0000)
+	_multiplayer_pick_quick_start_play_stage (0000)
 000D9880 00f0:
-	_code_000d9880 (0000)
+	_multiplayer_level_list_initialize (0000)
 000D9970 0020:
-	_code_000d9970 (0000)
+	_multiplayer_level_list_dispose (0000)
 000D9990 01d0:
-	_code_000d9990 (0000)
+	_multiplayer_level_select (0000)
 000D9B60 0160:
-	_code_000d9b60 (0000)
+	_multiplayer_profiles_list_initialize (0000)
 000D9CC0 0030:
-	_code_000d9cc0 (0000)
+	_multiplayer_profiles_list_dispose (0000)
 000D9CF0 02a0:
-	_code_000d9cf0 (0000)
+	_multiplayer_profile_set_for_game (0000)
 000D9F90 00f0:
-	_code_000d9f90 (0000)
+	_multiplayer_game_swap_teams (0000)
 000DA080 0110:
-	_code_000da080 (0000)
+	_netgame_join_player (0000)
 000DA190 0160:
-	_code_000da190 (0000)
+	_player_profiles_list_initialize (0000)
 000DA2F0 0030:
-	_code_000da2f0 (0000)
+	_player_profiles_list_dispose (0000)
 000DA320 01c0:
-	_code_000da320 (0000)
+	_player_profile_set_for_game_3wide (0000)
 000DA4E0 0160:
-	_code_000da4e0 (0000)
+	_player_profile_set_for_game_1wide (0000)
 000DA640 0140:
-	_code_000da640 (0000)
+	_playlist_profile_begin_editing (0000)
 000DA780 0020:
-	_code_000da780 (0000)
+	_playlist_profile_end_editing (0000)
 000DA7A0 00e0:
-	_code_000da7a0 (0000)
+	_playlist_profile_set_game_engine (0000)
 000DA880 0050:
-	_code_000da880 (0000)
+	_playlist_profile_change_name (0000)
 000DA8D0 03a0:
-	_code_000da8d0 (0000)
+	_playlist_profile_change_ctf_rules (0000)
 000DAC70 0220:
-	_code_000dac70 (0000)
+	_playlist_profile_change_koth_rules (0000)
 000DAE90 0360:
-	_code_000dae90 (0000)
+	_playlist_profile_change_slayer_rules (0000)
 000DB1F0 0580:
-	_code_000db1f0 (0000)
+	_playlist_profile_change_oddball_rules (0000)
 000DB770 02d0:
-	_code_000db770 (0000)
+	_playlist_profile_change_racing_rules (0000)
 000DBA40 0580:
-	_code_000dba40 (0000)
+	_playlist_profile_change_player_options (0000)
 000DBFC0 0320:
-	_code_000dbfc0 (0000)
+	_playlist_profile_change_item_options (0000)
 000DC2E0 01f0:
-	_code_000dc2e0 (0000)
+	_playlist_profile_change_indicator_options (0000)
 000DC4D0 00c0:
-	_code_000dc4d0 (0000)
+	_playlist_profile_initialize_game_engine (0000)
 000DC590 00a0:
-	_code_000dc590 (0000)
+	_playlist_profile_initialize_name (0000)
 000DC630 0390:
-	_code_000dc630 (0000)
+	_playlist_profile_initialize_ctf_rules (0000)
 000DC9C0 0230:
-	_code_000dc9c0 (0000)
+	_playlist_profile_initialize_koth_rules (0000)
 000DCBF0 0350:
-	_code_000dcbf0 (0000)
+	_playlist_profile_initialize_slayer_rules (0000)
 000DCF40 0510:
-	_code_000dcf40 (0000)
+	_playlist_profile_initialize_oddball_rules (0000)
 000DD450 02e0:
-	_code_000dd450 (0000)
+	_playlist_profile_initialize_racing_rules (0000)
 000DD730 0550:
-	_code_000dd730 (0000)
+	_playlist_profile_initialize_player_options (0000)
 000DDC80 0310:
-	_code_000ddc80 (0000)
+	_playlist_profile_initialize_item_options (0000)
 000DDF90 0200:
-	_code_000ddf90 (0000)
+	_playlist_profile_initialize_indicator_options (0000)
 000DE190 00c0:
-	_code_000de190 (0000)
+	_playlist_profile_save_changes (0000)
 000DE250 0110:
-	_code_000de250 (0000)
+	_player_profile_color_picker_menu_initialize (0000)
 000DE360 0030:
-	_code_000de360 (0000)
+	_player_profile_color_picker_menu_dispose (0000)
 000DE390 0100:
-	_code_000de390 (0000)
+	_player_profile_color_picker_select_color (0000)
 000DE490 0130:
-	_code_000de490 (0000)
+	_player_profile_begin_editing (0000)
 000DE5C0 0020:
-	_code_000de5c0 (0000)
+	_player_profile_end_editing (0000)
 000DE5E0 0050:
-	_code_000de5e0 (0000)
+	_player_profile_change_name (0000)
 000DE630 0080:
-	_code_000de630 (0000)
+	_player_profile_save_changes (0000)
 000DE6B0 01e0:
-	_code_000de6b0 (0000)
+	_player_profile_initialize_controller_settings (0000)
 000DE890 02e0:
-	_code_000de890 (0000)
+	_player_profile_initialize_advanced_controller_settings (0000)
 000DEB70 01d0:
-	_code_000deb70 (0000)
+	_player_profile_change_controller_settings (0000)
 000DED40 0340:
-	_code_000ded40 (0000)
+	_player_profile_change_advanced_controller_settings (0000)
 000DF080 0050:
-	_code_000df080 (0000)
+	_network_game_remove_local_player (0000)
 000DF0D0 0020:
-	_code_000df0d0 (0000)
+	_switch_from_main_menu_to_single_player (0000)
 000DF0F0 0110:
-	_code_000df0f0 (0000)
+	_delete_player_profile_request (0000)
 000DF200 0140:
-	_code_000df200 (0000)
+	_delete_playlist_profile_request (0000)
 000DF340 0050:
-	_code_000df340 (0000)
+	_delete_player_profile_final (0000)
 000DF390 0040:
-	_code_000df390 (0000)
+	_delete_playlist_profile_final (0000)
 000DF3D0 0010:
-	_code_000df3d0 (0000)
+	_cancel_profile_delete (0000)
 000DF3E0 0180:
-	_code_000df3e0 (0000)
+	_create_and_begin_editing_new_gametype_profile (0000)
 000DF560 00f0:
-	_code_000df560 (0000)
+	_create_and_begin_editing_new_player_profile (0000)
 000DF650 00a0:
-	_code_000df650 (0000)
+	_network_game_start_faster (0000)
 000DF6F0 00a0:
-	_code_000df6f0 (0000)
+	_network_game_start_slower (0000)
 000DF790 0020:
-	_code_000df790 (0000)
+	_network_game_server_accept_connections (0000)
 000DF7B0 0020:
-	_code_000df7b0 (0000)
+	_network_game_server_defer_game_start (0000)
 000DF7D0 0020:
-	_code_000df7d0 (0000)
+	_network_game_server_allow_game_start (0000)
 000DF7F0 0020:
-	_code_000df7f0 (0000)
+	_disable_widget_if_no_xdemos (0000)
 000DF810 0010:
-	_code_000df810 (0000)
+	_run_xdemos (0000)
 000DF820 0010:
-	_code_000df820 (0000)
+	_single_player_reset_controller_choices (0000)
 000DF830 0050:
-	_code_000df830 (0000)
+	_single_player_set_player1_controller_choice (0000)
 000DF880 0070:
-	_code_000df880 (0000)
+	_single_player_set_player2_controller_choice (0000)
 000DF8F0 0060:
-	_code_000df8f0 (0000)
+	_display_error_if_no_network_connection (0000)
 000DF950 0080:
-	_code_000df950 (0000)
+	_start_network_game_if_no_advertised_servers (0000)
 000DF9D0 0180:
-	_code_000df9d0 (0000)
+	_netgame_unjoin_player (0000)
 000DFB50 0050:
-	_code_000dfb50 (0000)
+	_close_calling_widget_if_not_editing_profile (0000)
 000DFBA0 0010:
-	_code_000dfba0 (0000)
+	_exit_to_xbox_dashboard (0000)
 000DFBB0 0090:
-	_code_000dfbb0 (0000)
+	_new_campaign_chosen (0000)
 000DFC40 0160:
-	_code_000dfc40 (0000)
+	_new_campaign_decision (0000)
 000DFDA0 0020:
-	_code_000dfda0 (0000)
+	_pop_history_stack_once (0000)
 000DFDC0 00e0:
-	_code_000dfdc0 (0000)
+	_difficulty_menu_initialize (0000)
 000DFEA0 0020:
-	_code_000dfea0 (0000)
+	_begin_music_fade_out (0000)
 000DFEC0 0050:
-	_code_000dfec0 (0000)
+	_new_campaign_if_no_custom_player_profiles_exist (0000)
 000DFF10 02a0:
-	_code_000dff10 (0000)
+	_solo_level_initialize_list_single_player (0000)
 00273234 001c:
 	??_C@_0BM@CKKFJKOP@levels?2test?2longest?2longest?$AA@ (0000)
 00273250 001a:
@@ -897,18 +897,22 @@ symbols in this file:
 00276DDC 0030:
 	??_C@_0DA@CLKNGJMF@expected?5column?5list?5for?5difficu@ (0000)
 00305EE0 03a6:
-	_data_00305ee0 (0000)
+	_event_handler_function_list (0000)
 	_event_handler_functions (0330)
 00454AF0 016e:
-	_bss_00454af0 (0000)
+	_new_campaign_profile_name (0000)
 	_single_player_level_data (0018)
 	_persistant_game_data_info (0068)
 */
 
 /* ---------- headers */
 
+struct widget_instance;
+struct event_record;
+
 #include "cseries.h"
 #include "interface/ui_widget_definitions.h"
+#include "interface/ui_widget_event_handler_functions.h"
 
 /* ---------- constants */
 
@@ -1006,13 +1010,12 @@ struct event_handler_globals
 	long function_count;
 	char const **function_names;
 	long unknown08;
-	long profile_index;
-	char *map_name;
-	char *single_player_levels[9];
+	long delete_profile_index;
+	char *scenario_paths[10];
 	long last_player1_profile_index;
-	long unknown3C;
+	long corrupted_game_state_profile_index;
 	char *multiplayer_levels[13];
-	short unknown74;
+	short new_campaign_controller_index;
 };
 #pragma pack(pop)
 
@@ -1223,14 +1226,14 @@ long saved_game_file_find_profile_index_for_directory_path(
 	char *directory_path,
 	short profile_type);
 extern byte cached_variant_profile[0x144];
-boolean code_000dfbb0(
+static boolean new_campaign_chosen(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
 short network_game_client_get_state(
 	void *client,
 	short *state);
-boolean code_000d94c0(
+static boolean network_game_start_new_server(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
@@ -1281,397 +1284,397 @@ typedef boolean (*ui_widget_event_handler_function)(
 	struct widget_instance *,
 	struct event_record *,
 	boolean *);
-boolean code_000d9020(
+static boolean widget_event_function_null(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9040(
+static boolean solo_level_initialize_list_coop(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d91e0(
+static boolean solo_level_dispose_list(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9210(
+static boolean solo_level_set_next_map_name(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9350(
+static boolean difficulty_set(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d93b0(
+static boolean start_new_game(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d93e0(
+static boolean pause_game_restart_at_checkpoint(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d93f0(
+static boolean pause_game_restart_level(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9400(
+static boolean pause_game_quit_to_main_menu(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9410(
+static boolean clear_multiplayer_player_joins(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9430(
+static boolean player_wants_to_join_multiplayer_game(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9480(
+static boolean network_game_server_list_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d94c0(
+static boolean network_game_start_new_server(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9550(
+static boolean network_game_join_game_from_server_list(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9750(
+static boolean network_server_list_dispose(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9770(
+static boolean network_game_cancel(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9790(
+static boolean split_screen_game_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9800(
+static boolean coop_game_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9810(
+static boolean main_menu_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9850(
+static boolean multiplayer_type_menu_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9860(
+static boolean multiplayer_pick_quick_start_play_stage(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9880(
+static boolean multiplayer_level_list_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9970(
+static boolean multiplayer_level_list_dispose(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9990(
+static boolean multiplayer_level_select(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9b60(
+static boolean multiplayer_profiles_list_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9cc0(
+static boolean multiplayer_profiles_list_dispose(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9cf0(
+static boolean multiplayer_profile_set_for_game(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000d9f90(
+static boolean multiplayer_game_swap_teams(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000da080(
+static boolean netgame_join_player(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000da190(
+static boolean player_profiles_list_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000da2f0(
+static boolean player_profiles_list_dispose(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000da320(
+static boolean player_profile_set_for_game_3wide(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000da4e0(
+static boolean player_profile_set_for_game_1wide(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000da640(
+static boolean playlist_profile_begin_editing(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000da780(
+static boolean playlist_profile_end_editing(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000da7a0(
+static boolean playlist_profile_set_game_engine(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000da880(
+static boolean playlist_profile_change_name(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000da8d0(
+static boolean playlist_profile_change_ctf_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dac70(
+static boolean playlist_profile_change_koth_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dae90(
+static boolean playlist_profile_change_slayer_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000db1f0(
+static boolean playlist_profile_change_oddball_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000db770(
+static boolean playlist_profile_change_racing_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dba40(
+static boolean playlist_profile_change_player_options(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dbfc0(
+static boolean playlist_profile_change_item_options(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dc2e0(
+static boolean playlist_profile_change_indicator_options(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dc4d0(
+static boolean playlist_profile_initialize_game_engine(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dc590(
+static boolean playlist_profile_initialize_name(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dc630(
+static boolean playlist_profile_initialize_ctf_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dc9c0(
+static boolean playlist_profile_initialize_koth_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dcbf0(
+static boolean playlist_profile_initialize_slayer_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dcf40(
+static boolean playlist_profile_initialize_oddball_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dd450(
+static boolean playlist_profile_initialize_racing_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dd730(
+static boolean playlist_profile_initialize_player_options(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000ddc80(
+static boolean playlist_profile_initialize_item_options(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000ddf90(
+static boolean playlist_profile_initialize_indicator_options(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000de190(
+static boolean playlist_profile_save_changes(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000de250(
+static boolean player_profile_color_picker_menu_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000de360(
+static boolean player_profile_color_picker_menu_dispose(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000de390(
+static boolean player_profile_color_picker_select_color(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000de490(
+static boolean player_profile_begin_editing(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000de5c0(
+static boolean player_profile_end_editing(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000de5e0(
+static boolean player_profile_change_name(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000de630(
+static boolean player_profile_save_changes(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000de6b0(
+static boolean player_profile_initialize_controller_settings(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000de890(
+static boolean player_profile_initialize_advanced_controller_settings(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000deb70(
+static boolean player_profile_change_controller_settings(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000ded40(
+static boolean player_profile_change_advanced_controller_settings(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df080(
+static boolean network_game_remove_local_player(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df0d0(
+static boolean switch_from_main_menu_to_single_player(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df0f0(
+static boolean delete_player_profile_request(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df200(
+static boolean delete_playlist_profile_request(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df340(
+static boolean delete_player_profile_final(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df390(
+static boolean delete_playlist_profile_final(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df3d0(
+static boolean cancel_profile_delete(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df3e0(
+static boolean create_and_begin_editing_new_gametype_profile(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df560(
+static boolean create_and_begin_editing_new_player_profile(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df650(
+static boolean network_game_start_faster(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df6f0(
+static boolean network_game_start_slower(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df790(
+static boolean network_game_server_accept_connections(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df7b0(
+static boolean network_game_server_defer_game_start(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df7d0(
+static boolean network_game_server_allow_game_start(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df7f0(
+static boolean disable_widget_if_no_xdemos(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df810(
+static boolean run_xdemos(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df820(
+static boolean single_player_reset_controller_choices(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df830(
+static boolean single_player_set_player1_controller_choice(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df880(
+static boolean single_player_set_player2_controller_choice(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df8f0(
+static boolean display_error_if_no_network_connection(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df950(
+static boolean start_network_game_if_no_advertised_servers(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000df9d0(
+static boolean netgame_unjoin_player(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dfb50(
+static boolean close_calling_widget_if_not_editing_profile(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dfba0(
+static boolean exit_to_xbox_dashboard(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dfbb0(
+static boolean new_campaign_chosen(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
 boolean virtual_keyboard_last_exit_saved_text(
 	void);
-boolean code_000dfc40(
+static boolean new_campaign_decision(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dfda0(
+static boolean pop_history_stack_once(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dfdc0(
+static boolean difficulty_menu_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dfea0(
+static boolean begin_music_fade_out(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dfec0(
+static boolean new_campaign_if_no_custom_player_profiles_exist(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
-boolean code_000dff10(
+static boolean solo_level_initialize_list_single_player(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted);
@@ -1688,8 +1691,8 @@ boolean widget_event_function_list_widget_goto_previous_item(
 /* ---------- globals */
 
 extern short player_spawn_count;
-wchar_t bss_00454af0[12] = { 0 };
-byte single_player_level_data[0x50] = { 0 };
+static wchar_t new_campaign_profile_name[12] = { 0 };
+static byte single_player_level_data[0x50] = { 0 };
 struct persistent_game_difficulty
 {
 	short value;
@@ -1704,7 +1707,7 @@ struct persistent_game_data_info
 	boolean corrupted;
 };
 
-struct persistent_game_data_info persistant_game_data_info = { 0 };
+static struct persistent_game_data_info persistant_game_data_info = { 0 };
 
 struct ui_widget_event_handler_function_table
 {
@@ -1712,111 +1715,111 @@ struct ui_widget_event_handler_function_table
 	char const *names[102];
 };
 
-struct ui_widget_event_handler_function_table data_00305ee0 =
+static struct ui_widget_event_handler_function_table event_handler_function_list =
 {
 	{
-		code_000d9020,
+		widget_event_function_null,
 		widget_event_function_list_widget_goto_next_item,
 		widget_event_function_list_widget_goto_previous_item,
-		code_000d9020,
-		code_000d9020,
-		code_000dff10,
-		code_000d9040,
-		code_000d91e0,
-		code_000d9210,
-		code_000d9350,
-		code_000d93b0,
-		code_000d93e0,
-		code_000d93f0,
-		code_000d9400,
-		code_000d9410,
-		code_000d9430,
-		code_000d9480,
-		code_000d94c0,
-		code_000d9750,
-		code_000d9770,
-		code_000d9550,
-		code_000d9790,
-		code_000d9800,
-		code_000d9810,
-		code_000d9850,
-		code_000d9860,
-		code_000d9880,
-		code_000d9970,
-		code_000d9990,
-		code_000d9b60,
-		code_000d9cc0,
-		code_000d9cf0,
-		code_000d9f90,
-		code_000da080,
-		code_000da190,
-		code_000da2f0,
-		code_000da320,
-		code_000da4e0,
-		code_000da640,
-		code_000da780,
-		code_000da7a0,
-		code_000da880,
-		code_000da8d0,
-		code_000dac70,
-		code_000dae90,
-		code_000db1f0,
-		code_000db770,
-		code_000dba40,
-		code_000dbfc0,
-		code_000dc2e0,
-		code_000dc4d0,
-		code_000dc590,
-		code_000dc630,
-		code_000dc9c0,
-		code_000dcbf0,
-		code_000dcf40,
-		code_000dd450,
-		code_000dd730,
-		code_000ddc80,
-		code_000ddf90,
-		code_000de190,
-		code_000de250,
-		code_000de360,
-		code_000de390,
-		code_000de490,
-		code_000de5c0,
-		code_000de5e0,
-		code_000de630,
-		code_000de6b0,
-		code_000de890,
-		code_000deb70,
-		code_000ded40,
-		code_000df080,
-		code_000df0d0,
-		code_000df0f0,
-		code_000df200,
-		code_000df340,
-		code_000df390,
-		code_000df3d0,
-		code_000df3e0,
-		code_000df560,
-		code_000df650,
-		code_000df6f0,
-		code_000df790,
-		code_000df7b0,
-		code_000df7d0,
-		code_000df7f0,
-		code_000df810,
-		code_000df820,
-		code_000df830,
-		code_000df880,
-		code_000df8f0,
-		code_000df950,
-		code_000df9d0,
-		code_000dfb50,
-		code_000dfba0,
-		code_000dfbb0,
-		code_000dfc40,
-		code_000dfda0,
-		code_000dfdc0,
-		code_000dfea0,
-		code_000dfec0,
+		widget_event_function_null,
+		widget_event_function_null,
+		solo_level_initialize_list_single_player,
+		solo_level_initialize_list_coop,
+		solo_level_dispose_list,
+		solo_level_set_next_map_name,
+		difficulty_set,
+		start_new_game,
+		pause_game_restart_at_checkpoint,
+		pause_game_restart_level,
+		pause_game_quit_to_main_menu,
+		clear_multiplayer_player_joins,
+		player_wants_to_join_multiplayer_game,
+		network_game_server_list_initialize,
+		network_game_start_new_server,
+		network_server_list_dispose,
+		network_game_cancel,
+		network_game_join_game_from_server_list,
+		split_screen_game_initialize,
+		coop_game_initialize,
+		main_menu_initialize,
+		multiplayer_type_menu_initialize,
+		multiplayer_pick_quick_start_play_stage,
+		multiplayer_level_list_initialize,
+		multiplayer_level_list_dispose,
+		multiplayer_level_select,
+		multiplayer_profiles_list_initialize,
+		multiplayer_profiles_list_dispose,
+		multiplayer_profile_set_for_game,
+		multiplayer_game_swap_teams,
+		netgame_join_player,
+		player_profiles_list_initialize,
+		player_profiles_list_dispose,
+		player_profile_set_for_game_3wide,
+		player_profile_set_for_game_1wide,
+		playlist_profile_begin_editing,
+		playlist_profile_end_editing,
+		playlist_profile_set_game_engine,
+		playlist_profile_change_name,
+		playlist_profile_change_ctf_rules,
+		playlist_profile_change_koth_rules,
+		playlist_profile_change_slayer_rules,
+		playlist_profile_change_oddball_rules,
+		playlist_profile_change_racing_rules,
+		playlist_profile_change_player_options,
+		playlist_profile_change_item_options,
+		playlist_profile_change_indicator_options,
+		playlist_profile_initialize_game_engine,
+		playlist_profile_initialize_name,
+		playlist_profile_initialize_ctf_rules,
+		playlist_profile_initialize_koth_rules,
+		playlist_profile_initialize_slayer_rules,
+		playlist_profile_initialize_oddball_rules,
+		playlist_profile_initialize_racing_rules,
+		playlist_profile_initialize_player_options,
+		playlist_profile_initialize_item_options,
+		playlist_profile_initialize_indicator_options,
+		playlist_profile_save_changes,
+		player_profile_color_picker_menu_initialize,
+		player_profile_color_picker_menu_dispose,
+		player_profile_color_picker_select_color,
+		player_profile_begin_editing,
+		player_profile_end_editing,
+		player_profile_change_name,
+		player_profile_save_changes,
+		player_profile_initialize_controller_settings,
+		player_profile_initialize_advanced_controller_settings,
+		player_profile_change_controller_settings,
+		player_profile_change_advanced_controller_settings,
+		network_game_remove_local_player,
+		switch_from_main_menu_to_single_player,
+		delete_player_profile_request,
+		delete_playlist_profile_request,
+		delete_player_profile_final,
+		delete_playlist_profile_final,
+		cancel_profile_delete,
+		create_and_begin_editing_new_gametype_profile,
+		create_and_begin_editing_new_player_profile,
+		network_game_start_faster,
+		network_game_start_slower,
+		network_game_server_accept_connections,
+		network_game_server_defer_game_start,
+		network_game_server_allow_game_start,
+		disable_widget_if_no_xdemos,
+		run_xdemos,
+		single_player_reset_controller_choices,
+		single_player_set_player1_controller_choice,
+		single_player_set_player2_controller_choice,
+		display_error_if_no_network_connection,
+		start_network_game_if_no_advertised_servers,
+		netgame_unjoin_player,
+		close_calling_widget_if_not_editing_profile,
+		exit_to_xbox_dashboard,
+		new_campaign_chosen,
+		new_campaign_decision,
+		pop_history_stack_once,
+		difficulty_menu_initialize,
+		begin_music_fade_out,
+		new_campaign_if_no_custom_player_profiles_exist,
 	},
 	{
 		"NULL",
@@ -1924,14 +1927,14 @@ struct ui_widget_event_handler_function_table data_00305ee0 =
 	}
 };
 
-struct event_handler_globals event_handler_functions =
+static struct event_handler_globals event_handler_functions =
 {
 	102,
-	data_00305ee0.names,
+	event_handler_function_list.names,
 	0,
 	NONE,
-	"levels\\a10\\a10",
 	{
+		"levels\\a10\\a10",
 		"levels\\a30\\a30",
 		"levels\\a50\\a50",
 		"levels\\b30\\b30",
@@ -1964,7 +1967,7 @@ struct event_handler_globals event_handler_functions =
 
 /* ---------- public code */
 
-boolean code_000d9020(
+static boolean widget_event_function_null(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -1979,7 +1982,7 @@ void reset_last_player1_profile_index(
 	return;
 }
 
-boolean code_000dfc40(
+static boolean new_campaign_decision(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -1989,22 +1992,22 @@ boolean code_000dfc40(
 	wchar_t name[128];
 
 	result = FALSE;
-	if (event_handler_functions.unknown74 != NONE)
+	if (event_handler_functions.new_campaign_controller_index != NONE)
 	{
 		if (virtual_keyboard_last_exit_saved_text())
 		{
-			if (bss_00454af0[0])
+			if (new_campaign_profile_name[0])
 			{
 				long profile_index;
 
-				player_ui_set_single_player_local_player_controller(0, event_handler_functions.unknown74);
-				profile_index = player_profile_new(event_handler_functions.unknown74, bss_00454af0);
+				player_ui_set_single_player_local_player_controller(0, event_handler_functions.new_campaign_controller_index);
+				profile_index = player_profile_new(event_handler_functions.new_campaign_controller_index, new_campaign_profile_name);
 				if (profile_index == NONE)
 				{
 					saved_game_file_get_useable_untitled_profile_name(name);
-					ustrncpy(bss_00454af0, name, 11);
-					bss_00454af0[11] = L'\0';
-					profile_index = player_profile_new(event_handler_functions.unknown74, bss_00454af0);
+					ustrncpy(new_campaign_profile_name, name, 11);
+					new_campaign_profile_name[11] = L'\0';
+					profile_index = player_profile_new(event_handler_functions.new_campaign_controller_index, new_campaign_profile_name);
 				}
 				if (profile_index != NONE)
 				{
@@ -2020,7 +2023,7 @@ boolean code_000dfc40(
 					error(2, "failed to create new player profile");
 				if (result)
 				{
-					main_set_map_name(event_handler_functions.map_name);
+					main_set_map_name(event_handler_functions.scenario_paths[0]);
 					main_defer_map_map_change();
 				}
 
@@ -2037,12 +2040,12 @@ boolean code_000dfc40(
 				ui_play_audio_feedback_sound(4);
 			}
 		}
-		event_handler_functions.unknown74 = NONE;
+		event_handler_functions.new_campaign_controller_index = NONE;
 	}
 	return result;
 }
 
-boolean code_000df3e0(
+static boolean create_and_begin_editing_new_gametype_profile(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2101,7 +2104,7 @@ boolean code_000df3e0(
 	return result;
 }
 
-boolean code_000d9550(
+static boolean network_game_join_game_from_server_list(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2188,7 +2191,7 @@ boolean code_000d9550(
 
 /* ---------- private code */
 
-boolean code_000d93e0(
+static boolean pause_game_restart_at_checkpoint(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2197,7 +2200,7 @@ boolean code_000d93e0(
 	return TRUE;
 }
 
-boolean code_000d93f0(
+static boolean pause_game_restart_level(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2206,7 +2209,7 @@ boolean code_000d93f0(
 	return TRUE;
 }
 
-boolean code_000d9400(
+static boolean pause_game_quit_to_main_menu(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2216,7 +2219,7 @@ boolean code_000d9400(
 	return TRUE;
 }
 
-boolean code_000d9800(
+static boolean coop_game_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2225,7 +2228,7 @@ boolean code_000d9800(
 	return TRUE;
 }
 
-boolean code_000d9850(
+static boolean multiplayer_type_menu_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2234,16 +2237,16 @@ boolean code_000d9850(
 	return TRUE;
 }
 
-boolean code_000df3d0(
+static boolean cancel_profile_delete(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
 {
-	event_handler_functions.profile_index = NONE;
+	event_handler_functions.delete_profile_index = NONE;
 	return TRUE;
 }
 
-boolean code_000df810(
+static boolean run_xdemos(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2252,7 +2255,7 @@ boolean code_000df810(
 	return TRUE;
 }
 
-boolean code_000df820(
+static boolean single_player_reset_controller_choices(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2261,7 +2264,7 @@ boolean code_000df820(
 	return TRUE;
 }
 
-boolean code_000dfba0(
+static boolean exit_to_xbox_dashboard(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2270,7 +2273,7 @@ boolean code_000dfba0(
 	return FALSE;
 }
 
-boolean code_000d9410(
+static boolean clear_multiplayer_player_joins(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2282,7 +2285,7 @@ boolean code_000d9410(
 	return TRUE;
 }
 
-boolean code_000d9750(
+static boolean network_server_list_dispose(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2292,7 +2295,7 @@ boolean code_000d9750(
 	return TRUE;
 }
 
-boolean code_000d9770(
+static boolean network_game_cancel(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2303,7 +2306,7 @@ boolean code_000d9770(
 	return TRUE;
 }
 
-boolean code_000d9860(
+static boolean multiplayer_pick_quick_start_play_stage(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2314,7 +2317,7 @@ boolean code_000d9860(
 	return TRUE;
 }
 
-boolean code_000d9970(
+static boolean multiplayer_level_list_dispose(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2324,27 +2327,27 @@ boolean code_000d9970(
 	return TRUE;
 }
 
-boolean code_000da780(
+static boolean playlist_profile_end_editing(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
 {
-	event_handler_functions.profile_index = NONE;
+	event_handler_functions.delete_profile_index = NONE;
 	player_ui_end_editing_profile();
 	return TRUE;
 }
 
-boolean code_000de5c0(
+static boolean player_profile_end_editing(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
 {
-	event_handler_functions.profile_index = NONE;
+	event_handler_functions.delete_profile_index = NONE;
 	player_ui_end_editing_profile();
 	return TRUE;
 }
 
-boolean code_000df0d0(
+static boolean switch_from_main_menu_to_single_player(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2355,7 +2358,7 @@ boolean code_000df0d0(
 	return TRUE;
 }
 
-boolean code_000df790(
+static boolean network_game_server_accept_connections(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2366,7 +2369,7 @@ boolean code_000df790(
 	return TRUE;
 }
 
-boolean code_000df7b0(
+static boolean network_game_server_defer_game_start(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2377,7 +2380,7 @@ boolean code_000df7b0(
 	return TRUE;
 }
 
-boolean code_000df7d0(
+static boolean network_game_server_allow_game_start(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2388,7 +2391,7 @@ boolean code_000df7d0(
 	return TRUE;
 }
 
-boolean code_000df7f0(
+static boolean disable_widget_if_no_xdemos(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2401,7 +2404,7 @@ boolean code_000df7f0(
 	return TRUE;
 }
 
-boolean code_000dfda0(
+static boolean pop_history_stack_once(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2410,7 +2413,7 @@ boolean code_000dfda0(
 	return TRUE;
 }
 
-boolean code_000dfea0(
+static boolean begin_music_fade_out(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2421,7 +2424,7 @@ boolean code_000dfea0(
 }
 
 
-boolean code_000d91e0(
+static boolean solo_level_dispose_list(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2432,20 +2435,20 @@ boolean code_000d91e0(
 	return TRUE;
 }
 
-boolean code_000d93b0(
+static boolean start_new_game(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
 {
 	main_set_difficulty(1);
-	main_set_map_name(event_handler_functions.map_name);
+	main_set_map_name(event_handler_functions.scenario_paths[0]);
 	game_connection_set(0);
 	main_menu_switch_to_single_player();
 	player_ui_remember_player1_profile(0);
 	return TRUE;
 }
 
-boolean code_000d9cc0(
+static boolean multiplayer_profiles_list_dispose(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2459,7 +2462,7 @@ boolean code_000d9cc0(
 	return TRUE;
 }
 
-boolean code_000da2f0(
+static boolean player_profiles_list_dispose(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2473,7 +2476,7 @@ boolean code_000da2f0(
 	return TRUE;
 }
 
-boolean code_000de360(
+static boolean player_profile_color_picker_menu_dispose(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2486,7 +2489,7 @@ boolean code_000de360(
 	return TRUE;
 }
 
-boolean code_000d9480(
+static boolean network_game_server_list_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2506,7 +2509,7 @@ boolean code_000d9480(
 	return result;
 }
 
-boolean code_000d9810(
+static boolean main_menu_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2523,13 +2526,13 @@ boolean code_000d9810(
 	return TRUE;
 }
 
-boolean code_000df390(
+static boolean delete_playlist_profile_final(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
 {
 	boolean result = FALSE;
-	long profile_index = event_handler_functions.profile_index;
+	long profile_index = event_handler_functions.delete_profile_index;
 
 	if ((profile_index & 0xF) == 1)
 	{
@@ -2541,7 +2544,7 @@ boolean code_000df390(
 	return result;
 }
 
-boolean code_000d9430(
+static boolean player_wants_to_join_multiplayer_game(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2553,7 +2556,7 @@ boolean code_000d9430(
 	return TRUE;
 }
 
-boolean code_000da880(
+static boolean playlist_profile_change_name(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2574,7 +2577,7 @@ boolean code_000da880(
 	return result;
 }
 
-boolean code_000de5e0(
+static boolean player_profile_change_name(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2598,7 +2601,7 @@ boolean code_000de5e0(
 	return result;
 }
 
-boolean code_000df080(
+static boolean network_game_remove_local_player(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2610,13 +2613,13 @@ boolean code_000df080(
 	return TRUE;
 }
 
-boolean code_000df340(
+static boolean delete_player_profile_final(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
 {
 	boolean result = FALSE;
-	long profile_index = event_handler_functions.profile_index;
+	long profile_index = event_handler_functions.delete_profile_index;
 
 	if (!(profile_index & 0x40000000))
 	{
@@ -2636,7 +2639,7 @@ boolean code_000df340(
 	return result;
 }
 
-boolean code_000df830(
+static boolean single_player_set_player1_controller_choice(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2647,7 +2650,7 @@ boolean code_000df830(
 	return TRUE;
 }
 
-boolean code_000df9d0(
+static boolean netgame_unjoin_player(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2725,7 +2728,7 @@ boolean code_000df9d0(
 	return result;
 }
 
-boolean code_000dfb50(
+static boolean close_calling_widget_if_not_editing_profile(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2744,7 +2747,7 @@ boolean code_000dfb50(
 	return result;
 }
 
-boolean code_000dfec0(
+static boolean new_campaign_if_no_custom_player_profiles_exist(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2758,12 +2761,12 @@ boolean code_000dfec0(
 	else
 	{
 		result = FALSE;
-		code_000dfbb0(widget, event, widget_deleted);
+		new_campaign_chosen(widget, event, widget_deleted);
 	}
 	return result;
 }
 
-boolean code_000d9350(
+static boolean difficulty_set(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2776,7 +2779,7 @@ boolean code_000d9350(
 	return TRUE;
 }
 
-boolean code_000df8f0(
+static boolean display_error_if_no_network_connection(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2790,7 +2793,7 @@ boolean code_000df8f0(
 	return result;
 }
 
-boolean code_000d9790(
+static boolean split_screen_game_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2820,7 +2823,7 @@ boolean code_000d9790(
 	return result;
 }
 
-boolean code_000df880(
+static boolean single_player_set_player2_controller_choice(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2841,7 +2844,7 @@ boolean code_000df880(
 }
 
 
-boolean code_000de630(
+static boolean player_profile_save_changes(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2867,7 +2870,7 @@ boolean code_000de630(
 	return result;
 }
 
-boolean code_000df950(
+static boolean start_network_game_if_no_advertised_servers(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2882,7 +2885,7 @@ boolean code_000df950(
 	{
 		client = global_network_game_client_get();
 		if (client && network_game_client_get_state(client, &state) == 0)
-			result = code_000d94c0(widget, event, widget_deleted);
+			result = network_game_start_new_server(widget, event, widget_deleted);
 	}
 	else
 		error(2, "not attempting to start a new server; there are other servers available");
@@ -2890,7 +2893,7 @@ boolean code_000df950(
 }
 
 
-boolean code_000df0f0(
+static boolean delete_player_profile_request(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2917,14 +2920,14 @@ boolean code_000df0f0(
 		widget->data3C.selected_index < (unsigned short)widget->generated_count,
 		"invalid multiplayer profile specified from 'multiplayer profile list' list widget");
 	profile_index = ((long *)widget->generated_list)[widget->data3C.selected_index];
-	event_handler_functions.profile_index = profile_index;
+	event_handler_functions.delete_profile_index = profile_index;
 	if (profile_index != NONE)
 		return TRUE;
 	ui_play_audio_feedback_sound(4);
 	return FALSE;
 }
 
-boolean code_000de390(
+static boolean player_profile_color_picker_select_color(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -2958,7 +2961,7 @@ boolean code_000de390(
 	return FALSE;
 }
 
-boolean code_000da7a0(
+static boolean playlist_profile_set_game_engine(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3007,7 +3010,7 @@ boolean code_000da7a0(
 	return result;
 }
 
-boolean code_000d9f90(
+static boolean multiplayer_game_swap_teams(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3048,7 +3051,7 @@ boolean code_000d9f90(
 	return TRUE;
 }
 
-boolean code_000df650(
+static boolean network_game_start_faster(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3080,7 +3083,7 @@ boolean code_000df650(
 	return TRUE;
 }
 
-boolean code_000df6f0(
+static boolean network_game_start_slower(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3112,7 +3115,7 @@ boolean code_000df6f0(
 	return TRUE;
 }
 
-boolean code_000df560(
+static boolean create_and_begin_editing_new_player_profile(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3158,7 +3161,7 @@ boolean code_000df560(
 	return result;
 }
 
-boolean code_000d9880(
+static boolean multiplayer_level_list_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3190,7 +3193,7 @@ boolean code_000d9880(
 	return TRUE;
 }
 
-boolean code_000da640(
+static boolean playlist_profile_begin_editing(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3201,7 +3204,7 @@ boolean code_000da640(
 	{
 		long definition_tag_index = widget->definition_tag_index;
 		struct ui_widget_definition *definition;
-		event_handler_functions.profile_index = NONE;
+		event_handler_functions.delete_profile_index = NONE;
 		definition = ui_widget_definition_get(definition_tag_index);
 		match_vassert("c:\\halo\\SOURCE\\interface\\ui_widget_event_handler_functions.c", 1896,
 			definition->type == 0 && definition->child_count >= 3,
@@ -3240,7 +3243,7 @@ boolean code_000da640(
 	return result;
 }
 
-boolean code_000de490(
+static boolean player_profile_begin_editing(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3254,7 +3257,7 @@ boolean code_000de490(
 	{
 		long definition_tag_index = widget->child->definition_tag_index;
 		struct ui_widget_definition *definition;
-		event_handler_functions.profile_index = NONE;
+		event_handler_functions.delete_profile_index = NONE;
 		definition = ui_widget_definition_get(definition_tag_index);
 		match_vassert("c:\\halo\\SOURCE\\interface\\ui_widget_event_handler_functions.c", 3677,
 			definition->type == 2,
@@ -3287,7 +3290,7 @@ boolean code_000de490(
 	return result;
 }
 
-boolean code_000df200(
+static boolean delete_playlist_profile_request(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3317,7 +3320,7 @@ boolean code_000df200(
 		widget->data3C.selected_index < (unsigned short)widget->generated_count,
 		"invalid multiplayer profile specified from 'multiplayer profile list' list widget");
 	profile_index = ((long *)widget->generated_list)[widget->data3C.selected_index];
-	event_handler_functions.profile_index = profile_index;
+	event_handler_functions.delete_profile_index = profile_index;
 	if (profile_index != NONE)
 	{
 		if (profile_index & 0x40000000)
@@ -3333,7 +3336,7 @@ boolean code_000df200(
 	return result;
 }
 
-boolean code_000de250(
+static boolean player_profile_color_picker_menu_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3379,7 +3382,7 @@ boolean code_000de250(
 	return TRUE;
 }
 
-boolean code_000dfdc0(
+static boolean difficulty_menu_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3407,7 +3410,7 @@ boolean code_000dfdc0(
 	return TRUE;
 }
 
-boolean code_000dc4d0(
+static boolean playlist_profile_initialize_game_engine(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3448,7 +3451,7 @@ boolean code_000dc4d0(
 	return FALSE;
 }
 
-boolean code_000de190(
+static boolean playlist_profile_save_changes(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3486,7 +3489,7 @@ boolean code_000de190(
 	return result;
 }
 
-boolean code_000d9b60(
+static boolean multiplayer_profiles_list_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3497,7 +3500,7 @@ boolean code_000d9b60(
 	long profile_index;
 	word list_item_index;
 
-	event_handler_functions.profile_index = NONE;
+	event_handler_functions.delete_profile_index = NONE;
 	memset(cached_variant_profile, -1, 0x144);
 	definition = ui_widget_definition_get(widget->definition_tag_index);
 	match_vassert("c:\\halo\\SOURCE\\interface\\ui_widget_event_handler_functions.c", 1384,
@@ -3562,16 +3565,16 @@ boolean ui_widget_event_handler_function_invoke(
 		"(widget != NULL) && (widget_deleted != NULL)");
 	if ((short)function_index >= 0 && function_index < 102)
 	{
-		result = data_00305ee0.functions[(short)function_index](widget, event, widget_deleted);
+		result = event_handler_function_list.functions[(short)function_index](widget, event, widget_deleted);
 		if (!result)
-			console_warning("event handler '%s' failed", data_00305ee0.names[(short)function_index]);
+			console_warning("event handler '%s' failed", event_handler_function_list.names[(short)function_index]);
 		return result;
 	}
 	error(2, "invalid event_handler_function");
 	return FALSE;
 }
 
-boolean code_000dfbb0(
+static boolean new_campaign_chosen(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3581,15 +3584,15 @@ boolean code_000dfbb0(
 	match_vassert("c:\\halo\\SOURCE\\interface\\ui_widget_event_handler_functions.c", 4741,
 		event != NULL, "event");
 	saved_game_file_get_useable_untitled_profile_name(name);
-	ustrncpy(bss_00454af0, name, 11);
-	bss_00454af0[11] = L'\0';
-	event_handler_functions.unknown74 = event->controller_index;
-	if (!virtual_keyboard_launch(bss_00454af0, 24, 8))
+	ustrncpy(new_campaign_profile_name, name, 11);
+	new_campaign_profile_name[11] = L'\0';
+	event_handler_functions.new_campaign_controller_index = event->controller_index;
+	if (!virtual_keyboard_launch(new_campaign_profile_name, 24, 8))
 		error(2, "failed to invoke the virtual keyboard for a new campaign profile name");
 	return TRUE;
 }
 
-boolean code_000d94c0(
+static boolean network_game_start_new_server(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3623,7 +3626,7 @@ boolean code_000d94c0(
 	return result;
 }
 
-boolean code_000dc590(
+static boolean playlist_profile_initialize_name(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3651,7 +3654,7 @@ boolean code_000dc590(
 	return result;
 }
 
-boolean code_000dbfc0(
+static boolean playlist_profile_change_item_options(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3748,7 +3751,7 @@ boolean code_000dbfc0(
 	return FALSE;
 }
 
-boolean code_000dc2e0(
+static boolean playlist_profile_change_indicator_options(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3819,7 +3822,7 @@ boolean code_000dc2e0(
 	return FALSE;
 }
 
-boolean code_000da8d0(
+static boolean playlist_profile_change_ctf_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3910,7 +3913,7 @@ boolean code_000da8d0(
 	return TRUE;
 }
 
-boolean code_000db770(
+static boolean playlist_profile_change_racing_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -3983,7 +3986,7 @@ boolean code_000db770(
 	return FALSE;
 }
 
-boolean code_000dac70(
+static boolean playlist_profile_change_koth_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4041,7 +4044,7 @@ boolean code_000dac70(
 	return FALSE;
 }
 
-boolean code_000dae90(
+static boolean playlist_profile_change_slayer_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4123,7 +4126,7 @@ boolean code_000dae90(
 	return FALSE;
 }
 
-boolean code_000da4e0(
+static boolean player_profile_set_for_game_1wide(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4159,7 +4162,7 @@ boolean code_000da4e0(
 	return FALSE;
 }
 
-boolean code_000de6b0(
+static boolean player_profile_initialize_controller_settings(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4235,7 +4238,7 @@ boolean code_000de6b0(
 	return result;
 }
 
-boolean code_000d9040(
+static boolean solo_level_initialize_list_coop(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4258,7 +4261,7 @@ boolean code_000d9040(
 
 		for (level_index = 0; level_index < 10; level_index++)
 		{
-			((struct single_player_level_entry *)single_player_level_data)[level_index].map_name = (&event_handler_functions.map_name)[level_index];
+			((struct single_player_level_entry *)single_player_level_data)[level_index].map_name = event_handler_functions.scenario_paths[level_index];
 			if (profile0[0x1C + level_index] || level_index == highest_levels[0] + 1 || profile1[0x1C + level_index] || level_index == highest_levels[1] + 1 || level_index == 0)
 			{
 				register unsigned long level_flags;
@@ -4281,7 +4284,7 @@ boolean code_000d9040(
 	return TRUE;
 }
 
-boolean code_000ded40(
+static boolean player_profile_change_advanced_controller_settings(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4365,7 +4368,7 @@ boolean code_000ded40(
 	return FALSE;
 }
 
-boolean code_000d9210(
+static boolean solo_level_set_next_map_name(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4409,7 +4412,7 @@ boolean code_000d9210(
 	}
 	if (result == TRUE)
 	{
-		main_set_map_name((&event_handler_functions.map_name)[list_widget->data3C.selected_index]);
+		main_set_map_name(event_handler_functions.scenario_paths[list_widget->data3C.selected_index]);
 		main_defer_map_map_change();
 	}
 	else
@@ -4420,7 +4423,7 @@ boolean code_000d9210(
 	return result;
 }
 
-boolean code_000da080(
+static boolean netgame_join_player(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4454,7 +4457,7 @@ boolean code_000da080(
 	return TRUE;
 }
 
-boolean code_000da190(
+static boolean player_profiles_list_initialize(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4466,7 +4469,7 @@ boolean code_000da190(
 	boolean include_default;
 	short required_profile_count;
 
-	event_handler_functions.profile_index = NONE;
+	event_handler_functions.delete_profile_index = NONE;
 	memset(cached_player_profile, NONE, 0x9C);
 	match_vassert("c:\\halo\\SOURCE\\interface\\ui_widget_event_handler_functions.c", 1686,
 		definition->type == 2,
@@ -4528,7 +4531,7 @@ boolean code_000da190(
 	return TRUE;
 }
 
-boolean code_000da320(
+static boolean player_profile_set_for_game_3wide(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4590,7 +4593,7 @@ boolean code_000da320(
 	return FALSE;
 }
 
-boolean code_000ddf90(
+static boolean playlist_profile_initialize_indicator_options(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4648,7 +4651,7 @@ boolean code_000ddf90(
 	return FALSE;
 }
 
-boolean code_000ddc80(
+static boolean playlist_profile_initialize_item_options(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4737,7 +4740,7 @@ boolean code_000ddc80(
 	return FALSE;
 }
 
-boolean code_000de890(
+static boolean player_profile_initialize_advanced_controller_settings(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4818,7 +4821,7 @@ boolean code_000de890(
 	return FALSE;
 }
 
-boolean code_000deb70(
+static boolean player_profile_change_controller_settings(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4867,7 +4870,7 @@ boolean code_000deb70(
 }
 
 
-boolean code_000dd450(
+static boolean playlist_profile_initialize_racing_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -4944,7 +4947,7 @@ boolean code_000dd450(
 }
 
 
-boolean code_000dcbf0(
+static boolean playlist_profile_initialize_slayer_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -5030,7 +5033,7 @@ boolean code_000dcbf0(
 }
 
 
-boolean code_000dc630(
+static boolean playlist_profile_initialize_ctf_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -5119,7 +5122,7 @@ boolean code_000dc630(
 	return FALSE;
 }
 
-boolean code_000dc9c0(
+static boolean playlist_profile_initialize_koth_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -5178,7 +5181,7 @@ boolean code_000dc9c0(
 	error(2, "failed to retrieve editable game variant");
 	return FALSE;
 }
-boolean code_000dcf40(
+static boolean playlist_profile_initialize_oddball_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -5306,7 +5309,7 @@ boolean code_000dcf40(
 	error(2, "failed to retrieve editable game variant");
 	return FALSE;
 }
-boolean code_000dd730(
+static boolean playlist_profile_initialize_player_options(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -5440,7 +5443,7 @@ boolean code_000dd730(
 	error(2, "failed to retrieve editable game variant");
 	return FALSE;
 }
-boolean code_000db1f0(
+static boolean playlist_profile_change_oddball_rules(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -5572,7 +5575,7 @@ boolean code_000db1f0(
 	return FALSE;
 }
 
-boolean code_000dba40(
+static boolean playlist_profile_change_player_options(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -5712,7 +5715,7 @@ boolean code_000dba40(
 	return result;
 }
 
-boolean code_000d9990(
+static boolean multiplayer_level_select(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -5789,7 +5792,7 @@ boolean saved_game_file_get_path_to_enclosing_directory(
 	long profile_index,
 	char *directory_path);
 
-boolean code_000d9cf0(
+static boolean multiplayer_profile_set_for_game(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -5868,7 +5871,7 @@ boolean code_000d9cf0(
 }
 
 
-boolean code_000dff10(
+static boolean solo_level_initialize_list_single_player(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
@@ -5883,7 +5886,7 @@ boolean code_000dff10(
 	if (player_spawn_count >= 2)
 	{
 		memset(&persistant_game_data_info, 0, sizeof(persistant_game_data_info));
-		code_000d9040(widget, event, widget_deleted);
+		solo_level_initialize_list_coop(widget, event, widget_deleted);
 		return TRUE;
 	}
 
@@ -5906,7 +5909,7 @@ boolean code_000dff10(
 		register unsigned long level_flags;
 
 		((struct single_player_level_entry *)single_player_level_data)[level_index].map_name =
-			(&event_handler_functions.map_name)[level_index];
+			event_handler_functions.scenario_paths[level_index];
 		if (profile[0x1C + level_index] || level_index == highest_level + 1 || level_index == 0)
 		{
 			level_flags = (char)profile[0x1C + level_index];
@@ -5934,7 +5937,7 @@ boolean code_000dff10(
 		for (level_index = 0; level_index < 10; level_index++)
 		{
 			if (_stricmp(persistant_game_data_info.map_name,
-				(&event_handler_functions.map_name)[level_index]) == 0)
+				event_handler_functions.scenario_paths[level_index]) == 0)
 			{
 				struct persistent_game_difficulty difficulty = persistant_game_data_info.difficulty;
 				persistant_game_data_info.map_index = (byte)level_index;
@@ -5959,13 +5962,13 @@ boolean code_000dff10(
 		profile_index = player_ui_get_active_player_profile_index(0);
 		if (profile_index != NONE)
 		{
-			if (event_handler_functions.unknown3C == NONE)
+			if (event_handler_functions.corrupted_game_state_profile_index == NONE)
 			{
 				display_error_deferred(39, NONE, TRUE, FALSE);
-				event_handler_functions.unknown3C = profile_index;
+				event_handler_functions.corrupted_game_state_profile_index = profile_index;
 			}
 			else
-				event_handler_functions.unknown3C = NONE;
+				event_handler_functions.corrupted_game_state_profile_index = NONE;
 		}
 	}
 	return TRUE;

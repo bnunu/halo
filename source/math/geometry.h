@@ -33,11 +33,25 @@ struct geosphere *geosphere_new(
 void geosphere_dispose(
 	struct geosphere *sphere);
 
+real vector_intersect_plane2d(
+	real_point2d const *point,
+	real_vector2d const *vector,
+	real_plane2d const *plane);
+
 short convex_hull2d(
 	short point_count,
 	real_point2d const *points,
 	short *hull_indices);
-boolean convex_hull2d_test_point(short count, union real_point2d const *points, union real_point2d const *point, real epsilon);
+boolean convex_hull2d_verify(
+	short vertex_count,
+	real_point2d const *vertices,
+	short index_count,
+	short const *indices);
+boolean convex_hull2d_test_point(
+	short count,
+	real_point2d const *points,
+	real_point2d const *point,
+	real epsilon);
 boolean convex_hull2d_test_circle(
 	short count,
 	real_point2d const *points,
@@ -62,6 +76,8 @@ boolean convex_hull2d_test_vector(
 boolean convex_polygon2d_verify(
 	short count,
 	real *vertices);
+boolean convex_hull3d_verify(
+	void);
 short convex_polygon3d_clip_to_plane(
 	short vertex_count,
 	real_point3d const *vertices,

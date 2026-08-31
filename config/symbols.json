@@ -837,7 +837,8 @@
 	{
 		"file_offset": 45376,
 		"flags": 32,
-		"name": "_code_0000b140"
+		"name": "_actor_action_allowed_to_enter_vehicle",
+		"static": true
 	},
 	{
 		"file_offset": 45440,
@@ -852,7 +853,8 @@
 	{
 		"file_offset": 46000,
 		"flags": 32,
-		"name": "_code_0000b3b0"
+		"name": "_actor_action_determine_pursuit_options",
+		"static": true
 	},
 	{
 		"file_offset": 46368,
@@ -897,7 +899,8 @@
 	{
 		"file_offset": 47936,
 		"flags": 32,
-		"name": "_code_0000bb40"
+		"name": "_actor_pursuit_consider_nearby_actor",
+		"static": true
 	},
 	{
 		"file_offset": 48080,
@@ -977,7 +980,8 @@
 	{
 		"file_offset": 51568,
 		"flags": 32,
-		"name": "_code_0000c970"
+		"name": "_actor_action_find_escape_from_danger",
+		"static": true
 	},
 	{
 		"file_offset": 52496,
@@ -10530,12 +10534,14 @@
 	{
 		"file_offset": 616528,
 		"flags": 32,
-		"name": "_code_00096850"
+		"name": "_initialize_player_multiplayer_data",
+		"static": true
 	},
 	{
 		"file_offset": 616592,
 		"flags": 32,
-		"name": "_code_00096890"
+		"name": "_game_engine_build_lighting",
+		"static": true
 	},
 	{
 		"file_offset": 616880,
@@ -10585,27 +10591,32 @@
 	{
 		"file_offset": 617264,
 		"flags": 32,
-		"name": "_code_00096b30"
+		"name": "_is_place_tied",
+		"static": true
 	},
 	{
 		"file_offset": 617280,
 		"flags": 32,
-		"name": "_code_00096b40"
+		"name": "_place_get_position",
+		"static": true
 	},
 	{
 		"file_offset": 617296,
 		"flags": 32,
-		"name": "_code_00096b50"
+		"name": "_get_place_string",
+		"static": true
 	},
 	{
 		"file_offset": 617376,
 		"flags": 32,
-		"name": "_code_00096ba0"
+		"name": "_drawline",
+		"static": true
 	},
 	{
 		"file_offset": 617488,
 		"flags": 32,
-		"name": "_code_00096c10"
+		"name": "_get_selected_color",
+		"static": true
 	},
 	{
 		"file_offset": 617520,
@@ -10615,7 +10626,7 @@
 	{
 		"file_offset": 617600,
 		"flags": 32,
-		"name": "_code_00096c80"
+		"name": "_find_closest_player_callback"
 	},
 	{
 		"file_offset": 617696,
@@ -10625,27 +10636,32 @@
 	{
 		"file_offset": 617728,
 		"flags": 32,
-		"name": "_code_00096d00"
+		"name": "_can_delete_item",
+		"static": true
 	},
 	{
 		"file_offset": 617776,
 		"flags": 32,
-		"name": "_code_00096d30"
+		"name": "_game_engine_update_purge",
+		"static": true
 	},
 	{
 		"file_offset": 618032,
 		"flags": 32,
-		"name": "_code_00096e30"
+		"name": "_update_weapon_inventory",
+		"static": true
 	},
 	{
 		"file_offset": 618192,
 		"flags": 32,
-		"name": "_code_00096ed0"
+		"name": "_game_engine_update_weapons",
+		"static": true
 	},
 	{
 		"file_offset": 618528,
 		"flags": 32,
-		"name": "_code_00097020"
+		"name": "_item_collection_get_total",
+		"static": true
 	},
 	{
 		"file_offset": 618704,
@@ -10680,7 +10696,8 @@
 	{
 		"file_offset": 619088,
 		"flags": 32,
-		"name": "_code_00097250"
+		"name": "_game_engine_player_is_odd_man_out",
+		"static": true
 	},
 	{
 		"file_offset": 619248,
@@ -10725,12 +10742,13 @@
 	{
 		"file_offset": 619872,
 		"flags": 32,
-		"name": "_code_00097560"
+		"name": "_game_engine_press_start_to_begin"
 	},
 	{
 		"file_offset": 619888,
 		"flags": 32,
-		"name": "_code_00097570"
+		"name": "_nearby_vehicle",
+		"static": true
 	},
 	{
 		"file_offset": 620128,
@@ -10745,7 +10763,8 @@
 	{
 		"file_offset": 620608,
 		"flags": 32,
-		"name": "_code_00097840"
+		"name": "_goal_matches_player",
+		"static": true
 	},
 	{
 		"file_offset": 620736,
@@ -10800,7 +10819,8 @@
 	{
 		"file_offset": 621568,
 		"flags": 32,
-		"name": "_code_00097c00"
+		"name": "_game_engine_infinite_grenades_internal",
+		"static": true
 	},
 	{
 		"file_offset": 621600,
@@ -10895,12 +10915,14 @@
 	{
 		"file_offset": 623728,
 		"flags": 32,
-		"name": "_code_00098470"
+		"name": "_netgame_flag_verify_no_team_duplicates",
+		"static": true
 	},
 	{
 		"file_offset": 623888,
 		"flags": 32,
-		"name": "_code_00098510"
+		"name": "_netgame_flag_verify_team_range",
+		"static": true
 	},
 	{
 		"file_offset": 624000,
@@ -11050,7 +11072,8 @@
 	{
 		"file_offset": 627952,
 		"flags": 32,
-		"name": "_code_000994f0"
+		"name": "_rasterize_in_game_score_draw_line",
+		"static": true
 	},
 	{
 		"file_offset": 628368,
@@ -11070,7 +11093,8 @@
 	{
 		"file_offset": 628864,
 		"flags": 32,
-		"name": "_code_00099880"
+		"name": "_test_any_gamepad_button",
+		"static": true
 	},
 	{
 		"file_offset": 628912,
@@ -11095,7 +11119,8 @@
 	{
 		"file_offset": 629648,
 		"flags": 32,
-		"name": "_code_00099b90"
+		"name": "_game_engine_predict_resources",
+		"static": true
 	},
 	{
 		"file_offset": 630272,
@@ -11140,7 +11165,8 @@
 	{
 		"file_offset": 631040,
 		"flags": 32,
-		"name": "_code_0009a100"
+		"name": "_adjust_score_for_ranking",
+		"static": true
 	},
 	{
 		"file_offset": 631168,
@@ -11150,7 +11176,8 @@
 	{
 		"file_offset": 631728,
 		"flags": 32,
-		"name": "_code_0009a3b0"
+		"name": "_game_engine_get_player_place",
+		"static": true
 	},
 	{
 		"file_offset": 631856,
@@ -11160,32 +11187,37 @@
 	{
 		"file_offset": 631952,
 		"flags": 32,
-		"name": "_code_0009a490"
+		"name": "_select_players_to_display",
+		"static": true
 	},
 	{
 		"file_offset": 632448,
 		"flags": 32,
-		"name": "_code_0009a680"
+		"name": "_find_closest_player_index"
 	},
 	{
 		"file_offset": 632896,
 		"flags": 32,
-		"name": "_code_0009a840"
+		"name": "_internal_rasterize_target_name",
+		"static": true
 	},
 	{
 		"file_offset": 633152,
 		"flags": 32,
-		"name": "_code_0009a940"
+		"name": "_internal_rasterize_score",
+		"static": true
 	},
 	{
 		"file_offset": 635488,
 		"flags": 32,
-		"name": "_code_0009b260"
+		"name": "_random_item",
+		"static": true
 	},
 	{
 		"file_offset": 635616,
 		"flags": 32,
-		"name": "_code_0009b2e0"
+		"name": "_game_engine_get_type",
+		"static": true
 	},
 	{
 		"file_offset": 635648,
@@ -11195,12 +11227,13 @@
 	{
 		"file_offset": 635808,
 		"flags": 32,
-		"name": "_code_0009b3a0"
+		"name": "_game_engine_update_item_spawn"
 	},
 	{
 		"file_offset": 636144,
 		"flags": 32,
-		"name": "_code_0009b4f0"
+		"name": "_game_engine_update_player_no_shield",
+		"static": true
 	},
 	{
 		"file_offset": 636256,
@@ -11215,17 +11248,20 @@
 	{
 		"file_offset": 636576,
 		"flags": 32,
-		"name": "_code_0009b6a0"
+		"name": "_multiplayer_message_internal",
+		"static": true
 	},
 	{
 		"file_offset": 636640,
 		"flags": 32,
-		"name": "_code_0009b6e0"
+		"name": "_multiplayer_message",
+		"static": true
 	},
 	{
 		"file_offset": 636784,
 		"flags": 32,
-		"name": "_code_0009b770"
+		"name": "_game_show_score_one_player",
+		"static": true
 	},
 	{
 		"file_offset": 636800,
@@ -11260,7 +11296,8 @@
 	{
 		"file_offset": 637600,
 		"flags": 32,
-		"name": "_code_0009baa0"
+		"name": "_handle_custom_starting_equipment",
+		"static": true
 	},
 	{
 		"file_offset": 637904,
@@ -11275,7 +11312,8 @@
 	{
 		"file_offset": 638448,
 		"flags": 32,
-		"name": "_code_0009bdf0"
+		"name": "_game_engine_update_teleporter",
+		"static": true
 	},
 	{
 		"file_offset": 639440,
@@ -11285,12 +11323,14 @@
 	{
 		"file_offset": 639808,
 		"flags": 32,
-		"name": "_code_0009c340"
+		"name": "_game_engine_get_friendly_bonus",
+		"static": true
 	},
 	{
 		"file_offset": 640096,
 		"flags": 32,
-		"name": "_code_0009c460"
+		"name": "_default_starting_location_rate_function",
+		"static": true
 	},
 	{
 		"file_offset": 640272,
@@ -11330,27 +11370,32 @@
 	{
 		"file_offset": 641888,
 		"flags": 32,
-		"name": "_code_0009cb60"
+		"name": "_game_engine_did_team_win",
+		"static": true
 	},
 	{
 		"file_offset": 642016,
 		"flags": 32,
-		"name": "_code_0009cbe0"
+		"name": "_netgame_flag_verify_team_exists",
+		"static": true
 	},
 	{
 		"file_offset": 642080,
 		"flags": 32,
-		"name": "_code_0009cc20"
+		"name": "_netgame_verify_spawn_points",
+		"static": true
 	},
 	{
 		"file_offset": 642176,
 		"flags": 32,
-		"name": "_code_0009cc80"
+		"name": "_netgame_verify_equipment",
+		"static": true
 	},
 	{
 		"file_offset": 642288,
 		"flags": 32,
-		"name": "_code_0009ccf0"
+		"name": "_game_engine_verify_current_map",
+		"static": true
 	},
 	{
 		"file_offset": 642928,
@@ -11370,7 +11415,8 @@
 	{
 		"file_offset": 643392,
 		"flags": 32,
-		"name": "_code_0009d140"
+		"name": "_game_engine_generate_title_string",
+		"static": true
 	},
 	{
 		"file_offset": 644544,
@@ -11395,12 +11441,14 @@
 	{
 		"file_offset": 648816,
 		"flags": 32,
-		"name": "_code_0009e670"
+		"name": "_game_engine_rasterize_in_game_score",
+		"static": true
 	},
 	{
 		"file_offset": 649664,
 		"flags": 32,
-		"name": "_code_0009e9c0"
+		"name": "_game_engine_post_rasterize_in_game",
+		"static": true
 	},
 	{
 		"file_offset": 649984,
@@ -13297,1947 +13345,1947 @@
 	{
 		"file_offset": 709264,
 		"flags": 32,
-		"name": "_code_000ad290"
+		"name": "_hs_not_evaluate"
 	},
 	{
 		"file_offset": 709344,
 		"flags": 32,
-		"name": "_code_000ad2e0"
+		"name": "_hs_print_evaluate"
 	},
 	{
 		"file_offset": 709408,
 		"flags": 32,
-		"name": "_code_000ad320"
+		"name": "_hs_players_evaluate"
 	},
 	{
 		"file_offset": 709440,
 		"flags": 32,
-		"name": "_code_000ad340"
+		"name": "_hs_teleport_players_not_in_trigger_volume_evaluate"
 	},
 	{
 		"file_offset": 709504,
 		"flags": 32,
-		"name": "_code_000ad380"
+		"name": "_scenario_trigger_volume_test_object_evaluate"
 	},
 	{
 		"file_offset": 709584,
 		"flags": 32,
-		"name": "_code_000ad3d0"
+		"name": "_hs_trigger_volume_test_objects_any_evaluate"
 	},
 	{
 		"file_offset": 709664,
 		"flags": 32,
-		"name": "_code_000ad420"
+		"name": "_hs_trigger_volume_test_objects_all_evaluate"
 	},
 	{
 		"file_offset": 709744,
 		"flags": 32,
-		"name": "_code_000ad470"
+		"name": "_hs_object_create_evaluate"
 	},
 	{
 		"file_offset": 709808,
 		"flags": 32,
-		"name": "_code_000ad4b0"
+		"name": "_hs_object_destroy_evaluate"
 	},
 	{
 		"file_offset": 709872,
 		"flags": 32,
-		"name": "_code_000ad4f0"
+		"name": "_hs_object_create_anew_evaluate"
 	},
 	{
 		"file_offset": 709936,
 		"flags": 32,
-		"name": "_code_000ad530"
+		"name": "_hs_object_create_containing_evaluate"
 	},
 	{
 		"file_offset": 710000,
 		"flags": 32,
-		"name": "_code_000ad570"
+		"name": "_hs_object_create_anew_containing_evaluate"
 	},
 	{
 		"file_offset": 710064,
 		"flags": 32,
-		"name": "_code_000ad5b0"
+		"name": "_hs_object_destroy_containing_evaluate"
 	},
 	{
 		"file_offset": 710128,
 		"flags": 32,
-		"name": "_code_000ad5f0"
+		"name": "_hs_object_destroy_all_evaluate"
 	},
 	{
 		"file_offset": 710160,
 		"flags": 32,
-		"name": "_code_000ad610"
+		"name": "_hs_object_teleport_evaluate"
 	},
 	{
 		"file_offset": 710224,
 		"flags": 32,
-		"name": "_code_000ad650"
+		"name": "_hs_object_set_facing_evaluate"
 	},
 	{
 		"file_offset": 710288,
 		"flags": 32,
-		"name": "_code_000ad690"
+		"name": "_hs_object_set_shield_evaluate"
 	},
 	{
 		"file_offset": 710352,
 		"flags": 32,
-		"name": "_code_000ad6d0"
+		"name": "_hs_object_set_permutation_evaluate"
 	},
 	{
 		"file_offset": 710416,
 		"flags": 32,
-		"name": "_code_000ad710"
+		"name": "_hs_object_list_get_element_evaluate"
 	},
 	{
 		"file_offset": 710480,
 		"flags": 32,
-		"name": "_code_000ad750"
+		"name": "_object_list_count_evaluate"
 	},
 	{
 		"file_offset": 710560,
 		"flags": 32,
-		"name": "_code_000ad7a0"
+		"name": "_hs_effect_new_evaluate"
 	},
 	{
 		"file_offset": 710624,
 		"flags": 32,
-		"name": "_code_000ad7e0"
+		"name": "_hs_effect_new_from_object_marker_evaluate"
 	},
 	{
 		"file_offset": 710688,
 		"flags": 32,
-		"name": "_code_000ad820"
+		"name": "_hs_damage_new_evaluate"
 	},
 	{
 		"file_offset": 710752,
 		"flags": 32,
-		"name": "_code_000ad860"
+		"name": "_hs_damage_object_evaluate"
 	},
 	{
 		"file_offset": 710816,
 		"flags": 32,
-		"name": "_code_000ad8a0"
+		"name": "_hs_objects_can_see_object_evaluate"
 	},
 	{
 		"file_offset": 710896,
 		"flags": 32,
-		"name": "_code_000ad8f0"
+		"name": "_hs_objects_can_see_flag_evaluate"
 	},
 	{
 		"file_offset": 710976,
 		"flags": 32,
-		"name": "_code_000ad940"
+		"name": "_hs_objects_delete_by_definition_evaluate"
 	},
 	{
 		"file_offset": 711040,
 		"flags": 32,
-		"name": "_code_000ad980"
+		"name": "_hs_sound_set_gain_evaluate"
 	},
 	{
 		"file_offset": 711104,
 		"flags": 32,
-		"name": "_code_000ad9c0"
+		"name": "_hs_sound_get_gain_evaluate"
 	},
 	{
 		"file_offset": 711168,
 		"flags": 32,
-		"name": "_code_000ada00"
+		"name": "_numeric_countdown_timer_set_evaluate"
 	},
 	{
 		"file_offset": 711232,
 		"flags": 32,
-		"name": "_code_000ada40"
+		"name": "_numeric_countdown_timer_get_evaluate"
 	},
 	{
 		"file_offset": 711312,
 		"flags": 32,
-		"name": "_code_000ada90"
+		"name": "_numeric_countdown_timer_stop_evaluate"
 	},
 	{
 		"file_offset": 711344,
 		"flags": 32,
-		"name": "_code_000adab0"
+		"name": "_numeric_countdown_timer_restart_evaluate"
 	},
 	{
 		"file_offset": 711376,
 		"flags": 32,
-		"name": "_code_000adad0"
+		"name": "_breakable_surfaces_enable_evaluate"
 	},
 	{
 		"file_offset": 711440,
 		"flags": 32,
-		"name": "_code_000adb10"
+		"name": "_recorded_animation_play_evaluate"
 	},
 	{
 		"file_offset": 711520,
 		"flags": 32,
-		"name": "_code_000adb60"
+		"name": "_recorded_animation_play_and_delete_evaluate"
 	},
 	{
 		"file_offset": 711600,
 		"flags": 32,
-		"name": "_code_000adbb0"
+		"name": "_recorded_animation_play_and_hover_evaluate"
 	},
 	{
 		"file_offset": 711680,
 		"flags": 32,
-		"name": "_code_000adc00"
+		"name": "_recorded_animation_kill_evaluate"
 	},
 	{
 		"file_offset": 711744,
 		"flags": 32,
-		"name": "_code_000adc40"
+		"name": "_recorded_animation_get_time_left_evaluate"
 	},
 	{
 		"file_offset": 711824,
 		"flags": 32,
-		"name": "_code_000adc90"
+		"name": "_object_set_ranged_attack_inhibited_evaluate"
 	},
 	{
 		"file_offset": 711888,
 		"flags": 32,
-		"name": "_code_000adcd0"
+		"name": "_object_set_melee_attack_inhibited_evaluate"
 	},
 	{
 		"file_offset": 711952,
 		"flags": 32,
-		"name": "_code_000add10"
+		"name": "_objects_dump_memory_evaluate"
 	},
 	{
 		"file_offset": 711984,
 		"flags": 32,
-		"name": "_code_000add30"
+		"name": "_object_scripting_set_collideable_evaluate"
 	},
 	{
 		"file_offset": 712048,
 		"flags": 32,
-		"name": "_code_000add70"
+		"name": "_objects_scripting_set_scale_evaluate"
 	},
 	{
 		"file_offset": 712112,
 		"flags": 32,
-		"name": "_code_000addb0"
+		"name": "_objects_scripting_attach_evaluate"
 	},
 	{
 		"file_offset": 712176,
 		"flags": 32,
-		"name": "_code_000addf0"
+		"name": "_objects_scripting_detach_evaluate"
 	},
 	{
 		"file_offset": 712240,
 		"flags": 32,
-		"name": "_code_000ade30"
+		"name": "_garbage_collect_now_evaluate"
 	},
 	{
 		"file_offset": 712272,
 		"flags": 32,
-		"name": "_code_000ade50"
+		"name": "_object_cannot_take_damage_evaluate"
 	},
 	{
 		"file_offset": 712336,
 		"flags": 32,
-		"name": "_code_000ade90"
+		"name": "_object_can_take_damage_evaluate"
 	},
 	{
 		"file_offset": 712400,
 		"flags": 32,
-		"name": "_code_000aded0"
+		"name": "_object_beautify_evaluate"
 	},
 	{
 		"file_offset": 712464,
 		"flags": 32,
-		"name": "_code_000adf10"
+		"name": "_hs_objects_predict_evaluate"
 	},
 	{
 		"file_offset": 712528,
 		"flags": 32,
-		"name": "_code_000adf50"
+		"name": "_object_definition_predict_evaluate"
 	},
 	{
 		"file_offset": 712592,
 		"flags": 32,
-		"name": "_code_000adf90"
+		"name": "_object_pvs_set_object_evaluate"
 	},
 	{
 		"file_offset": 712656,
 		"flags": 32,
-		"name": "_code_000adfd0"
+		"name": "_object_pvs_set_camera_point_evaluate"
 	},
 	{
 		"file_offset": 712720,
 		"flags": 32,
-		"name": "_code_000ae010"
+		"name": "_object_pvs_clear_evaluate"
 	},
 	{
 		"file_offset": 712752,
 		"flags": 32,
-		"name": "_code_000ae030"
+		"name": "_object_pvs_activate_evaluate"
 	},
 	{
 		"file_offset": 712816,
 		"flags": 32,
-		"name": "_code_000ae070"
+		"name": "_lights_enable_evaluate"
 	},
 	{
 		"file_offset": 712896,
 		"flags": 32,
-		"name": "_code_000ae0c0"
+		"name": "_scenery_get_animation_time_evaluate"
 	},
 	{
 		"file_offset": 712976,
 		"flags": 32,
-		"name": "_code_000ae110"
+		"name": "_scenery_animation_start_evaluate"
 	},
 	{
 		"file_offset": 713040,
 		"flags": 32,
-		"name": "_code_000ae150"
+		"name": "_scenery_animation_start_at_frame_evaluate"
 	},
 	{
 		"file_offset": 713120,
 		"flags": 32,
-		"name": "_code_000ae1a0"
+		"name": "_render_effects_evaluate"
 	},
 	{
 		"file_offset": 713184,
 		"flags": 32,
-		"name": "_code_000ae1e0"
+		"name": "_unit_scripting_can_blink_evaluate"
 	},
 	{
 		"file_offset": 713248,
 		"flags": 32,
-		"name": "_code_000ae220"
+		"name": "_unit_open_evaluate"
 	},
 	{
 		"file_offset": 713312,
 		"flags": 32,
-		"name": "_code_000ae260"
+		"name": "_unit_close_evaluate"
 	},
 	{
 		"file_offset": 713376,
 		"flags": 32,
-		"name": "_code_000ae2a0"
+		"name": "_unit_kill_evaluate"
 	},
 	{
 		"file_offset": 713440,
 		"flags": 32,
-		"name": "_code_000ae2e0"
+		"name": "_unit_kill_silent_evaluate"
 	},
 	{
 		"file_offset": 713504,
 		"flags": 32,
-		"name": "_code_000ae320"
+		"name": "_unit_get_custom_animation_time_evaluate"
 	},
 	{
 		"file_offset": 713584,
 		"flags": 32,
-		"name": "_code_000ae370"
+		"name": "_unit_stop_custom_animation_evaluate"
 	},
 	{
 		"file_offset": 713648,
 		"flags": 32,
-		"name": "_code_000ae3b0"
+		"name": "_unit_start_user_animation_evaluate"
 	},
 	{
 		"file_offset": 713728,
 		"flags": 32,
-		"name": "_code_000ae400"
+		"name": "_unit_scripting_start_user_animation_list_evaluate"
 	},
 	{
 		"file_offset": 713808,
 		"flags": 32,
-		"name": "_code_000ae450"
+		"name": "_unit_custom_animation_at_frame_evaluate"
 	},
 	{
 		"file_offset": 713904,
 		"flags": 32,
-		"name": "_code_000ae4b0"
+		"name": "_unit_is_playing_custom_animation_evaluate"
 	},
 	{
 		"file_offset": 713984,
 		"flags": 32,
-		"name": "_code_000ae500"
+		"name": "_unit_aim_without_turning_evaluate"
 	},
 	{
 		"file_offset": 714048,
 		"flags": 32,
-		"name": "_code_000ae540"
+		"name": "_unit_set_emotion_evaluate"
 	},
 	{
 		"file_offset": 714112,
 		"flags": 32,
-		"name": "_code_000ae580"
+		"name": "_unit_set_enterable_by_player_evaluate"
 	},
 	{
 		"file_offset": 714176,
 		"flags": 32,
-		"name": "_code_000ae5c0"
+		"name": "_unit_scripting_enter_vehicle_evaluate"
 	},
 	{
 		"file_offset": 714240,
 		"flags": 32,
-		"name": "_code_000ae600"
+		"name": "_unit_scripting_vehicle_test_seat_list_evaluate"
 	},
 	{
 		"file_offset": 714320,
 		"flags": 32,
-		"name": "_code_000ae650"
+		"name": "_unit_scripting_vehicle_test_seat_evaluate"
 	},
 	{
 		"file_offset": 714400,
 		"flags": 32,
-		"name": "_code_000ae6a0"
+		"name": "_unit_scripting_set_emotion_animation_evaluate"
 	},
 	{
 		"file_offset": 714464,
 		"flags": 32,
-		"name": "_code_000ae6e0"
+		"name": "_unit_scripting_exit_vehicle_evaluate"
 	},
 	{
 		"file_offset": 714528,
 		"flags": 32,
-		"name": "_code_000ae720"
+		"name": "_unit_scripting_set_maximum_vitality_evaluate"
 	},
 	{
 		"file_offset": 714608,
 		"flags": 32,
-		"name": "_code_000ae770"
+		"name": "_units_scripting_set_maximum_vitality_evaluate"
 	},
 	{
 		"file_offset": 714688,
 		"flags": 32,
-		"name": "_code_000ae7c0"
+		"name": "_unit_scripting_set_current_vitality_evaluate"
 	},
 	{
 		"file_offset": 714768,
 		"flags": 32,
-		"name": "_code_000ae810"
+		"name": "_units_scripting_set_current_vitality_evaluate"
 	},
 	{
 		"file_offset": 714848,
 		"flags": 32,
-		"name": "_code_000ae860"
+		"name": "_vehicle_scripting_load_magic_evaluate"
 	},
 	{
 		"file_offset": 714928,
 		"flags": 32,
-		"name": "_code_000ae8b0"
+		"name": "_vehicle_scripting_unload_evaluate"
 	},
 	{
 		"file_offset": 715008,
 		"flags": 32,
-		"name": "_code_000ae900"
+		"name": "_scripting_set_magic_base_seat_evaluate"
 	},
 	{
 		"file_offset": 715072,
 		"flags": 32,
-		"name": "_code_000ae940"
+		"name": "_unit_scripting_set_seat_evaluate"
 	},
 	{
 		"file_offset": 715136,
 		"flags": 32,
-		"name": "_code_000ae980"
+		"name": "_scripting_magic_melee_attack_evaluate"
 	},
 	{
 		"file_offset": 715168,
 		"flags": 32,
-		"name": "_code_000ae9a0"
+		"name": "_unit_scripting_unit_riders_evaluate"
 	},
 	{
 		"file_offset": 715232,
 		"flags": 32,
-		"name": "_code_000ae9e0"
+		"name": "_unit_scripting_unit_driver_evaluate"
 	},
 	{
 		"file_offset": 715296,
 		"flags": 32,
-		"name": "_code_000aea20"
+		"name": "_unit_scripting_unit_gunner_evaluate"
 	},
 	{
 		"file_offset": 715360,
 		"flags": 32,
-		"name": "_code_000aea60"
+		"name": "_unit_scripting_get_health_evaluate"
 	},
 	{
 		"file_offset": 715424,
 		"flags": 32,
-		"name": "_code_000aeaa0"
+		"name": "_unit_scripting_get_shield_evaluate"
 	},
 	{
 		"file_offset": 715488,
 		"flags": 32,
-		"name": "_code_000aeae0"
+		"name": "_unit_scripting_get_grenade_count_evaluate"
 	},
 	{
 		"file_offset": 715568,
 		"flags": 32,
-		"name": "_code_000aeb30"
+		"name": "_unit_scripting_has_weapon_evaluate"
 	},
 	{
 		"file_offset": 715648,
 		"flags": 32,
-		"name": "_code_000aeb80"
+		"name": "_unit_scripting_has_weapon_readied_evaluate"
 	},
 	{
 		"file_offset": 715728,
 		"flags": 32,
-		"name": "_code_000aebd0"
+		"name": "_unit_scripting_doesnt_drop_items_evaluate"
 	},
 	{
 		"file_offset": 715792,
 		"flags": 32,
-		"name": "_code_000aec10"
+		"name": "_unit_scripting_impervious_evaluate"
 	},
 	{
 		"file_offset": 715856,
 		"flags": 32,
-		"name": "_code_000aec50"
+		"name": "_unit_scripting_suspended_evaluate"
 	},
 	{
 		"file_offset": 715920,
 		"flags": 32,
-		"name": "_code_000aec90"
+		"name": "_unit_solo_player_integrated_night_vision_is_active_evaluate"
 	},
 	{
 		"file_offset": 715968,
 		"flags": 32,
-		"name": "_code_000aecc0"
+		"name": "_units_set_desired_flashlight_state_evaluate"
 	},
 	{
 		"file_offset": 716032,
 		"flags": 32,
-		"name": "_code_000aed00"
+		"name": "_unit_set_desired_flashlight_state_evaluate"
 	},
 	{
 		"file_offset": 716096,
 		"flags": 32,
-		"name": "_code_000aed40"
+		"name": "_unit_get_current_flashlight_state_evaluate"
 	},
 	{
 		"file_offset": 716176,
 		"flags": 32,
-		"name": "_code_000aed90"
+		"name": "_device_set_never_appears_locked_evaluate"
 	},
 	{
 		"file_offset": 716240,
 		"flags": 32,
-		"name": "_code_000aedd0"
+		"name": "_device_set_power_evaluate"
 	},
 	{
 		"file_offset": 716304,
 		"flags": 32,
-		"name": "_code_000aee10"
+		"name": "_device_get_power_evaluate"
 	},
 	{
 		"file_offset": 716368,
 		"flags": 32,
-		"name": "_code_000aee50"
+		"name": "_device_set_desired_position_evaluate"
 	},
 	{
 		"file_offset": 716448,
 		"flags": 32,
-		"name": "_code_000aeea0"
+		"name": "_device_get_position_evaluate"
 	},
 	{
 		"file_offset": 716512,
 		"flags": 32,
-		"name": "_code_000aeee0"
+		"name": "_device_set_actual_position_evaluate"
 	},
 	{
 		"file_offset": 716576,
 		"flags": 32,
-		"name": "_code_000aef20"
+		"name": "_device_group_get_value_evaluate"
 	},
 	{
 		"file_offset": 716640,
 		"flags": 32,
-		"name": "_code_000aef60"
+		"name": "_device_group_set_desired_value_evaluate"
 	},
 	{
 		"file_offset": 716720,
 		"flags": 32,
-		"name": "_code_000aefb0"
+		"name": "_device_group_set_actual_value_evaluate"
 	},
 	{
 		"file_offset": 716784,
 		"flags": 32,
-		"name": "_code_000aeff0"
+		"name": "_device_one_sided_set_evaluate"
 	},
 	{
 		"file_offset": 716848,
 		"flags": 32,
-		"name": "_code_000af030"
+		"name": "_device_operates_automatically_set_evaluate"
 	},
 	{
 		"file_offset": 716912,
 		"flags": 32,
-		"name": "_code_000af070"
+		"name": "_device_group_change_only_once_more_set_evaluate"
 	},
 	{
 		"file_offset": 716976,
 		"flags": 32,
-		"name": "_code_000af0b0"
+		"name": "_breakable_surfaces_reset_evaluate"
 	},
 	{
 		"file_offset": 717008,
 		"flags": 32,
-		"name": "_code_000af0d0"
+		"name": "_cheat_all_powerups_evaluate"
 	},
 	{
 		"file_offset": 717040,
 		"flags": 32,
-		"name": "_code_000af0f0"
+		"name": "_cheat_all_weapons_evaluate"
 	},
 	{
 		"file_offset": 717072,
 		"flags": 32,
-		"name": "_code_000af110"
+		"name": "_cheat_all_vehicles_evaluate"
 	},
 	{
 		"file_offset": 717104,
 		"flags": 32,
-		"name": "_code_000af130"
+		"name": "_cheat_teleport_to_camera_evaluate"
 	},
 	{
 		"file_offset": 717136,
 		"flags": 32,
-		"name": "_code_000af150"
+		"name": "_cheat_active_camouflage_evaluate"
 	},
 	{
 		"file_offset": 717168,
 		"flags": 32,
-		"name": "_code_000af170"
+		"name": "_cheat_active_camouflage_local_player_evaluate"
 	},
 	{
 		"file_offset": 717232,
 		"flags": 32,
-		"name": "_code_000af1b0"
+		"name": "_cheats_load_evaluate"
 	},
 	{
 		"file_offset": 717264,
 		"flags": 32,
-		"name": "_code_000af1d0"
+		"name": "_ai_globals_ai_active_evaluate"
 	},
 	{
 		"file_offset": 717328,
 		"flags": 32,
-		"name": "_code_000af210"
+		"name": "_ai_globals_dialogue_triggers_enabled_evaluate"
 	},
 	{
 		"file_offset": 717392,
 		"flags": 32,
-		"name": "_code_000af250"
+		"name": "_ai_globals_grenades_enabled_evaluate"
 	},
 	{
 		"file_offset": 717456,
 		"flags": 32,
-		"name": "_code_000af290"
+		"name": "_ai_scripting_free_evaluate"
 	},
 	{
 		"file_offset": 717520,
 		"flags": 32,
-		"name": "_code_000af2d0"
+		"name": "_ai_scripting_free_units_evaluate"
 	},
 	{
 		"file_offset": 717584,
 		"flags": 32,
-		"name": "_code_000af310"
+		"name": "_ai_scripting_attach_unit_evaluate"
 	},
 	{
 		"file_offset": 717648,
 		"flags": 32,
-		"name": "_code_000af350"
+		"name": "_ai_scripting_attach_units_evaluate"
 	},
 	{
 		"file_offset": 717712,
 		"flags": 32,
-		"name": "_code_000af390"
+		"name": "_ai_scripting_attach_free_evaluate"
 	},
 	{
 		"file_offset": 717776,
 		"flags": 32,
-		"name": "_code_000af3d0"
+		"name": "_ai_scripting_detach_unit_evaluate"
 	},
 	{
 		"file_offset": 717840,
 		"flags": 32,
-		"name": "_code_000af410"
+		"name": "_ai_scripting_detach_units_evaluate"
 	},
 	{
 		"file_offset": 717904,
 		"flags": 32,
-		"name": "_code_000af450"
+		"name": "_ai_scripting_place_evaluate"
 	},
 	{
 		"file_offset": 717968,
 		"flags": 32,
-		"name": "_code_000af490"
+		"name": "_ai_scripting_kill_evaluate"
 	},
 	{
 		"file_offset": 718032,
 		"flags": 32,
-		"name": "_code_000af4d0"
+		"name": "_ai_scripting_kill_silent_evaluate"
 	},
 	{
 		"file_offset": 718096,
 		"flags": 32,
-		"name": "_code_000af510"
+		"name": "_ai_scripting_erase_evaluate"
 	},
 	{
 		"file_offset": 718160,
 		"flags": 32,
-		"name": "_code_000af550"
+		"name": "_ai_scripting_erase_all_evaluate"
 	},
 	{
 		"file_offset": 718192,
 		"flags": 32,
-		"name": "_code_000af570"
+		"name": "_ai_scripting_select_evaluate"
 	},
 	{
 		"file_offset": 718256,
 		"flags": 32,
-		"name": "_code_000af5b0"
+		"name": "_ai_scripting_deselect_evaluate"
 	},
 	{
 		"file_offset": 718288,
 		"flags": 32,
-		"name": "_code_000af5d0"
+		"name": "_ai_scripting_spawn_actor_evaluate"
 	},
 	{
 		"file_offset": 718352,
 		"flags": 32,
-		"name": "_code_000af610"
+		"name": "_ai_scripting_set_respawn_evaluate"
 	},
 	{
 		"file_offset": 718416,
 		"flags": 32,
-		"name": "_code_000af650"
+		"name": "_ai_scripting_set_deaf_evaluate"
 	},
 	{
 		"file_offset": 718480,
 		"flags": 32,
-		"name": "_code_000af690"
+		"name": "_ai_scripting_set_blind_evaluate"
 	},
 	{
 		"file_offset": 718544,
 		"flags": 32,
-		"name": "_code_000af6d0"
+		"name": "_ai_scripting_magically_see_encounter_evaluate"
 	},
 	{
 		"file_offset": 718608,
 		"flags": 32,
-		"name": "_code_000af710"
+		"name": "_ai_scripting_magically_see_players_evaluate"
 	},
 	{
 		"file_offset": 718672,
 		"flags": 32,
-		"name": "_code_000af750"
+		"name": "_ai_scripting_magically_see_unit_evaluate"
 	},
 	{
 		"file_offset": 718736,
 		"flags": 32,
-		"name": "_code_000af790"
+		"name": "_ai_scripting_magically_see_units_evaluate"
 	},
 	{
 		"file_offset": 718800,
 		"flags": 32,
-		"name": "_code_000af7d0"
+		"name": "_ai_scripting_timer_start_evaluate"
 	},
 	{
 		"file_offset": 718864,
 		"flags": 32,
-		"name": "_code_000af810"
+		"name": "_ai_scripting_timer_expire_evaluate"
 	},
 	{
 		"file_offset": 718928,
 		"flags": 32,
-		"name": "_code_000af850"
+		"name": "_ai_scripting_attack_evaluate"
 	},
 	{
 		"file_offset": 718992,
 		"flags": 32,
-		"name": "_code_000af890"
+		"name": "_ai_scripting_defend_evaluate"
 	},
 	{
 		"file_offset": 719056,
 		"flags": 32,
-		"name": "_code_000af8d0"
+		"name": "_ai_scripting_retreat_evaluate"
 	},
 	{
 		"file_offset": 719120,
 		"flags": 32,
-		"name": "_code_000af910"
+		"name": "_ai_scripting_maneuver_evaluate"
 	},
 	{
 		"file_offset": 719184,
 		"flags": 32,
-		"name": "_code_000af950"
+		"name": "_ai_scripting_maneuver_enable_evaluate"
 	},
 	{
 		"file_offset": 719248,
 		"flags": 32,
-		"name": "_code_000af990"
+		"name": "_ai_scripting_migrate_evaluate"
 	},
 	{
 		"file_offset": 719312,
 		"flags": 32,
-		"name": "_code_000af9d0"
+		"name": "_ai_scripting_migrate_and_speak_evaluate"
 	},
 	{
 		"file_offset": 719376,
 		"flags": 32,
-		"name": "_code_000afa10"
+		"name": "_ai_scripting_migrate_by_unit_evaluate"
 	},
 	{
 		"file_offset": 719440,
 		"flags": 32,
-		"name": "_code_000afa50"
+		"name": "_ai_scripting_allegiance_evaluate"
 	},
 	{
 		"file_offset": 719504,
 		"flags": 32,
-		"name": "_code_000afa90"
+		"name": "_ai_scripting_allegiance_remove_evaluate"
 	},
 	{
 		"file_offset": 719568,
 		"flags": 32,
-		"name": "_code_000afad0"
+		"name": "_ai_scripting_go_to_vehicle_evaluate"
 	},
 	{
 		"file_offset": 719632,
 		"flags": 32,
-		"name": "_code_000afb10"
+		"name": "_ai_scripting_go_to_vehicle_override_evaluate"
 	},
 	{
 		"file_offset": 719696,
 		"flags": 32,
-		"name": "_code_000afb50"
+		"name": "_ai_scripting_exit_vehicle_evaluate"
 	},
 	{
 		"file_offset": 719760,
 		"flags": 32,
-		"name": "_code_000afb90"
+		"name": "_ai_scripting_braindead_evaluate"
 	},
 	{
 		"file_offset": 719824,
 		"flags": 32,
-		"name": "_code_000afbd0"
+		"name": "_ai_scripting_braindead_by_unit_evaluate"
 	},
 	{
 		"file_offset": 719888,
 		"flags": 32,
-		"name": "_code_000afc10"
+		"name": "_ai_scripting_ignore_evaluate"
 	},
 	{
 		"file_offset": 719952,
 		"flags": 32,
-		"name": "_code_000afc50"
+		"name": "_ai_scripting_prefer_target_evaluate"
 	},
 	{
 		"file_offset": 720016,
 		"flags": 32,
-		"name": "_code_000afc90"
+		"name": "_ai_scripting_teleport_starting_location_evaluate"
 	},
 	{
 		"file_offset": 720080,
 		"flags": 32,
-		"name": "_code_000afcd0"
+		"name": "_ai_scripting_teleport_starting_location_if_unsupported_evaluate"
 	},
 	{
 		"file_offset": 720144,
 		"flags": 32,
-		"name": "_code_000afd10"
+		"name": "_ai_scripting_renew_evaluate"
 	},
 	{
 		"file_offset": 720208,
 		"flags": 32,
-		"name": "_code_000afd50"
+		"name": "_ai_scripting_try_to_fight_nothing_evaluate"
 	},
 	{
 		"file_offset": 720272,
 		"flags": 32,
-		"name": "_code_000afd90"
+		"name": "_ai_scripting_try_to_fight_evaluate"
 	},
 	{
 		"file_offset": 720336,
 		"flags": 32,
-		"name": "_code_000afdd0"
+		"name": "_ai_scripting_try_to_fight_player_evaluate"
 	},
 	{
 		"file_offset": 720400,
 		"flags": 32,
-		"name": "_code_000afe10"
+		"name": "_ai_scripting_command_list_evaluate"
 	},
 	{
 		"file_offset": 720464,
 		"flags": 32,
-		"name": "_code_000afe50"
+		"name": "_ai_scripting_command_list_by_unit_evaluate"
 	},
 	{
 		"file_offset": 720528,
 		"flags": 32,
-		"name": "_code_000afe90"
+		"name": "_ai_scripting_command_list_advance_evaluate"
 	},
 	{
 		"file_offset": 720592,
 		"flags": 32,
-		"name": "_code_000afed0"
+		"name": "_ai_scripting_command_list_advance_by_unit_evaluate"
 	},
 	{
 		"file_offset": 720656,
 		"flags": 32,
-		"name": "_code_000aff10"
+		"name": "_ai_scripting_force_active_evaluate"
 	},
 	{
 		"file_offset": 720720,
 		"flags": 32,
-		"name": "_code_000aff50"
+		"name": "_ai_scripting_force_active_by_unit_evaluate"
 	},
 	{
 		"file_offset": 720784,
 		"flags": 32,
-		"name": "_code_000aff90"
+		"name": "_ai_scripting_set_return_state_evaluate"
 	},
 	{
 		"file_offset": 720848,
 		"flags": 32,
-		"name": "_code_000affd0"
+		"name": "_ai_scripting_set_current_state_evaluate"
 	},
 	{
 		"file_offset": 720912,
 		"flags": 32,
-		"name": "_code_000b0010"
+		"name": "_ai_scripting_playfight_evaluate"
 	},
 	{
 		"file_offset": 720976,
 		"flags": 32,
-		"name": "_code_000b0050"
+		"name": "_ai_scripting_reconnect_evaluate"
 	},
 	{
 		"file_offset": 721008,
 		"flags": 32,
-		"name": "_code_000b0070"
+		"name": "_ai_scripting_vehicle_encounter_evaluate"
 	},
 	{
 		"file_offset": 721072,
 		"flags": 32,
-		"name": "_code_000b00b0"
+		"name": "_ai_scripting_vehicle_enterable_distance_evaluate"
 	},
 	{
 		"file_offset": 721136,
 		"flags": 32,
-		"name": "_code_000b00f0"
+		"name": "_ai_scripting_vehicle_enterable_team_evaluate"
 	},
 	{
 		"file_offset": 721200,
 		"flags": 32,
-		"name": "_code_000b0130"
+		"name": "_ai_scripting_vehicle_enterable_actor_type_evaluate"
 	},
 	{
 		"file_offset": 721264,
 		"flags": 32,
-		"name": "_code_000b0170"
+		"name": "_ai_scripting_vehicle_enterable_actors_evaluate"
 	},
 	{
 		"file_offset": 721328,
 		"flags": 32,
-		"name": "_code_000b01b0"
+		"name": "_ai_scripting_vehicle_enterable_disable_evaluate"
 	},
 	{
 		"file_offset": 721392,
 		"flags": 32,
-		"name": "_code_000b01f0"
+		"name": "_ai_scripting_look_at_object_evaluate"
 	},
 	{
 		"file_offset": 721456,
 		"flags": 32,
-		"name": "_code_000b0230"
+		"name": "_ai_scripting_stop_looking_evaluate"
 	},
 	{
 		"file_offset": 721520,
 		"flags": 32,
-		"name": "_code_000b0270"
+		"name": "_ai_scripting_automatic_migration_target_evaluate"
 	},
 	{
 		"file_offset": 721584,
 		"flags": 32,
-		"name": "_code_000b02b0"
+		"name": "_ai_scripting_follow_target_disable_evaluate"
 	},
 	{
 		"file_offset": 721648,
 		"flags": 32,
-		"name": "_code_000b02f0"
+		"name": "_ai_scripting_follow_target_players_evaluate"
 	},
 	{
 		"file_offset": 721712,
 		"flags": 32,
-		"name": "_code_000b0330"
+		"name": "_ai_scripting_follow_target_unit_evaluate"
 	},
 	{
 		"file_offset": 721776,
 		"flags": 32,
-		"name": "_code_000b0370"
+		"name": "_ai_scripting_follow_target_ai_evaluate"
 	},
 	{
 		"file_offset": 721840,
 		"flags": 32,
-		"name": "_code_000b03b0"
+		"name": "_ai_scripting_follow_distance_evaluate"
 	},
 	{
 		"file_offset": 721904,
 		"flags": 32,
-		"name": "_code_000b03f0"
+		"name": "_ai_scripting_conversation_stop_evaluate"
 	},
 	{
 		"file_offset": 721968,
 		"flags": 32,
-		"name": "_code_000b0430"
+		"name": "_ai_scripting_conversation_advance_evaluate"
 	},
 	{
 		"file_offset": 722032,
 		"flags": 32,
-		"name": "_code_000b0470"
+		"name": "_ai_scripting_link_activation_evaluate"
 	},
 	{
 		"file_offset": 722096,
 		"flags": 32,
-		"name": "_code_000b04b0"
+		"name": "_ai_scripting_berserk_evaluate"
 	},
 	{
 		"file_offset": 722160,
 		"flags": 32,
-		"name": "_code_000b04f0"
+		"name": "_ai_scripting_set_team_evaluate"
 	},
 	{
 		"file_offset": 722224,
 		"flags": 32,
-		"name": "_code_000b0530"
+		"name": "_ai_scripting_allow_charge_evaluate"
 	},
 	{
 		"file_offset": 722288,
 		"flags": 32,
-		"name": "_code_000b0570"
+		"name": "_ai_scripting_allow_dormant_evaluate"
 	},
 	{
 		"file_offset": 722352,
 		"flags": 32,
-		"name": "_code_000b05b0"
+		"name": "_ai_scripting_is_attacking_evaluate"
 	},
 	{
 		"file_offset": 722432,
 		"flags": 32,
-		"name": "_code_000b0600"
+		"name": "_ai_scripting_command_list_status_evaluate"
 	},
 	{
 		"file_offset": 722512,
 		"flags": 32,
-		"name": "_code_000b0650"
+		"name": "_ai_scripting_going_to_vehicle_evaluate"
 	},
 	{
 		"file_offset": 722592,
 		"flags": 32,
-		"name": "_code_000b06a0"
+		"name": "_ai_scripting_living_count_evaluate"
 	},
 	{
 		"file_offset": 722672,
 		"flags": 32,
-		"name": "_code_000b06f0"
+		"name": "_ai_scripting_living_fraction_evaluate"
 	},
 	{
 		"file_offset": 722736,
 		"flags": 32,
-		"name": "_code_000b0730"
+		"name": "_ai_scripting_strength_evaluate"
 	},
 	{
 		"file_offset": 722800,
 		"flags": 32,
-		"name": "_code_000b0770"
+		"name": "_ai_scripting_swarm_count_evaluate"
 	},
 	{
 		"file_offset": 722880,
 		"flags": 32,
-		"name": "_code_000b07c0"
+		"name": "_ai_scripting_nonswarm_count_evaluate"
 	},
 	{
 		"file_offset": 722960,
 		"flags": 32,
-		"name": "_code_000b0810"
+		"name": "_object_list_from_ai_reference_evaluate"
 	},
 	{
 		"file_offset": 723024,
 		"flags": 32,
-		"name": "_code_000b0850"
+		"name": "_ai_scripting_status_evaluate"
 	},
 	{
 		"file_offset": 723104,
 		"flags": 32,
-		"name": "_code_000b08a0"
+		"name": "_ai_scripting_conversation_evaluate"
 	},
 	{
 		"file_offset": 723184,
 		"flags": 32,
-		"name": "_code_000b08f0"
+		"name": "_ai_scripting_conversation_line_evaluate"
 	},
 	{
 		"file_offset": 723264,
 		"flags": 32,
-		"name": "_code_000b0940"
+		"name": "_ai_scripting_conversation_status_evaluate"
 	},
 	{
 		"file_offset": 723344,
 		"flags": 32,
-		"name": "_code_000b0990"
+		"name": "_ai_scripting_allegiance_broken_evaluate"
 	},
 	{
 		"file_offset": 723424,
 		"flags": 32,
-		"name": "_code_000b09e0"
+		"name": "_director_script_camera_evaluate"
 	},
 	{
 		"file_offset": 723488,
 		"flags": 32,
-		"name": "_code_000b0a20"
+		"name": "_scripted_camera_set_absolute_evaluate"
 	},
 	{
 		"file_offset": 723552,
 		"flags": 32,
-		"name": "_code_000b0a60"
+		"name": "_scripted_camera_set_evaluate"
 	},
 	{
 		"file_offset": 723616,
 		"flags": 32,
-		"name": "_code_000b0aa0"
+		"name": "_scripted_camera_set_animation_evaluate"
 	},
 	{
 		"file_offset": 723680,
 		"flags": 32,
-		"name": "_code_000b0ae0"
+		"name": "_scripted_camera_set_first_person_evaluate"
 	},
 	{
 		"file_offset": 723744,
 		"flags": 32,
-		"name": "_code_000b0b20"
+		"name": "_scripted_camera_set_dead_evaluate"
 	},
 	{
 		"file_offset": 723808,
 		"flags": 32,
-		"name": "_code_000b0b60"
+		"name": "_scripted_camera_time_evaluate"
 	},
 	{
 		"file_offset": 723856,
 		"flags": 32,
-		"name": "_code_000b0b90"
+		"name": "_director_save_camera_evaluate"
 	},
 	{
 		"file_offset": 723888,
 		"flags": 32,
-		"name": "_code_000b0bb0"
+		"name": "_director_load_camera_evaluate"
 	},
 	{
 		"file_offset": 723920,
 		"flags": 32,
-		"name": "_code_000b0bd0"
+		"name": "_game_time_set_speed_evaluate"
 	},
 	{
 		"file_offset": 723984,
 		"flags": 32,
-		"name": "_code_000b0c10"
+		"name": "_game_set_game_variant_from_name_evaluate"
 	},
 	{
 		"file_offset": 724048,
 		"flags": 32,
-		"name": "_code_000b0c50"
+		"name": "_game_time_get_evaluate"
 	},
 	{
 		"file_offset": 724080,
 		"flags": 32,
-		"name": "_code_000b0c70"
+		"name": "_game_difficulty_level_get_ignore_easy_evaluate"
 	},
 	{
 		"file_offset": 724128,
 		"flags": 32,
-		"name": "_code_000b0ca0"
+		"name": "_game_difficulty_level_get_evaluate"
 	},
 	{
 		"file_offset": 724176,
 		"flags": 32,
-		"name": "_code_000b0cd0"
+		"name": "_players_unzoom_all_evaluate"
 	},
 	{
 		"file_offset": 724208,
 		"flags": 32,
-		"name": "_code_000b0cf0"
+		"name": "_player_input_enable_evaluate"
 	},
 	{
 		"file_offset": 724272,
 		"flags": 32,
-		"name": "_code_000b0d30"
+		"name": "_scripted_player_control_set_camera_control_evaluate"
 	},
 	{
 		"file_offset": 724352,
 		"flags": 32,
-		"name": "_code_000b0d80"
+		"name": "_player_control_action_test_reset_evaluate"
 	},
 	{
 		"file_offset": 724384,
 		"flags": 32,
-		"name": "_code_000b0da0"
+		"name": "_player_control_action_test_jump_evaluate"
 	},
 	{
 		"file_offset": 724432,
 		"flags": 32,
-		"name": "_code_000b0dd0"
+		"name": "_player_control_action_test_primary_trigger_evaluate"
 	},
 	{
 		"file_offset": 724480,
 		"flags": 32,
-		"name": "_code_000b0e00"
+		"name": "_player_control_action_test_grenade_trigger_evaluate"
 	},
 	{
 		"file_offset": 724528,
 		"flags": 32,
-		"name": "_code_000b0e30"
+		"name": "_player_control_action_test_zoom_evaluate"
 	},
 	{
 		"file_offset": 724576,
 		"flags": 32,
-		"name": "_code_000b0e60"
+		"name": "_player_control_action_test_action_evaluate"
 	},
 	{
 		"file_offset": 724624,
 		"flags": 32,
-		"name": "_code_000b0e90"
+		"name": "_player_control_action_test_accept_evaluate"
 	},
 	{
 		"file_offset": 724672,
 		"flags": 32,
-		"name": "_code_000b0ec0"
+		"name": "_player_control_action_test_back_evaluate"
 	},
 	{
 		"file_offset": 724720,
 		"flags": 32,
-		"name": "_code_000b0ef0"
+		"name": "_player_control_action_test_look_relative_up_evaluate"
 	},
 	{
 		"file_offset": 724768,
 		"flags": 32,
-		"name": "_code_000b0f20"
+		"name": "_player_control_action_test_look_relative_down_evaluate"
 	},
 	{
 		"file_offset": 724816,
 		"flags": 32,
-		"name": "_code_000b0f50"
+		"name": "_player_control_action_test_look_relative_left_evaluate"
 	},
 	{
 		"file_offset": 724864,
 		"flags": 32,
-		"name": "_code_000b0f80"
+		"name": "_player_control_action_test_look_relative_right_evaluate"
 	},
 	{
 		"file_offset": 724912,
 		"flags": 32,
-		"name": "_code_000b0fb0"
+		"name": "_player_control_action_test_look_relative_all_directions_evaluate"
 	},
 	{
 		"file_offset": 724960,
 		"flags": 32,
-		"name": "_code_000b0fe0"
+		"name": "_player_control_action_test_move_relative_all_directions_evaluate"
 	},
 	{
 		"file_offset": 725008,
 		"flags": 32,
-		"name": "_code_000b1010"
+		"name": "_player_add_equipment_evaluate"
 	},
 	{
 		"file_offset": 725072,
 		"flags": 32,
-		"name": "_code_000b1050"
+		"name": "_debug_player_teleport_evaluate"
 	},
 	{
 		"file_offset": 725136,
 		"flags": 32,
-		"name": "_code_000b1090"
+		"name": "_main_reset_map_evaluate"
 	},
 	{
 		"file_offset": 725168,
 		"flags": 32,
-		"name": "_code_000b10b0"
+		"name": "_main_set_map_name_evaluate"
 	},
 	{
 		"file_offset": 725232,
 		"flags": 32,
-		"name": "_code_000b10f0"
+		"name": "_main_set_multiplayer_map_name_evaluate"
 	},
 	{
 		"file_offset": 725296,
 		"flags": 32,
-		"name": "_code_000b1130"
+		"name": "_main_set_difficulty_evaluate"
 	},
 	{
 		"file_offset": 725360,
 		"flags": 32,
-		"name": "_code_000b1170"
+		"name": "_main_crash_evaluate"
 	},
 	{
 		"file_offset": 725424,
 		"flags": 32,
-		"name": "_code_000b11b0"
+		"name": "_scenario_switch_structure_bsp_evaluate"
 	},
 	{
 		"file_offset": 725488,
 		"flags": 32,
-		"name": "_code_000b11f0"
+		"name": "_global_structure_bsp_index_get_evaluate"
 	},
 	{
 		"file_offset": 725536,
 		"flags": 32,
-		"name": "_code_000b1220"
+		"name": "_main_print_version_evaluate"
 	},
 	{
 		"file_offset": 725568,
 		"flags": 32,
-		"name": "_code_000b1240"
+		"name": "_main_set_game_connection_to_film_playback_evaluate"
 	},
 	{
 		"file_offset": 725600,
 		"flags": 32,
-		"name": "_code_000b1260"
+		"name": "_texture_cache_flush_evaluate"
 	},
 	{
 		"file_offset": 725632,
 		"flags": 32,
-		"name": "_code_000b1280"
+		"name": "_sound_cache_flush_evaluate"
 	},
 	{
 		"file_offset": 725664,
 		"flags": 32,
-		"name": "_code_000b12a0"
+		"name": "_debug_dump_memory_evaluate"
 	},
 	{
 		"file_offset": 725696,
 		"flags": 32,
-		"name": "_code_000b12c0"
+		"name": "_debug_dump_memory_by_file_evaluate"
 	},
 	{
 		"file_offset": 725728,
 		"flags": 32,
-		"name": "_code_000b12e0"
+		"name": "_debug_dump_memory_for_file_evaluate"
 	},
 	{
 		"file_offset": 725792,
 		"flags": 32,
-		"name": "_code_000b1320"
+		"name": "_tag_groups_dump_memory_evaluate"
 	},
 	{
 		"file_offset": 725824,
 		"flags": 32,
-		"name": "_code_000b1340"
+		"name": "_profile_initialize_evaluate"
 	},
 	{
 		"file_offset": 725856,
 		"flags": 32,
-		"name": "_code_000b1360"
+		"name": "_profile_dump_to_file_evaluate"
 	},
 	{
 		"file_offset": 725920,
 		"flags": 32,
-		"name": "_code_000b13a0"
+		"name": "_profile_sections_activate_evaluate"
 	},
 	{
 		"file_offset": 725984,
 		"flags": 32,
-		"name": "_code_000b13e0"
+		"name": "_profile_sections_deactivate_evaluate"
 	},
 	{
 		"file_offset": 726048,
 		"flags": 32,
-		"name": "_code_000b1420"
+		"name": "_profile_graph_toggle_evaluate"
 	},
 	{
 		"file_offset": 726112,
 		"flags": 32,
-		"name": "_code_000b1460"
+		"name": "_debug_pvs_evaluate"
 	},
 	{
 		"file_offset": 726176,
 		"flags": 32,
-		"name": "_code_000b14a0"
+		"name": "_radiosity_start_evaluate"
 	},
 	{
 		"file_offset": 726208,
 		"flags": 32,
-		"name": "_code_000b14c0"
+		"name": "_radiosity_save_evaluate"
 	},
 	{
 		"file_offset": 726240,
 		"flags": 32,
-		"name": "_code_000b14e0"
+		"name": "_radiosity_debug_point_evaluate"
 	},
 	{
 		"file_offset": 726272,
 		"flags": 32,
-		"name": "_code_000b1500"
+		"name": "_ai_profile_change_render_spray_evaluate"
 	},
 	{
 		"file_offset": 726304,
 		"flags": 32,
-		"name": "_code_000b1520"
+		"name": "_ai_debug_sound_point_set_evaluate"
 	},
 	{
 		"file_offset": 726336,
 		"flags": 32,
-		"name": "_code_000b1540"
+		"name": "_ai_debug_vocalize_evaluate"
 	},
 	{
 		"file_offset": 726400,
 		"flags": 32,
-		"name": "_code_000b1580"
+		"name": "_ai_debug_teleport_to_evaluate"
 	},
 	{
 		"file_offset": 726464,
 		"flags": 32,
-		"name": "_code_000b15c0"
+		"name": "_ai_debug_speak_evaluate"
 	},
 	{
 		"file_offset": 726528,
 		"flags": 32,
-		"name": "_code_000b1600"
+		"name": "_ai_debug_speak_list_evaluate"
 	},
 	{
 		"file_offset": 726592,
 		"flags": 32,
-		"name": "_code_000b1640"
+		"name": "_player_effect_screen_fade_in_evaluate"
 	},
 	{
 		"file_offset": 726672,
 		"flags": 32,
-		"name": "_code_000b1690"
+		"name": "_player_effect_screen_fade_out_evaluate"
 	},
 	{
 		"file_offset": 726752,
 		"flags": 32,
-		"name": "_code_000b16e0"
+		"name": "_cinematic_start_evaluate"
 	},
 	{
 		"file_offset": 726784,
 		"flags": 32,
-		"name": "_code_000b1700"
+		"name": "_cinematic_stop_evaluate"
 	},
 	{
 		"file_offset": 726816,
 		"flags": 32,
-		"name": "_code_000b1720"
+		"name": "_cinematic_skip_start_evaluate"
 	},
 	{
 		"file_offset": 726848,
 		"flags": 32,
-		"name": "_code_000b1740"
+		"name": "_cinematic_skip_stop_evaluate"
 	},
 	{
 		"file_offset": 726880,
 		"flags": 32,
-		"name": "_code_000b1760"
+		"name": "_cinematic_show_letterbox_evaluate"
 	},
 	{
 		"file_offset": 726944,
 		"flags": 32,
-		"name": "_code_000b17a0"
+		"name": "_cinematic_set_title_evaluate"
 	},
 	{
 		"file_offset": 727008,
 		"flags": 32,
-		"name": "_code_000b17e0"
+		"name": "_cinematic_set_title_delayed_evaluate"
 	},
 	{
 		"file_offset": 727072,
 		"flags": 32,
-		"name": "_code_000b1820"
+		"name": "_cinematic_suppress_bsp_object_creation_evaluate"
 	},
 	{
 		"file_offset": 727136,
 		"flags": 32,
-		"name": "_code_000b1860"
+		"name": "_attract_mode_start_evaluate"
 	},
 	{
 		"file_offset": 727168,
 		"flags": 32,
-		"name": "_code_000b1880"
+		"name": "_main_won_map_evaluate"
 	},
 	{
 		"file_offset": 727200,
 		"flags": 32,
-		"name": "_code_000b18a0"
+		"name": "_main_lost_map_evaluate"
 	},
 	{
 		"file_offset": 727232,
 		"flags": 32,
-		"name": "_code_000b18c0"
+		"name": "_game_safe_to_save_evaluate"
 	},
 	{
 		"file_offset": 727280,
 		"flags": 32,
-		"name": "_code_000b18f0"
+		"name": "_game_all_quiet_evaluate"
 	},
 	{
 		"file_offset": 727328,
 		"flags": 32,
-		"name": "_code_000b1920"
+		"name": "_game_safe_to_speak_evaluate"
 	},
 	{
 		"file_offset": 727376,
 		"flags": 32,
-		"name": "_code_000b1950"
+		"name": "_game_is_cooperative_evaluate"
 	},
 	{
 		"file_offset": 727424,
 		"flags": 32,
-		"name": "_code_000b1980"
+		"name": "_main_save_map_safe_evaluate"
 	},
 	{
 		"file_offset": 727456,
 		"flags": 32,
-		"name": "_code_000b19a0"
+		"name": "_main_save_cancel_evaluate"
 	},
 	{
 		"file_offset": 727488,
 		"flags": 32,
-		"name": "_code_000b19c0"
+		"name": "_main_save_map_no_timeout_evaluate"
 	},
 	{
 		"file_offset": 727520,
 		"flags": 32,
-		"name": "_code_000b19e0"
+		"name": "_main_save_map_nonsafe_evaluate"
 	},
 	{
 		"file_offset": 727552,
 		"flags": 32,
-		"name": "_code_000b1a00"
+		"name": "_main_saving_map_evaluate"
 	},
 	{
 		"file_offset": 727600,
 		"flags": 32,
-		"name": "_code_000b1a30"
+		"name": "_main_revert_map_evaluate"
 	},
 	{
 		"file_offset": 727632,
 		"flags": 32,
-		"name": "_code_000b1a50"
+		"name": "_main_load_core_evaluate"
 	},
 	{
 		"file_offset": 727664,
 		"flags": 32,
-		"name": "_code_000b1a70"
+		"name": "_main_load_core_at_startup_evaluate"
 	},
 	{
 		"file_offset": 727696,
 		"flags": 32,
-		"name": "_code_000b1a90"
+		"name": "_main_load_core_name_evaluate"
 	},
 	{
 		"file_offset": 727760,
 		"flags": 32,
-		"name": "_code_000b1ad0"
+		"name": "_main_load_core_name_at_startup_evaluate"
 	},
 	{
 		"file_offset": 727824,
 		"flags": 32,
-		"name": "_code_000b1b10"
+		"name": "_main_save_core_evaluate"
 	},
 	{
 		"file_offset": 727856,
 		"flags": 32,
-		"name": "_code_000b1b30"
+		"name": "_main_save_core_name_evaluate"
 	},
 	{
 		"file_offset": 727920,
 		"flags": 32,
-		"name": "_code_000b1b70"
+		"name": "_main_skip_evaluate"
 	},
 	{
 		"file_offset": 727984,
 		"flags": 32,
-		"name": "_code_000b1bb0"
+		"name": "_game_state_reverted_evaluate"
 	},
 	{
 		"file_offset": 728032,
 		"flags": 32,
-		"name": "_code_000b1be0"
+		"name": "_scripted_sound_new_evaluate"
 	},
 	{
 		"file_offset": 728096,
 		"flags": 32,
-		"name": "_code_000b1c20"
+		"name": "_scripted_sound_time_evaluate"
 	},
 	{
 		"file_offset": 728160,
 		"flags": 32,
-		"name": "_code_000b1c60"
+		"name": "_scripted_sound_stop_evaluate"
 	},
 	{
 		"file_offset": 728224,
 		"flags": 32,
-		"name": "_code_000b1ca0"
+		"name": "_scripted_foley_predict_evaluate"
 	},
 	{
 		"file_offset": 728288,
 		"flags": 32,
-		"name": "_code_000b1ce0"
+		"name": "_scripted_looping_sound_start_evaluate"
 	},
 	{
 		"file_offset": 728352,
 		"flags": 32,
-		"name": "_code_000b1d20"
+		"name": "_scripted_looping_sound_stop_evaluate"
 	},
 	{
 		"file_offset": 728416,
 		"flags": 32,
-		"name": "_code_000b1d60"
+		"name": "_scripted_looping_sound_set_scale_evaluate"
 	},
 	{
 		"file_offset": 728480,
 		"flags": 32,
-		"name": "_code_000b1da0"
+		"name": "_scripted_looping_sound_set_alternate_evaluate"
 	},
 	{
 		"file_offset": 728544,
 		"flags": 32,
-		"name": "_code_000b1de0"
+		"name": "_debug_sound_classes_enable_evaluate"
 	},
 	{
 		"file_offset": 728608,
 		"flags": 32,
-		"name": "_code_000b1e20"
+		"name": "_debug_sound_classes_set_distances_evaluate"
 	},
 	{
 		"file_offset": 728688,
 		"flags": 32,
-		"name": "_code_000b1e70"
+		"name": "_debug_sound_classes_set_wet_evaluate"
 	},
 	{
 		"file_offset": 728752,
 		"flags": 32,
-		"name": "_code_000b1eb0"
+		"name": "_sound_class_set_gain_evaluate"
 	},
 	{
 		"file_offset": 728816,
 		"flags": 32,
-		"name": "_code_000b1ef0"
+		"name": "_sound_enable_evaluate"
 	},
 	{
 		"file_offset": 728880,
 		"flags": 32,
-		"name": "_code_000b1f30"
+		"name": "_vehicle_hover_evaluate"
 	},
 	{
 		"file_offset": 728944,
 		"flags": 32,
-		"name": "_code_000b1f70"
+		"name": "_scripted_show_hud_evaluate"
 	},
 	{
 		"file_offset": 729024,
 		"flags": 32,
-		"name": "_code_000b1fc0"
+		"name": "_scripted_show_hud_help_text_evaluate"
 	},
 	{
 		"file_offset": 729104,
 		"flags": 32,
-		"name": "_code_000b2010"
+		"name": "_scripted_hud_set_flashing_state_evaluate"
 	},
 	{
 		"file_offset": 729168,
 		"flags": 32,
-		"name": "_code_000b2050"
+		"name": "_scripted_hud_restart_flashing_evaluate"
 	},
 	{
 		"file_offset": 729200,
 		"flags": 32,
-		"name": "_code_000b2070"
+		"name": "_hud_unit_activate_nav_point_with_flag_evaluate"
 	},
 	{
 		"file_offset": 729280,
 		"flags": 32,
-		"name": "_code_000b20c0"
+		"name": "_hud_unit_activate_nav_point_with_object_evaluate"
 	},
 	{
 		"file_offset": 729360,
 		"flags": 32,
-		"name": "_code_000b2110"
+		"name": "_hud_activate_team_nav_point_with_flag_evaluate"
 	},
 	{
 		"file_offset": 729440,
 		"flags": 32,
-		"name": "_code_000b2160"
+		"name": "_hud_activate_team_nav_point_with_object_evaluate"
 	},
 	{
 		"file_offset": 729520,
 		"flags": 32,
-		"name": "_code_000b21b0"
+		"name": "_hud_unit_deactivate_nav_point_with_flag_evaluate"
 	},
 	{
 		"file_offset": 729584,
 		"flags": 32,
-		"name": "_code_000b21f0"
+		"name": "_hud_unit_deactivate_nav_point_with_object_evaluate"
 	},
 	{
 		"file_offset": 729648,
 		"flags": 32,
-		"name": "_code_000b2230"
+		"name": "_hud_deactivate_team_nav_point_with_flag_evaluate"
 	},
 	{
 		"file_offset": 729712,
 		"flags": 32,
-		"name": "_code_000b2270"
+		"name": "_hud_deactivate_team_nav_point_with_object_evaluate"
 	},
 	{
 		"file_offset": 729776,
 		"flags": 32,
-		"name": "_code_000b22b0"
+		"name": "_terminal_clear_evaluate"
 	},
 	{
 		"file_offset": 729808,
 		"flags": 32,
-		"name": "_code_000b22d0"
+		"name": "_errors_overflow_suppression_enable_evaluate"
 	},
 	{
 		"file_offset": 729872,
 		"flags": 32,
-		"name": "_code_000b2310"
+		"name": "_structure_lens_flares_place_evaluate"
 	},
 	{
 		"file_offset": 729904,
 		"flags": 32,
-		"name": "_code_000b2330"
+		"name": "_scripted_player_effect_set_translation_evaluate"
 	},
 	{
 		"file_offset": 729984,
 		"flags": 32,
-		"name": "_code_000b2380"
+		"name": "_scripted_player_effect_set_rotation_evaluate"
 	},
 	{
 		"file_offset": 730064,
 		"flags": 32,
-		"name": "_code_000b23d0"
+		"name": "_scripted_player_effect_set_rumble_evaluate"
 	},
 	{
 		"file_offset": 730128,
 		"flags": 32,
-		"name": "_code_000b2410"
+		"name": "_scripted_player_effect_start_evaluate"
 	},
 	{
 		"file_offset": 730192,
 		"flags": 32,
-		"name": "_code_000b2450"
+		"name": "_scripted_player_effect_stop_evaluate"
 	},
 	{
 		"file_offset": 730256,
 		"flags": 32,
-		"name": "_code_000b2490"
+		"name": "_scripted_hud_show_health_evaluate"
 	},
 	{
 		"file_offset": 730320,
 		"flags": 32,
-		"name": "_code_000b24d0"
+		"name": "_scripted_hud_blink_health_evaluate"
 	},
 	{
 		"file_offset": 730384,
 		"flags": 32,
-		"name": "_code_000b2510"
+		"name": "_scripted_hud_show_shield_evaluate"
 	},
 	{
 		"file_offset": 730448,
 		"flags": 32,
-		"name": "_code_000b2550"
+		"name": "_scripted_hud_blink_shield_evaluate"
 	},
 	{
 		"file_offset": 730512,
 		"flags": 32,
-		"name": "_code_000b2590"
+		"name": "_scripted_hud_show_motion_sensor_evaluate"
 	},
 	{
 		"file_offset": 730576,
 		"flags": 32,
-		"name": "_code_000b25d0"
+		"name": "_scripted_hud_blink_motion_sensor_evaluate"
 	},
 	{
 		"file_offset": 730640,
 		"flags": 32,
-		"name": "_code_000b2610"
+		"name": "_scripted_hud_show_crosshair_evaluate"
 	},
 	{
 		"file_offset": 730704,
 		"flags": 32,
-		"name": "_code_000b2650"
+		"name": "_scripted_hud_messages_clear_evaluate"
 	},
 	{
 		"file_offset": 730736,
 		"flags": 32,
-		"name": "_code_000b2670"
+		"name": "_scripted_hud_set_state_message_evaluate"
 	},
 	{
 		"file_offset": 730800,
 		"flags": 32,
-		"name": "_code_000b26b0"
+		"name": "_scripted_hud_set_objective_evaluate"
 	},
 	{
 		"file_offset": 730864,
 		"flags": 32,
-		"name": "_code_000b26f0"
+		"name": "_scripted_hud_set_timer_time_evaluate"
 	},
 	{
 		"file_offset": 730928,
 		"flags": 32,
-		"name": "_code_000b2730"
+		"name": "_scripted_hud_set_timer_warning_cutoff_evaluate"
 	},
 	{
 		"file_offset": 730992,
 		"flags": 32,
-		"name": "_code_000b2770"
+		"name": "_scripted_hud_set_timer_position_evaluate"
 	},
 	{
 		"file_offset": 731072,
 		"flags": 32,
-		"name": "_code_000b27c0"
+		"name": "_scripted_hud_show_timer_evaluate"
 	},
 	{
 		"file_offset": 731136,
 		"flags": 32,
-		"name": "_code_000b2800"
+		"name": "_scripted_hud_pause_timer_evaluate"
 	},
 	{
 		"file_offset": 731200,
 		"flags": 32,
-		"name": "_code_000b2840"
+		"name": "_scripted_hud_get_timer_ticks_evaluate"
 	},
 	{
 		"file_offset": 731248,
 		"flags": 32,
-		"name": "_code_000b2870"
+		"name": "_scripted_hud_time_code_show_evaluate"
 	},
 	{
 		"file_offset": 731312,
 		"flags": 32,
-		"name": "_code_000b28b0"
+		"name": "_scripted_hud_time_code_start_evaluate"
 	},
 	{
 		"file_offset": 731376,
 		"flags": 32,
-		"name": "_code_000b28f0"
+		"name": "_scripted_hud_time_code_reset_evaluate"
 	},
 	{
 		"file_offset": 731408,
 		"flags": 32,
-		"name": "_code_000b2910"
+		"name": "_rasterizer_decals_flush_evaluate"
 	},
 	{
 		"file_offset": 731440,
 		"flags": 32,
-		"name": "_code_000b2930"
+		"name": "_rasterizer_fps_accumulate_evaluate"
 	},
 	{
 		"file_offset": 731472,
 		"flags": 32,
-		"name": "_code_000b2950"
+		"name": "_rasterizer_model_ambient_reflection_tint_evaluate"
 	},
 	{
 		"file_offset": 731552,
 		"flags": 32,
-		"name": "_code_000b29a0"
+		"name": "_rasterizer_lights_reset_for_new_map_evaluate"
 	},
 	{
 		"file_offset": 731584,
 		"flags": 32,
-		"name": "_code_000b29c0"
+		"name": "_rasterizer_script_screen_effect_set_value_evaluate"
 	},
 	{
 		"file_offset": 731648,
 		"flags": 32,
-		"name": "_code_000b2a00"
+		"name": "_rasterizer_screen_effect_start_evaluate"
 	},
 	{
 		"file_offset": 731712,
 		"flags": 32,
-		"name": "_code_000b2a40"
+		"name": "_rasterizer_screen_effect_set_convolution_evaluate"
 	},
 	{
 		"file_offset": 731808,
 		"flags": 32,
-		"name": "_code_000b2aa0"
+		"name": "_rasterizer_screen_effect_set_filter_evaluate"
 	},
 	{
 		"file_offset": 731904,
 		"flags": 32,
-		"name": "_code_000b2b00"
+		"name": "_rasterizer_screen_effect_set_filter_desaturation_tint_evaluate"
 	},
 	{
 		"file_offset": 731984,
 		"flags": 32,
-		"name": "_code_000b2b50"
+		"name": "_rasterizer_screen_effect_set_video_evaluate"
 	},
 	{
 		"file_offset": 732048,
 		"flags": 32,
-		"name": "_code_000b2b90"
+		"name": "_rasterizer_screen_effect_stop_evaluate"
 	},
 	{
 		"file_offset": 732080,
 		"flags": 32,
-		"name": "_code_000b2bb0"
+		"name": "_rasterizer_set_near_clip_distance_evaluate"
 	},
 	{
 		"file_offset": 732144,
 		"flags": 32,
-		"name": "_code_000b2bf0"
+		"name": "_enumerate_memory_units_test_evaluate"
 	},
 	{
 		"file_offset": 732176,
 		"flags": 32,
-		"name": "_code_000b2c10"
+		"name": "_saved_game_files_delete_all_custom_profiles_evaluate"
 	},
 	{
 		"file_offset": 732208,
 		"flags": 32,
-		"name": "_code_000b2c30"
+		"name": "_player_ui_fast_setup_network_server_evaluate"
 	},
 	{
 		"file_offset": 732240,
 		"flags": 32,
-		"name": "_code_000b2c50"
+		"name": "_player_ui_activate_all_solo_levels_evaluate"
 	},
 	{
 		"file_offset": 732272,
 		"flags": 32,
-		"name": "_code_000b2c70"
+		"name": "_player0_look_invert_pitch_evaluate"
 	},
 	{
 		"file_offset": 732336,
 		"flags": 32,
-		"name": "_code_000b2cb0"
+		"name": "_player0_look_pitch_is_inverted_evaluate"
 	},
 	{
 		"file_offset": 732384,
 		"flags": 32,
-		"name": "_code_000b2ce0"
+		"name": "_player0_joystick_set_is_normal_evaluate"
 	},
 	{
 		"file_offset": 732432,
 		"flags": 32,
-		"name": "_code_000b2d10"
+		"name": "_ui_widget_debug_show_path_evaluate"
 	},
 	{
 		"file_offset": 732496,
 		"flags": 32,
-		"name": "_code_000b2d50"
+		"name": "_display_scenario_help_evaluate"
 	},
 	{
 		"file_offset": 732560,
 		"flags": 32,
-		"name": "_code_000b2d90"
+		"name": "_network_game_client_request_immediate_start_evaluate"
 	},
 	{
 		"file_offset": 732592,
 		"flags": 32,
-		"name": "_code_000b2db0"
+		"name": "_xbox_set_machine_name_evaluate"
 	},
 	{
 		"file_offset": 732656,
@@ -15247,7 +15295,7 @@
 	{
 		"file_offset": 732928,
 		"flags": 32,
-		"name": "_code_000b2f00"
+		"name": "_hs_allocate"
 	},
 	{
 		"file_offset": 733136,
@@ -15312,117 +15360,120 @@
 	{
 		"file_offset": 734128,
 		"flags": 32,
-		"name": "_code_000b33b0"
+		"name": "_alphabetize"
 	},
 	{
 		"file_offset": 734160,
 		"flags": 32,
-		"name": "_code_000b33d0"
+		"name": "_hs_tokens_enumerate_add_string",
+		"static": true
 	},
 	{
 		"file_offset": 734288,
 		"flags": 32,
-		"name": "_code_000b3450"
+		"name": "_hs_enumerate_from_string_list",
+		"static": true
 	},
 	{
 		"file_offset": 734352,
 		"flags": 32,
-		"name": "_code_000b3490"
+		"name": "_hs_enumerate_block_data",
+		"static": true
 	},
 	{
 		"file_offset": 734416,
 		"flags": 32,
-		"name": "_code_000b34d0"
+		"name": "_hs_enumerate_scenario_data"
 	},
 	{
 		"file_offset": 734464,
 		"flags": 32,
-		"name": "_code_000b3500"
+		"name": "_hs_enumerate_special_form_names"
 	},
 	{
 		"file_offset": 734496,
 		"flags": 32,
-		"name": "_code_000b3520"
+		"name": "_hs_enumerate_script_type_names"
 	},
 	{
 		"file_offset": 734544,
 		"flags": 32,
-		"name": "_code_000b3550"
+		"name": "_hs_enumerate_type_names"
 	},
 	{
 		"file_offset": 734592,
 		"flags": 32,
-		"name": "_code_000b3580"
+		"name": "_hs_enumerate_function_names"
 	},
 	{
 		"file_offset": 734688,
 		"flags": 32,
-		"name": "_code_000b35e0"
+		"name": "_hs_enumerate_script_names"
 	},
 	{
 		"file_offset": 734736,
 		"flags": 32,
-		"name": "_code_000b3610"
+		"name": "_hs_enumerate_variable_names"
 	},
 	{
 		"file_offset": 734912,
 		"flags": 32,
-		"name": "_code_000b36c0"
+		"name": "_hs_enumerate_ai_names"
 	},
 	{
 		"file_offset": 734960,
 		"flags": 32,
-		"name": "_code_000b36f0"
+		"name": "_hs_enumerate_ai_command_list_names"
 	},
 	{
 		"file_offset": 735008,
 		"flags": 32,
-		"name": "_code_000b3720"
+		"name": "_hs_enumerate_starting_profile_names"
 	},
 	{
 		"file_offset": 735056,
 		"flags": 32,
-		"name": "_code_000b3750"
+		"name": "_hs_enumerate_conversation_names"
 	},
 	{
 		"file_offset": 735104,
 		"flags": 32,
-		"name": "_code_000b3780"
+		"name": "_hs_enumerate_object_names"
 	},
 	{
 		"file_offset": 735152,
 		"flags": 32,
-		"name": "_code_000b37b0"
+		"name": "_hs_enumerate_trigger_volume_names"
 	},
 	{
 		"file_offset": 735200,
 		"flags": 32,
-		"name": "_code_000b37e0"
+		"name": "_hs_enumerate_cutscene_flag_names"
 	},
 	{
 		"file_offset": 735248,
 		"flags": 32,
-		"name": "_code_000b3810"
+		"name": "_hs_enumerate_cutscene_camera_point_names"
 	},
 	{
 		"file_offset": 735296,
 		"flags": 32,
-		"name": "_code_000b3840"
+		"name": "_hs_enumerate_cutscene_title_names"
 	},
 	{
 		"file_offset": 735344,
 		"flags": 32,
-		"name": "_code_000b3870"
+		"name": "_hs_enumerate_cutscene_recording_names"
 	},
 	{
 		"file_offset": 735392,
 		"flags": 32,
-		"name": "_code_000b38a0"
+		"name": "_hs_enumerate_navpoints"
 	},
 	{
 		"file_offset": 735456,
 		"flags": 32,
-		"name": "_code_000b38e0"
+		"name": "_hs_enumerate_hud_messages"
 	},
 	{
 		"file_offset": 735520,
@@ -15432,37 +15483,41 @@
 	{
 		"file_offset": 735744,
 		"flags": 32,
-		"name": "_code_000b3a00"
+		"name": "_hs_rebuild_source_file",
+		"static": true
 	},
 	{
 		"file_offset": 736016,
 		"flags": 32,
-		"name": "_code_000b3b10"
+		"name": "_alphabetize_file_references"
 	},
 	{
 		"file_offset": 736096,
 		"flags": 32,
-		"name": "_code_000b3b60"
+		"name": "_hs_rebuild_source"
 	},
 	{
 		"file_offset": 736416,
 		"flags": 32,
-		"name": "_code_000b3ca0"
+		"name": "_hs_compile_source_error",
+		"static": true
 	},
 	{
 		"file_offset": 736528,
 		"flags": 32,
-		"name": "_code_000b3d10"
+		"name": "_hs_compile_source"
 	},
 	{
 		"file_offset": 736736,
 		"flags": 32,
-		"name": "_code_000b3de0"
+		"name": "_hs_get_function_parameters_string",
+		"static": true
 	},
 	{
 		"file_offset": 736896,
 		"flags": 32,
-		"name": "_code_000b3e80"
+		"name": "_hs_get_function_documentation_string",
+		"static": true
 	},
 	{
 		"file_offset": 736928,
@@ -15472,17 +15527,17 @@
 	{
 		"file_offset": 736992,
 		"flags": 32,
-		"name": "_code_000b3ee0"
+		"name": "_hs_recompile_evaluate"
 	},
 	{
 		"file_offset": 737024,
 		"flags": 32,
-		"name": "_code_000b3f00"
+		"name": "_random_range_evaluate"
 	},
 	{
 		"file_offset": 737104,
 		"flags": 32,
-		"name": "_code_000b3f50"
+		"name": "_real_random_range_evaluate"
 	},
 	{
 		"file_offset": 737200,
@@ -15517,12 +15572,12 @@
 	{
 		"file_offset": 738192,
 		"flags": 32,
-		"name": "_code_000b4390"
+		"name": "_hs_doc_evaluate"
 	},
 	{
 		"file_offset": 738224,
 		"flags": 32,
-		"name": "_code_000b43b0"
+		"name": "_hs_help_evaluate"
 	},
 	{
 		"file_offset": 738288,
@@ -16904,12 +16959,14 @@
 	{
 		"file_offset": 800784,
 		"flags": 32,
-		"name": "_code_000c3810"
+		"name": "_render_state_text",
+		"static": true
 	},
 	{
 		"file_offset": 800912,
 		"flags": 32,
-		"name": "_code_000c3890"
+		"name": "_render_state_bitmap",
+		"static": true
 	},
 	{
 		"file_offset": 801312,
@@ -17034,12 +17091,14 @@
 	{
 		"file_offset": 803824,
 		"flags": 32,
-		"name": "_code_000c43f0"
+		"name": "_find_free_hud_message",
+		"static": true
 	},
 	{
 		"file_offset": 803952,
 		"flags": 32,
-		"name": "_code_000c4470"
+		"name": "_compare_messages",
+		"static": true
 	},
 	{
 		"file_offset": 804000,
@@ -18468,12 +18527,14 @@
 	{
 		"file_offset": 864960,
 		"flags": 32,
-		"name": "_code_000d32c0"
+		"name": "_pool_alloc",
+		"static": true
 	},
 	{
 		"file_offset": 864992,
 		"flags": 32,
-		"name": "_code_000d32e0"
+		"name": "_pool_free",
+		"static": true
 	},
 	{
 		"file_offset": 865024,
@@ -18543,7 +18604,8 @@
 	{
 		"file_offset": 865760,
 		"flags": 32,
-		"name": "_code_000d35e0"
+		"name": "_compute_offset_coordinate",
+		"static": true
 	},
 	{
 		"file_offset": 865792,
@@ -18598,7 +18660,8 @@
 	{
 		"file_offset": 867344,
 		"flags": 32,
-		"name": "_code_000d3c10"
+		"name": "_transition_to_game_in_progress",
+		"static": true
 	},
 	{
 		"file_offset": 867408,
@@ -18638,77 +18701,92 @@
 	{
 		"file_offset": 867952,
 		"flags": 32,
-		"name": "_code_000d3e70"
+		"name": "_push_widget",
+		"static": true
 	},
 	{
 		"file_offset": 868080,
 		"flags": 32,
-		"name": "_code_000d3ef0"
+		"name": "_pop_widget",
+		"static": true
 	},
 	{
 		"file_offset": 868176,
 		"flags": 32,
-		"name": "_code_000d3f50"
+		"name": "_dispose_widget_stack",
+		"static": true
 	},
 	{
 		"file_offset": 868224,
 		"flags": 32,
-		"name": "_code_000d3f80"
+		"name": "_ui_widget_add_child",
+		"static": true
 	},
 	{
 		"file_offset": 868368,
 		"flags": 32,
-		"name": "_code_000d4010"
+		"name": "_ui_widget_delete_children_recursive",
+		"static": true
 	},
 	{
 		"file_offset": 868496,
 		"flags": 32,
-		"name": "_code_000d4090"
+		"name": "_widget_instance_find_by_tag_index_recursive",
+		"static": true
 	},
 	{
 		"file_offset": 868576,
 		"flags": 32,
-		"name": "_code_000d40e0"
+		"name": "_widget_instance_get_cumulative_alpha_modifier",
+		"static": true
 	},
 	{
 		"file_offset": 868608,
 		"flags": 32,
-		"name": "_code_000d4100"
+		"name": "_widget_instance_can_receive_events",
+		"static": true
 	},
 	{
 		"file_offset": 868736,
 		"flags": 32,
-		"name": "_code_000d4180"
+		"name": "_widget_instance_can_handle_events",
+		"static": true
 	},
 	{
 		"file_offset": 868800,
 		"flags": 32,
-		"name": "_code_000d41c0"
+		"name": "_widget_instance_text_box_is_focused",
+		"static": true
 	},
 	{
 		"file_offset": 868864,
 		"flags": 32,
-		"name": "_code_000d4200"
+		"name": "_get_icon_type",
+		"static": true
 	},
 	{
 		"file_offset": 868944,
 		"flags": 32,
-		"name": "_code_000d4250"
+		"name": "_render_state_bitmap",
+		"static": true
 	},
 	{
 		"file_offset": 869360,
 		"flags": 32,
-		"name": "_code_000d43f0"
+		"name": "_render_state_text",
+		"static": true
 	},
 	{
 		"file_offset": 869472,
 		"flags": 32,
-		"name": "_code_000d4460"
+		"name": "_string_has_icons_to_draw",
+		"static": true
 	},
 	{
 		"file_offset": 869568,
 		"flags": 32,
-		"name": "_code_000d44c0"
+		"name": "_should_flip_sticks_for_local_player",
+		"static": true
 	},
 	{
 		"file_offset": 869664,
@@ -18718,62 +18796,74 @@
 	{
 		"file_offset": 869968,
 		"flags": 32,
-		"name": "_code_000d4650"
+		"name": "_widget_instance_update_animation_parameters",
+		"static": true
 	},
 	{
 		"file_offset": 870016,
 		"flags": 32,
-		"name": "_code_000d4680"
+		"name": "_widget_instance_reload_recursive",
+		"static": true
 	},
 	{
 		"file_offset": 870032,
 		"flags": 32,
-		"name": "_code_000d4690"
+		"name": "_ui_widget_reload_by_tag",
+		"static": true
 	},
 	{
 		"file_offset": 870048,
 		"flags": 32,
-		"name": "_code_000d46a0"
+		"name": "_widget_instance_give_focus_directly",
+		"static": true
 	},
 	{
 		"file_offset": 870416,
 		"flags": 32,
-		"name": "_code_000d4810"
+		"name": "_widget_instance_set_focused_child_by_index",
+		"static": true
 	},
 	{
 		"file_offset": 870624,
 		"flags": 32,
-		"name": "_code_000d48e0"
+		"name": "_play_sound_tag",
+		"static": true
 	},
 	{
 		"file_offset": 870656,
 		"flags": 32,
-		"name": "_code_000d4900"
+		"name": "_search_and_replace",
+		"static": true
 	},
 	{
 		"file_offset": 871120,
 		"flags": 32,
-		"name": "_code_000d4ad0"
+		"name": "_spinner_list_update",
+		"static": true
 	},
 	{
 		"file_offset": 871168,
 		"flags": 32,
-		"name": "_code_000d4b00"
+		"name": "_column_list_update",
+		"static": true
 	},
 	{
 		"file_offset": 871232,
 		"flags": 32,
-		"name": "_code_000d4b40"
+		"name": "_widget_instance_get_tail_child_widget",
+		"static": true
 	},
 	{
 		"file_offset": 871264,
 		"flags": 32,
-		"name": "_code_000d4b60"
+		"name": "_widget_instance_tab_to_next_valid_widget",
+		"static": true
 	},
 	{
 		"file_offset": 871360,
 		"flags": 32,
-		"name": "_code_000d4bc0"
+		"name": "_widget_instance_tab_to_previous_valid_widget",
+		"static": true
 	},
 	{
 		"file_offset": 871520,
@@ -18788,7 +18878,8 @@
 	{
 		"file_offset": 871696,
 		"flags": 32,
-		"name": "_code_000d4d10"
+		"name": "_filesystem_initialization_thread_proc",
+		"static": true
 	},
 	{
 		"file_offset": 871776,
@@ -18833,12 +18924,14 @@
 	{
 		"file_offset": 873104,
 		"flags": 32,
-		"name": "_code_000d5290"
+		"name": "_ui_widget_load_children_recursive",
+		"static": true
 	},
 	{
 		"file_offset": 873776,
 		"flags": 32,
-		"name": "_code_000d5530"
+		"name": "_widget_instance_find_by_tag_index",
+		"static": true
 	},
 	{
 		"file_offset": 873824,
@@ -18848,27 +18941,32 @@
 	{
 		"file_offset": 874688,
 		"flags": 32,
-		"name": "_code_000d58c0"
+		"name": "_widget_instance_render_text_box",
+		"static": true
 	},
 	{
 		"file_offset": 875472,
 		"flags": 32,
-		"name": "_code_000d5bd0"
+		"name": "_widget_instance_render_spinner_list",
+		"static": true
 	},
 	{
 		"file_offset": 876560,
 		"flags": 32,
-		"name": "_code_000d6010"
+		"name": "_widget_instance_give_focus_by_tag",
+		"static": true
 	},
 	{
 		"file_offset": 876640,
 		"flags": 32,
-		"name": "_code_000d6060"
+		"name": "_widget_instance_go_back_to_previous",
+		"static": true
 	},
 	{
 		"file_offset": 876800,
 		"flags": 32,
-		"name": "_code_000d6100"
+		"name": "_perform_filesystem_initialization",
+		"static": true
 	},
 	{
 		"file_offset": 877024,
@@ -18888,17 +18986,20 @@
 	{
 		"file_offset": 878160,
 		"flags": 32,
-		"name": "_code_000d6650"
+		"name": "_event_handler_dispatch",
+		"static": true
 	},
 	{
 		"file_offset": 879424,
 		"flags": 32,
-		"name": "_code_000d6b40"
+		"name": "_widget_instance_render_recursive",
+		"static": true
 	},
 	{
 		"file_offset": 880176,
 		"flags": 32,
-		"name": "_code_000d6e30"
+		"name": "_widget_instance_render_column_list",
+		"static": true
 	},
 	{
 		"file_offset": 880352,
@@ -18913,12 +19014,14 @@
 	{
 		"file_offset": 881296,
 		"flags": 32,
-		"name": "_code_000d7290"
+		"name": "_widget_instance_initialize",
+		"static": true
 	},
 	{
 		"file_offset": 881792,
 		"flags": 32,
-		"name": "_code_000d7480"
+		"name": "_widget_instance_process_one_event_recursive",
+		"static": true
 	},
 	{
 		"file_offset": 883808,
@@ -18963,12 +19066,14 @@
 	{
 		"file_offset": 886784,
 		"flags": 32,
-		"name": "_code_000d8800"
+		"name": "_ui_check_for_pause_game",
+		"static": true
 	},
 	{
 		"file_offset": 887456,
 		"flags": 32,
-		"name": "_code_000d8aa0"
+		"name": "_ui_widget_launch_widget",
+		"static": true
 	},
 	{
 		"file_offset": 887760,
@@ -18983,7 +19088,8 @@
 	{
 		"file_offset": 888864,
 		"flags": 32,
-		"name": "_code_000d9020"
+		"name": "_widget_event_function_null",
+		"static": true
 	},
 	{
 		"file_offset": 888880,
@@ -18993,487 +19099,584 @@
 	{
 		"file_offset": 888896,
 		"flags": 32,
-		"name": "_code_000d9040"
+		"name": "_solo_level_initialize_list_coop",
+		"static": true
 	},
 	{
 		"file_offset": 889312,
 		"flags": 32,
-		"name": "_code_000d91e0"
+		"name": "_solo_level_dispose_list",
+		"static": true
 	},
 	{
 		"file_offset": 889360,
 		"flags": 32,
-		"name": "_code_000d9210"
+		"name": "_solo_level_set_next_map_name",
+		"static": true
 	},
 	{
 		"file_offset": 889680,
 		"flags": 32,
-		"name": "_code_000d9350"
+		"name": "_difficulty_set",
+		"static": true
 	},
 	{
 		"file_offset": 889776,
 		"flags": 32,
-		"name": "_code_000d93b0"
+		"name": "_start_new_game",
+		"static": true
 	},
 	{
 		"file_offset": 889824,
 		"flags": 32,
-		"name": "_code_000d93e0"
+		"name": "_pause_game_restart_at_checkpoint",
+		"static": true
 	},
 	{
 		"file_offset": 889840,
 		"flags": 32,
-		"name": "_code_000d93f0"
+		"name": "_pause_game_restart_level",
+		"static": true
 	},
 	{
 		"file_offset": 889856,
 		"flags": 32,
-		"name": "_code_000d9400"
+		"name": "_pause_game_quit_to_main_menu",
+		"static": true
 	},
 	{
 		"file_offset": 889872,
 		"flags": 32,
-		"name": "_code_000d9410"
+		"name": "_clear_multiplayer_player_joins",
+		"static": true
 	},
 	{
 		"file_offset": 889904,
 		"flags": 32,
-		"name": "_code_000d9430"
+		"name": "_player_wants_to_join_multiplayer_game",
+		"static": true
 	},
 	{
 		"file_offset": 889984,
 		"flags": 32,
-		"name": "_code_000d9480"
+		"name": "_network_game_server_list_initialize",
+		"static": true
 	},
 	{
 		"file_offset": 890048,
 		"flags": 32,
-		"name": "_code_000d94c0"
+		"name": "_network_game_start_new_server",
+		"static": true
 	},
 	{
 		"file_offset": 890192,
 		"flags": 32,
-		"name": "_code_000d9550"
+		"name": "_network_game_join_game_from_server_list",
+		"static": true
 	},
 	{
 		"file_offset": 890704,
 		"flags": 32,
-		"name": "_code_000d9750"
+		"name": "_network_server_list_dispose",
+		"static": true
 	},
 	{
 		"file_offset": 890736,
 		"flags": 32,
-		"name": "_code_000d9770"
+		"name": "_network_game_cancel",
+		"static": true
 	},
 	{
 		"file_offset": 890768,
 		"flags": 32,
-		"name": "_code_000d9790"
+		"name": "_split_screen_game_initialize",
+		"static": true
 	},
 	{
 		"file_offset": 890880,
 		"flags": 32,
-		"name": "_code_000d9800"
+		"name": "_coop_game_initialize",
+		"static": true
 	},
 	{
 		"file_offset": 890896,
 		"flags": 32,
-		"name": "_code_000d9810"
+		"name": "_main_menu_initialize",
+		"static": true
 	},
 	{
 		"file_offset": 890960,
 		"flags": 32,
-		"name": "_code_000d9850"
+		"name": "_multiplayer_type_menu_initialize",
+		"static": true
 	},
 	{
 		"file_offset": 890976,
 		"flags": 32,
-		"name": "_code_000d9860"
+		"name": "_multiplayer_pick_quick_start_play_stage",
+		"static": true
 	},
 	{
 		"file_offset": 891008,
 		"flags": 32,
-		"name": "_code_000d9880"
+		"name": "_multiplayer_level_list_initialize",
+		"static": true
 	},
 	{
 		"file_offset": 891248,
 		"flags": 32,
-		"name": "_code_000d9970"
+		"name": "_multiplayer_level_list_dispose",
+		"static": true
 	},
 	{
 		"file_offset": 891280,
 		"flags": 32,
-		"name": "_code_000d9990"
+		"name": "_multiplayer_level_select",
+		"static": true
 	},
 	{
 		"file_offset": 891744,
 		"flags": 32,
-		"name": "_code_000d9b60"
+		"name": "_multiplayer_profiles_list_initialize",
+		"static": true
 	},
 	{
 		"file_offset": 892096,
 		"flags": 32,
-		"name": "_code_000d9cc0"
+		"name": "_multiplayer_profiles_list_dispose",
+		"static": true
 	},
 	{
 		"file_offset": 892144,
 		"flags": 32,
-		"name": "_code_000d9cf0"
+		"name": "_multiplayer_profile_set_for_game",
+		"static": true
 	},
 	{
 		"file_offset": 892816,
 		"flags": 32,
-		"name": "_code_000d9f90"
+		"name": "_multiplayer_game_swap_teams",
+		"static": true
 	},
 	{
 		"file_offset": 893056,
 		"flags": 32,
-		"name": "_code_000da080"
+		"name": "_netgame_join_player",
+		"static": true
 	},
 	{
 		"file_offset": 893328,
 		"flags": 32,
-		"name": "_code_000da190"
+		"name": "_player_profiles_list_initialize",
+		"static": true
 	},
 	{
 		"file_offset": 893680,
 		"flags": 32,
-		"name": "_code_000da2f0"
+		"name": "_player_profiles_list_dispose",
+		"static": true
 	},
 	{
 		"file_offset": 893728,
 		"flags": 32,
-		"name": "_code_000da320"
+		"name": "_player_profile_set_for_game_3wide",
+		"static": true
 	},
 	{
 		"file_offset": 894176,
 		"flags": 32,
-		"name": "_code_000da4e0"
+		"name": "_player_profile_set_for_game_1wide",
+		"static": true
 	},
 	{
 		"file_offset": 894528,
 		"flags": 32,
-		"name": "_code_000da640"
+		"name": "_playlist_profile_begin_editing",
+		"static": true
 	},
 	{
 		"file_offset": 894848,
 		"flags": 32,
-		"name": "_code_000da780"
+		"name": "_playlist_profile_end_editing",
+		"static": true
 	},
 	{
 		"file_offset": 894880,
 		"flags": 32,
-		"name": "_code_000da7a0"
+		"name": "_playlist_profile_set_game_engine",
+		"static": true
 	},
 	{
 		"file_offset": 895104,
 		"flags": 32,
-		"name": "_code_000da880"
+		"name": "_playlist_profile_change_name",
+		"static": true
 	},
 	{
 		"file_offset": 895184,
 		"flags": 32,
-		"name": "_code_000da8d0"
+		"name": "_playlist_profile_change_ctf_rules",
+		"static": true
 	},
 	{
 		"file_offset": 896112,
 		"flags": 32,
-		"name": "_code_000dac70"
+		"name": "_playlist_profile_change_koth_rules",
+		"static": true
 	},
 	{
 		"file_offset": 896656,
 		"flags": 32,
-		"name": "_code_000dae90"
+		"name": "_playlist_profile_change_slayer_rules",
+		"static": true
 	},
 	{
 		"file_offset": 897520,
 		"flags": 32,
-		"name": "_code_000db1f0"
+		"name": "_playlist_profile_change_oddball_rules",
+		"static": true
 	},
 	{
 		"file_offset": 898928,
 		"flags": 32,
-		"name": "_code_000db770"
+		"name": "_playlist_profile_change_racing_rules",
+		"static": true
 	},
 	{
 		"file_offset": 899648,
 		"flags": 32,
-		"name": "_code_000dba40"
+		"name": "_playlist_profile_change_player_options",
+		"static": true
 	},
 	{
 		"file_offset": 901056,
 		"flags": 32,
-		"name": "_code_000dbfc0"
+		"name": "_playlist_profile_change_item_options",
+		"static": true
 	},
 	{
 		"file_offset": 901856,
 		"flags": 32,
-		"name": "_code_000dc2e0"
+		"name": "_playlist_profile_change_indicator_options",
+		"static": true
 	},
 	{
 		"file_offset": 902352,
 		"flags": 32,
-		"name": "_code_000dc4d0"
+		"name": "_playlist_profile_initialize_game_engine",
+		"static": true
 	},
 	{
 		"file_offset": 902544,
 		"flags": 32,
-		"name": "_code_000dc590"
+		"name": "_playlist_profile_initialize_name",
+		"static": true
 	},
 	{
 		"file_offset": 902704,
 		"flags": 32,
-		"name": "_code_000dc630"
+		"name": "_playlist_profile_initialize_ctf_rules",
+		"static": true
 	},
 	{
 		"file_offset": 903616,
 		"flags": 32,
-		"name": "_code_000dc9c0"
+		"name": "_playlist_profile_initialize_koth_rules",
+		"static": true
 	},
 	{
 		"file_offset": 904176,
 		"flags": 32,
-		"name": "_code_000dcbf0"
+		"name": "_playlist_profile_initialize_slayer_rules",
+		"static": true
 	},
 	{
 		"file_offset": 905024,
 		"flags": 32,
-		"name": "_code_000dcf40"
+		"name": "_playlist_profile_initialize_oddball_rules",
+		"static": true
 	},
 	{
 		"file_offset": 906320,
 		"flags": 32,
-		"name": "_code_000dd450"
+		"name": "_playlist_profile_initialize_racing_rules",
+		"static": true
 	},
 	{
 		"file_offset": 907056,
 		"flags": 32,
-		"name": "_code_000dd730"
+		"name": "_playlist_profile_initialize_player_options",
+		"static": true
 	},
 	{
 		"file_offset": 908416,
 		"flags": 32,
-		"name": "_code_000ddc80"
+		"name": "_playlist_profile_initialize_item_options",
+		"static": true
 	},
 	{
 		"file_offset": 909200,
 		"flags": 32,
-		"name": "_code_000ddf90"
+		"name": "_playlist_profile_initialize_indicator_options",
+		"static": true
 	},
 	{
 		"file_offset": 909712,
 		"flags": 32,
-		"name": "_code_000de190"
+		"name": "_playlist_profile_save_changes",
+		"static": true
 	},
 	{
 		"file_offset": 909904,
 		"flags": 32,
-		"name": "_code_000de250"
+		"name": "_player_profile_color_picker_menu_initialize",
+		"static": true
 	},
 	{
 		"file_offset": 910176,
 		"flags": 32,
-		"name": "_code_000de360"
+		"name": "_player_profile_color_picker_menu_dispose",
+		"static": true
 	},
 	{
 		"file_offset": 910224,
 		"flags": 32,
-		"name": "_code_000de390"
+		"name": "_player_profile_color_picker_select_color",
+		"static": true
 	},
 	{
 		"file_offset": 910480,
 		"flags": 32,
-		"name": "_code_000de490"
+		"name": "_player_profile_begin_editing",
+		"static": true
 	},
 	{
 		"file_offset": 910784,
 		"flags": 32,
-		"name": "_code_000de5c0"
+		"name": "_player_profile_end_editing",
+		"static": true
 	},
 	{
 		"file_offset": 910816,
 		"flags": 32,
-		"name": "_code_000de5e0"
+		"name": "_player_profile_change_name",
+		"static": true
 	},
 	{
 		"file_offset": 910896,
 		"flags": 32,
-		"name": "_code_000de630"
+		"name": "_player_profile_save_changes",
+		"static": true
 	},
 	{
 		"file_offset": 911024,
 		"flags": 32,
-		"name": "_code_000de6b0"
+		"name": "_player_profile_initialize_controller_settings",
+		"static": true
 	},
 	{
 		"file_offset": 911504,
 		"flags": 32,
-		"name": "_code_000de890"
+		"name": "_player_profile_initialize_advanced_controller_settings",
+		"static": true
 	},
 	{
 		"file_offset": 912240,
 		"flags": 32,
-		"name": "_code_000deb70"
+		"name": "_player_profile_change_controller_settings",
+		"static": true
 	},
 	{
 		"file_offset": 912704,
 		"flags": 32,
-		"name": "_code_000ded40"
+		"name": "_player_profile_change_advanced_controller_settings",
+		"static": true
 	},
 	{
 		"file_offset": 913536,
 		"flags": 32,
-		"name": "_code_000df080"
+		"name": "_network_game_remove_local_player",
+		"static": true
 	},
 	{
 		"file_offset": 913616,
 		"flags": 32,
-		"name": "_code_000df0d0"
+		"name": "_switch_from_main_menu_to_single_player",
+		"static": true
 	},
 	{
 		"file_offset": 913648,
 		"flags": 32,
-		"name": "_code_000df0f0"
+		"name": "_delete_player_profile_request",
+		"static": true
 	},
 	{
 		"file_offset": 913920,
 		"flags": 32,
-		"name": "_code_000df200"
+		"name": "_delete_playlist_profile_request",
+		"static": true
 	},
 	{
 		"file_offset": 914240,
 		"flags": 32,
-		"name": "_code_000df340"
+		"name": "_delete_player_profile_final",
+		"static": true
 	},
 	{
 		"file_offset": 914320,
 		"flags": 32,
-		"name": "_code_000df390"
+		"name": "_delete_playlist_profile_final",
+		"static": true
 	},
 	{
 		"file_offset": 914384,
 		"flags": 32,
-		"name": "_code_000df3d0"
+		"name": "_cancel_profile_delete",
+		"static": true
 	},
 	{
 		"file_offset": 914400,
 		"flags": 32,
-		"name": "_code_000df3e0"
+		"name": "_create_and_begin_editing_new_gametype_profile",
+		"static": true
 	},
 	{
 		"file_offset": 914784,
 		"flags": 32,
-		"name": "_code_000df560"
+		"name": "_create_and_begin_editing_new_player_profile",
+		"static": true
 	},
 	{
 		"file_offset": 915024,
 		"flags": 32,
-		"name": "_code_000df650"
+		"name": "_network_game_start_faster",
+		"static": true
 	},
 	{
 		"file_offset": 915184,
 		"flags": 32,
-		"name": "_code_000df6f0"
+		"name": "_network_game_start_slower",
+		"static": true
 	},
 	{
 		"file_offset": 915344,
 		"flags": 32,
-		"name": "_code_000df790"
+		"name": "_network_game_server_accept_connections",
+		"static": true
 	},
 	{
 		"file_offset": 915376,
 		"flags": 32,
-		"name": "_code_000df7b0"
+		"name": "_network_game_server_defer_game_start",
+		"static": true
 	},
 	{
 		"file_offset": 915408,
 		"flags": 32,
-		"name": "_code_000df7d0"
+		"name": "_network_game_server_allow_game_start",
+		"static": true
 	},
 	{
 		"file_offset": 915440,
 		"flags": 32,
-		"name": "_code_000df7f0"
+		"name": "_disable_widget_if_no_xdemos",
+		"static": true
 	},
 	{
 		"file_offset": 915472,
 		"flags": 32,
-		"name": "_code_000df810"
+		"name": "_run_xdemos",
+		"static": true
 	},
 	{
 		"file_offset": 915488,
 		"flags": 32,
-		"name": "_code_000df820"
+		"name": "_single_player_reset_controller_choices",
+		"static": true
 	},
 	{
 		"file_offset": 915504,
 		"flags": 32,
-		"name": "_code_000df830"
+		"name": "_single_player_set_player1_controller_choice",
+		"static": true
 	},
 	{
 		"file_offset": 915584,
 		"flags": 32,
-		"name": "_code_000df880"
+		"name": "_single_player_set_player2_controller_choice",
+		"static": true
 	},
 	{
 		"file_offset": 915696,
 		"flags": 32,
-		"name": "_code_000df8f0"
+		"name": "_display_error_if_no_network_connection",
+		"static": true
 	},
 	{
 		"file_offset": 915792,
 		"flags": 32,
-		"name": "_code_000df950"
+		"name": "_start_network_game_if_no_advertised_servers",
+		"static": true
 	},
 	{
 		"file_offset": 915920,
 		"flags": 32,
-		"name": "_code_000df9d0"
+		"name": "_netgame_unjoin_player",
+		"static": true
 	},
 	{
 		"file_offset": 916304,
 		"flags": 32,
-		"name": "_code_000dfb50"
+		"name": "_close_calling_widget_if_not_editing_profile",
+		"static": true
 	},
 	{
 		"file_offset": 916384,
 		"flags": 32,
-		"name": "_code_000dfba0"
+		"name": "_exit_to_xbox_dashboard",
+		"static": true
 	},
 	{
 		"file_offset": 916400,
 		"flags": 32,
-		"name": "_code_000dfbb0"
+		"name": "_new_campaign_chosen",
+		"static": true
 	},
 	{
 		"file_offset": 916544,
 		"flags": 32,
-		"name": "_code_000dfc40"
+		"name": "_new_campaign_decision",
+		"static": true
 	},
 	{
 		"file_offset": 916896,
 		"flags": 32,
-		"name": "_code_000dfda0"
+		"name": "_pop_history_stack_once",
+		"static": true
 	},
 	{
 		"file_offset": 916928,
 		"flags": 32,
-		"name": "_code_000dfdc0"
+		"name": "_difficulty_menu_initialize",
+		"static": true
 	},
 	{
 		"file_offset": 917152,
 		"flags": 32,
-		"name": "_code_000dfea0"
+		"name": "_begin_music_fade_out",
+		"static": true
 	},
 	{
 		"file_offset": 917184,
 		"flags": 32,
-		"name": "_code_000dfec0"
+		"name": "_new_campaign_if_no_custom_player_profiles_exist",
+		"static": true
 	},
 	{
 		"file_offset": 917264,
 		"flags": 32,
-		"name": "_code_000dff10"
+		"name": "_solo_level_initialize_list_single_player",
+		"static": true
 	},
 	{
 		"file_offset": 917936,
@@ -20377,12 +20580,13 @@
 	{
 		"file_offset": 967072,
 		"flags": 32,
-		"name": "_code_000ec1a0"
+		"name": "_weapon_magazine_start_reload",
+		"static": true
 	},
 	{
 		"file_offset": 967424,
 		"flags": 32,
-		"name": "_code_000ec300"
+		"name": "_weapon_magazine_finish_reload"
 	},
 	{
 		"file_offset": 967648,
@@ -20427,7 +20631,8 @@
 	{
 		"file_offset": 969056,
 		"flags": 32,
-		"name": "_code_000ec960"
+		"name": "_weapon_state_next",
+		"static": true
 	},
 	{
 		"file_offset": 969104,
@@ -20682,12 +20887,12 @@
 	{
 		"file_offset": 981152,
 		"flags": 32,
-		"name": "_code_000ef8a0"
+		"name": "_sort_controllers_ascending"
 	},
 	{
 		"file_offset": 981216,
 		"flags": 32,
-		"name": "_code_000ef8e0"
+		"name": "_create_local_players"
 	},
 	{
 		"file_offset": 981680,
@@ -20787,7 +20992,7 @@
 	{
 		"file_offset": 982496,
 		"flags": 32,
-		"name": "_code_000efde0"
+		"name": "_main_queue_map_private"
 	},
 	{
 		"file_offset": 982576,
@@ -20847,7 +21052,7 @@
 	{
 		"file_offset": 983216,
 		"flags": 32,
-		"name": "_code_000f00b0"
+		"name": "_compute_subframe_counts"
 	},
 	{
 		"file_offset": 983328,
@@ -20862,67 +21067,67 @@
 	{
 		"file_offset": 983888,
 		"flags": 32,
-		"name": "_code_000f0350"
+		"name": "_main_new_map"
 	},
 	{
 		"file_offset": 984096,
 		"flags": 32,
-		"name": "_code_000f0420"
+		"name": "_main_change_map_name"
 	},
 	{
 		"file_offset": 984480,
 		"flags": 32,
-		"name": "_code_000f05a0"
+		"name": "_main_revert_map_private"
 	},
 	{
 		"file_offset": 984512,
 		"flags": 32,
-		"name": "_code_000f05c0"
+		"name": "_main_skip_cinematic_private"
 	},
 	{
 		"file_offset": 984560,
 		"flags": 32,
-		"name": "_code_000f05f0"
+		"name": "_main_skip_private"
 	},
 	{
 		"file_offset": 984736,
 		"flags": 32,
-		"name": "_code_000f06a0"
+		"name": "_main_saving_map_private"
 	},
 	{
 		"file_offset": 984768,
 		"flags": 32,
-		"name": "_code_000f06c0"
+		"name": "_main_save_map_private"
 	},
 	{
 		"file_offset": 984992,
 		"flags": 32,
-		"name": "_code_000f07a0"
+		"name": "_main_switch_to_structure_bsp_private"
 	},
 	{
 		"file_offset": 985040,
 		"flags": 32,
-		"name": "_code_000f07d0"
+		"name": "_main_lost_map_private"
 	},
 	{
 		"file_offset": 985104,
 		"flags": 32,
-		"name": "_code_000f0810"
+		"name": "_main_respawn_private"
 	},
 	{
 		"file_offset": 985168,
 		"flags": 32,
-		"name": "_code_000f0850"
+		"name": "_main_won_map_private"
 	},
 	{
 		"file_offset": 985264,
 		"flags": 32,
-		"name": "_code_000f08b0"
+		"name": "_main_load_core_private"
 	},
 	{
 		"file_offset": 985296,
 		"flags": 32,
-		"name": "_code_000f08d0"
+		"name": "_main_save_core_private"
 	},
 	{
 		"file_offset": 985328,
@@ -20932,22 +21137,22 @@
 	{
 		"file_offset": 985392,
 		"flags": 32,
-		"name": "_code_000f0930"
+		"name": "_main_run_demos_private"
 	},
 	{
 		"file_offset": 985408,
 		"flags": 32,
-		"name": "_code_000f0940"
+		"name": "_main_frame_rate_debug"
 	},
 	{
 		"file_offset": 985952,
 		"flags": 32,
-		"name": "_code_000f0b60"
+		"name": "_main_exit"
 	},
 	{
 		"file_offset": 986032,
 		"flags": 32,
-		"name": "_code_000f0bb0"
+		"name": "_main_reset_time"
 	},
 	{
 		"file_offset": 986080,
@@ -20967,7 +21172,7 @@
 	{
 		"file_offset": 988064,
 		"flags": 32,
-		"name": "_code_000f13a0"
+		"name": "_screenshot_record"
 	},
 	{
 		"file_offset": 988096,
@@ -21057,17 +21262,17 @@
 	{
 		"file_offset": 990240,
 		"flags": 32,
-		"name": "_code_000f1c20"
+		"name": "_main_setup_connection"
 	},
 	{
 		"file_offset": 990432,
 		"flags": 32,
-		"name": "_code_000f1ce0"
+		"name": "_main_initialize_time"
 	},
 	{
 		"file_offset": 990512,
 		"flags": 32,
-		"name": "_code_000f1d30"
+		"name": "_screenshot_render"
 	},
 	{
 		"file_offset": 991008,
@@ -21087,7 +21292,7 @@
 	{
 		"file_offset": 992416,
 		"flags": 32,
-		"name": "_code_000f24a0"
+		"name": "_main_game_render"
 	},
 	{
 		"file_offset": 992864,
@@ -22304,12 +22509,14 @@
 	{
 		"file_offset": 1050208,
 		"flags": 32,
-		"name": "_code_00100660"
+		"name": "_putShortMSB",
+		"static": true
 	},
 	{
 		"file_offset": 1050256,
 		"flags": 32,
-		"name": "_code_00100690"
+		"name": "_flush_pending",
+		"static": true
 	},
 	{
 		"file_offset": 1050352,
@@ -22329,42 +22536,50 @@
 	{
 		"file_offset": 1051616,
 		"flags": 32,
-		"name": "_code_00100be0"
+		"name": "_read_buf",
+		"static": true
 	},
 	{
 		"file_offset": 1051712,
 		"flags": 32,
-		"name": "_code_00100c40"
+		"name": "_lm_init",
+		"static": true
 	},
 	{
 		"file_offset": 1051840,
 		"flags": 32,
-		"name": "_code_00100cc0"
+		"name": "_longest_match",
+		"static": true
 	},
 	{
 		"file_offset": 1052368,
 		"flags": 32,
-		"name": "_code_00100ed0"
+		"name": "_check_match",
+		"static": true
 	},
 	{
 		"file_offset": 1052560,
 		"flags": 32,
-		"name": "_code_00100f90"
+		"name": "_fill_window",
+		"static": true
 	},
 	{
 		"file_offset": 1052976,
 		"flags": 32,
-		"name": "_code_00101130"
+		"name": "_deflate_stored",
+		"static": true
 	},
 	{
 		"file_offset": 1053632,
 		"flags": 32,
-		"name": "_code_001013c0"
+		"name": "_deflate_fast",
+		"static": true
 	},
 	{
 		"file_offset": 1054400,
 		"flags": 32,
-		"name": "_code_001016c0"
+		"name": "_deflate_slow",
+		"static": true
 	},
 	{
 		"file_offset": 1055360,
@@ -22394,17 +22609,20 @@
 	{
 		"file_offset": 1056880,
 		"flags": 32,
-		"name": "_code_00102070"
+		"name": "_get_byte",
+		"static": true
 	},
 	{
 		"file_offset": 1056992,
 		"flags": 32,
-		"name": "_code_001020e0"
+		"name": "_check_header",
+		"static": true
 	},
 	{
 		"file_offset": 1058032,
 		"flags": 32,
-		"name": "_code_001024f0"
+		"name": "_destroy",
+		"static": true
 	},
 	{
 		"file_offset": 1058256,
@@ -22454,7 +22672,8 @@
 	{
 		"file_offset": 1059056,
 		"flags": 32,
-		"name": "_code_001028f0"
+		"name": "_getLong",
+		"static": true
 	},
 	{
 		"file_offset": 1059120,
@@ -22469,7 +22688,8 @@
 	{
 		"file_offset": 1059408,
 		"flags": 32,
-		"name": "_code_00102a50"
+		"name": "_gz_open",
+		"static": true
 	},
 	{
 		"file_offset": 1060000,
@@ -27522,7 +27742,8 @@
 	{
 		"file_offset": 1310864,
 		"flags": 32,
-		"name": "_code_00140090"
+		"name": "_get_material_type",
+		"static": true
 	},
 	{
 		"file_offset": 1310976,
@@ -27547,12 +27768,14 @@
 	{
 		"file_offset": 1311952,
 		"flags": 32,
-		"name": "_code_001404d0"
+		"name": "_compute_ground_plane",
+		"static": true
 	},
 	{
 		"file_offset": 1312288,
 		"flags": 32,
-		"name": "_code_00140620"
+		"name": "_friction_evaluate",
+		"static": true
 	},
 	{
 		"file_offset": 1312544,
@@ -27562,22 +27785,26 @@
 	{
 		"file_offset": 1315488,
 		"flags": 32,
-		"name": "_code_001412a0"
+		"name": "_physics_compute_biped_collision",
+		"static": true
 	},
 	{
 		"file_offset": 1316624,
 		"flags": 32,
-		"name": "_code_00141710"
+		"name": "_physics_compute_vehicle_collision",
+		"static": true
 	},
 	{
 		"file_offset": 1317792,
 		"flags": 32,
-		"name": "_code_00141ba0"
+		"name": "_physics_compute_unit_collisions",
+		"static": true
 	},
 	{
 		"file_offset": 1318176,
 		"flags": 32,
-		"name": "_code_00141d20"
+		"name": "_rotate_vectors3d_by_angular_velocity",
+		"static": true
 	},
 	{
 		"file_offset": 1318608,
@@ -27587,7 +27814,8 @@
 	{
 		"file_offset": 1320592,
 		"flags": 32,
-		"name": "_code_00142690"
+		"name": "_physics_update_old",
+		"static": true
 	},
 	{
 		"file_offset": 1325760,
@@ -35493,7 +35721,7 @@
 	{
 		"file_offset": 1724240,
 		"flags": 32,
-		"name": "_code_001a4f50"
+		"name": "_update_turret_physics"
 	},
 	{
 		"file_offset": 1724272,
@@ -35503,7 +35731,8 @@
 	{
 		"file_offset": 1724320,
 		"flags": 32,
-		"name": "_code_001a4fa0"
+		"name": "_compute_airborne_ticks",
+		"static": true
 	},
 	{
 		"file_offset": 1724480,
@@ -35543,62 +35772,74 @@
 	{
 		"file_offset": 1726480,
 		"flags": 32,
-		"name": "_code_001a5810"
+		"name": "_compute_acceleration",
+		"static": true
 	},
 	{
 		"file_offset": 1726688,
 		"flags": 32,
-		"name": "_code_001a58e0"
+		"name": "_update_human_tank_physics",
+		"static": true
 	},
 	{
 		"file_offset": 1727024,
 		"flags": 32,
-		"name": "_code_001a5a30"
+		"name": "_update_human_jeep_physics",
+		"static": true
 	},
 	{
 		"file_offset": 1727296,
 		"flags": 32,
-		"name": "_code_001a5b40"
+		"name": "_update_human_boat_physics",
+		"static": true
 	},
 	{
 		"file_offset": 1728080,
 		"flags": 32,
-		"name": "_code_001a5e50"
+		"name": "_update_alien_fighter_physics_new",
+		"static": true
 	},
 	{
 		"file_offset": 1729168,
 		"flags": 32,
-		"name": "_code_001a6290"
+		"name": "_update_alien_fighter_physics_old",
+		"static": true
 	},
 	{
 		"file_offset": 1729936,
 		"flags": 32,
-		"name": "_code_001a6590"
+		"name": "_slowly_stop_vehicle",
+		"static": true
 	},
 	{
 		"file_offset": 1730320,
 		"flags": 32,
-		"name": "_code_001a6710"
+		"name": "_create_pelican_effect",
+		"static": true
 	},
 	{
 		"file_offset": 1730832,
 		"flags": 32,
-		"name": "_code_001a6910"
+		"name": "_create_ghost_effect",
+		"static": true
 	},
 	{
 		"file_offset": 1731488,
 		"flags": 32,
-		"name": "_code_001a6ba0"
+		"name": "_create_crashing_effects",
+		"static": true
 	},
 	{
 		"file_offset": 1732032,
 		"flags": 32,
-		"name": "_code_001a6dc0"
+		"name": "_update_suspension",
+		"static": true
 	},
 	{
 		"file_offset": 1732832,
 		"flags": 32,
-		"name": "_code_001a70e0"
+		"name": "_create_slipping_effects",
+		"static": true
 	},
 	{
 		"file_offset": 1733296,
@@ -35618,17 +35859,20 @@
 	{
 		"file_offset": 1735360,
 		"flags": 32,
-		"name": "_code_001a7ac0"
+		"name": "_update_human_plane_physics",
+		"static": true
 	},
 	{
 		"file_offset": 1736288,
 		"flags": 32,
-		"name": "_code_001a7e60"
+		"name": "_update_alien_scout_physics",
+		"static": true
 	},
 	{
 		"file_offset": 1738752,
 		"flags": 32,
-		"name": "_code_001a8800"
+		"name": "_update_alien_fighter_physics",
+		"static": true
 	},
 	{
 		"file_offset": 1738864,
@@ -88810,7 +89054,8 @@
 	{
 		"file_offset": 2600880,
 		"flags": 0,
-		"name": "_rdata_0027afb0"
+		"name": "_real_math_constants",
+		"static": true
 	},
 	{
 		"file_offset": 2601024,
@@ -110443,7 +110688,8 @@
 	{
 		"file_offset": 3034188,
 		"flags": 0,
-		"name": "_data_002e4c4c"
+		"name": "_button_mappings",
+		"static": true
 	},
 	{
 		"file_offset": 3034204,
@@ -110540,7 +110786,8 @@
 	{
 		"file_offset": 3153312,
 		"flags": 0,
-		"name": "_data_00301da0"
+		"name": "___medium_widget_memory_pool",
+		"static": true
 	},
 	{
 		"file_offset": 3169748,
@@ -110555,7 +110802,8 @@
 	{
 		"file_offset": 3170016,
 		"flags": 0,
-		"name": "_data_00305ee0"
+		"name": "_event_handler_function_list",
+		"static": true
 	},
 	{
 		"file_offset": 3170832,
@@ -110596,7 +110844,7 @@
 	{
 		"file_offset": 3174720,
 		"flags": 0,
-		"name": "_data_00307140"
+		"name": "_weapons_globals"
 	},
 	{
 		"file_offset": 3176256,
@@ -110842,12 +111090,14 @@
 	{
 		"file_offset": 3176952,
 		"flags": 0,
-		"name": "_data_003079f8"
+		"name": "_my_version",
+		"static": true
 	},
 	{
 		"file_offset": 3176956,
 		"flags": 0,
-		"name": "_data_003079fc"
+		"name": "_gz_magic",
+		"static": true
 	},
 	{
 		"file_offset": 3176968,
@@ -111507,7 +111757,8 @@
 	{
 		"file_offset": 3236392,
 		"flags": 0,
-		"name": "_data_00316228"
+		"name": "_vehicle_update_section",
+		"static": true
 	},
 	{
 		"file_offset": 3237920,
@@ -112624,7 +112875,8 @@
 	{
 		"file_offset": 4537016,
 		"flags": 0,
-		"name": "_bss_00453ab8"
+		"name": "_hud_messaging_globals",
+		"static": true
 	},
 	{
 		"file_offset": 4537020,
@@ -112723,7 +112975,8 @@
 	{
 		"file_offset": 4541168,
 		"flags": 0,
-		"name": "_bss_00454af0"
+		"name": "_new_campaign_profile_name",
+		"static": true
 	},
 	{
 		"file_offset": 4541192,

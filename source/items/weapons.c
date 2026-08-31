@@ -113,9 +113,9 @@ symbols in this file:
 000EC140 0060:
 	_weapon_prevents_melee_attack (0000)
 000EC1A0 0160:
-	_code_000ec1a0 (0000)
+	_weapon_magazine_start_reload (0000)
 000EC300 00e0:
-	_code_000ec300 (0000)
+	_weapon_magazine_finish_reload (0000)
 000EC3E0 00c0:
 	_code_000ec3e0 (0000)
 000EC4A0 0080:
@@ -133,7 +133,7 @@ symbols in this file:
 000EC8C0 00a0:
 	_code_000ec8c0 (0000)
 000EC960 0030:
-	_code_000ec960 (0000)
+	_weapon_state_next (0000)
 000EC990 0160:
 	_weapon_set_current_amount (0000)
 000ECAF0 0080:
@@ -195,7 +195,7 @@ symbols in this file:
 00279448 0004:
 	__real@3d2aaaab (0000)
 00307140 0600:
-	_data_00307140 (0000)
+	_weapons_globals (0000)
 */
 
 /* ---------- headers */
@@ -268,14 +268,14 @@ static boolean weapon_set_state(
 	short new_state,
 	boolean immediate);
 
-void code_000ec300(
+void weapon_magazine_finish_reload(
 	long weapon_index,
 	short magazine_index);
-static void code_000ec1a0(
+static void weapon_magazine_start_reload(
 	long weapon_index,
 	short magazine_index,
 	boolean unknown);
-static void code_000ec960(
+static void weapon_state_next(
 	long weapon_index);
 
 /* ---------- globals */
@@ -286,7 +286,7 @@ struct weapons_globals
 	struct profile_section update_profile;
 };
 
-struct weapons_globals data_00307140 =
+struct weapons_globals weapons_globals =
 {
 	{"~primary-blur", "~secondary-blur"},
 	{"weapon_update", NONE, TRUE}
@@ -336,7 +336,7 @@ void weapon_ready(
 void weapon_update(
 	long weapon_index)
 {
-	code_000ec960(weapon_index);
+	weapon_state_next(weapon_index);
 
 	return;
 }
@@ -592,7 +592,7 @@ void weapon_owner_update(
 	return;
 }
 
-void code_000ec300(
+void weapon_magazine_finish_reload(
 	long weapon_index,
 	short magazine_index)
 {
@@ -623,13 +623,13 @@ void code_000ec300(
 		!TEST_FLAG(magazine_definition->flags, 0) &&
 		!(weapon->weapon.control_flags & 0x26))
 	{
-		code_000ec1a0(weapon_index, magazine_index, FALSE);
+		weapon_magazine_start_reload(weapon_index, magazine_index, FALSE);
 	}
 
 	return;
 }
 
-static void code_000ec1a0(
+static void weapon_magazine_start_reload(
 	long weapon_index,
 	short magazine_index,
 	boolean unknown)
@@ -673,7 +673,7 @@ static void code_000ec1a0(
 	return;
 }
 
-static void code_000ec960(
+static void weapon_state_next(
 	long weapon_index)
 {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
@@ -820,7 +820,7 @@ static void weapon_reset(
 		{
 			if (2*magazine->state_timer<weapon_get_first_person_animation_time(weapon_index, 0, _first_person_weapon_animation_reload_while_empty, NONE))
 			{
-				code_000ec300(weapon_index, magazine_index);
+				weapon_magazine_finish_reload(weapon_index, magazine_index);
 			}
 		}
 

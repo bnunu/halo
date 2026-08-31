@@ -27,6 +27,19 @@ ALLOWED_CLASSES = {
     # reconstruction.  See ASM_IMPLEMENTED_CLASS below: entries in this class
     # are expected to compare exact, which is precisely why they are parked.
     "asm-implemented",
+    # The target object is recovered from the linked image, so csplit must
+    # attribute every relocation destination to the symbol whose address
+    # range contains it.  An address that is one past the end of a symbol is
+    # therefore attributed to the *next* image symbol, while the compiler --
+    # which forms the address from a C expression rooted in the preceding
+    # object -- necessarily spells it as that object plus an offset.  Neither
+    # spelling is recoverable from the other, and no C source can make VC7
+    # emit csplit's.  Entries in this class must prove identity the only way
+    # that remains: equal size, equal normalized bytes, equal relocation
+    # count/addresses/types, and independently resolved image destinations
+    # that agree exactly.  This records a limitation of target recovery, not
+    # a codegen gap.
+    "csplit-relocation-alias",
 }
 
 # The ordinary manifest records functions we cannot yet match.  Membership is

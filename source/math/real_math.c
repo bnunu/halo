@@ -6,6 +6,7 @@ REAL_MATH.C
 
 #include "cseries.h"
 #include "real_math.h"
+#include "periodic_functions.h"
 
 /* ---------- constants */
 
@@ -33,7 +34,7 @@ static __inline real magnitude_squared3d_right_associated(
 
 /* ---------- globals */
 
-struct real_math_constant_block const rdata_0027afb0 =
+static struct real_math_constant_block const real_math_constants =
 {
 	{
 		1.f,
@@ -72,44 +73,44 @@ short const global_projection3d_mappings[3][2][2] =
 	}
 };
 
-const real_point2d *global_origin2d = (const real_point2d *)&rdata_0027afb0.identity4x3.up;
-const real_point2d *global_x_axis2d = (const real_point2d *)&rdata_0027afb0.identity4x3.forward;
-const real_point2d *global_y_axis2d = (const real_point2d *)&rdata_0027afb0.identity4x3.left;
-const real_point2d *global_negative_x_axis2d = (const real_point2d *)&rdata_0027afb0.negative_identity4x3.forward;
-const real_point2d *global_negative_y_axis2d = (const real_point2d *)&rdata_0027afb0.negative_identity4x3.left;
+const real_point2d *global_origin2d = (const real_point2d *)&real_math_constants.identity4x3.up;
+const real_point2d *global_x_axis2d = (const real_point2d *)&real_math_constants.identity4x3.forward;
+const real_point2d *global_y_axis2d = (const real_point2d *)&real_math_constants.identity4x3.left;
+const real_point2d *global_negative_x_axis2d = (const real_point2d *)&real_math_constants.negative_identity4x3.forward;
+const real_point2d *global_negative_y_axis2d = (const real_point2d *)&real_math_constants.negative_identity4x3.left;
 
-const real_vector2d *global_zero_vector2d = (const real_vector2d *)&rdata_0027afb0.identity4x3.up;
-const real_vector2d *global_forward2d = (const real_vector2d *)&rdata_0027afb0.identity4x3.forward;
-const real_vector2d *global_left2d = (const real_vector2d *)&rdata_0027afb0.identity4x3.left;
-const real_vector2d *global_backward2d = (const real_vector2d *)&rdata_0027afb0.negative_identity4x3.forward;
-const real_vector2d *global_right2d = (const real_vector2d *)&rdata_0027afb0.negative_identity4x3.left;
+const real_vector2d *global_zero_vector2d = (const real_vector2d *)&real_math_constants.identity4x3.up;
+const real_vector2d *global_forward2d = (const real_vector2d *)&real_math_constants.identity4x3.forward;
+const real_vector2d *global_left2d = (const real_vector2d *)&real_math_constants.identity4x3.left;
+const real_vector2d *global_backward2d = (const real_vector2d *)&real_math_constants.negative_identity4x3.forward;
+const real_vector2d *global_right2d = (const real_vector2d *)&real_math_constants.negative_identity4x3.left;
 
-const real_point3d *global_origin3d = (const real_point3d *)&rdata_0027afb0.identity4x3.position;
+const real_point3d *global_origin3d = (const real_point3d *)&real_math_constants.identity4x3.position;
 
-const real_point3d *global_x_axis3d = (const real_point3d *)&rdata_0027afb0.identity4x3.forward;
-const real_point3d *global_y_axis3d = (const real_point3d *)&rdata_0027afb0.identity4x3.left;
-const real_point3d *global_z_axis3d = (const real_point3d *)&rdata_0027afb0.identity4x3.up;
-const real_point3d *global_negative_x_axis3d = (const real_point3d *)&rdata_0027afb0.negative_identity4x3.forward;
-const real_point3d *global_negative_y_axis3d = (const real_point3d *)&rdata_0027afb0.negative_identity4x3.left;
-const real_point3d *global_negative_z_axis3d = (const real_point3d *)&rdata_0027afb0.negative_identity4x3.up;
+const real_point3d *global_x_axis3d = (const real_point3d *)&real_math_constants.identity4x3.forward;
+const real_point3d *global_y_axis3d = (const real_point3d *)&real_math_constants.identity4x3.left;
+const real_point3d *global_z_axis3d = (const real_point3d *)&real_math_constants.identity4x3.up;
+const real_point3d *global_negative_x_axis3d = (const real_point3d *)&real_math_constants.negative_identity4x3.forward;
+const real_point3d *global_negative_y_axis3d = (const real_point3d *)&real_math_constants.negative_identity4x3.left;
+const real_point3d *global_negative_z_axis3d = (const real_point3d *)&real_math_constants.negative_identity4x3.up;
 
-const real_vector3d *global_zero_vector3d = (const real_vector3d *)&rdata_0027afb0.identity4x3.position;
+const real_vector3d *global_zero_vector3d = (const real_vector3d *)&real_math_constants.identity4x3.position;
 
-const real_vector3d *global_forward3d = (const real_vector3d *)&rdata_0027afb0.identity4x3.forward;
-const real_vector3d *global_left3d = (const real_vector3d *)&rdata_0027afb0.identity4x3.left;
-const real_vector3d *global_up3d = (const real_vector3d *)&rdata_0027afb0.identity4x3.up;
+const real_vector3d *global_forward3d = (const real_vector3d *)&real_math_constants.identity4x3.forward;
+const real_vector3d *global_left3d = (const real_vector3d *)&real_math_constants.identity4x3.left;
+const real_vector3d *global_up3d = (const real_vector3d *)&real_math_constants.identity4x3.up;
 
-const real_vector3d *global_backward3d = (const real_vector3d *)&rdata_0027afb0.negative_identity4x3.forward;
-const real_vector3d *global_right3d = (const real_vector3d *)&rdata_0027afb0.negative_identity4x3.left;
-const real_vector3d *global_down3d = (const real_vector3d *)&rdata_0027afb0.negative_identity4x3.up;
+const real_vector3d *global_backward3d = (const real_vector3d *)&real_math_constants.negative_identity4x3.forward;
+const real_vector3d *global_right3d = (const real_vector3d *)&real_math_constants.negative_identity4x3.left;
+const real_vector3d *global_down3d = (const real_vector3d *)&real_math_constants.negative_identity4x3.up;
 
-const real_euler_angles2d *global_zero_angles2d = (const real_euler_angles2d *)&rdata_0027afb0.identity4x3.up;
-const real_euler_angles3d *global_zero_angles3d = (const real_euler_angles3d *)&rdata_0027afb0.identity4x3.up;
-const real_quaternion *global_identity_quaternion = &rdata_0027afb0.identity_quaternion;
-const real_matrix4x3 *global_identity4x3 = &rdata_0027afb0.identity4x3;
-const real_matrix4x3 *global_negative_identity4x3 = &rdata_0027afb0.negative_identity4x3;
-const real_rectangle2d *global_null_rectangle2d = (const real_rectangle2d *)&rdata_0027afb0.null_rectangle3d;
-const real_rectangle3d *global_null_rectangle3d = &rdata_0027afb0.null_rectangle3d;
+const real_euler_angles2d *global_zero_angles2d = (const real_euler_angles2d *)&real_math_constants.identity4x3.up;
+const real_euler_angles3d *global_zero_angles3d = (const real_euler_angles3d *)&real_math_constants.identity4x3.up;
+const real_quaternion *global_identity_quaternion = &real_math_constants.identity_quaternion;
+const real_matrix4x3 *global_identity4x3 = &real_math_constants.identity4x3;
+const real_matrix4x3 *global_negative_identity4x3 = &real_math_constants.negative_identity4x3;
+const real_rectangle2d *global_null_rectangle2d = (const real_rectangle2d *)&real_math_constants.null_rectangle3d;
+const real_rectangle3d *global_null_rectangle3d = &real_math_constants.null_rectangle3d;
 
 /* ---------- public code */
 
@@ -959,9 +960,9 @@ boolean point_in_triangle3d(
 	real *t0,
 	real *t1)
 {
-	real_point3d edge0;
-	real_point3d edge1;
-	real_point3d offset;
+	real_vector3d edge0;
+	real_vector3d edge1;
+	real_vector3d offset;
 	real_vector3d normal;
 	real_point2d projected_edge0;
 	real_point2d projected_edge1;
@@ -974,44 +975,22 @@ boolean point_in_triangle3d(
 	boolean projection_sign;
 	boolean result;
 
-	offset.x = point->x - triangle0->x;
-	offset.y = point->y - triangle0->y;
-	offset.z = point->z - triangle0->z;
-	edge0.x = triangle1->x - triangle0->x;
-	edge0.y = triangle1->y - triangle0->y;
-	edge0.z = triangle1->z - triangle0->z;
-	edge1.x = triangle2->x - triangle0->x;
-	edge1.y = triangle2->y - triangle0->y;
-	edge1.z = triangle2->z - triangle0->z;
-	{
-		real normal_k;
-		real normal_j;
-		real normal_i;
-
-		normal_k = edge0.x * edge1.y - edge0.y * edge1.x;
-		normal_j = edge0.z * edge1.x - edge0.x * edge1.z;
-		normal_i = edge0.y * edge1.z - edge0.z * edge1.y;
-		normal.i = normal_i;
-		normal.j = normal_j;
-		normal.k = normal_k;
-	}
-	plane_distance =
-		normal.i * offset.x +
-		normal.j * offset.y +
-		normal.k * offset.z;
-	if (plane_distance * plane_distance <
-		(normal.i * normal.i + normal.j * normal.j + normal.k * normal.k) *
-		_real_epsilon)
+	vector_from_points3d(triangle0, point, &offset);
+	vector_from_points3d(triangle0, triangle1, &edge0);
+	vector_from_points3d(triangle0, triangle2, &edge1);
+	cross_product3d(&edge0, &edge1, &normal);
+	plane_distance = dot_product3d(&normal, &offset);
+	if (plane_distance * plane_distance < magnitude_squared3d(&normal) * _real_epsilon)
 	{
 		projection = projection_from_vector3d(&normal);
 		projection_sign = projection_sign_from_vector3d(&normal, projection);
 		project_point3d(
-			&edge0,
+			(real_point3d const *)&edge0,
 			projection,
 			projection_sign,
 			&projected_edge0);
 		project_point3d(
-			&offset,
+			(real_point3d const *)&offset,
 			projection,
 			projection_sign,
 			&projected_offset);
@@ -1019,7 +998,7 @@ boolean point_in_triangle3d(
 		if (cross0 >= 0.0f)
 		{
 			project_point3d(
-				&edge1,
+				(real_point3d const *)&edge1,
 				projection,
 				projection_sign,
 				&projected_edge1);
@@ -2945,10 +2924,7 @@ void angular_accelerate_to_position(
 		return;
 	}
 
-	cosine_value =
-		position_desired->k * position->k +
-		position->i * position_desired->i +
-		position_desired->j * position->j;
+	cosine_value = dot_product3d(position, position_desired);
 	if (cosine_value < -1.0f)
 	{
 		cosine_value = -1.0f;
@@ -2973,27 +2949,12 @@ void angular_accelerate_to_position(
 		speed = square_root(speed_squared);
 	}
 
-	axis.i =
-		position_desired->k * position->j -
-		position->k * position_desired->j;
-	axis.j =
-		position->k * position_desired->i -
-		position_desired->k * position->i;
-	axis.k =
-		position->i * position_desired->j -
-		position_desired->i * position->j;
+	cross_product3d(position, position_desired, &axis);
 	normalize3d(&axis);
 
-	axis.i = axis.i * speed;
-	axis.j = axis.j * speed;
-	axis.k = axis.k * speed;
-	delta.i = axis.i - angular_velocity->i;
-	delta.j = axis.j - angular_velocity->j;
-	delta.k = axis.k - angular_velocity->k;
-	delta_magnitude_squared =
-		delta.k * delta.k +
-		delta.j * delta.j +
-		delta.i * delta.i;
+	scale_vector3d(&axis, speed, &axis);
+	subtract_vectors3d(&axis, angular_velocity, &delta);
+	delta_magnitude_squared = magnitude_squared3d(&delta);
 	if (delta_magnitude_squared <
 		angular_acceleration_magnitude_maximum *
 		angular_acceleration_magnitude_maximum)

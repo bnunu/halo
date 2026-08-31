@@ -437,9 +437,9 @@ void scenario_get_water_current(
 static void wind_variance_initialize(
 	void)
 {
-	long control_point_index;
-	long sample_index;
-	long axis_index;
+	short control_point_index;
+	short sample_index;
+	short axis_index;
 
 	for (control_point_index = 0; control_point_index < 8; control_point_index++)
 	{

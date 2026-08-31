@@ -138,11 +138,11 @@ static boolean surface_is_walkable(
 }
 
 static void find_tangent_point(
-	real const *point,
-	real const *center,
+	real_point2d const *point,
+	real_point2d const *center,
 	real radius,
 	boolean clockwise,
-	real *tangent_point)
+	real_point2d *tangent_point)
 {
 	real_vector2d center_to_point;
 	real distance_squared;
@@ -152,8 +152,8 @@ static void find_tangent_point(
 	long cross_positive;
 	long tangent_point_index;
 
-	center_to_point.i = point[0] - center[0];
-	center_to_point.j = point[1] - center[1];
+	center_to_point.i = point->x - center->x;
+	center_to_point.j = point->y - center->y;
 	distance_squared = center_to_point.i*center_to_point.i;
 	distance_squared += center_to_point.j*center_to_point.j;
 	inverse_distance_squared = radius / distance_squared;
@@ -166,35 +166,32 @@ static void find_tangent_point(
 		tangent_length = (real)sqrt(tangent_length);
 
 		tangent_points[0].x =
-			(center_to_point.i*radius + center_to_point.j*tangent_length)*inverse_distance_squared + center[0];
+			(center_to_point.i*radius + center_to_point.j*tangent_length)*inverse_distance_squared + center->x;
 		tangent_points[0].y =
-			(center_to_point.j*radius - center_to_point.i*tangent_length)*inverse_distance_squared + center[1];
+			(center_to_point.j*radius - center_to_point.i*tangent_length)*inverse_distance_squared + center->y;
 		tangent_points[1].x =
-			(center_to_point.i*radius - center_to_point.j*tangent_length)*inverse_distance_squared + center[0];
+			(center_to_point.i*radius - center_to_point.j*tangent_length)*inverse_distance_squared + center->x;
 		tangent_points[1].y =
-			(center_to_point.i*tangent_length + center_to_point.j*radius)*inverse_distance_squared + center[1];
+			(center_to_point.i*tangent_length + center_to_point.j*radius)*inverse_distance_squared + center->y;
 
-		point_to_tangent[0].i = tangent_points[0].x - point[0];
-		point_to_tangent[0].j = tangent_points[0].y - point[1];
-		point_to_tangent[1].i = tangent_points[1].x - point[0];
-		point_to_tangent[1].j = tangent_points[1].y - point[1];
+		point_to_tangent[0].i = tangent_points[0].x - point->x;
+		point_to_tangent[0].j = tangent_points[0].y - point->y;
+		point_to_tangent[1].i = tangent_points[1].x - point->x;
+		point_to_tangent[1].j = tangent_points[1].y - point->y;
 		cross_positive =
 			cross_product2d(&point_to_tangent[0], &point_to_tangent[1]) > 0.0f;
 		tangent_point_index = cross_positive != clockwise;
-		*(real_point2d *)tangent_point = tangent_points[tangent_point_index];
+		*tangent_point = tangent_points[tangent_point_index];
 	}
 	else
 	{
-		vector_from_points2d(
-			(real_point2d const *)center,
-			(real_point2d const *)point,
-			&center_to_point);
+		vector_from_points2d(center, point, &center_to_point);
 
 		if (normalize2d(&center_to_point) == 0.0f)
 			center_to_point = *global_left2d;
 
-		tangent_point[0] = center_to_point.i*radius + center[0];
-		tangent_point[1] = center_to_point.j*radius + center[1];
+		tangent_point->x = center_to_point.i*radius + center->x;
+		tangent_point->y = center_to_point.j*radius + center->y;
 	}
 
 	return;
@@ -213,10 +210,8 @@ static void find_avoidance_point(
 	real magnitude;
 	real_vector2d direction;
 
-	center_to_tangent[0].i = tangent_points[0].x - center->x;
-	center_to_tangent[0].j = tangent_points[0].y - center->y;
-	center_to_tangent[1].i = tangent_points[1].x - center->x;
-	center_to_tangent[1].j = tangent_points[1].y - center->y;
+	vector_from_points2d(center, &tangent_points[0], &center_to_tangent[0]);
+	vector_from_points2d(center, &tangent_points[1], &center_to_tangent[1]);
 	cross = cross_product2d(&center_to_tangent[0], &center_to_tangent[1]);
 
 	if (!(fabs(cross) < _real_epsilon))
@@ -259,12 +254,12 @@ static void find_avoidance_point(
 
 
 static boolean choose_turning_point(
-	real const *start_point,
-	real const *clockwise_turning_point,
-	real const *counterclockwise_turning_point,
-	real const *unobstructed_path_point,
-	real const *obstructed_path_point,
-	real *result)
+	real_point2d const *start_point,
+	real_point2d const *clockwise_turning_point,
+	real_point2d const *counterclockwise_turning_point,
+	real_point2d const *unobstructed_path_point,
+	real_point2d const *obstructed_path_point,
+	real_point2d *result)
 {
 	real_vector2d start_to_clockwise;
 	real_vector2d clockwise_to_unobstructed;
@@ -276,33 +271,33 @@ static boolean choose_turning_point(
 	real counterclockwise_turn;
 
 	normalize2d(vector_from_points2d(
-		(real_point2d const *)clockwise_turning_point,
-		(real_point2d const *)start_point,
+		clockwise_turning_point,
+		start_point,
 		&start_to_clockwise));
 
 	normalize2d(vector_from_points2d(
-		(real_point2d const *)clockwise_turning_point,
-		(real_point2d const *)unobstructed_path_point,
+		clockwise_turning_point,
+		unobstructed_path_point,
 		&clockwise_to_unobstructed));
 
 	normalize2d(vector_from_points2d(
-		(real_point2d const *)clockwise_turning_point,
-		(real_point2d const *)obstructed_path_point,
+		clockwise_turning_point,
+		obstructed_path_point,
 		&clockwise_to_obstructed));
 
 	normalize2d(vector_from_points2d(
-		(real_point2d const *)counterclockwise_turning_point,
-		(real_point2d const *)start_point,
+		counterclockwise_turning_point,
+		start_point,
 		&start_to_counterclockwise));
 
 	normalize2d(vector_from_points2d(
-		(real_point2d const *)counterclockwise_turning_point,
-		(real_point2d const *)unobstructed_path_point,
+		counterclockwise_turning_point,
+		unobstructed_path_point,
 		&counterclockwise_to_unobstructed));
 
 	normalize2d(vector_from_points2d(
-		(real_point2d const *)counterclockwise_turning_point,
-		(real_point2d const *)obstructed_path_point,
+		counterclockwise_turning_point,
+		obstructed_path_point,
 		&counterclockwise_to_obstructed));
 
 	clockwise_turn =
@@ -317,25 +312,25 @@ static boolean choose_turning_point(
 				&start_to_counterclockwise,
 				&counterclockwise_to_unobstructed)))
 	{
-		result[0] = clockwise_turning_point[0];
-		result[1] = clockwise_turning_point[1];
+		result->x = clockwise_turning_point->x;
+		result->y = clockwise_turning_point->y;
 		return TRUE;
 	}
 
-	result[0] = counterclockwise_turning_point[0];
-	result[1] = counterclockwise_turning_point[1];
+	result->x = counterclockwise_turning_point->x;
+	result->y = counterclockwise_turning_point->y;
 
 	return FALSE;
 }
 
 static boolean find_turning_point(
 	struct structure_bsp const *structure,
-	real const *point,
+	real_point2d const *point,
 	real radius,
 	long first_edge_index,
 	boolean clockwise,
 	boolean ignore_broken_surfaces,
-	real *result)
+	real_point2d *result)
 {
 	struct collision_bsp const *bsp;
 	byte const *pathfinding_surfaces;
@@ -418,10 +413,10 @@ static boolean find_turning_point(
 			magnitude = 0.0f;
 		}
 
-		positive_point.x = point[0] + edge_direction.i*radius;
-		positive_point.y = point[1] + edge_direction.j*radius;
-		negative_point.x = point[0] + edge_direction.i*negative_radius;
-		negative_point.y = point[1] + edge_direction.j*negative_radius;
+		positive_point.x = point->x + edge_direction.i*radius;
+		positive_point.y = point->y + edge_direction.j*radius;
+		negative_point.x = point->x + edge_direction.i*negative_radius;
+		negative_point.y = point->y + edge_direction.j*negative_radius;
 
 		vertex_to_positive.i = vertex_a->point.x - positive_point.x;
 		vertex_to_positive.j = vertex_a->point.y - positive_point.y;
@@ -458,8 +453,8 @@ static boolean find_turning_point(
 				&bsp->vertices,
 				next_vertex_index,
 				struct collision_vertex);
-			result[0] = vertex_a->point.x;
-			result[1] = vertex_a->point.y;
+			result->x = vertex_a->point.x;
+			result->y = vertex_a->point.y;
 			return TRUE;
 		}
 
@@ -587,43 +582,43 @@ void path_smooth(
 
 			found_clockwise = find_turning_point(
 				state->structure,
-				current_position.n,
+				&current_position,
 				0.3f,
 				collision_edge_index,
 				TRUE,
 				state->input.ignore_broken_surfaces,
-				clockwise_turning_point.n);
+				&clockwise_turning_point);
 			found_counterclockwise = find_turning_point(
 				state->structure,
-				current_position.n,
+				&current_position,
 				0.3f,
 				collision_edge_index,
 				FALSE,
 				state->input.ignore_broken_surfaces,
-				counterclockwise_turning_point.n);
+				&counterclockwise_turning_point);
 			if (!found_counterclockwise || !found_clockwise)
 				goto bail_out;
 
 			chose_clockwise = choose_turning_point(
-				current_position.n,
-				clockwise_turning_point.n,
-				counterclockwise_turning_point.n,
-				raw_steps[collision_step_index - 1].point.n,
-				raw_steps[collision_step_index].point.n,
-				chosen_center.n);
+				&current_position,
+				&clockwise_turning_point,
+				&counterclockwise_turning_point,
+				&raw_steps[collision_step_index - 1].point,
+				&raw_steps[collision_step_index].point,
+				&chosen_center);
 
 			find_tangent_point(
-				current_position.n,
-				chosen_center.n,
+				&current_position,
+				&chosen_center,
 				0.35f,
 				chose_clockwise,
-				tangent_points[0].n);
+				&tangent_points[0]);
 			find_tangent_point(
-				raw_steps[collision_step_index].point.n,
-				chosen_center.n,
+				&raw_steps[collision_step_index].point,
+				&chosen_center,
 				0.35f,
 				!chose_clockwise,
-				tangent_points[1].n);
+				&tangent_points[1]);
 			find_avoidance_point(
 				&tangent_points[0],
 				&chosen_center,

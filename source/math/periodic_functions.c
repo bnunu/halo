@@ -92,6 +92,7 @@ symbols in this file:
 
 #include "cseries.h"
 #include "periodic_functions.h"
+#include "tag_files/tag_groups.h"
 
 /* ---------- constants */
 
@@ -128,13 +129,6 @@ enum
 /* ---------- macros */
 
 /* ---------- structures */
-
-struct tag_enum_definition
-{
-	long count;
-	char **names;
-	void *unused;
-};
 
 struct periodic_functions_globals
 {
@@ -379,6 +373,7 @@ static void transition_function_build_table(
 	byte *table,
 	short function_type)
 {
+	long transition_function = function_type;
 	long index;
 	long count;
 	real value;
@@ -388,7 +383,7 @@ static void transition_function_build_table(
 	for (count = PERIODIC_FUNCTION_TABLE_SIZE; count; count--)
 	{
 		value = index * (1.0f/(PERIODIC_FUNCTION_TABLE_SIZE-1));
-		switch (function_type)
+		switch (transition_function)
 		{
 		case _transition_function_linear:
 			result = value;

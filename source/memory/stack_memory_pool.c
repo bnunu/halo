@@ -726,48 +726,42 @@ static void *stack_memory_pool_find_space_between_blocks(
 {
 	struct memory_block *block;
 	struct memory_block *next_block;
+	void *result = NULL;
 
-	block = pool->first_block;
-	if (!block)
-	{
-		return NULL;
-	}
 	if (
-		(unsigned long)((byte *)block-pool->base_address) >=
+		pool->first_block &&
+		(unsigned long)((byte *)pool->first_block-pool->base_address) >=
 		allocation_size)
 	{
-		return pool->base_address;
+		result = pool->base_address;
 	}
-
-	next_block = block->next;
-	if (!next_block)
+	else
 	{
-		return NULL;
+		block = pool->first_block;
+		if (block)
+		{
+			next_block = block->next;
+			while (next_block)
+			{
+				match_assert("c:\\halo\\SOURCE\\memory\\stack_memory_pool.c", 0x22F, block);
+				if (
+					(unsigned long)(
+						(byte *)next_block-
+						((byte *)block+(block->size_and_flags&MEMORY_BLOCK_SIZE_MASK))) >=
+					allocation_size)
+				{
+					result = (byte *)block+(block->size_and_flags&MEMORY_BLOCK_SIZE_MASK);
+					*previous_block = block;
+					break;
+				}
+
+				block = next_block;
+				next_block = next_block->next;
+			}
+		}
 	}
 
-	while (TRUE)
-	{
-		match_assert("c:\\halo\\SOURCE\\memory\\stack_memory_pool.c", 0x22F, block);
-		if (
-			(unsigned long)(
-				(byte *)next_block-
-				((byte *)block+(block->size_and_flags&MEMORY_BLOCK_SIZE_MASK))) >=
-			allocation_size)
-		{
-			break;
-		}
-
-		block = next_block;
-		next_block = next_block->next;
-		if (!next_block)
-		{
-			return NULL;
-		}
-	}
-
-	*previous_block = block;
-
-	return (byte *)block+(block->size_and_flags&MEMORY_BLOCK_SIZE_MASK);
+	return result;
 }
 
 static boolean memory_block_valid(

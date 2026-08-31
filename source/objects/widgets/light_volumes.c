@@ -58,6 +58,9 @@ static real pow1(
 	real value,
 	real exponent);
 
+pixel32 real_argb_color_to_pixel32(
+	real_argb_color const *color);
+
 /* ---------- globals */
 
 struct light_volume_globals light_volume_globals = {0};
@@ -274,7 +277,7 @@ void light_volume_render(
 
 			intensity *= angle_brightness;
 			{
-				real function_value;
+				real function_value = 1.f;
 
 				if (object_get_function_value(object_index, definition->brightness_scale_source - 1, &function_value))
 					intensity *= function_value;

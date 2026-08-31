@@ -27,9 +27,9 @@ symbols in this file:
 000EF890 0010:
 	_main_get_difficulty (0000)
 000EF8A0 0040:
-	_code_000ef8a0 (0000)
+	_sort_controllers_ascending (0000)
 000EF8E0 01d0:
-	_code_000ef8e0 (0000)
+	_create_local_players (0000)
 000EFAB0 0020:
 	_main_reset_map (0000)
 000EFAD0 0020:
@@ -69,7 +69,7 @@ symbols in this file:
 000EFDA0 0040:
 	_main_queue_map_name (0000)
 000EFDE0 0050:
-	_code_000efde0 (0000)
+	_main_queue_map_private (0000)
 000EFE30 0020:
 	_main_goto_main_menu (0000)
 000EFE50 0050:
@@ -93,47 +93,47 @@ symbols in this file:
 000F00A0 0010:
 	_main_run_demos (0000)
 000F00B0 0070:
-	_code_000f00b0 (0000)
+	_compute_subframe_counts (0000)
 000F0120 01f0:
 	_compute_window_bounds (0000)
 000F0310 0040:
 	_main_get_window_count (0000)
 000F0350 00d0:
-	_code_000f0350 (0000)
+	_main_new_map (0000)
 000F0420 0180:
-	_code_000f0420 (0000)
+	_main_change_map_name (0000)
 000F05A0 0020:
-	_code_000f05a0 (0000)
+	_main_revert_map_private (0000)
 000F05C0 0030:
-	_code_000f05c0 (0000)
+	_main_skip_cinematic_private (0000)
 000F05F0 00b0:
-	_code_000f05f0 (0000)
+	_main_skip_private (0000)
 000F06A0 0020:
-	_code_000f06a0 (0000)
+	_main_saving_map_private (0000)
 000F06C0 00e0:
-	_code_000f06c0 (0000)
+	_main_save_map_private (0000)
 000F07A0 0030:
-	_code_000f07a0 (0000)
+	_main_switch_to_structure_bsp_private (0000)
 000F07D0 0040:
-	_code_000f07d0 (0000)
+	_main_lost_map_private (0000)
 000F0810 0040:
-	_code_000f0810 (0000)
+	_main_respawn_private (0000)
 000F0850 0060:
-	_code_000f0850 (0000)
+	_main_won_map_private (0000)
 000F08B0 0020:
-	_code_000f08b0 (0000)
+	_main_load_core_private (0000)
 000F08D0 0020:
-	_code_000f08d0 (0000)
+	_main_save_core_private (0000)
 000F08F0 0040:
-	_code_000f08f0 (0000)
+	_main_reset_map_private (0000)
 000F0930 0010:
-	_code_000f0930 (0000)
+	_main_run_demos_private (0000)
 000F0940 0220:
-	_code_000f0940 (0000)
+	_main_frame_rate_debug (0000)
 000F0B60 0050:
-	_code_000f0b60 (0000)
+	_main_exit (0000)
 000F0BB0 0030:
-	_code_000f0bb0 (0000)
+	_main_reset_time (0000)
 000F0BE0 0010:
 	_code_000f0be0 (0000)
 000F0BF0 05a0:
@@ -141,7 +141,7 @@ symbols in this file:
 000F1190 0210:
 	_main_rasterizer_throttle (0000)
 000F13A0 0020:
-	_code_000f13a0 (0000)
+	_screenshot_record (0000)
 000F13C0 0020:
 	_main_taking_screenshot (0000)
 000F13E0 00b0:
@@ -177,11 +177,11 @@ symbols in this file:
 000F1B90 0090:
 	_main_present_frame (0000)
 000F1C20 00c0:
-	_code_000f1c20 (0000)
+	_main_setup_connection (0000)
 000F1CE0 0050:
-	_code_000f1ce0 (0000)
+	_main_initialize_time (0000)
 000F1D30 01f0:
-	_code_000f1d30 (0000)
+	_screenshot_render (0000)
 000F1F20 02a0:
 	_main_framerate_render (0000)
 000F21C0 02a0:
@@ -189,7 +189,7 @@ symbols in this file:
 000F2460 0040:
 	_main_loop_of_death (0000)
 000F24A0 01c0:
-	_code_000f24a0 (0000)
+	_main_game_render (0000)
 000F2660 0670:
 	_main_loop (0000)
 002795A8 003a:
@@ -376,14 +376,14 @@ struct _main_globals
 	long long last_achievable_vblank_index; // 0x28
 	long long last_present_vblank_index; // 0x30
 	unsigned char did_time_overflow_occur; // 0x38
-	float seconds_elapsed; // 0x3C
+	real seconds_elapsed; // 0x3C
 	short connection; // 0x40
 	unsigned short screenshot_identifier; // 0x42
 	bitmap_data *movie; // 0x44
 	long recording_start_tick; // 0x48
 	long recording_stop_tick; // 0x4C
 	long recording_frame_index; // 0x50
-	float recording_dt; // 0x54
+	real recording_dt; // 0x54
 	unsigned char reset_map; // 0x58
 	unsigned char rename_map; // 0x59
 	unsigned char revert_map; // 0x5A
@@ -568,12 +568,12 @@ struct _main_window_storage
 
 /* ---------- prototypes */
 
-extern void code_000ef8e0(
+extern void create_local_players(
 	void);
-extern void code_000f1c20(void);
-extern void code_000f1ce0(void);
+extern void main_setup_connection(void);
+extern void main_initialize_time(void);
 
-extern void code_000f0350(
+extern void main_new_map(
 	struct game_options *options);
 extern void scripted_camera_set(
 	word camera_point_index0,
@@ -841,7 +841,7 @@ void main_goto_main_menu(
 	return;
 }
 
-void code_000efde0(
+void main_queue_map_private(
 	void)
 {
 	real progress;
@@ -1003,7 +1003,7 @@ void main_set_difficulty(
 	return;
 }
 
-long code_000ef8a0(
+long sort_controllers_ascending(
 	short const *a,
 	short const *b)
 {
@@ -1165,7 +1165,7 @@ void main_load_ui_scenario(
 	game_engine_dispose();
 	game_set_game_variant(NULL);
 	main_globals.main_menu_scenario_loaded = TRUE;
-	code_000f0350(&options);
+	main_new_map(&options);
 	director_script_camera(TRUE);
 	scripted_camera_set(0, 0, NONE);
 	main_menu_active(TRUE);
@@ -1201,7 +1201,7 @@ extern void game_state_load_core(
 extern void game_state_save_core(
 	char const *name);
 
-void code_000f05a0(
+void main_revert_map_private(
 	void)
 {
 	game_state_revert();
@@ -1210,7 +1210,7 @@ void code_000f05a0(
 	return;
 }
 
-void code_000f05c0(
+void main_skip_cinematic_private(
 	void)
 {
 	if (cinematic_can_be_skipped())
@@ -1223,7 +1223,7 @@ void code_000f05c0(
 	return;
 }
 
-void code_000f06a0(
+void main_saving_map_private(
 	void)
 {
 	game_state_save();
@@ -1232,7 +1232,7 @@ void code_000f06a0(
 	return;
 }
 
-void code_000f07a0(
+void main_switch_to_structure_bsp_private(
 	void)
 {
 	scenario_switch_structure_bsp(main_globals.switch_to_structure_bsp_index);
@@ -1241,7 +1241,7 @@ void code_000f07a0(
 	return;
 }
 
-void code_000f07d0(
+void main_lost_map_private(
 	void)
 {
 	if (!game_time_get_paused())
@@ -1256,7 +1256,7 @@ void code_000f07d0(
 	return;
 }
 
-void code_000f0810(
+void main_respawn_private(
 	void)
 {
 	if (!game_time_get_paused() && !cinematic_in_progress())
@@ -1270,7 +1270,7 @@ void code_000f0810(
 	return;
 }
 
-void code_000f08b0(
+void main_load_core_private(
 	void)
 {
 	game_state_load_core(main_globals.core_name);
@@ -1278,7 +1278,7 @@ void code_000f08b0(
 	return;
 }
 
-void code_000f08d0(
+void main_save_core_private(
 	void)
 {
 	game_state_save_core(main_globals.core_name);
@@ -1286,7 +1286,7 @@ void code_000f08d0(
 	return;
 }
 
-void code_000f0930(
+void main_run_demos_private(
 	void)
 {
 	main_globals.run_xdemos = FALSE;
@@ -1294,7 +1294,7 @@ void code_000f0930(
 	return;
 }
 
-void code_000f0850(
+void main_won_map_private(
 	void)
 {
 	short level;
@@ -1327,7 +1327,7 @@ extern void dispose_global_network_game_client(
 extern void dispose_global_network_game_server(
 	void);
 
-void code_000f0b60(
+void main_exit(
 	void)
 {
 	switch (main_globals.connection)
@@ -1352,7 +1352,7 @@ void code_000f0b60(
 	return;
 }
 
-void code_000f0bb0(
+void main_reset_time(
 	void)
 {
 	unsigned long frame_index;
@@ -1371,7 +1371,7 @@ boolean code_000f0be0(
 	return rasterizer_globals.framerate_throttle;
 }
 
-void code_000f1ce0(
+void main_initialize_time(
 	void)
 {
 	main_globals.frame_start_milliseconds = system_milliseconds();
@@ -1393,7 +1393,7 @@ static void main_reset_map_private(
 		game_dispose_from_old_map();
 		input_flush();
 		game_initialize_for_new_map();
-		code_000ef8e0();
+		create_local_players();
 		game_time_start();
 		game_initial_pulse();
 		ui_widgets_disable_pause_game(30);
@@ -1441,8 +1441,8 @@ void main_loop(
 	debug_keys_initialize();
 	game_initialize();
 	console_startup();
-	code_000f1c20();
-	code_000f1ce0();
+	main_setup_connection();
+	main_initialize_time();
 
 	while (TRUE)
 	{
@@ -1532,7 +1532,7 @@ void main_loop(
 
 			if (main_globals.skip)
 			{
-				code_000f05f0();
+				main_skip_private();
 			}
 
 			if (main_globals.queue_map)
@@ -1792,7 +1792,7 @@ void main_loop(
 
 		input_frame_end();
 		profile_frame_end();
-		code_000f0940();
+		main_frame_rate_debug();
 		
 		if (main_globals.restart_time)
 		{

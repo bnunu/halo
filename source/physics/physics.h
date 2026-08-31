@@ -41,7 +41,9 @@ extern real global_gravity;
 extern real global_water_density;
 extern real global_air_density;
 extern real global_physics_collision_depth;
-extern long depths_of_hell;
+extern real_plane3d depths_of_hell;
+
+extern boolean debug_physics_disable_penetration_freeze;
 
 /* ---------- public code */
 

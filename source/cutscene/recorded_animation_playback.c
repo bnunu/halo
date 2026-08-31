@@ -308,10 +308,10 @@ boolean recorded_animation_apply_event_stream(
 	word header_size;
 	recorded_animation_apply_proc apply;
 
-	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 0x113, control);
-	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 0x114, ticks);
-	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 0x115, playback_stream);
-	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 0x116, *playback_stream);
+	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 275, control);
+	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 276, ticks);
+	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 277, playback_stream);
+	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 278, *playback_stream);
 
 	for (;;)
 	{
@@ -334,7 +334,7 @@ boolean recorded_animation_apply_event_stream(
 			header_size = 2;
 			match_assert(
 				"c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c",
-				0x12D,
+				301,
 				time_delta>1&&time_delta<=UNSIGNED_CHAR_MAX);
 			break;
 
@@ -343,14 +343,14 @@ boolean recorded_animation_apply_event_stream(
 			header_size = 3;
 			match_assert(
 				"c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c",
-				0x132,
+				306,
 				time_delta>UNSIGNED_CHAR_MAX);
 			break;
 
 		default:
 			match_assert(
 				"c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c",
-				0x135,
+				309,
 				!"unreachable");
 			break;
 		}
@@ -361,7 +361,7 @@ boolean recorded_animation_apply_event_stream(
 		*playback_stream += header_size;
 		match_assert(
 			"c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c",
-			0x13B,
+			315,
 			header->event_type<NUMBEROF(apply_funcs));
 
 		apply = apply_funcs[header->event_type];

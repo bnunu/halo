@@ -191,6 +191,7 @@ boolean shader_transparent_chicago_create(
 
 			pixel_shader->alpha_outputs[map_index] = 0x00000c00;
 			pixel_shader->rgb_outputs[map_index] = 0x00000c00;
+			result = shader_map_verify();
 		}
 	}
 	else

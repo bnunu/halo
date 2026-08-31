@@ -7,7 +7,7 @@ symbols in this file:
 0013FFE0 00b0:
 	_physics_get_features_in_sphere (0000)
 00140090 0070:
-	_code_00140090 (0000)
+	_get_material_type (0000)
 00140100 0110:
 	_render_debug_physics (0000)
 00140210 0100:
@@ -17,23 +17,23 @@ symbols in this file:
 001403B0 0120:
 	_physics_test_vector (0000)
 001404D0 0150:
-	_code_001404d0 (0000)
+	_compute_ground_plane (0000)
 00140620 0100:
-	_code_00140620 (0000)
+	_friction_evaluate (0000)
 00140720 0b80:
 	_physics_compute_new (0000)
 001412A0 0470:
-	_code_001412a0 (0000)
+	_physics_compute_biped_collision (0000)
 00141710 0490:
-	_code_00141710 (0000)
+	_physics_compute_vehicle_collision (0000)
 00141BA0 0180:
-	_code_00141ba0 (0000)
+	_physics_compute_unit_collisions (0000)
 00141D20 01b0:
-	_code_00141d20 (0000)
+	_rotate_vectors3d_by_angular_velocity (0000)
 00141ED0 07c0:
 	_physics_update_new (0000)
 00142690 1430:
-	_code_00142690 (0000)
+	_physics_update_old (0000)
 00143AC0 0260:
 	_physics_update (0000)
 0028BC20 008d:
@@ -113,7 +113,8 @@ real global_gravity = 0.0035651792f;
 real global_water_density = 1.0f;
 real global_air_density = 0.0011f;
 real global_physics_collision_depth = 0.2f;
-long depths_of_hell = 0;
+real_plane3d depths_of_hell = {{{0.0f, 0.0f, 1.0f}}, -256.0f};
+boolean debug_physics_disable_penetration_freeze = FALSE;
 
 /* ---------- public code */
 

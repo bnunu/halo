@@ -376,92 +376,92 @@
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000da7a0",
+		"function": "_playlist_profile_set_game_engine",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000da8d0",
+		"function": "_playlist_profile_change_ctf_rules",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000dac70",
+		"function": "_playlist_profile_change_koth_rules",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000dae90",
+		"function": "_playlist_profile_change_slayer_rules",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000db1f0",
+		"function": "_playlist_profile_change_oddball_rules",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000db770",
+		"function": "_playlist_profile_change_racing_rules",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000dba40",
+		"function": "_playlist_profile_change_player_options",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000dbfc0",
+		"function": "_playlist_profile_change_item_options",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000dc4d0",
+		"function": "_playlist_profile_initialize_game_engine",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000dc630",
+		"function": "_playlist_profile_initialize_ctf_rules",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000dc9c0",
+		"function": "_playlist_profile_initialize_koth_rules",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000dcbf0",
+		"function": "_playlist_profile_initialize_slayer_rules",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000dcf40",
+		"function": "_playlist_profile_initialize_oddball_rules",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000dd450",
+		"function": "_playlist_profile_initialize_racing_rules",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000dd730",
+		"function": "_playlist_profile_initialize_player_options",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000ddc80",
+		"function": "_playlist_profile_initialize_item_options",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000de6b0",
+		"function": "_player_profile_initialize_controller_settings",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
 		"unit": "source/interface/ui_widget_event_handler_functions",
-		"function": "_code_000deb70",
+		"function": "_player_profile_change_controller_settings",
 		"reason": "hardened COFF comparison proves exact bytes and relocation destinations; objdiff reports a local-symbol ownership false negative"
 	},
 	{
