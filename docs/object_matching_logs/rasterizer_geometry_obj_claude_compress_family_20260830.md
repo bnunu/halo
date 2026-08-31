@@ -90,9 +90,9 @@ consuming `.c`.
 
 After the rename the relocation for the table matched but the function still
 failed on relocation identity, and the cause was **not** the table: the
-assert's file-path literal had been written with single backslashes
-(`"c:\halo\SOURCE\..."` collapsing to `c:haloSOURCE...`), producing a
-different `.rdata` string symbol. This is the same class of defect recorded
+assert's file-path literal had been written with single backslashes, so
+C collapsed it to `c:haloSOURCE...` and it produced a different
+`.rdata` string symbol. This is the same class of defect recorded
 for `unit_weapon_next_index`. Path literals in generated edits must be built
 with explicit character construction, never through a shell heredoc.
 
