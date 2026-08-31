@@ -32,6 +32,20 @@ typedef void (*director_camera_update_proc)(
 	void *command,
 	void *result);
 
+struct camera_control
+{
+	short local_player_index;
+	boolean active;
+	byte pad3;
+	real seconds_elapsed;
+	real_euler_angles3d facing_delta;
+	real_vector3d position_delta;
+	real wheel_delta;
+};
+
+typedef char camera_control_size_assert[
+	sizeof(struct camera_control) == 0x24 ? 1 : -1];
+
 struct director_scripting_globals
 {
 	boolean camera_scripted;

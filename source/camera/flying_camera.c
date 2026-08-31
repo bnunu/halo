@@ -15,6 +15,8 @@ symbols in this file:
 /* ---------- headers */
 
 #include "flying_camera.h"
+#include "camera/director.h"
+#include "camera/observer.h"
 #include "static_camera.h"
 
 /* ---------- constants */
@@ -31,10 +33,6 @@ struct rasterizer_debug_options
 };
 
 /* ---------- prototypes */
-
-void observer_up_from_forward(
-	real_vector3d const *forward,
-	real_vector3d *up);
 
 /* ---------- globals */
 
@@ -56,25 +54,25 @@ void flying_camera_new(
 
 void flying_camera_new_from_point_and_vector(
 	struct flying_camera *camera,
-	real_point3d const *position,
-	real_vector3d const *forward)
+	real_point3d const *focus,
+	real_vector3d const *orientation)
 {
 	flying_camera_new(camera);
-	camera->position = *position;
-	euler_angles2d_from_vector3d(&camera->facing, forward);
+	camera->position = *focus;
+	euler_angles2d_from_vector3d(&camera->facing, orientation);
 	return;
 }
 
 void flying_camera_update(
 	struct flying_camera *camera,
-	struct flying_camera_action const *controls,
+	struct camera_control const *controls,
 	struct camera_command *result)
 {
 	match_assert("c:\\halo\\SOURCE\\camera\\flying_camera.c", 41, camera);
 	match_assert("c:\\halo\\SOURCE\\camera\\flying_camera.c", 42, controls);
 	match_assert("c:\\halo\\SOURCE\\camera\\flying_camera.c", 43, result);
 
-	if (controls->inhibit_input)
+	if (controls->active)
 	{
 		camera->facing.yaw += controls->facing_delta.yaw;
 		camera->facing.pitch = PIN(
@@ -101,18 +99,18 @@ void flying_camera_update(
 		sine(camera->facing.roll),
 		cosine(camera->facing.roll));
 
-	if (controls->inhibit_input)
+	if (controls->active)
 	{
-		real cosine_yaw= cosine(camera->facing.yaw);
-		real sine_yaw= sine(camera->facing.yaw);
+		real cosine_yaw = cosine(camera->facing.yaw);
+		real sine_yaw = sine(camera->facing.yaw);
 		real_vector3d translation;
 		real_point3d position;
 
 		set_real_vector3d(
 			&translation,
-			cosine_yaw*controls->translation.i - sine_yaw*controls->translation.j,
-			cosine_yaw*controls->translation.j + sine_yaw*controls->translation.i,
-			controls->translation.k);
+			cosine_yaw*controls->position_delta.i - sine_yaw*controls->position_delta.j,
+			cosine_yaw*controls->position_delta.j + sine_yaw*controls->position_delta.i,
+			controls->position_delta.k);
 		point_from_line3d(&camera->position, &translation, 1.f, &position);
 		camera->position = position;
 	}
@@ -121,12 +119,12 @@ void flying_camera_update(
 	result->offset = *global_zero_vector3d;
 	result->depth = 0.f;
 	result->field_of_view = camera->field_of_view;
-	result->flags = FLAG(0);
+	result->flags = FLAG(_camera_command_valid_bit);
 
 	match_vassert(
 		"c:\\halo\\SOURCE\\camera\\flying_camera.c",
 		149,
-		!(result->flags & FLAG(0)) ||
+		!(result->flags & FLAG(_camera_command_valid_bit)) ||
 		(valid_real_vector3d_axes2(&result->forward, &result->up) &&
 			valid_real(result->position.x) && result->position.x>=-5000.f && result->position.x<=5000.f &&
 			valid_real(result->position.y) && result->position.y>=-5000.f && result->position.y<=5000.f &&

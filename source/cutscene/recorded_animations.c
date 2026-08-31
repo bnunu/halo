@@ -89,14 +89,19 @@ symbols in this file:
 #include "cseries/cseries.h"
 #include "cseries/errors.h"
 #include "cutscene/recorded_animation_definitions.h"
+#include "cutscene/recorded_animation_playback.h"
+#include "cutscene/recorded_animation_playback_v1.h"
 #include "game/players.h"
 #include "memory/data.h"
 #include "objects/objects.h"
+#include "cutscene/recorded_animation_initialize.h"
 #include "render/render_debug.h"
 #include "scenario/scenario.h"
 #include "scenario/scenario_definitions.h"
 #include "text/draw_string.h"
 #include "units/units.h"
+#include "units/vehicles.h"
+#include "hs/hs_library_external.h"
 
 /* ---------- constants */
 
@@ -111,22 +116,6 @@ enum
 };
 
 /* ---------- structures */
-
-struct unit_control_data
-{
-	char animation_state;
-	char aiming_speed;
-	word control_flags;
-	short weapon_index;
-	short grenade_index;
-	short zoom_level;
-	short pad;
-	real_vector3d throttle;
-	real primary_trigger;
-	real_vector3d facing_vector;
-	real_vector3d aiming_vector;
-	real_vector3d looking_vector;
-};
 
 struct animation_thread
 {
@@ -167,102 +156,57 @@ struct animation_playback
 		byte **event_stream);
 };
 
-struct recorded_animation_playback_data
-{
-	struct animation_playback playback[2];
-	struct animation_playback *playback_codec[RECORDED_ANIMATION_VERSION];
-};
-
 /* ---------- macros */
 
 #define animation_threads_debug_get(index) \
 	(animation_threads_debug + ((index) & 0xFFFF))
-#define playback_codec (data_002dd160.playback_codec)
-
-struct recorded_animations_globals_prefix
-{
-	struct data_array *animation_threads;
-};
 
 /* ---------- prototypes */
 
-static struct animation_thread *code_000836c0(
+static struct animation_thread *get_controlling_thread(
 	long unit_index,
 	long *thread_index_reference);
-static boolean code_000839a0(
+static boolean recorded_animation_play_internal(
 	long unit_index,
 	short animation_index,
 	word extra_flags);
 
-void unit_control(
-	long unit_index,
-	struct unit_control_data const *control_data);
-void hs_object_destroy(
-	long object_index);
-void vehicle_hover(
-	long vehicle_index,
-	boolean hover);
-
-extern boolean recorded_animation_controlling_unit(
-	long unit_index);
-
-void recorded_animation_initialize_event_stream(
-	void *animation_state,
-	void *controller,
-	byte **event_stream,
-	byte unit_control_data_version);
-boolean recorded_animation_apply_event_stream(
-	void *animation_state,
-	struct unit_control_data *controller,
-	long *relative_ticks,
-	byte **event_stream);
-void recorded_animation_initialize_event_stream_v1(
-	void *animation_state,
-	void *controller,
-	byte **event_stream,
-	byte unit_control_data_version);
-boolean recorded_animation_apply_event_stream_v1(
-	void *animation_state,
-	struct unit_control_data *controller,
-	long *relative_ticks,
-	byte **event_stream);
-
 /* ---------- globals */
 
 /* January lays these three out contiguously in one 12-byte .bss group
- * (bss_00435ca4 @0, debug_recording @4, animation_threads_debug @8), which
+ * (animation_threads @0, debug_recording @4, animation_threads_debug @8), which
  * VC7 only produces when all three have internal linkage; the internal
  * linkage of animation_threads_debug is also what lets the compiler hoist
- * its load above the store to thread->event_stream in code_000839a0. */
-static struct recorded_animations_globals_prefix bss_00435ca4;
+ * its load above the store to thread->event_stream in recorded_animation_play_internal. */
+static struct data_array *animation_threads;
 static boolean debug_recording;
 static struct animation_thread_debug *animation_threads_debug;
 
-struct recorded_animation_playback_data data_002dd160 =
+/* January anchors this .data run on its first object, so that one stays externally
+   visible; the rest of the run is file static as in the original. */
+struct animation_playback current_playback =
 {
-	{
-		{
-			recorded_animation_initialize_event_stream,
-			recorded_animation_apply_event_stream
-		},
-		{
-			recorded_animation_initialize_event_stream_v1,
-			recorded_animation_apply_event_stream_v1
-		}
-	},
-	{
-		&data_002dd160.playback[1],
-		&data_002dd160.playback[1],
-		&data_002dd160.playback[1],
-		&data_002dd160.playback[0]
-	}
+	recorded_animation_initialize_event_stream,
+	recorded_animation_apply_event_stream
+};
+
+static struct animation_playback v1_playback =
+{
+	recorded_animation_initialize_event_stream_v1,
+	recorded_animation_apply_event_stream_v1
+};
+
+static struct animation_playback *playback_codec[RECORDED_ANIMATION_VERSION] =
+{
+	&v1_playback,
+	&v1_playback,
+	&v1_playback,
+	&current_playback
 };
 
 short debug_recording_newlines = 10;
 
 /* ---------- public code */
-
-#define animation_threads bss_00435ca4.animation_threads
 
 void recorded_animations_initialize(
 	void)
@@ -288,8 +232,6 @@ void recorded_animations_initialize(
 	return;
 }
 
-#undef animation_threads
-
 void recorded_animations_dispose(
 	void)
 {
@@ -308,7 +250,7 @@ void recorded_animations_dispose(
 void recorded_animations_dispose_from_old_map(
 	void)
 {
-	data_make_invalid(bss_00435ca4.animation_threads);
+	data_make_invalid(animation_threads);
 
 	return;
 }
@@ -331,7 +273,7 @@ void recorded_animations_update(
 	struct data_iterator iterator;
 	struct animation_thread *thread;
 
-	data_iterator_new(&iterator, bss_00435ca4.animation_threads);
+	data_iterator_new(&iterator, animation_threads);
 	thread = data_iterator_next(&iterator);
 	while (thread)
 	{
@@ -414,12 +356,12 @@ void recorded_animations_update(
 					vehicle_hover(thread->unit_index, TRUE);
 				}
 
-				datum_delete(bss_00435ca4.animation_threads, iterator.datum_index);
+				datum_delete(animation_threads, iterator.datum_index);
 			}
 		}
 		else
 		{
-			datum_delete(bss_00435ca4.animation_threads, iterator.datum_index);
+			datum_delete(animation_threads, iterator.datum_index);
 		}
 
 		thread = data_iterator_next(&iterator);
@@ -431,7 +373,7 @@ void recorded_animations_update(
 void recorded_animations_initialize_for_new_map(
 	void)
 {
-	data_make_valid(bss_00435ca4.animation_threads);
+	data_make_valid(animation_threads);
 	recorded_animations_clear_debug_storage();
 
 	return;
@@ -467,7 +409,7 @@ void render_debug_recording(
 			string + (short)string_length,
 			"recording name|tticks left|tobject name");
 
-		data_iterator_new(&iterator, bss_00435ca4.animation_threads);
+		data_iterator_new(&iterator, animation_threads);
 		thread = data_iterator_next(&iterator);
 		while (thread)
 		{
@@ -579,7 +521,7 @@ boolean recorded_animation_controlling_unit(
 	struct data_iterator iterator;
 	struct animation_thread *thread;
 
-	data_iterator_new(&iterator, bss_00435ca4.animation_threads);
+	data_iterator_new(&iterator, animation_threads);
 	thread = data_iterator_next(&iterator);
 	if (thread)
 	{
@@ -598,7 +540,7 @@ boolean recorded_animation_controlling_unit(
 	return result;
 }
 
-static struct animation_thread *code_000836c0(
+static struct animation_thread *get_controlling_thread(
 	long unit_index,
 	long *thread_index_reference)
 {
@@ -606,7 +548,7 @@ static struct animation_thread *code_000836c0(
 	struct data_iterator iterator;
 	struct animation_thread *thread;
 
-	data_iterator_new(&iterator, bss_00435ca4.animation_threads);
+	data_iterator_new(&iterator, animation_threads);
 
 	thread = data_iterator_next(&iterator);
 	while (thread)
@@ -631,12 +573,12 @@ void recorded_animation_kill(
 {
 	struct animation_thread *thread;
 
-	thread = code_000836c0(unit_index, NULL);
+	thread = get_controlling_thread(unit_index, NULL);
 	if (thread)
 	{
 		thread->flags |=
-			(1 << _recording_thread_finished_bit) |
-			(1 << _recording_thread_killed_bit);
+			FLAG(_recording_thread_finished_bit) |
+			FLAG(_recording_thread_killed_bit);
 	}
 
 	return;
@@ -648,7 +590,7 @@ long recorded_animation_get_time_left(
 	long result = 0;
 	struct animation_thread *thread;
 
-	thread = code_000836c0(unit_index, NULL);
+	thread = get_controlling_thread(unit_index, NULL);
 
 	match_assert(
 		"c:\\halo\\SOURCE\\cutscene\\recorded_animations.c",
@@ -665,26 +607,32 @@ boolean recorded_animation_play(
 	long unit_index,
 	short animation_index)
 {
-	return code_000839a0(unit_index, animation_index, 0);
+	return recorded_animation_play_internal(unit_index, animation_index, 0);
 }
 
 boolean recorded_animation_play_and_delete(
 	long unit_index,
 	short animation_index)
 {
-	return code_000839a0(unit_index, animation_index, 1 << 3);
+	return recorded_animation_play_internal(
+		unit_index,
+		animation_index,
+		FLAG(_recording_thread_delete_unit_on_complete_bit));
 }
 
 boolean recorded_animation_play_and_hover(
 	long unit_index,
 	short animation_index)
 {
-	return code_000839a0(unit_index, animation_index, 1 << 4);
+	return recorded_animation_play_internal(
+		unit_index,
+		animation_index,
+		FLAG(_recording_thread_hover_vehicle_on_complete_bit));
 }
 
 /* ---------- private code */
 
-static boolean code_000839a0(
+static boolean recorded_animation_play_internal(
 	long unit_index,
 	short animation_index,
 	word extra_flags)
@@ -703,7 +651,7 @@ static boolean code_000839a0(
 			object_get_and_verify_type(unit_index, _object_mask_unit);
 			player_index_from_unit_index(unit_index);
 
-			thread = code_000836c0(unit_index, &thread_index);
+			thread = get_controlling_thread(unit_index, &thread_index);
 			animation = TAG_BLOCK_GET_ELEMENT(
 				&global_scenario_get()->recorded_animations,
 				animation_index,
@@ -713,9 +661,9 @@ static boolean code_000839a0(
 			{
 				if (!thread)
 				{
-					thread_index = datum_new(bss_00435ca4.animation_threads);
+					thread_index = datum_new(animation_threads);
 					if (thread_index != NONE)
-						thread = datum_get(bss_00435ca4.animation_threads, thread_index);
+						thread = datum_get(animation_threads, thread_index);
 				}
 
 				if (thread)
@@ -740,7 +688,7 @@ static boolean code_000839a0(
 					debug->animation_index = animation_index;
 
 					thread->version = animation->version - 1;
-					thread->flags &= ~(1 << _recording_thread_finished_bit);
+					SET_FLAG(thread->flags, _recording_thread_finished_bit, FALSE);
 
 					playback = playback_codec[thread->version];
 					playback->initialize_event_stream(
@@ -750,10 +698,10 @@ static boolean code_000839a0(
 						animation->unit_control_data_version);
 
 					unit_set_actively_controlled(unit_index, TRUE);
-					if (unit_controllable(unit_index))
-						thread->flags |= 1 << _recording_thread_unit_was_controlled_bit;
-					else
-						thread->flags &= ~(1 << _recording_thread_unit_was_controlled_bit);
+					SET_FLAG(
+						thread->flags,
+						_recording_thread_unit_was_controlled_bit,
+						unit_controllable(unit_index));
 
 					unit_set_controllable(unit_index, FALSE);
 					unit_set_possessed(unit_index, TRUE);

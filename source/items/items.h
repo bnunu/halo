@@ -84,6 +84,8 @@ void item_accelerate(
 	long item_index,
 	real_vector3d const *acceleration,
 	boolean detonates_explosives);
+boolean item_update(
+	long item_index);
 
 /* ---------- globals */
 

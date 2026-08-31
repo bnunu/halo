@@ -26,16 +26,8 @@ struct flying_camera
 	real field_of_view;
 };
 
-struct flying_camera_action
-{
-	short local_player_index;
-	boolean inhibit_input;
-	byte pad3[5];
-	real_euler_angles3d facing_delta;
-	real_vector3d translation;
-};
-
 struct camera_command;
+struct camera_control;
 
 /* ---------- prototypes/FLYING_CAMERA.C */
 
@@ -43,11 +35,11 @@ void flying_camera_new(
 	struct flying_camera *camera);
 void flying_camera_new_from_point_and_vector(
 	struct flying_camera *camera,
-	real_point3d const *position,
-	real_vector3d const *forward);
+	real_point3d const *focus,
+	real_vector3d const *orientation);
 void flying_camera_update(
 	struct flying_camera *camera,
-	struct flying_camera_action const *controls,
+	struct camera_control const *controls,
 	struct camera_command *result);
 
 /* ---------- globals */

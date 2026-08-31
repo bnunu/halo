@@ -32,11 +32,6 @@ boolean sound_file_aiff_info_get(struct file_reference const *file, struct sound
 boolean sound_file_aiff_raw_data_get(struct file_reference const *file, long *size, void *data);
 void sound_file_aiff_format(struct sound_file_info const *info, long *size, void *data);
 
-boolean sound_file_is_wave(struct file_reference const *file);
-boolean sound_file_wave_info_get(struct file_reference const *file, struct sound_file_info *info);
-boolean sound_file_wave_raw_data_get(struct file_reference const *file, long *size, void *data);
-void sound_file_wave_format(struct sound_file_info const *info, long *size, void *data);
-
 /* ---------- globals */
 
 /* ---------- public code */

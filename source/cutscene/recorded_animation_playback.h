@@ -18,6 +18,17 @@ header included in hcex build.
 
 void byte_swap_recording_stream(void *stream, long stream_size, byte unit_control_data_version);
 
+void recorded_animation_initialize_event_stream(
+	void *animation_state,
+	void *controller,
+	byte **event_stream,
+	byte unit_control_data_version);
+boolean recorded_animation_apply_event_stream(
+	void *animation_state,
+	struct unit_control_data *controller,
+	long *relative_ticks,
+	byte **event_stream);
+
 /* ---------- globals */
 
 /* ---------- public code */

@@ -39,7 +39,7 @@ symbols in this file:
 002555DC 0013:
 	??_C@_0BD@NKJFFLKL@unsupported?5format?$AA@ (0000)
 0031C320 0200:
-	_bss_0031c320 (0000)
+	_error_message_buffer (0000)
 */
 
 /* ---------- headers */
@@ -88,7 +88,7 @@ void bitmap_delete(
 
 /* ---------- globals */
 
-char bss_0031c320[512] = {0};
+static char error_message_buffer[512] = {0};
 
 /* ---------- public code */
 
@@ -103,7 +103,7 @@ tiff_get_bounds(
 	boolean result = FALSE;
 
 	tiff = TIFFOpen(
-		file_reference_get_name(file, 0xD, path),
+		file_reference_get_name(file, FLAG(_name_directory_bit) | FLAG(_name_filename_bit) | FLAG(_name_extension_bit), path),
 		"r");
 	if (tiff)
 	{
@@ -154,7 +154,7 @@ tiff_export(
 	}
 
 	tiff = TIFFOpen(
-		file_reference_get_name(file, 0xD, path),
+		file_reference_get_name(file, FLAG(_name_directory_bit) | FLAG(_name_filename_bit) | FLAG(_name_extension_bit), path),
 		"w");
 	if (tiff)
 	{
@@ -165,92 +165,91 @@ tiff_export(
 		row_buffer = debug_malloc(row_size, FALSE, "c:\\halo\\SOURCE\\bitmaps\\tiff_file.c", 107);
 		if (row_buffer)
 		{
+			TIFFSetField(tiff, TIFFTAG_IMAGEWIDTH, bitmap->width);
+			TIFFSetField(tiff, TIFFTAG_IMAGELENGTH, bitmap->height);
+			TIFFSetField(tiff, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
+			TIFFSetField(tiff, TIFFTAG_PHOTOMETRIC, photometric);
+			TIFFSetField(tiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+			TIFFSetField(tiff, TIFFTAG_SAMPLESPERPIXEL, samples_per_pixel);
+			TIFFSetField(tiff, TIFFTAG_BITSPERSAMPLE, 8);
+			TIFFSetField(tiff, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
 
-	TIFFSetField(tiff, TIFFTAG_IMAGEWIDTH, bitmap->width);
-	TIFFSetField(tiff, TIFFTAG_IMAGELENGTH, bitmap->height);
-	TIFFSetField(tiff, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
-	TIFFSetField(tiff, TIFFTAG_PHOTOMETRIC, photometric);
-	TIFFSetField(tiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-	TIFFSetField(tiff, TIFFTAG_SAMPLESPERPIXEL, samples_per_pixel);
-	TIFFSetField(tiff, TIFFTAG_BITSPERSAMPLE, 8);
-	TIFFSetField(tiff, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
-
-	for (y = 0; y < bitmap->height; y++)
-	{
-		byte *source_row = bitmap_2d_address(bitmap, 0, (short)y, 0);
-		short x;
-
-		switch (bitmap->format)
-		{
-		case _bitmap_format_a1r5g5b5:
-			for (x = 0; x < bitmap->width; x++)
+			for (y = 0; y < bitmap->height; y++)
 			{
-				word pixel = ((word *)source_row)[x];
-				byte middle = (byte)(pixel >> 5);
-				row_buffer[x * 4 + 2] = (((byte)pixel & 0x1F) | ((byte)pixel << 1)) << 2;
-				row_buffer[x * 4 + 1] = ((middle & 0x1F) | (middle << 1)) << 2;
-				row_buffer[x * 4] = (((byte)(pixel >> 7) & 0xFB) | (byte)(pixel >> 8)) & 0xFC;
-				row_buffer[x * 4 + 3] = 0xFF;
+				byte *source_row = bitmap_2d_address(bitmap, 0, (short)y, 0);
+				short x;
+
+				switch (bitmap->format)
+				{
+				case _bitmap_format_a1r5g5b5:
+					for (x = 0; x < bitmap->width; x++)
+					{
+						word pixel = ((word *)source_row)[x];
+						byte middle = (byte)(pixel >> 5);
+						row_buffer[x * 4 + 2] = (((byte)pixel & 0x1F) | ((byte)pixel << 1)) << 2;
+						row_buffer[x * 4 + 1] = ((middle & 0x1F) | (middle << 1)) << 2;
+						row_buffer[x * 4] = (((byte)(pixel >> 7) & 0xFB) | (byte)(pixel >> 8)) & 0xFC;
+						row_buffer[x * 4 + 3] = 0xFF;
+					}
+					break;
+
+				case _bitmap_format_r5g6b5:
+					for (x = 0; x < bitmap->width; x++)
+					{
+						word pixel = ((word *)source_row)[x];
+						row_buffer[x * 4 + 2] = ((byte)(pixel >> 2) & 7) | (byte)(pixel << 3);
+						row_buffer[x * 4 + 1] = ((byte)(pixel >> 9) & 3) | ((byte)(pixel >> 5) << 2);
+						row_buffer[x * 4] = ((byte)(pixel >> 8) & 0xF8) | (byte)(pixel >> 13);
+						row_buffer[x * 4 + 3] = 0xFF;
+					}
+					break;
+
+				case _bitmap_format_a4r4g4b4:
+					for (x = 0; x < bitmap->width; x++)
+					{
+						word pixel = ((word *)source_row)[x];
+						byte high = (byte)(pixel >> 8);
+						byte middle = (byte)(pixel >> 4);
+						row_buffer[x * 4 + 3] = (high >> 4) | ((high >> 4) << 4);
+						row_buffer[x * 4 + 2] = ((byte)pixel & 0xF) | ((byte)pixel << 4);
+						row_buffer[x * 4 + 1] = (middle & 0xF) | (middle << 4);
+						row_buffer[x * 4] = (high & 0xF) | (high << 4);
+					}
+					break;
+
+				case _bitmap_format_x8r8g8b8:
+					for (x = 0; x < bitmap->width; x++)
+					{
+						unsigned long pixel = ((unsigned long *)source_row)[x];
+						row_buffer[x * 4 + 2] = (byte)pixel;
+						row_buffer[x * 4 + 1] = (byte)(pixel >> 8);
+						row_buffer[x * 4] = (byte)(pixel >> 16);
+						row_buffer[x * 4 + 3] = 0xFF;
+					}
+					break;
+
+				case _bitmap_format_a8r8g8b8:
+					for (x = 0; x < bitmap->width; x++)
+					{
+						unsigned long pixel = ((unsigned long *)source_row)[x];
+						row_buffer[x * 4 + 3] = (byte)(pixel >> 24);
+						row_buffer[x * 4 + 2] = (byte)pixel;
+						row_buffer[x * 4 + 1] = (byte)(pixel >> 8);
+						row_buffer[x * 4] = (byte)(pixel >> 16);
+					}
+					break;
+
+				default:
+					csmemcpy(row_buffer, source_row, row_size);
+					break;
+				}
+
+				if (TIFFWriteScanline(tiff, row_buffer, y, 0) < 0)
+				{
+					error_message = "failed to write scanline";
+					break;
+				}
 			}
-			break;
-
-		case _bitmap_format_r5g6b5:
-			for (x = 0; x < bitmap->width; x++)
-			{
-				word pixel = ((word *)source_row)[x];
-				row_buffer[x * 4 + 2] = ((byte)(pixel >> 2) & 7) | (byte)(pixel << 3);
-				row_buffer[x * 4 + 1] = ((byte)(pixel >> 9) & 3) | ((byte)(pixel >> 5) << 2);
-				row_buffer[x * 4] = ((byte)(pixel >> 8) & 0xF8) | (byte)(pixel >> 13);
-				row_buffer[x * 4 + 3] = 0xFF;
-			}
-			break;
-
-		case _bitmap_format_a4r4g4b4:
-			for (x = 0; x < bitmap->width; x++)
-			{
-				word pixel = ((word *)source_row)[x];
-				byte high = (byte)(pixel >> 8);
-				byte middle = (byte)(pixel >> 4);
-				row_buffer[x * 4 + 3] = (high >> 4) | ((high >> 4) << 4);
-				row_buffer[x * 4 + 2] = ((byte)pixel & 0xF) | ((byte)pixel << 4);
-				row_buffer[x * 4 + 1] = (middle & 0xF) | (middle << 4);
-				row_buffer[x * 4] = (high & 0xF) | (high << 4);
-			}
-			break;
-
-		case _bitmap_format_x8r8g8b8:
-			for (x = 0; x < bitmap->width; x++)
-			{
-				unsigned long pixel = ((unsigned long *)source_row)[x];
-				row_buffer[x * 4 + 2] = (byte)pixel;
-				row_buffer[x * 4 + 1] = (byte)(pixel >> 8);
-				row_buffer[x * 4] = (byte)(pixel >> 16);
-				row_buffer[x * 4 + 3] = 0xFF;
-			}
-			break;
-
-		case _bitmap_format_a8r8g8b8:
-			for (x = 0; x < bitmap->width; x++)
-			{
-				unsigned long pixel = ((unsigned long *)source_row)[x];
-				row_buffer[x * 4 + 3] = (byte)(pixel >> 24);
-				row_buffer[x * 4 + 2] = (byte)pixel;
-				row_buffer[x * 4 + 1] = (byte)(pixel >> 8);
-				row_buffer[x * 4] = (byte)(pixel >> 16);
-			}
-			break;
-
-		default:
-			csmemcpy(row_buffer, source_row, row_size);
-			break;
-		}
-
-		if (TIFFWriteScanline(tiff, row_buffer, y, 0) < 0)
-		{
-			error_message = "failed to write scanline";
-			break;
-		}
-	}
 
 			debug_free(row_buffer, "c:\\halo\\SOURCE\\bitmaps\\tiff_file.c", 231);
 			TIFFClose(tiff);
@@ -296,7 +295,7 @@ tiff_import(
 
 	if (file_exists(file))
 	{
-		tiff = TIFFOpen(file_reference_get_name(file, 0xD, path), "r");
+		tiff = TIFFOpen(file_reference_get_name(file, FLAG(_name_directory_bit) | FLAG(_name_filename_bit) | FLAG(_name_extension_bit), path), "r");
 		if (tiff)
 		{
 			scanline_size = TIFFScanlineSize(tiff);
@@ -325,12 +324,12 @@ tiff_import(
 				samples_per_pixel != 2 && samples_per_pixel != 1))
 				{
 					_snprintf(
-					bss_0031c320,
-					NUMBEROF(bss_0031c320),
+					error_message_buffer,
+					NUMBEROF(error_message_buffer),
 					"unsupported bits per sample (%d) or sample count (%d)",
 					bits_per_sample,
 					samples_per_pixel);
-					error_message = bss_0031c320;
+					error_message = error_message_buffer;
 					goto cleanup;
 				}
 

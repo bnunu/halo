@@ -130,6 +130,8 @@ void player_control_get_unit_camera_info(
 	struct player_control_unit_camera_info *camera_info);
 long player_control_get_unit_index(
 	short local_player_index);
+long player_control_get_aiming_unit_index(
+	short local_player_index);
 long player_control_get_desired_weapon(
 	short local_player_index,
 	long unit_index);

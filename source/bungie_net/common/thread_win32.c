@@ -113,7 +113,7 @@ void dispose_mutex(
 /* ---------- globals */
 
 struct thread_globals bss_0031c728 = {0};
-extern struct mutex_reference bss_0031cd30;
+extern struct mutex_reference transport_address_string;
 
 /* ---------- public code */
 
@@ -310,7 +310,7 @@ struct mutex_reference *code_0006fc60(
 		in_use += sizeof(struct mutex_reference);
 		mutex_index++;
 	}
-	while ((long)in_use<(long)&bss_0031cd30.in_use);
+	while ((long)in_use<(long)&transport_address_string.in_use);
 
 	return mutex_reference;
 }

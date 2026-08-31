@@ -1,5 +1,5 @@
 #ifndef lint
-char data_002daf98[] = "$Header: /usr/people/sam/tiff/libtiff/RCS/tif_print.c,v 1.43 92/03/17 11:08:58 sam Exp $";
+char tif_print_rcsid[] = "$Header: /usr/people/sam/tiff/libtiff/RCS/tif_print.c,v 1.43 92/03/17 11:08:58 sam Exp $";
 #endif
 
 /*
@@ -41,7 +41,7 @@ JPEGPrintQTable(fd, tab)
 	FILE *fd;
 	u_char tab[64];
 {
-	int i, j;
+	int i;
 	char *sep;
 
 	fputc('\n', fd);
@@ -123,7 +123,7 @@ TIFFPrintDirectory(tif, fd, flags)
 {
 	register TIFFDirectory *td;
 	char *sep;
-	int i, j;
+	int i;
 	long n;
 
 	fprintf(fd, "TIFF Directory at offset 0x%x\n", tif->tif_diroff);

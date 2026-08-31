@@ -15,7 +15,7 @@ symbols in this file:
 000C53A0 0010:
 	_hud_dispose_nav_points (0000)
 000C53B0 00f0:
-	_code_000c53b0 (0000)
+	_hud_activate_nav_point (0000)
 000C54A0 0020:
 	_hud_activate_nav_point_with_game_engine_flag (0000)
 000C54C0 0020:
@@ -23,7 +23,7 @@ symbols in this file:
 000C54E0 0020:
 	_hud_activate_nav_point_with_object (0000)
 000C5500 0070:
-	_code_000c5500 (0000)
+	_hud_activate_team_nav_point (0000)
 000C5570 0030:
 	_hud_activate_team_nav_point_with_game_engine_flag (0000)
 000C55A0 0030:
@@ -31,11 +31,11 @@ symbols in this file:
 000C55D0 0030:
 	_hud_activate_team_nav_point_with_object (0000)
 000C5600 0070:
-	_code_000c5600 (0000)
+	_hud_activate_global_nav_point (0000)
 000C5670 0030:
 	_hud_activate_global_nav_point_with_game_engine_flag (0000)
 000C56A0 0070:
-	_code_000c56a0 (0000)
+	_hud_deactivate_nav_point (0000)
 000C5710 0020:
 	_hud_deactivate_nav_point_with_game_engine_flag (0000)
 000C5730 0020:
@@ -43,7 +43,7 @@ symbols in this file:
 000C5750 0020:
 	_hud_deactivate_nav_point_with_object (0000)
 000C5770 0060:
-	_code_000c5770 (0000)
+	_hud_deactivate_team_nav_point (0000)
 000C57D0 0020:
 	_hud_deactivate_team_nav_point_with_flag (0000)
 000C57F0 0020:
@@ -63,7 +63,7 @@ symbols in this file:
 000C6040 0190:
 	_hud_render_nav_points (0000)
 000C61D0 0230:
-	_code_000c61d0 (0000)
+	_hud_update_nav_point_local_player (0000)
 000C6400 0030:
 	_hud_update_nav_points (0000)
 00270134 0019:
@@ -217,7 +217,7 @@ struct hud_nav_point_datum
 	short nav_index;
 	short type : 4;
 	short screen_type : 4;
-	float z_offset;
+	real z_offset;
 	long reference_index;
 };
 
@@ -246,7 +246,7 @@ struct hud_nav_object_datum
 
 /* ---------- prototypes */
 
-void code_000c61d0(
+void hud_update_nav_point_local_player(
 	short local_player_index);
 
 void *object_try_and_get_and_verify_type(
@@ -325,12 +325,12 @@ struct hud_nav_point_player_datum *get_nav_point_datum(
 	return &nav_point_data[local_player_index];
 }
 
-static void code_000c53b0(
+static void hud_activate_nav_point(
 	short nav_index,
 	long player_index,
 	short type,
 	long reference_index,
-	float vertical_offset)
+	real vertical_offset)
 {
 	if (player_index!=NONE)
 	{
@@ -378,12 +378,12 @@ static void code_000c53b0(
 	return;
 }
 
-static void code_000c5500(
+static void hud_activate_team_nav_point(
 	short nav_index,
 	short team_index,
 	short type,
 	long reference_index,
-	float vertical_offset)
+	real vertical_offset)
 {
 	struct data_iterator player_iterator;
 	struct player_datum *player;
@@ -394,7 +394,7 @@ static void code_000c5500(
 	{
 		if (player->local_player_index!=NONE && team_index==player->team_index)
 		{
-			code_000c53b0(nav_index, player_iterator.datum_index, type,
+			hud_activate_nav_point(nav_index, player_iterator.datum_index, type,
 				reference_index, vertical_offset);
 		}
 	}
@@ -402,11 +402,11 @@ static void code_000c5500(
 	return;
 }
 
-static void code_000c5600(
+static void hud_activate_global_nav_point(
 	short nav_index,
 	short type,
 	short reference_index,
-	float vertical_offset)
+	real vertical_offset)
 {
 	struct data_iterator player_iterator;
 	struct player_datum *player;
@@ -417,7 +417,7 @@ static void code_000c5600(
 	{
 		if (player->local_player_index!=NONE)
 		{
-			code_000c53b0(nav_index, player_iterator.datum_index, type,
+			hud_activate_nav_point(nav_index, player_iterator.datum_index, type,
 				reference_index, vertical_offset);
 		}
 	}
@@ -425,7 +425,7 @@ static void code_000c5600(
 	return;
 }
 
-static void code_000c56a0(
+static void hud_deactivate_nav_point(
 	long player_index,
 	short type,
 	long reference_index)
@@ -459,7 +459,7 @@ static void code_000c56a0(
 	return;
 }
 
-static void code_000c5770(
+static void hud_deactivate_team_nav_point(
 	short team_index,
 	short type,
 	long reference_index)
@@ -473,7 +473,7 @@ static void code_000c5770(
 	{
 		if (player->local_player_index!=NONE && team_index==player->team_index)
 		{
-			code_000c56a0(player_iterator.datum_index, type, reference_index);
+			hud_deactivate_nav_point(player_iterator.datum_index, type, reference_index);
 		}
 	}
 
@@ -515,9 +515,9 @@ void hud_activate_nav_point_with_game_engine_flag(
 	short nav_index,
 	long player_index,
 	short flag_index,
-	float vertical_offset)
+	real vertical_offset)
 {
-	code_000c53b0(nav_index, player_index, _hud_nav_point_type_game_engine_flag, flag_index, vertical_offset);
+	hud_activate_nav_point(nav_index, player_index, _hud_nav_point_type_game_engine_flag, flag_index, vertical_offset);
 
 	return;
 }
@@ -526,9 +526,9 @@ void hud_activate_nav_point_with_flag(
 	short nav_index,
 	long player_index,
 	short flag_index,
-	float vertical_offset)
+	real vertical_offset)
 {
-	code_000c53b0(nav_index, player_index, _hud_nav_point_type_flag, flag_index, vertical_offset);
+	hud_activate_nav_point(nav_index, player_index, _hud_nav_point_type_flag, flag_index, vertical_offset);
 
 	return;
 }
@@ -537,9 +537,9 @@ void hud_activate_nav_point_with_object(
 	short nav_index,
 	long player_index,
 	long object_index,
-	float vertical_offset)
+	real vertical_offset)
 {
-	code_000c53b0(nav_index, player_index, _hud_nav_point_type_object, object_index, vertical_offset);
+	hud_activate_nav_point(nav_index, player_index, _hud_nav_point_type_object, object_index, vertical_offset);
 
 	return;
 }
@@ -548,9 +548,9 @@ void hud_activate_team_nav_point_with_game_engine_flag(
 	short nav_index,
 	short team_index,
 	short flag_index,
-	float vertical_offset)
+	real vertical_offset)
 {
-	code_000c5500(nav_index, team_index, _hud_nav_point_type_game_engine_flag, flag_index, vertical_offset);
+	hud_activate_team_nav_point(nav_index, team_index, _hud_nav_point_type_game_engine_flag, flag_index, vertical_offset);
 
 	return;
 }
@@ -559,9 +559,9 @@ void hud_activate_team_nav_point_with_flag(
 	short nav_index,
 	short team_index,
 	short flag_index,
-	float vertical_offset)
+	real vertical_offset)
 {
-	code_000c5500(nav_index, team_index, _hud_nav_point_type_flag, flag_index, vertical_offset);
+	hud_activate_team_nav_point(nav_index, team_index, _hud_nav_point_type_flag, flag_index, vertical_offset);
 
 	return;
 }
@@ -570,9 +570,9 @@ void hud_activate_team_nav_point_with_object(
 	short nav_index,
 	short team_index,
 	long object_index,
-	float vertical_offset)
+	real vertical_offset)
 {
-	code_000c5500(nav_index, team_index, _hud_nav_point_type_object, object_index, vertical_offset);
+	hud_activate_team_nav_point(nav_index, team_index, _hud_nav_point_type_object, object_index, vertical_offset);
 
 	return;
 }
@@ -580,9 +580,9 @@ void hud_activate_team_nav_point_with_object(
 void hud_activate_global_nav_point_with_game_engine_flag(
 	short nav_index,
 	short flag_index,
-	float vertical_offset)
+	real vertical_offset)
 {
-	code_000c5600(nav_index, _hud_nav_point_type_game_engine_flag, flag_index, vertical_offset);
+	hud_activate_global_nav_point(nav_index, _hud_nav_point_type_game_engine_flag, flag_index, vertical_offset);
 
 	return;
 }
@@ -591,7 +591,7 @@ void hud_deactivate_nav_point_with_game_engine_flag(
 	long player_unit_index,
 	short flag_index)
 {
-	code_000c56a0(player_unit_index, _hud_nav_point_type_game_engine_flag, flag_index);
+	hud_deactivate_nav_point(player_unit_index, _hud_nav_point_type_game_engine_flag, flag_index);
 
 	return;
 }
@@ -600,7 +600,7 @@ void hud_deactivate_nav_point_with_flag(
 	long player_unit_index,
 	short flag_index)
 {
-	code_000c56a0(player_unit_index, _hud_nav_point_type_flag, flag_index);
+	hud_deactivate_nav_point(player_unit_index, _hud_nav_point_type_flag, flag_index);
 
 	return;
 }
@@ -609,7 +609,7 @@ void hud_deactivate_nav_point_with_object(
 	long player_unit_index,
 	long object_index)
 {
-	code_000c56a0(player_unit_index, _hud_nav_point_type_object, object_index);
+	hud_deactivate_nav_point(player_unit_index, _hud_nav_point_type_object, object_index);
 
 	return;
 }
@@ -618,7 +618,7 @@ void hud_deactivate_team_nav_point_with_flag(
 	short team_index,
 	short flag_index)
 {
-	code_000c5770(team_index, _hud_nav_point_type_flag, flag_index);
+	hud_deactivate_team_nav_point(team_index, _hud_nav_point_type_flag, flag_index);
 
 	return;
 }
@@ -627,7 +627,7 @@ void hud_deactivate_team_nav_point_with_object(
 	short team_index,
 	long object_index)
 {
-	code_000c5770(team_index, _hud_nav_point_type_object, object_index);
+	hud_deactivate_team_nav_point(team_index, _hud_nav_point_type_object, object_index);
 
 	return;
 }
@@ -636,13 +636,13 @@ void hud_unit_activate_nav_point_with_flag(
 	short nav_index,
 	long unit_index,
 	short flag_index,
-	float vertical_offset)
+	real vertical_offset)
 {
 	long player_index = player_index_from_unit_index(unit_index);
 
 	if (player_index!=NONE)
 	{
-		code_000c53b0(nav_index, player_index, _hud_nav_point_type_flag, flag_index, vertical_offset);
+		hud_activate_nav_point(nav_index, player_index, _hud_nav_point_type_flag, flag_index, vertical_offset);
 	}
 
 	return;
@@ -652,13 +652,13 @@ void hud_unit_activate_nav_point_with_object(
 	short nav_index,
 	long unit_index,
 	long object_index,
-	float vertical_offset)
+	real vertical_offset)
 {
 	long player_index = player_index_from_unit_index(unit_index);
 
 	if (player_index!=NONE)
 	{
-		code_000c53b0(nav_index, player_index, _hud_nav_point_type_object, object_index, vertical_offset);
+		hud_activate_nav_point(nav_index, player_index, _hud_nav_point_type_object, object_index, vertical_offset);
 	}
 
 	return;
@@ -672,7 +672,7 @@ void hud_unit_deactivate_nav_point_with_flag(
 
 	if (player_index!=NONE)
 	{
-		code_000c56a0(player_index, _hud_nav_point_type_flag, flag_index);
+		hud_deactivate_nav_point(player_index, _hud_nav_point_type_flag, flag_index);
 	}
 
 	return;
@@ -686,7 +686,7 @@ void hud_unit_deactivate_nav_point_with_object(
 
 	if (player_index!=NONE)
 	{
-		code_000c56a0(player_index, _hud_nav_point_type_object, object_index);
+		hud_deactivate_nav_point(player_index, _hud_nav_point_type_object, object_index);
 	}
 
 	return;
@@ -807,7 +807,7 @@ void hud_render_nav_points(
 	return;
 }
 
-void code_000c61d0(
+void hud_update_nav_point_local_player(
 	short local_player_index)
 {
 	long return_eip = get_return_eip();
@@ -940,7 +940,7 @@ void hud_update_nav_points(
 
 	while (local_player_index!=NONE)
 	{
-		code_000c61d0(local_player_index);
+		hud_update_nav_point_local_player(local_player_index);
 		local_player_index = local_player_get_next(local_player_index);
 	}
 

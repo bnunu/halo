@@ -3,15 +3,15 @@ RASTERIZER_XBOX_VERTEX_SHADERS_INITIALIZE.C
 
 symbols in this file:
 00168070 0020:
-	_code_00168070 (0000)
+	_IDirect3DDevice8_CreateVertexShader@20 (0000)
 00168090 0010:
-	_code_00168090 (0000)
+	_IDirect3DDevice8_DeleteVertexShader@8 (0000)
 001680A0 0260:
 	_rasterizer_vertex_shaders_initialize (0000)
 00168300 0050:
 	_rasterizer_vertex_shaders_dispose (0000)
 0029BF94 00e0:
-	_rdata_0029bf94 (0000)
+	_vertex_shader_declarations (0000)
 0029C074 0036:
 	??_C@_0DG@DJPOAFHM@?$CD?$CD?$CD?5ERROR?5rasterizer_vertex_shad@ (0000)
 0029C0B0 00e9:
@@ -54,7 +54,7 @@ void rasterizer_error(
 
 extern void *global_d3d_device;
 
-unsigned long const rdata_0029bf94[] =
+unsigned long const vertex_shader_declarations[] =
 {
 	0x20000000, 0x40320000, 0x40400009, 0xFFFFFFFF,
 	0x20000000, 0x40320000, 0x40210004, 0xFFFFFFFF,
@@ -69,8 +69,6 @@ unsigned long const rdata_0029bf94[] =
 
 /* ---------- public code */
 
-/* NonMatching: the declaration table and SDK wrappers are exact; VC7 schedules
-the table-address loads differently in the initializer. */
 boolean rasterizer_vertex_shaders_initialize(
 	void)
 {
@@ -79,78 +77,78 @@ boolean rasterizer_vertex_shaders_initialize(
 	short vertex_shader_index;
 
 	success = TRUE;
-	for (vertex_shader_index = 0; vertex_shader_index < 67; vertex_shader_index++)
+	for (vertex_shader_index = 0; vertex_shader_index < NUMBER_OF_VERTEX_SHADERS; vertex_shader_index++)
 		vertex_shader_table[vertex_shader_index].declaration = NULL;
 
-	vertex_shader_table[4].declaration = &rdata_0029bf94[0x64 / sizeof(unsigned long)];
-	vertex_shader_table[3].declaration = &rdata_0029bf94[0x64 / sizeof(unsigned long)];
-	vertex_shader_table[38].declaration = &rdata_0029bf94[0x64 / sizeof(unsigned long)];
-	vertex_shader_table[33].declaration = &rdata_0029bf94[0x20 / sizeof(unsigned long)];
-	vertex_shader_table[65].declaration = &rdata_0029bf94[0x34 / sizeof(unsigned long)];
-	vertex_shader_table[2].declaration = &rdata_0029bf94[0x34 / sizeof(unsigned long)];
-	vertex_shader_table[12].declaration = &rdata_0029bf94[0x34 / sizeof(unsigned long)];
-	vertex_shader_table[56].declaration = &rdata_0029bf94[0x34 / sizeof(unsigned long)];
-	vertex_shader_table[0].declaration = &rdata_0029bf94[0x00 / sizeof(unsigned long)];
-	vertex_shader_table[1].declaration = &rdata_0029bf94[0x10 / sizeof(unsigned long)];
-	vertex_shader_table[66].declaration = &rdata_0029bf94[0x48 / sizeof(unsigned long)];
-	vertex_shader_table[16].declaration = &rdata_0029bf94[0x9C / sizeof(unsigned long)];
-	vertex_shader_table[49].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[29].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[40].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[21].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[41].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[59].declaration = &rdata_0029bf94[0x9C / sizeof(unsigned long)];
-	vertex_shader_table[58].declaration = &rdata_0029bf94[0x9C / sizeof(unsigned long)];
-	vertex_shader_table[26].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[42].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[44].declaration = &rdata_0029bf94[0x9C / sizeof(unsigned long)];
-	vertex_shader_table[51].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[6].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[8].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[10].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[11].declaration = &rdata_0029bf94[0x20 / sizeof(unsigned long)];
-	vertex_shader_table[9].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[27].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[17].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[64].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[39].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[13].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[5].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[24].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[48].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[34].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[19].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[35].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[47].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[31].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[60].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[57].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[45].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[62].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[46].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[28].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[43].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[61].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[25].declaration = &rdata_0029bf94[0x9C / sizeof(unsigned long)];
-	vertex_shader_table[30].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[63].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[36].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[50].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[20].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[23].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[18].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[14].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[22].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[32].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[15].declaration = &rdata_0029bf94[0x78 / sizeof(unsigned long)];
-	vertex_shader_table[37].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[7].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[54].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[55].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[53].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
-	vertex_shader_table[52].declaration = &rdata_0029bf94[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[4].declaration = &vertex_shader_declarations[0x64 / sizeof(unsigned long)];
+	vertex_shader_table[3].declaration = &vertex_shader_declarations[0x64 / sizeof(unsigned long)];
+	vertex_shader_table[38].declaration = &vertex_shader_declarations[0x64 / sizeof(unsigned long)];
+	vertex_shader_table[33].declaration = &vertex_shader_declarations[0x20 / sizeof(unsigned long)];
+	vertex_shader_table[65].declaration = &vertex_shader_declarations[0x34 / sizeof(unsigned long)];
+	vertex_shader_table[2].declaration = &vertex_shader_declarations[0x34 / sizeof(unsigned long)];
+	vertex_shader_table[12].declaration = &vertex_shader_declarations[0x34 / sizeof(unsigned long)];
+	vertex_shader_table[56].declaration = &vertex_shader_declarations[0x34 / sizeof(unsigned long)];
+	vertex_shader_table[0].declaration = &vertex_shader_declarations[0x00 / sizeof(unsigned long)];
+	vertex_shader_table[1].declaration = &vertex_shader_declarations[0x10 / sizeof(unsigned long)];
+	vertex_shader_table[66].declaration = &vertex_shader_declarations[0x48 / sizeof(unsigned long)];
+	vertex_shader_table[16].declaration = &vertex_shader_declarations[0x9C / sizeof(unsigned long)];
+	vertex_shader_table[49].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[29].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[40].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[21].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[41].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[59].declaration = &vertex_shader_declarations[0x9C / sizeof(unsigned long)];
+	vertex_shader_table[58].declaration = &vertex_shader_declarations[0x9C / sizeof(unsigned long)];
+	vertex_shader_table[26].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[42].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[44].declaration = &vertex_shader_declarations[0x9C / sizeof(unsigned long)];
+	vertex_shader_table[51].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[6].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[8].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[10].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[11].declaration = &vertex_shader_declarations[0x20 / sizeof(unsigned long)];
+	vertex_shader_table[9].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[27].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[17].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[64].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[39].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[13].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[5].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[24].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[48].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[34].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[19].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[35].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[47].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[31].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[60].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[57].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[45].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[62].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[46].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[28].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[43].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[61].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[25].declaration = &vertex_shader_declarations[0x9C / sizeof(unsigned long)];
+	vertex_shader_table[30].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[63].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[36].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[50].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[20].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[23].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[18].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[14].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[22].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[32].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[15].declaration = &vertex_shader_declarations[0x78 / sizeof(unsigned long)];
+	vertex_shader_table[37].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[7].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[54].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[55].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[53].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
+	vertex_shader_table[52].declaration = &vertex_shader_declarations[0xC4 / sizeof(unsigned long)];
 
-	for (vertex_shader_index = 0; vertex_shader_index < 67; vertex_shader_index++)
+	for (vertex_shader_index = 0; vertex_shader_index < NUMBER_OF_VERTEX_SHADERS; vertex_shader_index++)
 	{
 		match_assert(
 			"c:\\halo\\SOURCE\\rasterizer\\xbox\\rasterizer_xbox_vertex_shaders_initialize.c",
@@ -180,7 +178,7 @@ boolean rasterizer_vertex_shaders_initialize(
 	}
 
 	if (!success)
-		error(2, "### ERROR rasterizer_vertex_shaders_initialize failed");
+		error(_error_silent, "### ERROR rasterizer_vertex_shaders_initialize failed");
 
 	return success;
 }
@@ -192,7 +190,7 @@ void rasterizer_vertex_shaders_dispose(
 	short vertex_shader_index;
 
 	success = TRUE;
-	for (vertex_shader_index = 0; vertex_shader_index < 67; vertex_shader_index++)
+	for (vertex_shader_index = 0; vertex_shader_index < NUMBER_OF_VERTEX_SHADERS; vertex_shader_index++)
 	{
 		if (IDirect3DDevice8_DeleteVertexShader(
 			global_d3d_device,
@@ -211,7 +209,7 @@ void rasterizer_vertex_shaders_dispose(
 
 	if (!success)
 	{
-		error(2, "### ERROR rasterizer_vertex_shaders_dispose failed");
+		error(_error_silent, "### ERROR rasterizer_vertex_shaders_dispose failed");
 	}
 	return;
 }

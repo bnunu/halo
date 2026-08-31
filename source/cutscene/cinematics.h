@@ -8,6 +8,11 @@ header included in hcex build.
 #define __CINEMATICS_H
 #pragma once
 
+/* ---------- headers */
+
+#include "cseries/cseries.h"
+#include "math/real_math.h"
+
 /* ---------- constants */
 
 /* ---------- macros */
@@ -66,6 +71,9 @@ void cinematic_stop(
 	void);
 void cinematic_set_title(
 	unsigned short title_index);
+void cinematic_set_title_delayed(
+	short title_index,
+	real delay);
 
 /* ---------- globals */
 

@@ -40,6 +40,10 @@ void observer_initialize_for_new_map(
 struct observer_result const *observer_get_camera(
 	short local_player_index);
 
+void observer_up_from_forward(
+	real_vector3d const *forward,
+	real_vector3d *up);
+
 /* ---------- globals */
 
 /* ---------- public code */

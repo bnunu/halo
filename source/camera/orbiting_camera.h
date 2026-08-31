@@ -25,7 +25,7 @@ struct orbiting_camera
 	real distance;
 };
 
-struct camera_action;
+struct camera_control;
 struct camera_command;
 
 /* ---------- prototypes/ORBITING_CAMERA.C */
@@ -36,7 +36,7 @@ void orbiting_camera_new(
 	real_vector3d const *forward);
 void orbiting_camera_update(
 	struct orbiting_camera *camera,
-	struct camera_action const *action,
+	struct camera_control const *controls,
 	struct camera_command *result);
 
 /* ---------- globals */

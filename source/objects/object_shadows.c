@@ -3,9 +3,9 @@ OBJECT_SHADOWS.C
 
 symbols in this file:
 0012B870 0010:
-	_code_0012b870 (0000)
+	_object_shadow_get_object (0000)
 0012B880 0050:
-	_code_0012b880 (0000)
+	_object_build_shadow_recursive (0000)
 0012B8D0 0080:
 	_object_build_shadow (0000)
 */
@@ -13,6 +13,7 @@ symbols in this file:
 /* ---------- headers */
 
 #include "cseries.h"
+#include "objects/object_shadows.h"
 #include "objects/objects.h"
 
 /* ---------- constants */
@@ -20,14 +21,6 @@ symbols in this file:
 /* ---------- macros */
 
 /* ---------- structures */
-
-struct object_shadow
-{
-	real object_bounding_radius;
-	real_rectangle3d bounds;
-	short count;
-	short unknown1;
-};
 
 /* ---------- prototypes */
 
@@ -38,7 +31,7 @@ void _ReadWriteBarrier(void);
 
 /* ---------- public code */
 
-__declspec(naked) void *code_0012b870(void)
+__declspec(naked) void *object_shadow_get_object(void)
 {
 	__asm
 	{
@@ -50,14 +43,14 @@ __declspec(naked) void *code_0012b870(void)
 	}
 }
 
-void code_0012b880(long object_index, void const *context, struct object_shadow *shadow)
+void object_build_shadow_recursive(long object_index, void const *context, struct object_shadow *shadow)
 {
 	while (object_index != NONE)
 	{
 		struct object_datum *object = object_get(object_index);
 
 		object_get(object_index);
-		code_0012b880(object->object.first_child_object_index, context, shadow);
+		object_build_shadow_recursive(object->object.first_child_object_index, context, shadow);
 		object_index = object->object.next_object_index;
 	}
 }
@@ -78,7 +71,7 @@ boolean object_build_shadow(long object_index, void const *context, struct objec
 	shadow->unknown1 = 0;
 
 	object_get(object_index);
-	code_0012b880(object->object.first_child_object_index, context, shadow);
+	object_build_shadow_recursive(object->object.first_child_object_index, context, shadow);
 	if (shadow->count > 0)
 	{
 		_ReadWriteBarrier();

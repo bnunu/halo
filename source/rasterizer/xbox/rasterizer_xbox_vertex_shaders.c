@@ -3,13 +3,14 @@ RASTERIZER_XBOX_VERTEX_SHADERS.C
 
 symbols in this file:
 00293850 8744:
-	_rdata_00293850 (0000)
+	_vertex_shader_code (0000)
 0030CF88 0430:
 	_vertex_shader_table (0000)
 */
 
 /* ---------- headers */
 
+#include "cseries.h"
 #include "rasterizer_xbox_vertex_shaders.h"
 
 /* ---------- constants */
@@ -17,7 +18,7 @@ symbols in this file:
 /* ---------- macros */
 
 #define VERTEX_SHADER_ENTRY(offset, instruction_bytes) \
-	{ 0, (unsigned char const *)rdata_00293850 + (offset), 0xFFFFFFFF, (instruction_bytes) }
+	{ 0, (unsigned char const *)vertex_shader_code + (offset), 0xFFFFFFFF, (instruction_bytes) }
 
 /* ---------- structures */
 
@@ -29,7 +30,7 @@ symbols in this file:
 34,628-byte read-only payload.  These are immutable Xbox shader instruction
 tokens, represented as dwords so the generated data remains inspectable and
 the compiler reproduces the original little-endian bytes. */
-unsigned long const rdata_00293850[] =
+unsigned long const vertex_shader_code[] =
 {
 #include "rasterizer_xbox_vertex_shaders_data.inc"
 };

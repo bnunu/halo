@@ -60,7 +60,12 @@ struct hs_syntax_node
 	long data;
 };
 
-/* ---------- prototypes/EXAMPLE.C */
+/* ---------- prototypes/HS_SCENARIO_DEFINITIONS.C */
+
+void hs_syntax_data_byte_swap(
+	void *owner,
+	void *data,
+	long size);
 
 /* ---------- globals */
 

@@ -71,6 +71,12 @@ void data_packet_group_initialize(
 char const *data_packet_groups_get_error(
 	void);
 
+boolean data_packet_group_append_packet_header(
+	struct data_packet_group_definition *group_definition,
+	void *encoded_packet,
+	short *encoded_packet_size,
+	short packet_type);
+
 boolean data_packet_group_encode_packet(
 	struct data_packet_group_definition *group_definition,
 	const void *decoded_packet,

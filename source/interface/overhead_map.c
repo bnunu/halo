@@ -11,9 +11,9 @@ symbols in this file:
 000CFB50 00e0:
 	_overhead_map_post_rasterize (0000)
 00270BD0 000c:
-	_rdata_00270bd0 (0000)
+	_overhead_map_constants (0000)
 00453CD0 0030:
-	_bss_00453cd0 (0000)
+	_overhead_map_globals (0000)
 */
 
 /* ---------- headers */
@@ -61,10 +61,11 @@ typedef char verify_overhead_map_bitmap_offset[offsetof(struct overhead_map_glob
 
 /* ---------- globals */
 
-real const rdata_00270bd0[3] = { 0.5f, 84.0f, 80.0f };
+/* An orphan .rdata constant pool: the January object keeps these three reals,
+but no code in the object references them. */
+real const overhead_map_constants[3] = { 0.5f, 84.0f, 80.0f };
 
-static struct overhead_map_globals bss_00453cd0;
-#define overhead_map_globals bss_00453cd0
+static struct overhead_map_globals overhead_map_globals;
 
 /* ---------- public code */
 

@@ -3,7 +3,7 @@ STRUCTURE_LENS_FLARES.C
 
 symbols in this file:
 00183BB0 0020:
-	_code_00183bb0 (0000)
+	_compare_lens_flare_markers_by_cluster (0000)
 00183BD0 0060:
 	_cluster_index_from_point (0000)
 00183C30 10f0:
@@ -52,10 +52,14 @@ symbols in this file:
 #include "cseries/errors.h"
 
 #include "structure_bsp_definitions.h"
+#include "structures/structure_lens_flares.h"
+#include "cache/cache_files.h"
 #include "math/geometry.h"
+#include "memory/array.h"
 #include "physics/collision_bsp_definitions.h"
 #include "scenario/scenario.h"
 #include "shaders/shader_definitions.h"
+#include "tool/connected_geometry.h"
 
 /* ---------- constants */
 
@@ -76,6 +80,13 @@ __inline long fast_ftol(
 enum
 {
 	MAXIMUM_TRIANGLES_PER_CONNECTED_GEOMETRY_COPLANAR_GROUP = 20000,
+};
+
+enum
+{
+	_shader_type_environment = 3,
+	_shader_type_transparent_generic = 5,
+	_shader_type_transparent_chicago = 6
 };
 
 /* ---------- macros */
@@ -122,34 +133,6 @@ struct structure_environment_vertex
 	byte remaining[0x2C];
 };
 
-struct dynamic_array
-{
-	long element_size;
-	long count;
-	void *elements;
-};
-
-struct connected_geometry_edge
-{
-	byte reserved[0xC];
-	long point_indices[2];
-	byte trailing[0x8];
-};
-
-struct connected_geometry_triangle
-{
-	long edge_designators[3];
-	long coplanar_group_index;
-	long unused[2];
-};
-
-struct connected_geometry
-{
-	struct dynamic_array points;
-	struct dynamic_array edges;
-	struct dynamic_array triangles;
-};
-
 struct shader_lens_flare_fields_environment
 {
 	struct shader shader;
@@ -168,34 +151,9 @@ struct shader_lens_flare_fields_transparent
 
 /* ---------- prototypes */
 
-long code_00183bb0(
+long compare_lens_flare_markers_by_cluster(
 	struct temporary_lens_flare_marker const *a,
 	struct temporary_lens_flare_marker const *b);
-boolean build_structure_lens_flares(
-	struct structure_bsp *structure_bsp);
-void structure_lens_flares_place(
-	void);
-
-boolean tag_block_resize(struct tag_block *block, long count);
-long tag_block_add_element(struct tag_block *block);
-void tag_reference_set(struct tag_reference *reference, unsigned long group_tag, const char *name);
-void connected_geometry_new(struct connected_geometry *geometry);
-void connected_geometry_delete(struct connected_geometry *geometry);
-long connected_geometry_add_triangle(
-	struct connected_geometry *geometry,
-	real_point3d const *point0,
-	real_point3d const *point1,
-	real_point3d const *point2,
-	boolean report_duplicates);
-long connected_geometry_group_coplanar(struct connected_geometry *geometry);
-void *dynamic_array_get_element(struct dynamic_array *array, long index, long element_size);
-short convex_hull2d(short point_count, real_point2d const *points, short *hull_indices);
-boolean convex_hull2d_test_point_indexed(
-	short count,
-	short const *indices,
-	real_point2d const *points,
-	real_point2d const *point,
-	real epsilon);
 
 /* ---------- globals */
 
@@ -298,28 +256,28 @@ boolean build_structure_lens_flares(
 			shader = tag_get('shdr', material->shader.index);
 			switch (shader->base.type)
 			{
-			case 3:
+			case _shader_type_environment:
 			{
 				struct shader_lens_flare_fields_environment *lens_flare_fields =
-					(struct shader_lens_flare_fields_environment *)shader_get_and_verify_type(shader, 3);
+					(struct shader_lens_flare_fields_environment *)shader_get_and_verify_type(shader, _shader_type_environment);
 				lens_flare_reference = &lens_flare_fields->lens_flare;
-				lens_flare_spacing = ((struct shader_lens_flare_fields_environment *)shader_get_and_verify_type(shader, 3))->lens_flare_spacing;
+				lens_flare_spacing = ((struct shader_lens_flare_fields_environment *)shader_get_and_verify_type(shader, _shader_type_environment))->lens_flare_spacing;
 				break;
 			}
-			case 5:
+			case _shader_type_transparent_generic:
 			{
 				struct shader_lens_flare_fields_transparent *lens_flare_fields =
-					(struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, 5);
+					(struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, _shader_type_transparent_generic);
 				lens_flare_reference = &lens_flare_fields->lens_flare;
-				lens_flare_spacing = ((struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, 5))->lens_flare_spacing;
+				lens_flare_spacing = ((struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, _shader_type_transparent_generic))->lens_flare_spacing;
 				break;
 			}
-			case 6:
+			case _shader_type_transparent_chicago:
 			{
 				struct shader_lens_flare_fields_transparent *lens_flare_fields =
-					(struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, 6);
+					(struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, _shader_type_transparent_chicago);
 				lens_flare_reference = &lens_flare_fields->lens_flare;
-				lens_flare_spacing = ((struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, 6))->lens_flare_spacing;
+				lens_flare_spacing = ((struct shader_lens_flare_fields_transparent *)shader_get_and_verify_type(shader, _shader_type_transparent_chicago))->lens_flare_spacing;
 				break;
 			}
 			default:
@@ -677,7 +635,7 @@ boolean build_structure_lens_flares(
 		temp_markers,
 		structure_bsp->lens_flare_markers.count,
 		sizeof(*temp_markers),
-		(int (__cdecl *)(const void *, const void *))code_00183bb0);
+		(int (__cdecl *)(const void *, const void *))compare_lens_flare_markers_by_cluster);
 
 	{
 		for (marker_index = 0; marker_index < structure_bsp->lens_flare_markers.count; marker_index++)
@@ -763,7 +721,7 @@ boolean build_structure_lens_flares(
 
 /* ---------- private code */
 
-long code_00183bb0(
+long compare_lens_flare_markers_by_cluster(
 	struct temporary_lens_flare_marker const *a,
 	struct temporary_lens_flare_marker const *b)
 {

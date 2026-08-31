@@ -247,7 +247,7 @@ symbols in this file:
 0027F1FC 000b:
 	??_C@_0L@JEIPCDKP@?$CD?$DMinvalid?$DO?$AA@ (0000)
 00309E80 0508:
-	_data_00309e80 (0000)
+	_weapon_type_animation_list_entries (0000)
 	_weapon_type_animation_list (0050)
 	_weapon_class_animation_list (0210)
 	_damage_type_strings (0218)
@@ -275,8 +275,6 @@ symbols in this file:
 
 /* ---------- globals */
 
-extern boolean hs_model_animation_compression_enabled;
-
 typedef char verify_animation_size[
 	sizeof(struct animation) == 0xB4 ? 1 : -1];
 typedef char verify_animation_frame_count_offset[
@@ -298,7 +296,7 @@ typedef char verify_animation_list_size[
 typedef char verify_animation_list_animations_offset[
 	offsetof(struct animation_list, animations) == 0x04 ? 1 : -1];
 
-struct animation_list_entry data_00309e80[] =
+struct animation_list_entry weapon_type_animation_list_entries[] =
 {
 	{ "reload-1", _animation_replacement },
 	{ "reload-2", _animation_replacement },
@@ -312,7 +310,7 @@ struct animation_list_entry data_00309e80[] =
 	{ "overheat", _animation_overlay },
 };
 
-struct animation_list weapon_type_animation_list = { NUMBEROF(data_00309e80), data_00309e80 };
+struct animation_list weapon_type_animation_list = { NUMBEROF(weapon_type_animation_list_entries), weapon_type_animation_list_entries };
 
 struct animation_list_entry weapon_class_animation_list_entries[] =
 {

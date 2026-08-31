@@ -5,7 +5,7 @@ symbols in this file:
 00139530 1060:
 	_collision_debug_render (0000)
 0028B2A8 0060:
-	_rdata_0028b2a8 (0000)
+	_collision_debug_cube_vertices (0000)
 0028B308 000a:
 	??_C@_09PCOGIILP@count?$DM?$DN14?$AA@ (0000)
 0028B314 0031:
@@ -41,7 +41,7 @@ symbols in this file:
 	_collision_debug_length (0008)
 	_collision_debug_ignore_object_index (000c)
 00456EC0 7122:
-	_bss_00456ec0 (0000)
+	_collision_debug_spray_globals (0000)
 	_collision_debug_width (7118)
 	_collision_debug_height (711c)
 	_collision_debug_phantom_bsp (7120)
@@ -66,21 +66,21 @@ enum
 
 /* ---------- structures */
 
-struct collision_debug_spray_cache
+struct collision_debug_spray_globals
 {
 	real_vector3d normals[COLLISION_DEBUG_SPRAY_COUNT];
 	real_point3d points[COLLISION_DEBUG_SPRAY_COUNT];
 	unsigned long hit_flags[BIT_VECTOR_SIZE_IN_LONGS(COLLISION_DEBUG_SPRAY_COUNT)];
 };
 
-typedef char collision_debug_spray_cache_size_assert[
-	sizeof(struct collision_debug_spray_cache) == 0x7118 ? 1 : -1];
+typedef char collision_debug_spray_globals_size_assert[
+	sizeof(struct collision_debug_spray_globals) == 0x7118 ? 1 : -1];
 
 /* ---------- prototypes */
 
 /* ---------- globals */
 
-const real_point3d rdata_0028b2a8[NUMBER_OF_VERTICES_PER_CUBE] =
+const real_point3d collision_debug_cube_vertices[NUMBER_OF_VERTICES_PER_CUBE] =
 {
 	{ -1.0f, -1.0f, -1.0f },
 	{ -1.0f, -1.0f,  1.0f },
@@ -100,7 +100,7 @@ boolean collision_debug_flag_objects = TRUE;
 real collision_debug_length = 100.0f;
 long collision_debug_ignore_object_index = NONE;
 
-struct collision_debug_spray_cache bss_00456ec0 = { 0 };
+struct collision_debug_spray_globals collision_debug_spray_globals = { 0 };
 real collision_debug_width = 0.0f;
 real collision_debug_height = 0.0f;
 boolean collision_debug_phantom_bsp = FALSE;

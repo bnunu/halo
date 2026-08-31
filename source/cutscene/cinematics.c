@@ -74,9 +74,6 @@ symbols in this file:
 
 /* ---------- prototypes */
 
-void cinematic_set_title_delayed(
-	short title_index,
-	real delay);
 void draw_quad(
 	rectangle2d *rectangle,
 	pixel32 color);
@@ -282,7 +279,7 @@ void draw_quad(
 	}
 
 	csmemset(&parameters, 0, sizeof(parameters));
-	parameters.framebuffer_blend_function = 0;
+	parameters.framebuffer_blend_function = _framebuffer_blend_function_alpha_blend;
 	parameters.map_texture_scale[0].j = 1.0f;
 	parameters.map_texture_scale[0].i = 1.0f;
 	parameters.map_scale[0].j = 1.0f;

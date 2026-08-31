@@ -30,6 +30,14 @@ void lights_illumination_at_point(union real_point3d const *point, struct locati
 void light_disconnect_from_map(long light_index);
 void light_reconnect_to_map(long light_index);
 
+void lights_queue_lens_flare(
+	long lens_flare_index,
+	union real_point3d const *position,
+	union real_vector3d const *forward,
+	union real_vector3d const *up,
+	union real_rgb_color const *color,
+	real scale);
+
 /* ---------- globals */
 
 /* ---------- public code */

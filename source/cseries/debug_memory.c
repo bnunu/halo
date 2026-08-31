@@ -5,25 +5,25 @@ symbols in this file:
 0007CCC0 0030:
 	_debug_memory_manager_initialize (0000)
 0007CCF0 0050:
-	_code_0007ccf0 (0000)
+	_debug_check_memory_globals (0000)
 0007CD40 0050:
-	_code_0007cd40 (0000)
+	_debug_check_pointer_overrun (0000)
 0007CD90 0030:
-	_code_0007cd90 (0000)
+	_debug_memory_header_checksum (0000)
 0007CDC0 0020:
-	_code_0007cdc0 (0000)
+	_compare_file_pointer_totals (0000)
 0007CDE0 0050:
 	_check_memory_status (0000)
 0007CE30 0010:
 	_local_random (0000)
 0007CE40 0110:
-	_code_0007ce40 (0000)
+	_debug_check_pointer_header (0000)
 0007CF50 0070:
-	_code_0007cf50 (0000)
+	_debug_memory_fill_with_random (0000)
 0007CFC0 00a0:
-	_code_0007cfc0 (0000)
+	_debug_memory_add_pointer (0000)
 0007D060 00e0:
-	_code_0007d060 (0000)
+	_debug_memory_remove_pointer (0000)
 0007D140 00b0:
 	_debug_check_memory (0000)
 0007D1F0 00e0:
@@ -91,7 +91,7 @@ symbols in this file:
 00257C58 0010:
 	??_C@_0BA@BEKDBLPJ@pointer?5?$HM?$HM?5size?$AA@ (0000)
 002DCD0C 0020:
-	_data_002dcd0c (0000)
+	_debug_memory_globals (0000)
 */
 
 /* ---------- headers */
@@ -120,7 +120,7 @@ enum
 struct debug_memory_globals
 {
 	unsigned long signature;
-	long total_pointer_size;
+	long current_heap_size;
 	long maximum_pointer_size;
 	struct debug_memory_header *first_pointer;
 	struct debug_memory_header *minimum_pointer;
@@ -170,30 +170,30 @@ unsigned long *get_global_local_random_seed_address(
 	void);
 unsigned short seed_random(
 	unsigned long *seed);
-int code_0007cdc0(
+int compare_file_pointer_totals(
 	const void *a,
 	const void *b);
-static void code_0007ce40(
+static void debug_check_pointer_header(
 	struct debug_memory_header *header,
 	const char *file,
 	long line);
-static void code_0007cd40(
+static void debug_check_pointer_overrun(
 	void *pointer,
 	const char *file,
 	long line);
-static void code_0007cf50(
+static void debug_memory_fill_with_random(
 	void *pointer,
 	unsigned long size);
-static void code_0007cfc0(
+static void debug_memory_add_pointer(
 	struct debug_memory_header *header);
-static void code_0007d060(
+static void debug_memory_remove_pointer(
 	struct debug_memory_header *header,
 	const char *file,
 	long line);
 
 /* ---------- globals */
 
-struct debug_memory_globals data_002dcd0c =
+struct debug_memory_globals debug_memory_globals =
 {
 	debug_memory_signature,
 	0,
@@ -210,26 +210,26 @@ struct debug_memory_globals data_002dcd0c =
 void debug_memory_manager_initialize(
 	void)
 {
-	data_002dcd0c.signature = debug_memory_signature;
-	data_002dcd0c.total_pointer_size = 0;
-	data_002dcd0c.maximum_pointer_size = 0;
-	data_002dcd0c.first_pointer = NULL;
-	data_002dcd0c.minimum_pointer = NULL;
-	data_002dcd0c.maximum_pointer = NULL;
-	data_002dcd0c.trailing_signature = debug_memory_signature;
+	debug_memory_globals.signature = debug_memory_signature;
+	debug_memory_globals.current_heap_size = 0;
+	debug_memory_globals.maximum_pointer_size = 0;
+	debug_memory_globals.first_pointer = NULL;
+	debug_memory_globals.minimum_pointer = NULL;
+	debug_memory_globals.maximum_pointer = NULL;
+	debug_memory_globals.trailing_signature = debug_memory_signature;
 
 	return;
 }
 
-void code_0007ccf0(
+void debug_check_memory_globals(
 	const char *file,
 	long line)
 {
 	match_vassert(
 		"c:\\halo\\SOURCE\\cseries\\debug_memory.c",
 		145,
-		data_002dcd0c.signature == debug_memory_signature &&
-			data_002dcd0c.trailing_signature == debug_memory_signature,
+		debug_memory_globals.signature == debug_memory_signature &&
+			debug_memory_globals.trailing_signature == debug_memory_signature,
 		((char *(__cdecl *)(char *, ...))csprintf)(
 			"Debug memory manager is uninitialized or corrupted. (%s:%d)",
 			file,
@@ -245,7 +245,7 @@ void debug_dump_memory_for_file(
 	FILE *dump_file = NULL;
 	long total_size = 0;
 
-	header = data_002dcd0c.first_pointer;
+	header = debug_memory_globals.first_pointer;
 	debug_check_memory("c:\\halo\\SOURCE\\cseries\\debug_memory.c", 513);
 
 	for (;
@@ -294,9 +294,6 @@ void debug_dump_memory_for_file(
 	return;
 }
 
-#define debug_memory_globals data_002dcd0c
-#define current_heap_size total_pointer_size
-
 void debug_dump_memory_by_file(
 	void)
 {
@@ -309,7 +306,7 @@ void debug_dump_memory_by_file(
 	FILE *dump_file;
 	short i;
 
-	header = data_002dcd0c.first_pointer;
+	header = debug_memory_globals.first_pointer;
 	debug_check_memory("c:\\halo\\SOURCE\\cseries\\debug_memory.c", 553);
 
 	for (; header != NULL; header = header->next)
@@ -357,7 +354,7 @@ void debug_dump_memory_by_file(
 			files,
 			file_count,
 			sizeof(struct file_pointer_totals),
-			code_0007cdc0);
+			compare_file_pointer_totals);
 		for (i = 0; i < file_count; i++)
 		{
 			fprintf(
@@ -379,15 +376,12 @@ void debug_dump_memory_by_file(
 			"\r\nTotal: %40d bytes in %4d pointers\r\n\r\nLargest Heap Size: %28d bytes\r\n\r\n",
 			total_pointer_size,
 			pointer_count,
-			data_002dcd0c.maximum_pointer_size);
+			debug_memory_globals.maximum_pointer_size);
 		fclose(dump_file);
 	}
 
 	return;
 }
-
-#undef current_heap_size
-#undef debug_memory_globals
 
 void debug_dump_memory(
 	void)
@@ -433,11 +427,11 @@ void debug_check_memory(
 {
 	struct debug_memory_header *header;
 
-	code_0007ccf0(file, line);
-	header = data_002dcd0c.first_pointer;
+	debug_check_memory_globals(file, line);
+	header = debug_memory_globals.first_pointer;
 	while (header != NULL)
 	{
-		code_0007ce40(header, file, line);
+		debug_check_pointer_header(header, file, line);
 		match_vassert(
 			"c:\\halo\\SOURCE\\cseries\\debug_memory.c",
 			199,
@@ -472,7 +466,7 @@ void *debug_malloc(
 		"c:\\halo\\SOURCE\\cseries\\debug_memory.c",
 		214,
 		size>=0 && size<MAXIMUM_POINTER_SIZE);
-	code_0007ccf0(file, line);
+	debug_check_memory_globals(file, line);
 
 	header = system_malloc(allocation_size);
 	if (header != NULL)
@@ -480,11 +474,11 @@ void *debug_malloc(
 		header->file = file;
 		header->signature = debug_memory_allocated_signature;
 		header->line = line;
-		header->allocation_id = data_002dcd0c.next_allocation_id++;
+		header->allocation_id = debug_memory_globals.next_allocation_id++;
 		header->size = size;
 		*(unsigned long *)((byte *)(header + 1) + size) =
 			debug_memory_trailing_signature;
-		code_0007cfc0(header);
+		debug_memory_add_pointer(header);
 
 		pointer = header + 1;
 		if (clear)
@@ -499,10 +493,10 @@ void *debug_malloc(
 
 	if (pointer != NULL)
 	{
-		data_002dcd0c.total_pointer_size += size;
-		if (data_002dcd0c.maximum_pointer_size < data_002dcd0c.total_pointer_size)
+		debug_memory_globals.current_heap_size += size;
+		if (debug_memory_globals.maximum_pointer_size < debug_memory_globals.current_heap_size)
 		{
-			data_002dcd0c.maximum_pointer_size = data_002dcd0c.total_pointer_size;
+			debug_memory_globals.maximum_pointer_size = debug_memory_globals.current_heap_size;
 		}
 	}
 
@@ -517,12 +511,12 @@ void debug_free(
 	struct debug_memory_header *header =
 		(struct debug_memory_header *)pointer - 1;
 
-	code_0007ccf0(file, line);
-	code_0007ce40(header, file, line);
-	code_0007cd40(pointer, file, line);
+	debug_check_memory_globals(file, line);
+	debug_check_pointer_header(header, file, line);
+	debug_check_pointer_overrun(pointer, file, line);
 
-	data_002dcd0c.total_pointer_size -= header->size;
-	code_0007d060(header, file, line);
+	debug_memory_globals.current_heap_size -= header->size;
+	debug_memory_remove_pointer(header, file, line);
 	header->signature = debug_memory_disposed_signature;
 	system_free(header);
 
@@ -551,14 +545,14 @@ void *debug_realloc(
 		"c:\\halo\\SOURCE\\cseries\\debug_memory.c",
 		338,
 		size>=0 && size<MAXIMUM_POINTER_SIZE);
-	code_0007ccf0(file, line);
+	debug_check_memory_globals(file, line);
 
 	if (pointer != NULL)
 	{
 		header = (struct debug_memory_header *)pointer - 1;
-		code_0007ce40(header, file, line);
-		code_0007cd40(pointer, file, line);
-		code_0007d060(header, file, line);
+		debug_check_pointer_header(header, file, line);
+		debug_check_pointer_overrun(pointer, file, line);
+		debug_memory_remove_pointer(header, file, line);
 
 		allocation_line = header->line;
 		old_size = header->size;
@@ -574,16 +568,16 @@ void *debug_realloc(
 		header->signature = debug_memory_allocated_signature;
 		header->line = allocation_line;
 		header->file = allocation_file;
-		header->allocation_id = data_002dcd0c.next_allocation_id++;
+		header->allocation_id = debug_memory_globals.next_allocation_id++;
 		header->size = size;
 		*(unsigned long *)((byte *)(header + 1) + size) =
 			debug_memory_trailing_signature;
-		code_0007cfc0(header);
+		debug_memory_add_pointer(header);
 
 		result = header + 1;
 		if (size > old_size)
 		{
-			code_0007cf50(
+			debug_memory_fill_with_random(
 				(byte *)result + old_size,
 				size - old_size);
 		}
@@ -591,10 +585,10 @@ void *debug_realloc(
 
 	if (result != NULL || size == 0)
 	{
-		data_002dcd0c.total_pointer_size += size - old_size;
-		if (data_002dcd0c.maximum_pointer_size < data_002dcd0c.total_pointer_size)
+		debug_memory_globals.current_heap_size += size - old_size;
+		if (debug_memory_globals.maximum_pointer_size < debug_memory_globals.current_heap_size)
 		{
-			data_002dcd0c.maximum_pointer_size = data_002dcd0c.total_pointer_size;
+			debug_memory_globals.maximum_pointer_size = debug_memory_globals.current_heap_size;
 		}
 	}
 
@@ -609,7 +603,7 @@ unsigned short local_random(
 	return seed_random(get_global_local_random_seed_address());
 }
 
-unsigned long code_0007cd90(
+unsigned long debug_memory_header_checksum(
 	struct debug_memory_header const *header)
 {
 	unsigned long checksum;
@@ -620,7 +614,7 @@ unsigned long code_0007cd90(
 	return checksum;
 }
 
-int code_0007cdc0(
+int compare_file_pointer_totals(
 	const void *a,
 	const void *b)
 {
@@ -630,7 +624,7 @@ int code_0007cdc0(
 	return file_b->total_size - file_a->total_size;
 }
 
-static void code_0007ce40(
+static void debug_check_pointer_header(
 	struct debug_memory_header *header,
 	const char *file,
 	long line)
@@ -641,7 +635,7 @@ static void code_0007ce40(
 	match_vassert(
 		"c:\\halo\\SOURCE\\cseries\\debug_memory.c",
 		160,
-		data_002dcd0c.first_pointer != NULL,
+		debug_memory_globals.first_pointer != NULL,
 		csprintf(
 			temporary,
 			"Attempted an operation with pointer at 0x%x when no pointers have been allocated. (%s:%d)",
@@ -651,8 +645,8 @@ static void code_0007ce40(
 	match_vassert(
 		"c:\\halo\\SOURCE\\cseries\\debug_memory.c",
 		165,
-		header >= data_002dcd0c.minimum_pointer &&
-			header <= data_002dcd0c.maximum_pointer,
+		header >= debug_memory_globals.minimum_pointer &&
+			header <= debug_memory_globals.maximum_pointer,
 		csprintf(
 			temporary,
 			"Attempted an operation with pointer at 0x%x, outside of the valid pointer range. (%s:%d)",
@@ -700,7 +694,7 @@ static void code_0007ce40(
 	return;
 }
 
-static void code_0007cd40(
+static void debug_check_pointer_overrun(
 	void *pointer,
 	const char *file,
 	long line)
@@ -724,7 +718,7 @@ static void code_0007cd40(
 	return;
 }
 
-static void code_0007cf50(
+static void debug_memory_fill_with_random(
 	void *pointer,
 	unsigned long size)
 {
@@ -747,48 +741,48 @@ static void code_0007cf50(
 	return;
 }
 
-static void code_0007cfc0(
+static void debug_memory_add_pointer(
 	struct debug_memory_header *header)
 {
-	if (data_002dcd0c.first_pointer == NULL ||
-		header < data_002dcd0c.minimum_pointer)
+	if (debug_memory_globals.first_pointer == NULL ||
+		header < debug_memory_globals.minimum_pointer)
 	{
-		data_002dcd0c.minimum_pointer = header;
+		debug_memory_globals.minimum_pointer = header;
 	}
-	if (data_002dcd0c.first_pointer == NULL ||
-		header > data_002dcd0c.maximum_pointer)
+	if (debug_memory_globals.first_pointer == NULL ||
+		header > debug_memory_globals.maximum_pointer)
 	{
-		data_002dcd0c.maximum_pointer = header;
+		debug_memory_globals.maximum_pointer = header;
 	}
 
-	header->next = data_002dcd0c.first_pointer;
-	if (data_002dcd0c.first_pointer != NULL)
+	header->next = debug_memory_globals.first_pointer;
+	if (debug_memory_globals.first_pointer != NULL)
 	{
-		data_002dcd0c.first_pointer->previous = header;
-		header->next->checksum = code_0007cd90(header->next);
+		debug_memory_globals.first_pointer->previous = header;
+		header->next->checksum = debug_memory_header_checksum(header->next);
 	}
 	header->previous = NULL;
-	data_002dcd0c.first_pointer = header;
-	header->checksum = code_0007cd90(header);
+	debug_memory_globals.first_pointer = header;
+	header->checksum = debug_memory_header_checksum(header);
 
 	return;
 }
 
-static void code_0007d060(
+static void debug_memory_remove_pointer(
 	struct debug_memory_header *header,
 	const char *file,
 	long line)
 {
 	struct debug_memory_header *previous;
 
-	if (header == data_002dcd0c.first_pointer)
+	if (header == debug_memory_globals.first_pointer)
 	{
-		data_002dcd0c.first_pointer = header->next;
-		if (data_002dcd0c.first_pointer != NULL)
+		debug_memory_globals.first_pointer = header->next;
+		if (debug_memory_globals.first_pointer != NULL)
 		{
-			data_002dcd0c.first_pointer->previous = NULL;
-			data_002dcd0c.first_pointer->checksum =
-				code_0007cd90(data_002dcd0c.first_pointer);
+			debug_memory_globals.first_pointer->previous = NULL;
+			debug_memory_globals.first_pointer->checksum =
+				debug_memory_header_checksum(debug_memory_globals.first_pointer);
 		}
 	}
 	else
@@ -799,11 +793,11 @@ static void code_0007d060(
 			446,
 			previous);
 		previous->next = header->next;
-		previous->checksum = code_0007cd90(previous);
+		previous->checksum = debug_memory_header_checksum(previous);
 		if (previous->next != NULL)
 		{
 			previous->next->previous = previous;
-			previous->next->checksum = code_0007cd90(previous->next);
+			previous->next->checksum = debug_memory_header_checksum(previous->next);
 		}
 	}
 

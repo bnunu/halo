@@ -8,11 +8,26 @@ header included in hcex build.
 #define __MODELS_H
 #pragma once
 
+/* ---------- headers */
+
+#include "math/real_math.h"
+
 /* ---------- constants */
+
+enum
+{
+	_render_model_immediate_bit = 0,
+	_render_model_shadow_bit,
+	_render_model_no_planar_fog_bit,
+	_render_model_first_person_bit,
+	NUMBER_OF_RENDER_MODEL_FLAGS
+};
 
 /* ---------- macros */
 
 /* ---------- structures */
+
+struct render_lighting;
 
 /* ---------- prototypes/MODELS.C */
 
@@ -45,6 +60,27 @@ short model_get_marker_by_name(
 	short maximum_marker_count);
 void model_build_tangent_matrices(
 	struct model *model);
+void model_node_matrices_from_orientations(
+	struct model const *model,
+	struct real_matrix4x3 *node_matrices,
+	struct real_orientation const *node_orientations,
+	union real_point3d const *position,
+	union real_vector3d const *forward,
+	union real_vector3d const *up);
+void render_model(
+	long model_index,
+	real level_of_detail_pixels,
+	struct real_matrix4x3 const *node_matrices,
+	byte const *region_permutation_indices,
+	union real_rgb_color const *change_colors,
+	real const *function_values,
+	struct render_lighting const *lighting,
+	union real_point3d const *centroid,
+	real radius,
+	long model_effect,
+	long unique_identifier,
+	short forced_shader_permutation_index,
+	unsigned long flags);
 
 /* ---------- globals */
 

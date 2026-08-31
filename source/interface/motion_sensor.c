@@ -96,6 +96,15 @@ symbols in this file:
 
 /* ---------- constants */
 
+enum
+{
+	/* january's assert text at 00270548 is "_blip_type_none != blip_type", which names
+	this one; the six lower blip types are only referenced by the drawing code this
+	object has not reconstructed yet, so only the sentinel is spelled out. */
+	_blip_type_none = 6,
+	NUMBER_OF_BLIP_TYPES
+};
+
 /* ---------- macros */
 
 /* ---------- structures */
@@ -138,7 +147,7 @@ typedef char motion_sensor_globals_size_assert[
 
 /* ---------- globals */
 
-const real_rgb_color blip_colors[] =
+const real_rgb_color blip_colors[NUMBER_OF_BLIP_TYPES] =
 {
 	{ 1.f, .5f, 0.f },
 	{ 1.f, 1.f, 0.f },
@@ -152,15 +161,19 @@ const real_rgb_color blip_colors[] =
 real scale = 1.f;
 
 /* January's .data chunk for this file is 0x18 bytes: `scale` at +0 followed by five
-more floats (0.f, -.75f, 1.f, 1.f, 1.1f) that only the unwritten drawing code names.
-The leading 0.f proves they belong to an aggregate - a lone zero-initialised real
-would land in .bss - so carry them as one address-named array until the users of
-these values are reconstructed. */
-static real data_002e4c70[5] = { 0.f, -.75f, 1.f, 1.f, 1.1f };
+more reals (0.f, -.75f, 1.f, 1.f, 1.1f) that only the unreconstructed drawing code
+reads. The leading 0.f proves they belong to an aggregate - a lone zero-initialised
+real would land in .bss - so carry them as one array until their users land. HCEA's
+motion_sensor.obj has five .data reals too (sizes[3], sweep_speed, test) but they do
+not line up with these values, so the individual names are not recoverable yet. */
+static real motion_sensor_render_constants[5] = { 0.f, -.75f, 1.f, 1.f, 1.1f };
 
 static long next_vertex_index = 0;
 static struct motion_sensor_globals_definition *motion_sensor_globals = NULL;
-static long bss_00453ad0 = 0;
+/* hcea's motion_sensor.obj places the file static `float sweep_theta` immediately
+after motion_sensor_globals in .bss, exactly where this january object has an unnamed
+4-byte hole. */
+static real sweep_theta = 0.f;
 static boolean debug_motion_sensor_draw_all_units = FALSE;
 
 /* ---------- public code */
@@ -209,7 +222,7 @@ motion_sensor_initialize_for_new_map(
 
 			do
 			{
-				blip->type = 6;
+				blip->type = _blip_type_none;
 				blip++;
 			}
 			while (--blip_count);

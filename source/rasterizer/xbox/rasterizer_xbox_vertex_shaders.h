@@ -23,8 +23,17 @@ struct vertex_shader_entry
 	long instruction_count;
 };
 
+/* ---------- prototypes/RASTERIZER_XBOX_VERTEX_SHADERS_INITIALIZE.C */
+
+boolean rasterizer_vertex_shaders_initialize(
+	void);
+void rasterizer_vertex_shaders_dispose(
+	void);
+
 /* ---------- globals */
 
+extern unsigned long const vertex_shader_code[];
+extern unsigned long const vertex_shader_declarations[];
 extern struct vertex_shader_entry vertex_shader_table[NUMBER_OF_VERTEX_SHADERS];
 
 #endif // __RASTERIZER_XBOX_VERTEX_SHADERS_H

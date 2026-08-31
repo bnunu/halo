@@ -2770,6 +2770,7 @@ symbols in this file:
 /* ---------- headers */
 
 #include "cseries/cseries.h"
+#include "cutscene/cinematics.h"
 #include "hs.h"
 #include "object_lists.h"
 #include "hs_scenario_definitions.h"
@@ -3663,9 +3664,6 @@ void player_effect_screen_fade_out(
 	real initial_opacity,
 	real final_opacity,
 	short duration_ticks);
-void cinematic_set_title_delayed(
-	short title_index,
-	real delay);
 void scripted_sound_new(
 	long sound_index,
 	long source_object_index,

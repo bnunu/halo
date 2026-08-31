@@ -5081,10 +5081,7 @@ boolean actor_action_handle_danger_avoidance(
 			}
 		}
 
-		if (body_within_danger)
-		{
-		}
-		else
+		if (!body_within_danger)
 		{
 			debug_info->danger_decision = 5;
 			debug_info->danger_zone_dist =

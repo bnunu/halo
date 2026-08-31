@@ -5,7 +5,7 @@ symbols in this file:
 000A4800 0050:
 	_material_get_name (0000)
 000A4850 00b0:
-	_code_000a4850 (0000)
+	_game_difficulty_get_value_by_difficulty (0000)
 000A4900 0020:
 	_game_difficulty_get_value (0000)
 000A4920 0090:
@@ -82,6 +82,7 @@ symbols in this file:
 
 #include "cseries/cseries.h"
 #include "game/game.h"
+#include "game/game_allegiance.h"
 #include "game/game_engine.h"
 #include "game/game_globals.h"
 #include "scenario/scenario.h"
@@ -93,8 +94,6 @@ symbols in this file:
 /* ---------- structures */
 
 /* ---------- prototypes */
-
-boolean game_team_is_enemy(short team_index0, short team_index1);
 
 /* ---------- globals */
 
@@ -164,7 +163,7 @@ char const *material_get_name(
 
 /* ---------- private code */
 
-static real code_000a4850(
+static real game_difficulty_get_value_by_difficulty(
 	short value_type,
 	short difficulty)
 {
@@ -198,7 +197,7 @@ static real code_000a4850(
 real game_difficulty_get_value(
 	short value_type)
 {
-	return code_000a4850(value_type, game_difficulty_level_get());
+	return game_difficulty_get_value_by_difficulty(value_type, game_difficulty_level_get());
 }
 
 real game_difficulty_get_team_value(
@@ -216,10 +215,10 @@ real game_difficulty_get_team_value(
 			(value_type >= 0) && (value_type < NUMBER_OF_GAME_DIFFICULTY_VALUES));
 		friend_value_type = global_difficulty_friend_settings[value_type];
 		if (friend_value_type == NONE)
-			return code_000a4850(value_type, _game_difficulty_level_normal);
+			return game_difficulty_get_value_by_difficulty(value_type, _game_difficulty_level_normal);
 
-		return code_000a4850(friend_value_type, difficulty);
+		return game_difficulty_get_value_by_difficulty(friend_value_type, difficulty);
 	}
 
-	return code_000a4850(value_type, difficulty);
+	return game_difficulty_get_value_by_difficulty(value_type, difficulty);
 }

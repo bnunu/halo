@@ -3,15 +3,15 @@ PATH_SMOOTHING.C
 
 symbols in this file:
 00051190 0080:
-	_code_00051190 (0000)
+	_surface_is_walkable (0000)
 00051210 0150:
-	_code_00051210 (0000)
+	_find_tangent_point (0000)
 00051360 0120:
-	_code_00051360 (0000)
+	_find_avoidance_point (0000)
 00051480 0220:
-	_code_00051480 (0000)
+	_choose_turning_point (0000)
 000516A0 0380:
-	_code_000516a0 (0000)
+	_find_turning_point (0000)
 00051A20 0360:
 	_path_smooth (0000)
 0024EAB0 0046:
@@ -103,7 +103,7 @@ void path_smooth(
 
 /* ---------- private code */
 
-static boolean code_00051190(
+static boolean surface_is_walkable(
 	byte const *pathfinding_surfaces,
 	struct collision_bsp const *bsp,
 	byte const *breakable_surface_flags,
@@ -116,7 +116,7 @@ static boolean code_00051190(
 	byte breakable_surface_index;
 
 	pathfinding_surface_flags = pathfinding_surfaces[surface_index];
-	walkable = (pathfinding_surface_flags >> _pathfinding_surface_walkable_bit) & 1;
+	walkable = TEST_FLAG(pathfinding_surface_flags, _pathfinding_surface_walkable_bit);
 
 	if (!ignore_broken_surfaces &&
 		walkable &&
@@ -137,7 +137,7 @@ static boolean code_00051190(
 	return walkable;
 }
 
-static void code_00051210(
+static void find_tangent_point(
 	real const *point,
 	real const *center,
 	real radius,
@@ -201,7 +201,7 @@ static void code_00051210(
 	return;
 }
 
-static void code_00051360(
+static void find_avoidance_point(
 	real const *tangent_points,
 	real const *center,
 	real const *start_point,
@@ -259,7 +259,7 @@ static void code_00051360(
 }
 
 
-static boolean code_00051480(
+static boolean choose_turning_point(
 	real const *start_point,
 	real const *clockwise_turning_point,
 	real const *counterclockwise_turning_point,
@@ -329,7 +329,7 @@ static boolean code_00051480(
 	return FALSE;
 }
 
-static boolean code_000516a0(
+static boolean find_turning_point(
 	struct structure_bsp const *structure,
 	real const *point,
 	real radius,
@@ -385,7 +385,7 @@ static boolean code_000516a0(
 			&bsp->edges,
 			edge_index,
 			struct collision_edge);
-		side_flag = code_00051190(
+		side_flag = surface_is_walkable(
 			pathfinding_surfaces,
 			bsp,
 			breakable_surface_flags,
@@ -475,7 +475,7 @@ static boolean code_000516a0(
 		{
 			matches_end = next_vertex_index == collision_edge->vertex_indices[1];
 			candidate_surface_index = collision_edge->surface_indices[!matches_end];
-			refined_side = code_00051190(
+			refined_side = surface_is_walkable(
 				pathfinding_surfaces,
 				bsp,
 				breakable_surface_flags,
@@ -586,7 +586,7 @@ void path_smooth(
 			if (!collision_active || collision_edge_index == NONE)
 				break;
 
-			found_clockwise = code_000516a0(
+			found_clockwise = find_turning_point(
 				state->structure,
 				current_position.n,
 				0.3f,
@@ -594,7 +594,7 @@ void path_smooth(
 				TRUE,
 				state->input.ignore_broken_surfaces,
 				clockwise_turning_point.n);
-			found_counterclockwise = code_000516a0(
+			found_counterclockwise = find_turning_point(
 				state->structure,
 				current_position.n,
 				0.3f,
@@ -605,7 +605,7 @@ void path_smooth(
 			if (!found_counterclockwise || !found_clockwise)
 				goto bail_out;
 
-			chose_clockwise = code_00051480(
+			chose_clockwise = choose_turning_point(
 				current_position.n,
 				clockwise_turning_point.n,
 				counterclockwise_turning_point.n,
@@ -613,19 +613,19 @@ void path_smooth(
 				raw_steps[collision_step_index].point.n,
 				chosen_center.n);
 
-			code_00051210(
+			find_tangent_point(
 				current_position.n,
 				chosen_center.n,
 				0.35f,
 				chose_clockwise,
 				tangent_points[0].n);
-			code_00051210(
+			find_tangent_point(
 				raw_steps[collision_step_index].point.n,
 				chosen_center.n,
 				0.35f,
 				!chose_clockwise,
 				tangent_points[1].n);
-			code_00051360(
+			find_avoidance_point(
 				tangent_points[0].n,
 				chosen_center.n,
 				current_position.n,

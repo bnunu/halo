@@ -42,10 +42,7 @@ symbols in this file:
 
 /* ---------- prototypes */
 
-void code_00081cd0(
-	struct recorded_animation_definition const *animation,
-	void *stream,
-	long stream_size);
+static void byte_swap_recording(void *definition, void *stream, long stream_size);
 
 /* ---------- globals */
 
@@ -61,7 +58,7 @@ struct recorded_animation_event_stream_definition recorded_animation_event_strea
 		"recorded_animation_event_stream_data",
 		0,
 		0x200000,
-		code_00081cd0,
+		byte_swap_recording,
 	},
 	{
 		{ _tag_field_string, 0, "name^", NULL },
@@ -118,11 +115,10 @@ short scenario_get_animation_by_name(struct scenario const *scenario, char const
 
 /* ---------- private code */
 
-void code_00081cd0(
-	struct recorded_animation_definition const *animation,
-	void *stream,
-	long stream_size)
+static void byte_swap_recording(void *definition, void *stream, long stream_size)
 {
+	struct recorded_animation_definition const *animation = (struct recorded_animation_definition const *)definition;
+
 	if (animation->version > 0)
 	{
 		if (animation->version > 3)

@@ -17,6 +17,11 @@ header included in hcex build.
 
 enum
 {
+	_framebuffer_blend_function_alpha_blend = 0
+};
+
+enum
+{
 	MAXIMUM_WINDOWS = 4,
 	MAXIMUM_LENS_FLARES_PER_FRAME = 1024,
 	MAXIMUM_LIGHTS_PER_WINDOW = 128,

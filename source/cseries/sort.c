@@ -3,9 +3,9 @@ SORT.C
 
 symbols in this file:
 00080360 0060:
-	_code_00080360 (0000)
+	_shortsort_2byte (0000)
 000803C0 0050:
-	_code_000803c0 (0000)
+	_shortsort_4byte (0000)
 00080410 0150:
 	_qsort_2byte (0000)
 00080560 0140:
@@ -30,11 +30,11 @@ enum
 
 /* ---------- prototypes */
 
-static void code_00080360(
+static void shortsort_2byte(
 	word *hi,
 	word *lo,
 	boolean (*compare)(word, word));
-static void code_000803c0(
+static void shortsort_4byte(
 	long *hi,
 	long *lo,
 	boolean (*compare)(long, long));
@@ -76,7 +76,7 @@ void qsort_2byte(
 		size = hi-lo+1;
 		if (size<=QSORT_CUTOFF)
 		{
-			code_00080360(hi, lo, compare);
+			shortsort_2byte(hi, lo, compare);
 		}
 		else
 		{
@@ -178,7 +178,7 @@ void qsort_4byte(
 		size = hi-lo+1;
 		if (size<=QSORT_CUTOFF)
 		{
-			code_000803c0(hi, lo, compare);
+			shortsort_4byte(hi, lo, compare);
 		}
 		else
 		{
@@ -258,7 +258,7 @@ void qsort_4byte(
 
 /* ---------- private code */
 
-static void code_00080360(
+static void shortsort_2byte(
 	word *hi,
 	word *lo,
 	boolean (*compare)(word, word))
@@ -285,7 +285,7 @@ static void code_00080360(
 	return;
 }
 
-static void code_000803c0(
+static void shortsort_4byte(
 	long *hi,
 	long *lo,
 	boolean (*compare)(long, long))

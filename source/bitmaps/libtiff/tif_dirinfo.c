@@ -1,5 +1,5 @@
 #ifndef lint
-static char rcsid[] = "$Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirinfo.c,v 1.17 92/03/20 11:25:08 sam Exp $";
+char tif_dirinfo_rcsid[] = "$Header: /usr/people/sam/tiff/libtiff/RCS/tif_dirinfo.c,v 1.17 92/03/20 11:25:08 sam Exp $";
 #endif
 
 /*
@@ -269,21 +269,21 @@ int tiffDataWidth[] = {
     8,	/* TIFF_DOUBLE */
 };
 
-TIFFFieldInfo const *bss_0031be4c = NULL;
+static TIFFFieldInfo const *last = NULL;
 
 TIFFFieldInfo const *
 DECLARE2(TIFFFindFieldInfo, u_short, tag, TIFFDataType, dt)
 {
 	register TIFFFieldInfo const *fip;
 
-	if (bss_0031be4c && bss_0031be4c->field_tag == tag &&
-	    (dt == TIFF_ANY || dt == bss_0031be4c->field_type))
-		return (bss_0031be4c);
+	if (last && last->field_tag == tag &&
+	    (dt == TIFF_ANY || dt == last->field_type))
+		return (last);
 	/* NB: if table gets big, use sorted search (e.g. binary search) */
 	for (fip = tiffFieldInfo; fip->field_tag; fip++)
 		if (fip->field_tag == tag &&
 		    (dt == TIFF_ANY || fip->field_type == dt))
-			return (bss_0031be4c = fip);
+			return (last = fip);
 	return ((TIFFFieldInfo *)0);
 }
 

@@ -16,7 +16,7 @@ symbols in this file:
 	_standard_frame_level_of_detail (0000)
 	_render_target_frame_level_of_detail (0058)
 004C004C 002c:
-	_bss_004c004c (0000)
+	_render_media_globals (0000)
 */
 
 /* ---------- headers */
@@ -61,7 +61,7 @@ typedef char frame_level_of_detail_size_assert[
 
 /* ---------- globals */
 
-struct render_media_globals bss_004c004c = {0};
+struct render_media_globals render_media_globals = {0};
 
 const real media_wave_amplitude = 0.05f;
 
@@ -96,8 +96,8 @@ struct frame_level_of_detail render_target_frame_level_of_detail =
 void render_media_initialize_for_new_map(
 	void)
 {
-	bss_004c004c.initialized = TRUE;
-	bss_004c004c.render_target_index = 0;
+	render_media_globals.initialized = TRUE;
+	render_media_globals.render_target_index = 0;
 
 	return;
 }
@@ -105,7 +105,7 @@ void render_media_initialize_for_new_map(
 void render_media_dispose_from_old_map(
 	void)
 {
-	bss_004c004c.initialized = FALSE;
+	render_media_globals.initialized = FALSE;
 
 	return;
 }

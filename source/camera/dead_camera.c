@@ -19,6 +19,7 @@ symbols in this file:
 /* ---------- headers */
 
 #include "dead_camera.h"
+#include "camera/director.h"
 #include "observer.h"
 #include "static_camera.h"
 #include "game/game_engine.h"
@@ -32,10 +33,13 @@ symbols in this file:
 
 /* ---------- structures */
 
-struct camera_control
+/* January emitted these three as separate const file statics; they are kept as one
+   aggregate because splitting them lets VC7 constant-fold the referenced scalars. */
+struct dead_camera_constants
 {
-	long unknown0;
-	real seconds_elapsed;
+	real dead_timer;
+	real multiplayer_switch_timer;
+	real singleplayer_switch_timer;
 };
 
 struct dead_camera_command
@@ -65,29 +69,18 @@ struct dead_camera_command
 typedef char dead_camera_command_size_assert[
 	sizeof(struct dead_camera_command) == 0x68 ? 1 : -1];
 
-struct dead_camera_constants
-{
-	real timer;
-	real multiplayer_switch_timer;
-	real single_player_switch_timer;
-};
-
 /* ---------- prototypes */
 
-void observer_up_from_forward(
-	real_vector3d const *forward,
-	real_vector3d *up);
-
-static boolean code_000740b0(
+static boolean player_has_allies(
 	long player_index);
-static long code_00074120(
+static long player_get_next_player_with_a_unit(
 	long player_index,
 	long old_player_index,
 	boolean match_team);
 
 /* ---------- globals */
 
-struct dead_camera_constants const rdata_00256ae8 =
+struct dead_camera_constants const dead_camera_constants =
 {
 	3.f,
 	15.f,
@@ -119,7 +112,7 @@ void dead_camera_new(
 	camera->facing.yaw = yaw;
 	pitch = real_local_random_range(0.47123894f, 1.0995574f);
 	camera->facing.pitch = -pitch;
-	camera->timer = rdata_00256ae8.timer;
+	camera->timer = dead_camera_constants.dead_timer;
 	if (unit_index != NONE)
 	{
 		switch_timer = FLT_MAX;
@@ -127,8 +120,8 @@ void dead_camera_new(
 	else
 	{
 		switch_timer = game_engine_running()
-			? rdata_00256ae8.multiplayer_switch_timer
-			: rdata_00256ae8.single_player_switch_timer;
+			? dead_camera_constants.multiplayer_switch_timer
+			: dead_camera_constants.singleplayer_switch_timer;
 	}
 	camera->switch_timer = switch_timer;
 
@@ -174,12 +167,12 @@ void dead_camera_update(
 	result->field_of_view = camera->field_of_view;
 	result->offset = *global_zero_vector3d;
 	result->velocity = *global_zero_vector3d;
-	result->flags = FLAG(0);
+	result->flags = FLAG(_camera_command_valid_bit);
 	result->timer = MAX(0.f, camera->timer);
 	result->position_timer = 0.f;
 	result->position_flags = 3;
 
-	if (camera->timer == rdata_00256ae8.timer)
+	if (camera->timer == dead_camera_constants.dead_timer)
 	{
 		result->depth = 0.5f;
 		result->distance_timer = 0.f;
@@ -197,8 +190,8 @@ void dead_camera_update(
 		long next_unit_index;
 		boolean match_team;
 
-		match_team = code_000740b0(camera->player_index);
-		next_player_index = code_00074120(
+		match_team = player_has_allies(camera->player_index);
+		next_player_index = player_get_next_player_with_a_unit(
 			camera->player_index,
 			camera->current_player_index,
 			match_team);
@@ -216,19 +209,19 @@ void dead_camera_update(
 
 		if (next_unit_index != camera->unit_index && next_unit_index != NONE)
 		{
-			camera->timer = rdata_00256ae8.timer;
+			camera->timer = dead_camera_constants.dead_timer;
 			camera->unit_index = next_unit_index;
 		}
 
 		camera->switch_timer = game_engine_running()
-			? rdata_00256ae8.multiplayer_switch_timer
-			: rdata_00256ae8.single_player_switch_timer;
+			? dead_camera_constants.multiplayer_switch_timer
+			: dead_camera_constants.singleplayer_switch_timer;
 	}
 
 	match_vassert(
 		"c:\\halo\\SOURCE\\camera\\dead_camera.c",
 		158,
-		!(result->flags & FLAG(0)) ||
+		!(result->flags & FLAG(_camera_command_valid_bit)) ||
 		(valid_real_vector3d_axes2(&result->forward, &result->up) &&
 			valid_real(result->position.x) && result->position.x>=-5000.f && result->position.x<=5000.f &&
 			valid_real(result->position.y) && result->position.y>=-5000.f && result->position.y<=5000.f &&
@@ -268,20 +261,20 @@ void dead_camera_update(
 
 /* ---------- private code */
 
-static boolean code_000740b0(
+static boolean player_has_allies(
 	long player_index)
 {
-	struct data_iterator iterator;
+	struct data_iterator player_iterator;
 	struct player_datum *player;
 	long team_index;
 	boolean found;
 
 	team_index = player_get(player_index)->team_index;
 	found = FALSE;
-	data_iterator_new(&iterator, player_data);
-	while ((player = (struct player_datum *)data_iterator_next(&iterator)) != NULL)
+	data_iterator_new(&player_iterator, player_data);
+	while ((player = (struct player_datum *)data_iterator_next(&player_iterator)) != NULL)
 	{
-		if (iterator.datum_index != player_index && player->team_index == team_index)
+		if (player_iterator.datum_index != player_index && player->team_index == team_index)
 		{
 			found = TRUE;
 			break;
@@ -291,12 +284,12 @@ static boolean code_000740b0(
 	return found;
 }
 
-static long code_00074120(
+static long player_get_next_player_with_a_unit(
 	long player_index,
 	long old_player_index,
 	boolean match_team)
 {
-	struct data_iterator iterator;
+	struct data_iterator player_iterator;
 	struct player_datum *player;
 	long first_player_index;
 	long next_player_index;
@@ -304,21 +297,21 @@ static long code_00074120(
 
 	team_index = match_team ? player_get(player_index)->team_index : NONE;
 	first_player_index = NONE;
-	data_iterator_new(&iterator, player_data);
-	while ((player = (struct player_datum *)data_iterator_next(&iterator)) != NULL)
+	data_iterator_new(&player_iterator, player_data);
+	while ((player = (struct player_datum *)data_iterator_next(&player_iterator)) != NULL)
 	{
-		if (iterator.datum_index != player_index &&
+		if (player_iterator.datum_index != player_index &&
 			player->unit_index != NONE &&
 			(!match_team || player->team_index == team_index))
 		{
 			if (first_player_index == NONE)
 			{
-				first_player_index = iterator.datum_index;
+				first_player_index = player_iterator.datum_index;
 			}
-			else if ((iterator.datum_index & 0xFFFF) >
+			else if ((player_iterator.datum_index & 0xFFFF) >
 				(old_player_index & 0xFFFF))
 			{
-				first_player_index = iterator.datum_index;
+				first_player_index = player_iterator.datum_index;
 				break;
 			}
 		}

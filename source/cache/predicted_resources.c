@@ -3,7 +3,7 @@ PREDICTED_RESOURCES.C
 
 symbols in this file:
 001AD870 0090:
-	_code_001ad870 (0000)
+	_predicted_resources_sound_precache (0000)
 001AD900 0080:
 	_predicted_resources_precache (0000)
 */
@@ -13,6 +13,8 @@ symbols in this file:
 #include "cseries.h"
 #include "cache/predicted_resources.h"
 #include "bitmaps/bitmap_group.h"
+#include "cache/sound_cache.h"
+#include "cache/texture_cache.h"
 #include "sound/sound_definitions.h"
 #include "tag_files/tag_groups.h"
 
@@ -24,18 +26,7 @@ symbols in this file:
 
 /* ---------- prototypes */
 
-void _sound_cache_sound_request(
-	struct sound_permutation *sound,
-	boolean load,
-	boolean reference,
-	boolean block);
-
-void *_texture_cache_bitmap_get_hardware_format(
-	struct bitmap_data *bitmap,
-	boolean block,
-	boolean load);
-
-static void code_001ad870(long sound_definition_index);
+static void predicted_resources_sound_precache(long sound_definition_index);
 
 /* ---------- globals */
 
@@ -69,7 +60,7 @@ void predicted_resources_precache(
 			break;
 
 		case _predicted_resource_sound:
-			code_001ad870(predicted_resource->tag_index);
+			predicted_resources_sound_precache(predicted_resource->tag_index);
 			break;
 		}
 	}
@@ -79,25 +70,22 @@ void predicted_resources_precache(
 
 /* ---------- private code */
 
-static void code_001ad870(
+static void predicted_resources_sound_precache(
 	long sound_definition_index)
 {
-	struct sound_definition *sound_definition;
+	struct sound_definition *sound_definition = sound_definition_get(sound_definition_index);
 	struct tag_block *pitch_ranges;
-	short pitch_range_index;
+	short pitch_range_index = 0;
 
-	sound_definition = sound_definition_get(sound_definition_index);
-	pitch_range_index = 0;
 	if (sound_definition->pitch_ranges.count <= 0)
 		return;
 	pitch_ranges = &sound_definition->pitch_ranges;
 
-pitch_range_loop:
+	do
 	{
-		struct sound_pitch_range *pitch_range;
+		struct sound_pitch_range *pitch_range = TAG_BLOCK_GET_ELEMENT(pitch_ranges, pitch_range_index, struct sound_pitch_range);
 		short permutation_index;
 
-		pitch_range = TAG_BLOCK_GET_ELEMENT(pitch_ranges, pitch_range_index, struct sound_pitch_range);
 		for (permutation_index = 0;
 			permutation_index < pitch_range->actual_permutation_count;
 			permutation_index++)
@@ -110,8 +98,7 @@ pitch_range_loop:
 		}
 		pitch_range_index++;
 	}
-	if (pitch_range_index < pitch_ranges->count)
-		goto pitch_range_loop;
+	while (pitch_range_index < pitch_ranges->count);
 
 	return;
 }

@@ -1,5 +1,5 @@
 #ifndef lint
-static char rcsid[] = "$Header: /usr/people/sam/tiff/libtiff/RCS/tif_next.c,v 1.14 92/02/10 19:06:45 sam Exp $";
+char tif_next_rcsid[] = "$Header: /usr/people/sam/tiff/libtiff/RCS/tif_next.c,v 1.14 92/02/10 19:06:45 sam Exp $";
 #endif
 
 /*
@@ -36,17 +36,17 @@ static char rcsid[] = "$Header: /usr/people/sam/tiff/libtiff/RCS/tif_next.c,v 1.
 extern void *csmemcpy(void *destination, const void *source, unsigned long size);
 
 #if USE_PROTOTYPES
-static	int code_0005b9b0(TIFF *, u_char *, int, u_int);
+static	int NeXTDecode(TIFF *, u_char *, int, u_int);
 #else
-static	int code_0005b9b0();
+static	int NeXTDecode();
 #endif
 
-TIFFInitNeXT(tif)
-	TIFF *tif;
+int TIFFInitNeXT(
+	TIFF *tif)
 {
-	tif->tif_decoderow = code_0005b9b0;
-	tif->tif_decodestrip = code_0005b9b0;
-	tif->tif_decodetile = code_0005b9b0;
+	tif->tif_decoderow = NeXTDecode;
+	tif->tif_decodestrip = NeXTDecode;
+	tif->tif_decodetile = NeXTDecode;
 	return (1);
 }
 
@@ -63,12 +63,11 @@ TIFFInitNeXT(tif)
 #define LITERALSPAN	0x40
 #define WHITE   	((1<<2)-1)
 
-static int
-code_0005b9b0(tif, buf, occ, s)
-	TIFF *tif;
-	u_char *buf;
-	int occ;
-	u_int s;
+static int NeXTDecode(
+	TIFF *tif,
+	u_char *buf,
+	int occ,
+	u_int s)
 {
 	register u_char *bp, *op;
 	register int cc, n;

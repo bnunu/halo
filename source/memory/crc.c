@@ -5,7 +5,7 @@ symbols in this file:
 001088D0 0010:
 	_crc_new (0000)
 001088E0 0040:
-	_code_001088e0 (0000)
+	_build_crc_table (0000)
 00108920 0080:
 	_crc_checksum_buffer (0000)
 0027D2E4 000f:
@@ -13,7 +13,7 @@ symbols in this file:
 0027D2F4 001c:
 	??_C@_0BM@FPJPBIIF@c?3?2halo?2SOURCE?2memory?2crc?4c?$AA@ (0000)
 00456220 0401:
-	_bss_00456220 (0000)
+	_crc_globals (0000)
 */
 
 /* ---------- headers */
@@ -30,8 +30,8 @@ symbols in this file:
 #pragma pack(push, 1)
 struct crc_globals
 {
-	unsigned long table[256];
-	boolean initialized;
+	unsigned long crc_table[256];
+	boolean crc_table_built;
 };
 #pragma pack(pop)
 
@@ -40,10 +40,8 @@ struct crc_globals
 /* ---------- globals */
 
 #pragma bss_seg(".bss")
-struct crc_globals bss_00456220;
+static struct crc_globals crc_globals;
 #pragma bss_seg()
-
-#define crc_state bss_00456220
 
 /* ---------- public code */
 
@@ -54,21 +52,18 @@ void crc_new(
 	return;
 }
 
-/* Initializes the CRC-32 lookup table; the private function has no surviving PDB name. */
-__declspec(noinline) static void code_001088e0(
+/* Initializes the CRC-32 lookup table. */
+__declspec(noinline) static void build_crc_table(
 	unsigned long *crc_table)
 {
-	unsigned long byte_index;
-	long byte_count;
+	unsigned long byte_index = 0;
+	long byte_count = 256;
 
-	byte_index = 0;
-	byte_count = 256;
 	do
 	{
 		unsigned long crc = byte_index;
-		long bit_count;
+		long bit_count = 8;
 
-		bit_count = 8;
 		do
 		{
 			if (crc & 1)
@@ -95,10 +90,10 @@ void crc_checksum_buffer(
 
 	match_assert("c:\\halo\\SOURCE\\memory\\crc.c", 42, buffer_size>=0);
 
-	if (!crc_state.initialized)
+	if (!crc_globals.crc_table_built)
 	{
-		code_001088e0(crc_state.table);
-		crc_state.initialized = TRUE;
+		build_crc_table(crc_globals.crc_table);
+		crc_globals.crc_table_built = TRUE;
 	}
 
 	crc = *crc_reference;
@@ -107,7 +102,7 @@ void crc_checksum_buffer(
 		do
 		{
 			table_index = (*(byte const *)buffer ^ crc) & 0xFF;
-			table_index = crc_state.table[table_index];
+			table_index = crc_globals.crc_table[table_index];
 			crc >>= 8;
 			buffer = (byte const *)buffer + 1;
 			crc ^= table_index;

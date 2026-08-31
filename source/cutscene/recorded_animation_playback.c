@@ -83,6 +83,7 @@ symbols in this file:
 /* ---------- headers */
 
 #include "cseries.h"
+#include "cutscene/recorded_animation_initialize.h"
 #include "memory/byte_swapping.h"
 #include "math/real_math.h"
 
@@ -154,26 +155,9 @@ struct animation_playback_controller
 	struct direction_playback_controller looking_control;
 };
 
-struct recorded_unit_control
-{
-	byte byte_field0;
-	byte byte_field1;
-	short word_field2;
-	short word_field4;
-	short version2_field;
-	short version3_field;
-	short unused_field10;
-	real_vector2d vector2d_field12;
-	long long_field20;
-	long version1_field;
-	real_vector3d vector3d_field28;
-	real_vector3d vector3d_field40;
-	real_vector3d vector3d_field52;
-};
-
 typedef void (*recorded_animation_apply_proc)(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
 
@@ -198,44 +182,39 @@ struct recorded_animation_playback_data
 
 /* ---------- prototypes */
 
-void recorded_animation_initialize_unit_control(
-	struct recorded_unit_control *unit_control,
-	byte **stream,
-	byte unit_control_data_version);
-
 void code_00081ef0(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
 void code_00081f80(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
 void code_00082010(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
 void code_000820a0(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
 void code_00082130(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
 void code_00082290(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
 void code_00082490(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream);
 
@@ -332,7 +311,7 @@ struct recorded_animation_playback_data data_002dcf20 =
 
 void recorded_animation_initialize_event_stream(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *unit_control,
+	struct unit_control_data *unit_control,
 	byte **playback_stream,
 	byte unit_control_data_version)
 {
@@ -349,7 +328,7 @@ void recorded_animation_initialize_event_stream(
 
 void recorded_animation_initialize_event_stream_with_size(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *unit_control,
+	struct unit_control_data *unit_control,
 	byte **playback_stream)
 {
 	memcpy(unit_control, *playback_stream, sizeof(*unit_control));
@@ -363,7 +342,7 @@ void recorded_animation_initialize_event_stream_with_size(
 
 boolean recorded_animation_apply_event_stream(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	long *ticks,
 	byte const **playback_stream)
 {
@@ -455,7 +434,7 @@ void byte_swap_recording_stream(
 
 void code_00081ef0(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream)
 {
@@ -465,7 +444,7 @@ void code_00081ef0(
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 25, header);
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 25, header->event_type==_playback_animation_state_set);
 
-	control->byte_field0 = *event_data;
+	control->animation_state = *event_data;
 	(*playback_stream)++;
 
 	return;
@@ -473,7 +452,7 @@ void code_00081ef0(
 
 void code_00081f80(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream)
 {
@@ -483,7 +462,7 @@ void code_00081f80(
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 26, header);
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 26, header->event_type==_playback_aiming_speed_set);
 
-	control->byte_field1 = *event_data;
+	control->aiming_speed = *event_data;
 	(*playback_stream)++;
 
 	return;
@@ -491,7 +470,7 @@ void code_00081f80(
 
 void code_00082010(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream)
 {
@@ -501,15 +480,15 @@ void code_00082010(
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 27, header);
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 27, header->event_type==_playback_control_flags_set);
 
-	memcpy(&control->word_field2, event_data, sizeof(control->word_field2));
-	*playback_stream += sizeof(control->word_field2);
+	memcpy(&control->control_flags, event_data, sizeof(control->control_flags));
+	*playback_stream += sizeof(control->control_flags);
 
 	return;
 }
 
 void code_000820a0(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream)
 {
@@ -519,15 +498,15 @@ void code_000820a0(
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 28, header);
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 28, header->event_type==_playback_weapon_index_set);
 
-	memcpy(&control->word_field4, event_data, sizeof(control->word_field4));
-	*playback_stream += sizeof(control->word_field4);
+	memcpy(&control->weapon_index, event_data, sizeof(control->weapon_index));
+	*playback_stream += sizeof(control->weapon_index);
 
 	return;
 }
 
 void code_00082130(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream)
 {
@@ -537,9 +516,9 @@ void code_00082130(
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 35, header);
 	match_assert("c:\\halo\\SOURCE\\cutscene\\recorded_animation_playback.c", 36, header->event_type==_playback_throttle_set);
 
-	memcpy(&control->vector2d_field12, event_data, sizeof(control->vector2d_field12));
-	control->long_field20 = 0;
-	*playback_stream += sizeof(control->vector2d_field12);
+	memcpy(&control->throttle, event_data, sizeof(real_vector2d));
+	control->throttle.k = 0.0f;
+	*playback_stream += sizeof(real_vector2d);
 
 	return;
 }
@@ -595,7 +574,7 @@ static void code_00082250(
 
 void code_00082290(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream)
 {
@@ -611,7 +590,7 @@ void code_00082290(
 	if (event_type & FLAG(_control_vector_facing_bit))
 	{
 		code_000821d0(event_data, &animation_state->facing_control);
-		code_00082250(&control->vector3d_field28, &animation_state->facing_control);
+		code_00082250(&control->facing_vector, &animation_state->facing_control);
 	}
 
 	if (event_type & FLAG(_control_vector_aiming_bit))
@@ -619,12 +598,12 @@ void code_00082290(
 		if (event_type & FLAG(_control_vector_facing_bit))
 		{
 			animation_state->aiming_control = animation_state->facing_control;
-			control->vector3d_field40 = control->vector3d_field28;
+			control->aiming_vector = control->facing_vector;
 		}
 		else
 		{
 			code_000821d0(event_data, &animation_state->aiming_control);
-			code_00082250(&control->vector3d_field40, &animation_state->aiming_control);
+			code_00082250(&control->aiming_vector, &animation_state->aiming_control);
 		}
 	}
 
@@ -633,7 +612,7 @@ void code_00082290(
 		if (event_type & FLAG(_control_vector_facing_bit))
 		{
 			animation_state->looking_control = animation_state->facing_control;
-			control->vector3d_field52 = control->vector3d_field28;
+			control->looking_vector = control->facing_vector;
 			*playback_stream += sizeof(struct vector_char_difference_data);
 			return;
 		}
@@ -641,13 +620,13 @@ void code_00082290(
 		if (event_type & FLAG(_control_vector_aiming_bit))
 		{
 			animation_state->looking_control = animation_state->aiming_control;
-			control->vector3d_field52 = control->vector3d_field40;
+			control->looking_vector = control->aiming_vector;
 			*playback_stream += sizeof(struct vector_char_difference_data);
 			return;
 		}
 
 		code_000821d0(event_data, &animation_state->looking_control);
-		code_00082250(&control->vector3d_field52, &animation_state->looking_control);
+		code_00082250(&control->looking_vector, &animation_state->looking_control);
 	}
 
 	*playback_stream += sizeof(struct vector_char_difference_data);
@@ -657,7 +636,7 @@ void code_00082290(
 
 void code_00082490(
 	struct animation_playback_controller *animation_state,
-	struct recorded_unit_control *control,
+	struct unit_control_data *control,
 	struct animation_event_header const *header,
 	byte const **playback_stream)
 {
@@ -673,7 +652,7 @@ void code_00082490(
 	if (event_type & FLAG(_control_vector_facing_bit))
 	{
 		code_00082210(event_data, &animation_state->facing_control);
-		code_00082250(&control->vector3d_field28, &animation_state->facing_control);
+		code_00082250(&control->facing_vector, &animation_state->facing_control);
 	}
 
 	if (event_type & FLAG(_control_vector_aiming_bit))
@@ -681,12 +660,12 @@ void code_00082490(
 		if (event_type & FLAG(_control_vector_facing_bit))
 		{
 			animation_state->aiming_control = animation_state->facing_control;
-			control->vector3d_field40 = control->vector3d_field28;
+			control->aiming_vector = control->facing_vector;
 		}
 		else
 		{
 			code_00082210(event_data, &animation_state->aiming_control);
-			code_00082250(&control->vector3d_field40, &animation_state->aiming_control);
+			code_00082250(&control->aiming_vector, &animation_state->aiming_control);
 		}
 	}
 
@@ -695,7 +674,7 @@ void code_00082490(
 		if (event_type & FLAG(_control_vector_facing_bit))
 		{
 			animation_state->looking_control = animation_state->facing_control;
-			control->vector3d_field52 = control->vector3d_field28;
+			control->looking_vector = control->facing_vector;
 			*playback_stream += sizeof(struct vector_short_difference_data);
 			return;
 		}
@@ -703,13 +682,13 @@ void code_00082490(
 		if (event_type & FLAG(_control_vector_aiming_bit))
 		{
 			animation_state->looking_control = animation_state->aiming_control;
-			control->vector3d_field52 = control->vector3d_field40;
+			control->looking_vector = control->aiming_vector;
 			*playback_stream += sizeof(struct vector_short_difference_data);
 			return;
 		}
 
 		code_00082210(event_data, &animation_state->looking_control);
-		code_00082250(&control->vector3d_field52, &animation_state->looking_control);
+		code_00082250(&control->looking_vector, &animation_state->looking_control);
 	}
 
 	*playback_stream += sizeof(struct vector_short_difference_data);

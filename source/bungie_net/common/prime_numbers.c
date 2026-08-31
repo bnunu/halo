@@ -22,6 +22,7 @@ symbols in this file:
 
 #include "cseries.h"
 #include "bungie_net/common/64bit_math.h"
+#include "bungie_net/common/prime_numbers.h"
 #include "bungie_net/common/random_numbers.h"
 
 /* ---------- constants */
@@ -31,13 +32,6 @@ symbols in this file:
 /* ---------- structures */
 
 /* ---------- prototypes */
-
-unsigned long *generate_prime_numbers(
-	unsigned long maximum,
-	unsigned long *num_primes);
-
-void probable_prime64(
-	struct qword_value *result);
 
 /* ---------- globals */
 

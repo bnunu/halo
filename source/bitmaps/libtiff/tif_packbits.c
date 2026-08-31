@@ -1,5 +1,5 @@
 #ifndef lint
-char data_002daf38[] = "$Header: /usr/people/sam/tiff/libtiff/RCS/tif_packbits.c,v 1.23 92/03/30 18:29:40 sam Exp $";
+char tif_packbits_rcsid[] = "$Header: /usr/people/sam/tiff/libtiff/RCS/tif_packbits.c,v 1.23 92/03/30 18:29:40 sam Exp $";
 #endif
 
 /*
@@ -33,6 +33,9 @@ char data_002daf38[] = "$Header: /usr/people/sam/tiff/libtiff/RCS/tif_packbits.c
  */
 #include "tiffioP.h"
 #include <stdio.h>
+
+extern void *csmemcpy(void *destination, const void *source, unsigned long size);
+extern int TIFFFlushData1(TIFF *);
 
 #if USE_PROTOTYPES
 int	PackBitsPreEncode(TIFF *);

@@ -15,6 +15,11 @@ header included in hcex build.
 
 /* ---------- constants */
 
+enum
+{
+	_camera_command_valid_bit
+};
+
 /* ---------- macros */
 
 /* ---------- structures */

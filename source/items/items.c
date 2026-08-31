@@ -17,7 +17,7 @@ symbols in this file:
 000E6140 0010:
 	_item_delete (0000)
 000E6150 0010:
-	_code_000e6150 (0000)
+	_verify_item_location (0000)
 000E6160 0050:
 	_dangerous_items_near_player (0000)
 000E61B0 00a0:
@@ -27,7 +27,7 @@ symbols in this file:
 000E62E0 0090:
 	_item_detonate (0000)
 000E6370 00c0:
-	_code_000e6370 (0000)
+	_item_adjust_for_angular_velocity_change (0000)
 000E6430 00c0:
 	_valid_real_vector3d_axes3 (0000)
 000E64F0 0060:
@@ -35,11 +35,11 @@ symbols in this file:
 000E6550 03b0:
 	_item_accelerate (0000)
 000E6900 0230:
-	_code_000e6900 (0000)
+	_item_align_to_normal_and_point (0000)
 000E6B30 0930:
 	_item_update (0000)
 00278FB0 0004:
-	_rdata_00278fb0 (0000)
+	_item_maximum_impact_velocity (0000)
 00278FB4 000c:
 	??_C@_0M@HIOGOKBN@item_update?$AA@ (0000)
 00278FC0 000d:
@@ -53,7 +53,7 @@ symbols in this file:
 00279024 0004:
 	__real@3f350481 (0000)
 00306498 05f8:
-	_data_00306498 (0000)
+	_item_update_section (0000)
 */
 
 /* ---------- headers */
@@ -162,8 +162,8 @@ real_point3d *point_from_line3d(
 
 /* ---------- globals */
 
-real const rdata_00278fb0 = 0.1f;
-struct profile_section data_00306498 = { "item_update", NONE, TRUE };
+real const item_maximum_impact_velocity = 0.1f;
+struct profile_section item_update_section = { "item_update", NONE, TRUE };
 
 /* ---------- public code */
 
@@ -203,8 +203,8 @@ void item_delete(
 	return;
 }
 
-void code_000e6150(
-	void)
+void verify_item_location(
+	long item_index)
 {
 	return;
 }
@@ -248,14 +248,14 @@ void item_in_unit_inventory(
 	{
 		struct unit_datum *unit = unit_get(owner_unit_index);
 
-		item->item.flags |= FLAG(_item_attached_to_unit_bit);
+		SET_FLAG(item->item.flags, _item_attached_to_unit_bit, TRUE);
 		if (unit->unit.player_index != NONE)
 		{
-			item->item.flags |= FLAG(_item_belongs_to_player_bit);
+			SET_FLAG(item->item.flags, _item_belongs_to_player_bit, TRUE);
 		}
 		else
 		{
-			item->item.flags &= ~FLAG(_item_belongs_to_player_bit);
+			SET_FLAG(item->item.flags, _item_belongs_to_player_bit, FALSE);
 		}
 
 		item->object.owner_player_index = unit->unit.player_index;
@@ -346,7 +346,7 @@ void item_detonate(
 
 /* ---------- private code */
 
-static void code_000e6370(
+static void item_adjust_for_angular_velocity_change(
 	long item_index)
 {
 	struct item_datum *item = item_get(item_index);
@@ -354,7 +354,7 @@ static void code_000e6370(
 
 	if (angular_velocity_magnitude != 0.f)
 	{
-		item->item.flags |= FLAG(_item_has_nonzero_angular_velocity_bit);
+		SET_FLAG(item->item.flags, _item_has_nonzero_angular_velocity_bit, TRUE);
 		if (!TEST_FLAG(item->object.flags, _object_at_rest_bit))
 		{
 			scale_vector3d(
@@ -368,7 +368,7 @@ static void code_000e6370(
 	}
 	else
 	{
-		item->item.flags &= ~FLAG(_item_has_nonzero_angular_velocity_bit);
+		SET_FLAG(item->item.flags, _item_has_nonzero_angular_velocity_bit, FALSE);
 		item->item.rotation_sine = 0.f;
 		item->item.rotation_cosine = 1.f;
 	}
@@ -462,13 +462,13 @@ void item_accelerate(
 				object_translate(item_index, &new_position, NULL);
 			}
 
-			item->object.flags &= ~FLAG(_object_at_rest_bit);
-			item->item.flags &= ~FLAG(_item_on_structure_bit);
+			SET_FLAG(item->object.flags, _object_at_rest_bit, FALSE);
+			SET_FLAG(item->item.flags, _item_on_structure_bit, FALSE);
 		}
 	}
 	else
 	{
-		item->object.flags &= ~FLAG(_object_at_rest_bit);
+		SET_FLAG(item->object.flags, _object_at_rest_bit, FALSE);
 	}
 
 	add_vectors3d(
@@ -534,7 +534,7 @@ void item_accelerate(
 			&item->object.angular_velocity);
 	}
 
-	code_000e6370(item_index);
+	item_adjust_for_angular_velocity_change(item_index);
 	object_set_garbage(item_index, FALSE);
 	}
 
@@ -547,7 +547,7 @@ void item_accelerate(
 	return;
 }
 
-static void code_000e6900(
+static void item_align_to_normal_and_point(
 	long item_index,
 	real_vector3d const *normal,
 	real_point3d const *position,
@@ -628,7 +628,7 @@ boolean item_update(
 
 	item = item_get(item_index);
 	definition = item_definition_get(item->definition_index);
-	profile_enter(data_00306498);
+	profile_enter(item_update_section);
 
 	match_assert(
 		"c:\\halo\\SOURCE\\items\\items.c",
@@ -691,7 +691,7 @@ boolean item_update(
 				vectors.candidate.z += collision->plane.n.k * 0.05f;
 
 				impact_scale = magnitude3d(&vectors.velocity);
-				impact_scale /= rdata_00278fb0;
+				impact_scale /= item_maximum_impact_velocity;
 				if (impact_scale < 0.f)
 				{
 					impact_scale = 0.f;
@@ -741,7 +741,7 @@ boolean item_update(
 					real angular_dot;
 
 					vectors.candidate = collision->point;
-					code_000e6900(
+					item_align_to_normal_and_point(
 						item_index,
 						&collision->plane.n,
 						&collision->point,
@@ -762,11 +762,11 @@ boolean item_update(
 						object_set_garbage(item_index, TRUE);
 					}
 
-					item->object.flags |= FLAG(_object_at_rest_bit);
+					SET_FLAG(item->object.flags, _object_at_rest_bit, TRUE);
 					switch (collision->type)
 					{
 					case _collision_result_structure:
-						item->item.flags |= FLAG(_item_on_structure_bit);
+						SET_FLAG(item->item.flags, _item_on_structure_bit, TRUE);
 						item->item.rested_surface_index =
 							(short)collision->surface_index;
 						item->item.bsp_index =
@@ -777,7 +777,7 @@ boolean item_update(
 					{
 						real_matrix4x3 const *support_matrix;
 
-						item->item.flags |= FLAG(_item_on_object_bit);
+						SET_FLAG(item->item.flags, _item_on_object_bit, TRUE);
 						item->item.item_on_rest_object_index =
 							collision->object_index;
 						support_matrix = object_get_node_matrix(
@@ -799,7 +799,7 @@ boolean item_update(
 					}
 
 					item->item.rotation_axis = collision->plane.n;
-					code_000e6370(item_index);
+					item_adjust_for_angular_velocity_change(item_index);
 					item->item.ignore_object_index = NONE;
 				}
 				else
@@ -873,7 +873,7 @@ boolean item_update(
 						global_down3d,
 						global_gravity,
 						(real_vector3d *)&vectors.candidate);
-					item->item.flags &= ~FLAG(_item_on_structure_bit);
+					SET_FLAG(item->item.flags, _item_on_structure_bit, FALSE);
 					item->item.rested_surface_index = NONE;
 					goto accelerate;
 				}
@@ -887,7 +887,7 @@ boolean item_update(
 						global_down3d,
 						global_gravity,
 						(real_vector3d *)&vectors.candidate);
-					item->item.flags &= ~FLAG(_item_on_object_bit);
+					SET_FLAG(item->item.flags, _item_on_object_bit, FALSE);
 					goto accelerate;
 				}
 				else
@@ -901,7 +901,7 @@ boolean item_update(
 						support_matrix,
 						&item->item.item_rest_object_offset,
 						(real_point3d *)&vectors.velocity);
-					code_000e6900(
+					item_align_to_normal_and_point(
 						item_index,
 						&item->item.rotation_axis,
 						(real_point3d const *)&vectors.velocity,
@@ -920,7 +920,7 @@ boolean item_update(
 			item->object.angular_velocity.i *= 0.9f;
 			item->object.angular_velocity.j *= 0.9f;
 			item->object.angular_velocity.k *= 0.9f;
-			code_000e6370(item_index);
+			item_adjust_for_angular_velocity_change(item_index);
 		}
 
 		if (TEST_FLAG(
@@ -1016,7 +1016,7 @@ boolean item_update(
 		468,
 		global_current_collision_user_depth > 1);
 	--global_current_collision_user_depth;
-	profile_exit(data_00306498);
+	profile_exit(item_update_section);
 
 	return TRUE;
 }

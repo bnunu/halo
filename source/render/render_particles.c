@@ -5,11 +5,11 @@ symbols in this file:
 0017BD20 00b0:
 	_local_player_is_first_person (0000)
 0017BDD0 0030:
-	_code_0017bdd0 (0000)
+	_compare_rendered_particles (0000)
 0017BE00 0490:
 	_render_particles (0000)
 0030E180 05f8:
-	_data_0030e180 (0000)
+	_render_particles_section (0000)
 */
 
 /* ---------- headers */
@@ -33,7 +33,7 @@ enum
 
 /* ---------- structures */
 
-struct rendered_particle
+struct rendered_particle_datum
 {
 	short particle_index;
 	short definition_index;
@@ -42,14 +42,14 @@ struct rendered_particle
 	byte pad;
 };
 
-typedef char rendered_particle_size_assert[
-	sizeof(struct rendered_particle) == 8 ? 1 : -1];
+typedef char rendered_particle_datum_size_assert[
+	sizeof(struct rendered_particle_datum) == 8 ? 1 : -1];
 
 /* ---------- prototypes */
 
 /* ---------- globals */
 
-struct profile_section data_0030e180 =
+struct profile_section render_particles_section =
 {
 	"render_particles",
 	NONE,
@@ -93,12 +93,12 @@ boolean local_player_is_first_person(
 	return result;
 }
 
-int __cdecl code_0017bdd0(
+int __cdecl compare_rendered_particles(
 	void const *left_pointer,
 	void const *right_pointer)
 {
-	struct rendered_particle const *left = left_pointer;
-	struct rendered_particle const *right = right_pointer;
+	struct rendered_particle_datum const *left = left_pointer;
+	struct rendered_particle_datum const *right = right_pointer;
 	int result = left->definition_index - right->definition_index;
 
 	if (!result)

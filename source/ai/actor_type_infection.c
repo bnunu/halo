@@ -5,11 +5,11 @@ symbols in this file:
 00027280 0130:
 	_infection_decide_action (0000)
 000273B0 0060:
-	_code_000273b0 (0000)
+	_infection_wander_pause_time (0000)
 00027410 0060:
-	_code_00027410 (0000)
+	_infection_wander_move_time (0000)
 00027470 0e20:
-	_code_00027470 (0000)
+	_infection_swarm_control (0000)
 00028290 02b0:
 	_infection_swarm_aim_jump (0000)
 0024644C 000a:
@@ -188,9 +188,9 @@ typedef char projectile_aim_direction_size_check[
 
 /* ---------- prototypes */
 
-static short code_000273b0(
+static short infection_wander_pause_time(
 	short movement_type);
-static short code_00027410(
+static short infection_wander_move_time(
 	short movement_type);
 real real_random_range(
 	real lower_bound,
@@ -213,7 +213,7 @@ boolean projectile_aim_ballistic(
 
 void infection_decide_action(
 	long actor_index);
-void code_00027470(
+void infection_swarm_control(
 	long actor_index);
 void infection_swarm_aim_jump(
 	long actor_index,
@@ -241,7 +241,7 @@ struct actor_type_definition actor_type_infection =
 	{ 0, 0 },
 	NULL,
 	infection_decide_action,
-	code_00027470,
+	infection_swarm_control,
 	infection_swarm_aim_jump
 };
 
@@ -303,7 +303,7 @@ void infection_decide_action(
 	return;
 }
 
-static short code_000273b0(
+static short infection_wander_pause_time(
 	short movement_type)
 {
 	real scale = 1.f;
@@ -311,15 +311,15 @@ static short code_000273b0(
 
 	switch (movement_type)
 	{
-	case 1:
+	case _actor_movement_type_asleep:
 		scale = real_seed_random_range(get_global_random_seed_address(), 4.f, 5.f);
 		break;
 
-	case 2:
+	case _actor_movement_type_combat:
 		scale = real_seed_random_range(get_global_random_seed_address(), 2.f, 2.8f);
 		break;
 
-	case 3:
+	case _actor_movement_type_panic:
 		scale = real_seed_random_range(get_global_random_seed_address(), 0.4f, 1.f);
 		break;
 	}
@@ -328,7 +328,7 @@ static short code_000273b0(
 	return MIN(result, 255);
 }
 
-static short code_00027410(
+static short infection_wander_move_time(
 	short movement_type)
 {
 	real scale = 1.f;
@@ -336,12 +336,12 @@ static short code_00027410(
 
 	switch (movement_type)
 	{
-	case 1:
+	case _actor_movement_type_asleep:
 		scale = real_seed_random_range(get_global_random_seed_address(), 1.f, 2.5f);
 		break;
 
-	case 2:
-	case 3:
+	case _actor_movement_type_combat:
+	case _actor_movement_type_panic:
 		scale = real_seed_random_range(get_global_random_seed_address(), 0.6f, 1.8f);
 		break;
 	}
@@ -350,7 +350,7 @@ static short code_00027410(
 	return MIN(result, 255);
 }
 
-void code_00027470(
+void infection_swarm_control(
 	long actor_index)
 {
 	struct actor_datum *actor = actor_get(actor_index);
@@ -629,7 +629,7 @@ void code_00027470(
 							real distance_squared;
 							real angle;
 
-							swarm_component->wander.move_ticks = (byte)code_00027410(movement_type);
+							swarm_component->wander.move_ticks = (byte)infection_wander_move_time(movement_type);
 							vector_from_points3d(
 								&swarm_component->position,
 								&swarm->swarm_center,
@@ -659,7 +659,7 @@ void code_00027470(
 						swarm_component->wander.move_ticks--;
 						if (!swarm_component->wander.move_ticks)
 						{
-							swarm_component->wander.pause_ticks = (byte)code_000273b0(movement_type);
+							swarm_component->wander.pause_ticks = (byte)infection_wander_pause_time(movement_type);
 						}
 						else
 						{

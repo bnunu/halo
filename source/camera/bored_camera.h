@@ -25,7 +25,7 @@ struct bored_camera
 	long boredom_count;
 };
 
-struct camera_action;
+struct camera_control;
 struct camera_command;
 
 /* ---------- prototypes/BORED_CAMERA.C */
@@ -34,7 +34,7 @@ void bored_camera_new(
 	struct bored_camera *camera);
 void bored_camera_update(
 	struct bored_camera *camera,
-	struct camera_action const *action,
+	struct camera_control const *controls,
 	struct camera_command *result);
 
 boolean is_bored(

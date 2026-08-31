@@ -41,6 +41,8 @@ symbols in this file:
 #define valid_real_normal3d valid_real_normal3d_inline
 #define real_local_random_range real_local_random_range_inline
 #include "bored_camera.h"
+#include "camera/director.h"
+#include "camera/observer.h"
 #include "camera/static_camera.h"
 #include "cseries/cseries_windows.h"
 #include "game/player_control.h"
@@ -58,11 +60,6 @@ symbols in this file:
 
 /* ---------- structures */
 
-struct camera_action
-{
-	short local_player_index;
-};
-
 struct unit_camera_track
 {
 	struct tag_reference track;
@@ -74,18 +71,6 @@ typedef char unit_camera_track_size_assert[
 
 /* ---------- prototypes */
 
-unsigned long *get_global_local_random_seed_address(
-	void);
-float real_seed_random_range(
-	unsigned long *seed,
-	float lower_bound,
-	float upper_bound);
-long player_control_get_aiming_unit_index(
-	short local_player_index);
-void observer_up_from_forward(
-	real_vector3d const *forward,
-	real_vector3d *up);
-
 boolean valid_real_vector3d(
 	real_vector3d const *v);
 boolean valid_real_normal3d(
@@ -94,13 +79,13 @@ boolean valid_real_vector3d_axes2(
 	real_vector3d const *forward,
 	real_vector3d const *up);
 
-static long code_00073000(
+static long bored_camera_shot_threshold_milliseconds(
 	long boredom_count);
-static long code_00073020(
+static long bored_camera_shot_duration_milliseconds(
 	long boredom_count);
-float real_local_random_range(
-	float lower_bound,
-	float upper_bound);
+real real_local_random_range(
+	real lower_bound,
+	real upper_bound);
 
 /* ---------- globals */
 
@@ -117,7 +102,7 @@ void bored_camera_new(
 
 void bored_camera_update(
 	struct bored_camera *camera,
-	struct camera_action const *action,
+	struct camera_control const *controls,
 	struct camera_command *result)
 {
 	unsigned long now;
@@ -128,15 +113,15 @@ void bored_camera_update(
 	camera->timer_milliseconds += camera->last_update_milliseconds - now;
 	camera->last_update_milliseconds = now;
 
-	if (camera->timer_milliseconds < code_00073000(camera->boredom_count))
+	if (camera->timer_milliseconds < bored_camera_shot_threshold_milliseconds(camera->boredom_count))
 	{
 		struct player_control_unit_camera_info camera_info;
 		long aiming_unit_index;
 
 		aiming_unit_index = player_control_get_aiming_unit_index(
-			action->local_player_index);
+			controls->local_player_index);
 		player_control_get_unit_camera_info(
-			action->local_player_index,
+			controls->local_player_index,
 			&camera_info);
 		result->position = camera_info.position;
 
@@ -156,7 +141,7 @@ void bored_camera_update(
 			}
 
 			angles = *player_control_get_facing_angles(
-				action->local_player_index);
+				controls->local_player_index);
 			unit_get_camera_position(aiming_unit_index, &camera_position);
 			angles.pitch = real_local_random_range(
 				-DEGREES_TO_RADIANS(63.f),
@@ -173,16 +158,16 @@ void bored_camera_update(
 			result->depth = real_local_random_range(1.f, 6.f);
 			result->velocity = *global_zero_vector3d;
 
-			timer_milliseconds = code_00073020(camera->boredom_count);
+			timer_milliseconds = bored_camera_shot_duration_milliseconds(camera->boredom_count);
 			camera->timer_milliseconds = timer_milliseconds;
-			result->flags = FLAG(0);
+			result->flags = FLAG(_camera_command_valid_bit);
 			result->timer = (real)timer_milliseconds;
 			camera->boredom_count++;
 
 			/* January can set timer to 10000..30000 here, while the
 			 * validation below accepts at most 3600. Preserve that bug. */
 			if (!(
-				!(result->flags & FLAG(0)) ||
+				!(result->flags & FLAG(_camera_command_valid_bit)) ||
 				(valid_real_vector3d_axes2(&result->forward, &result->up) &&
 					valid_real(result->position.x) && result->position.x>=-5000.f && result->position.x<=5000.f &&
 					valid_real(result->position.y) && result->position.y>=-5000.f && result->position.y<=5000.f &&
@@ -232,13 +217,13 @@ void bored_camera_update(
 
 /* ---------- private code */
 
-static long code_00073000(
+static long bored_camera_shot_threshold_milliseconds(
 	long boredom_count)
 {
 	return MIN(boredom_count, 3) * 1000;
 }
 
-static long code_00073020(
+static long bored_camera_shot_duration_milliseconds(
 	long boredom_count)
 {
 	return MIN(boredom_count + 1, 3) * 10000;
@@ -256,9 +241,9 @@ boolean is_still_bored(
 	return FALSE;
 }
 
-float real_local_random_range(
-	float lower_bound,
-	float upper_bound)
+real real_local_random_range(
+	real lower_bound,
+	real upper_bound)
 {
 	return real_seed_random_range(
 		get_global_local_random_seed_address(),

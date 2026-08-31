@@ -11,11 +11,11 @@ symbols in this file:
 000527D0 0010:
 	_props_dispose_from_old_map (0000)
 000527E0 0260:
-	_code_000527e0 (0000)
+	_prop_add (0000)
 00052A40 0030:
-	_code_00052a40 (0000)
+	_prop_new_blank (0000)
 00052A70 0140:
-	_code_00052a70 (0000)
+	_prop_remove (0000)
 00052BB0 0030:
 	_prop_iterator_new (0000)
 00052BE0 0030:
@@ -23,7 +23,7 @@ symbols in this file:
 00052C10 0220:
 	_prop_new_unacknowledged (0000)
 00052E30 00e0:
-	_code_00052e30 (0000)
+	_prop_setup_orphan (0000)
 00052F10 00d0:
 	_prop_orphan_transition (0000)
 00052FE0 00f0:
@@ -61,7 +61,7 @@ symbols in this file:
 0024F064 002e:
 	??_C@_0CO@FIFBOHNC@parent_prop?9?$DOowner_actor_index?5?$DN@ (0000)
 002B7D78 0004:
-	_data_002b7d78 (0000)
+	_last_database_full_warning_time (0000)
 */
 
 /* ---------- headers */
@@ -127,7 +127,7 @@ void actor_perception_acknowledge(
 
 /* ---------- globals */
 
-long data_002b7d78 = NONE;
+long last_database_full_warning_time = NONE;
 
 /* ---------- public code */
 
@@ -165,7 +165,7 @@ void props_dispose_from_old_map(
 
 /* ---------- private code */
 
-static void code_000527e0(
+static void prop_add(
 	long actor_index,
 	long prop_index,
 	long unit_index)
@@ -174,13 +174,13 @@ static void code_000527e0(
 	{
 		long game_time = game_time_get();
 
-		if (data_002b7d78 == NONE || game_time >= data_002b7d78 + TICKS_PER_SECOND * 30)
+		if (last_database_full_warning_time == NONE || game_time >= last_database_full_warning_time + TICKS_PER_SECOND * 30)
 		{
 			error(
 				_error_silent,
 				"AI knowledge database (%d entries) is full (warns once every 30 sec)",
 				768);
-			data_002b7d78 = game_time;
+			last_database_full_warning_time = game_time;
 		}
 	}
 	else
@@ -269,17 +269,17 @@ static void code_000527e0(
 	return;
 }
 
-long code_00052a40(
+long prop_new_blank(
 	long actor_index)
 {
 	long prop_index = datum_new(prop_data);
 
-	code_000527e0(actor_index, prop_index, NONE);
+	prop_add(actor_index, prop_index, NONE);
 
 	return prop_index;
 }
 
-static void code_00052a70(
+static void prop_remove(
 	long actor_index,
 	long prop_index)
 {
@@ -458,19 +458,19 @@ long prop_new_unacknowledged(
 			prop->parent_prop_index == NONE);
 
 		actor_switch_props(actor_index, prop_index, NONE);
-		code_00052a70(actor_index, prop_index);
+		prop_remove(actor_index, prop_index);
 		identifier = prop->identifier;
 		memset(prop, 0, sizeof(*prop));
 		prop->identifier = identifier;
 	}
 
-	code_000527e0(actor_index, prop_index, unit_index);
+	prop_add(actor_index, prop_index, unit_index);
 
 	return prop_index;
 }
 
 
-static void code_00052e30(
+static void prop_setup_orphan(
 	long actor_index,
 	long prop_index,
 	long parent_prop_index)
@@ -514,7 +514,7 @@ long prop_orphan_transition(
 {
 	long prop_index = datum_new(prop_data);
 
-	code_000527e0(actor_index, prop_index, NONE);
+	prop_add(actor_index, prop_index, NONE);
 	if (prop_index != NONE)
 	{
 		struct prop_datum *parent_prop = prop_get(parent_prop_index);
@@ -529,7 +529,7 @@ long prop_orphan_transition(
 			0x156,
 			parent_prop->orphan_prop_index == NONE);
 
-		code_00052e30(actor_index, prop_index, parent_prop_index);
+		prop_setup_orphan(actor_index, prop_index, parent_prop_index);
 		parent_prop->orphan_prop_index = prop_index;
 		prop->parent_prop_index = parent_prop_index;
 	}
@@ -544,7 +544,7 @@ long prop_orphan_from_friend(
 {
 	long prop_index = datum_new(prop_data);
 
-	code_000527e0(actor_index, prop_index, NONE);
+	prop_add(actor_index, prop_index, NONE);
 	if (prop_index != NONE)
 	{
 		struct prop_datum *parent_prop = prop_get(parent_prop_index);
@@ -560,7 +560,7 @@ long prop_orphan_from_friend(
 			0x16e,
 			parent_prop->orphan_prop_index == NONE);
 
-		code_00052e30(actor_index, prop_index, friend_prop_index);
+		prop_setup_orphan(actor_index, prop_index, friend_prop_index);
 		parent_prop->orphan_prop_index = prop_index;
 		prop->parent_prop_index = parent_prop_index;
 
@@ -579,7 +579,7 @@ void prop_orphan_update_information(
 	long prop_index,
 	long parent_prop_index)
 {
-	code_00052e30(actor_index, prop_index, parent_prop_index);
+	prop_setup_orphan(actor_index, prop_index, parent_prop_index);
 
 	return;
 }
@@ -588,7 +588,7 @@ void prop_delete(
 	long actor_index,
 	long prop_index)
 {
-	code_00052a70(actor_index, prop_index);
+	prop_remove(actor_index, prop_index);
 	datum_delete(prop_data, prop_index);
 
 	return;

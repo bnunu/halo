@@ -7,7 +7,7 @@ symbols in this file:
 00136680 0280:
 	_bsp3d_clip_line_to_leaves (0000)
 00136900 02d0:
-	_code_00136900 (0000)
+	_bsp3d_clip_polygon_to_leaves_recursive (0000)
 00136BD0 0030:
 	_bsp3d_clip_polygon_to_leaves (0000)
 0028AF28 000f:
@@ -30,6 +30,7 @@ symbols in this file:
 
 #include "cseries.h"
 #include "bsp3d.h"
+#include "math/geometry.h"
 
 /* ---------- constants */
 
@@ -44,40 +45,17 @@ enum
 
 /* ---------- structures */
 
-typedef void (*bsp3d_line_leaf_proc)(
-	real_point3d const *point0,
-	real_point3d const *point1,
-	long leaf_index,
-	void *context);
-
-typedef void (*bsp3d_polygon_leaf_proc)(
-	real_point3d const *vertices,
-	short vertex_count,
-	long leaf_index,
-	long plane_designator,
-	void *context);
-
 /* ---------- prototypes */
 
-short convex_polygon3d_clip_to_plane(
-	short vertex_count,
-	real_point3d const *vertices,
-	real_plane3d const *plane,
-	short maximum_vertex_count,
-	real_point3d *clipped_vertices,
-	short *vertex_indices,
-	real epsilon,
-	boolean keep_degenerate);
-
-long code_00136900(
+static long bsp3d_clip_polygon_to_leaves_recursive(
 	struct bsp3d const *bsp,
 	long node_index,
-	long plane_designator,
+	long on_node_designator,
 	real_point3d const *vertices,
 	short vertex_count,
 	real epsilon,
-	bsp3d_polygon_leaf_proc proc,
-	void *context);
+	bsp3d_polygon_leaf_proc handler,
+	void *user_data);
 
 static __inline real bsp3d_plane_distance_to_point(
 	real_plane3d const *plane,
@@ -205,37 +183,37 @@ long bsp3d_clip_line_to_leaves(
 
 long bsp3d_clip_polygon_to_leaves(
 	struct bsp3d const *bsp,
-	long node_index,
+	long root_node_index,
 	real_point3d const *vertices,
 	short vertex_count,
 	real epsilon,
-	bsp3d_polygon_leaf_proc proc,
-	void *context)
+	bsp3d_polygon_leaf_proc handler,
+	void *user_data)
 {
-	long result = code_00136900(
+	long result = bsp3d_clip_polygon_to_leaves_recursive(
 		bsp,
-		node_index,
+		root_node_index,
 		NONE,
 		vertices,
 		vertex_count,
 		epsilon,
-		proc,
-		context);
+		handler,
+		user_data);
 
 	return result;
 }
 
 /* ---------- private code */
 
-long code_00136900(
+static long bsp3d_clip_polygon_to_leaves_recursive(
 	struct bsp3d const *bsp,
 	long node_index,
-	long plane_designator,
+	long on_node_designator,
 	real_point3d const *vertices,
 	short vertex_count,
 	real epsilon,
-	bsp3d_polygon_leaf_proc proc,
-	void *context)
+	bsp3d_polygon_leaf_proc handler,
+	void *user_data)
 {
 	real_point3d clipped_polygon_storage[2][MAXIMUM_VERTICES_PER_CLIPPED_POLYGON];
 	real_point3d const *clipped_polygons[2];
@@ -290,11 +268,11 @@ long code_00136900(
 
 		if (facing)
 		{
-			plane_designator = LONG_MIN | node_index & LONG_MAX;
+			on_node_designator = LONG_MIN | node_index & LONG_MAX;
 		}
 		else
 		{
-			plane_designator = node_index & LONG_MAX;
+			on_node_designator = node_index & LONG_MAX;
 		}
 	}
 	else
@@ -337,14 +315,14 @@ long code_00136900(
 			{
 				if (node->children[child_index] != NONE)
 				{
-					if (proc)
+					if (handler)
 					{
-						proc(
+						handler(
 							clipped_polygons[child_index],
 							clipped_counts[child_index],
 							node->children[child_index] & LONG_MAX,
-							plane_designator,
-							context);
+							on_node_designator,
+							user_data);
 					}
 
 					intersected_leaf_count++;
@@ -352,15 +330,15 @@ long code_00136900(
 			}
 			else
 			{
-				intersected_leaf_count += code_00136900(
+				intersected_leaf_count += bsp3d_clip_polygon_to_leaves_recursive(
 					bsp,
 					node->children[child_index],
-					plane_designator,
+					on_node_designator,
 					clipped_polygons[child_index],
 					clipped_counts[child_index],
 					epsilon,
-					proc,
-					context);
+					handler,
+					user_data);
 			}
 		}
 	}
