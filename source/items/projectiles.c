@@ -114,8 +114,12 @@ symbols in this file:
 
 /* ---------- headers */
 
+#define normalize3d normalize3d_inline
+#define random_vector_in_cone3d random_vector_in_cone3d_inline
 #include "cseries.h"
 #include "projectiles.h"
+#undef normalize3d
+#undef random_vector_in_cone3d
 
 #include "projectile_definitions.h"
 
@@ -137,11 +141,51 @@ enum projectile_datum_flags
 	NUMBER_OF_PROJECTILE_DATUM_FLAGS,
 };
 
+enum projectile_definition_flags
+{
+	_projectile_oriented_along_velocity_bit = 0,
+	_projectile_aim_ballistic_bit = 1,
+	_projectile_detonation_maximum_time_if_attached_bit = 2,
+	_projectile_super_combining_explosion_bit = 3,
+	_projectile_combine_initial_velocity_with_parent_velocity_bit = 4,
+	_projectile_random_detonation_time_when_attached_bit = 5,
+	_projectile_minimum_unattached_detonation_time_bit = 6,
+	NUMBER_OF_PROJECTILE_DEFINITION_FLAGS,
+};
+
 /* ---------- macros */
 
 /* ---------- structures */
 
 /* ---------- prototypes */
+
+real normalize3d(
+	real_vector3d *v);
+
+boolean projectile_aim_ballistic(
+	real base_velocity,
+	real gravity_scale,
+	real_point3d const *origin,
+	real_point3d const *target_point,
+	real *target_velocity_min,
+	real *target_ballistic_fraction_min,
+	real *forced_velocity,
+	boolean lob,
+	real_vector3d *result_aim_vector,
+	real *result_velocity,
+	real *result_ticks,
+	real *result_distance,
+	real *result_vertical_velocity,
+	real *result_horizontal_velocity);
+
+boolean projectile_aim_linear(
+	real base_velocity,
+	real_point3d const *origin,
+	real_point3d const *target_point,
+	real_vector3d *result_aim_vector,
+	real *result_velocity,
+	real *result_ticks,
+	real *result_distance);
 
 /* ---------- globals */
 
@@ -279,4 +323,269 @@ real projectile_get_ballistic_acceleration(
 	struct projectile_definition const *definition)
 {
 	return -(definition->projectile.air_gravity_scale * global_gravity);
+}
+
+real projectile_estimate_time_to_target(
+	struct projectile_definition const *definition,
+	real target_distance)
+{
+	real time_to_target = 0.0f;
+
+	if (definition->projectile.initial_velocity > 0.0f)
+		time_to_target = target_distance / definition->projectile.initial_velocity;
+
+	return time_to_target;
+}
+
+real_vector3d *random_vector_in_cone3d(
+	real_vector3d const *axis,
+	real inner_cone_angle,
+	real outer_cone_angle,
+	real_vector3d *result)
+{
+	return seed_random_vector_in_cone3d(
+		get_global_random_seed_address(),
+		axis,
+		inner_cone_angle,
+		outer_cone_angle,
+		result);
+}
+
+boolean projectile_aim_ballistic(
+	real base_velocity,
+	real gravity_scale,
+	real_point3d const *origin,
+	real_point3d const *target_point,
+	real *target_velocity_min,
+	real *target_ballistic_fraction_min,
+	real *forced_velocity,
+	boolean lob,
+	real_vector3d *result_aim_vector,
+	real *result_velocity,
+	real *result_ticks,
+	real *result_distance,
+	real *result_vertical_velocity,
+	real *result_horizontal_velocity)
+{
+	boolean result = TRUE;
+	boolean solution = FALSE;
+	real_vector3d delta;
+	real_vector3d aim_vector;
+	real acceleration, a, b, c, four_a_c, two_a;
+	real acceleration_height;
+	real t_squared_max, t_max, t_min, t;
+	real v_desired, v_desired_sq;
+	real distance, vertical_velocity, horizontal_velocity;
+
+	delta.i = target_point->x - origin->x;
+	delta.j = target_point->y - origin->y;
+	delta.k = target_point->z - origin->z;
+
+	acceleration = MAX(0.f, global_gravity * gravity_scale);
+	a = acceleration * acceleration * 0.25f;
+	c = magnitude_squared3d(&delta);
+	four_a_c = 4.0f * a * c;
+	match_assert(
+		"c:\\halo\\SOURCE\\items\\projectiles.c",
+		760,
+		4.0f * a * c > 0.0f);
+	b = -square_root(four_a_c);
+	two_a = a + a;
+	t_squared_max = -(b / two_a);
+	match_assert(
+		"c:\\halo\\SOURCE\\items\\projectiles.c",
+		764,
+		t_squared_max >= 0.0f);
+	t_max = square_root(t_squared_max);
+	acceleration_height = acceleration * delta.k;
+	t_min = acceleration_height - b < 0.0f
+		? 0.0f
+		: square_root(acceleration_height - b);
+
+	if (forced_velocity)
+	{
+		v_desired = *forced_velocity;
+	}
+	else
+	{
+		v_desired = base_velocity;
+
+		if (target_ballistic_fraction_min)
+		{
+			if (*target_ballistic_fraction_min > 0.0f)
+			{
+				real t_desired = t_max * *target_ballistic_fraction_min;
+				real t_desired_squared = t_desired * t_desired;
+				real b_desired = -(c / t_desired_squared + a * t_desired_squared);
+
+				v_desired_sq = acceleration_height - b_desired;
+				match_assert(
+					"c:\\halo\\SOURCE\\items\\projectiles.c",
+					806,
+					v_desired_sq > 0.0f);
+				if (base_velocity > square_root(v_desired_sq))
+					v_desired = square_root(v_desired_sq);
+			}
+		}
+	}
+
+	if (v_desired >= t_min)
+	{
+		real b_desired = acceleration_height - v_desired * v_desired;
+		real discriminant = b_desired * b_desired - four_a_c;
+
+		if (b_desired < 0.0f && discriminant >= 0.0f)
+		{
+			real t_squared = (square_root(discriminant) * (lob ? 1 : -1) - b_desired) / two_a;
+
+			if (t_squared > 0.0f)
+			{
+				t = square_root(t_squared);
+				solution = TRUE;
+			}
+		}
+	}
+
+	if (!solution)
+	{
+		result = FALSE;
+		t = t_max;
+		v_desired = t_min;
+	}
+
+	aim_vector.i = delta.i / t;
+	aim_vector.j = delta.j / t;
+	aim_vector.k = delta.k / t + t * acceleration * 0.5f;
+	horizontal_velocity = square_root(aim_vector.i * aim_vector.i + aim_vector.j * aim_vector.j);
+	vertical_velocity = aim_vector.k;
+	distance = t * v_desired;
+
+	if (normalize3d(&aim_vector) == 0.0f)
+	{
+		aim_vector = delta;
+		result = FALSE;
+		if (normalize3d(&aim_vector) == 0.0f)
+			aim_vector = *global_up3d;
+	}
+
+	match_assert(
+		"c:\\halo\\SOURCE\\items\\projectiles.c",
+		867,
+		result_aim_vector);
+	*result_aim_vector = aim_vector;
+
+	if (result_distance)
+		*result_distance = distance;
+	if (result_velocity)
+		*result_velocity = v_desired;
+	if (result_vertical_velocity)
+		*result_vertical_velocity = vertical_velocity;
+	if (result_horizontal_velocity)
+		*result_horizontal_velocity = horizontal_velocity;
+	if (result_ticks)
+		*result_ticks = t;
+
+	return result;
+}
+
+boolean projectile_aim_linear(
+	real base_velocity,
+	real_point3d const *origin,
+	real_point3d const *target_point,
+	real_vector3d *result_aim_vector,
+	real *result_velocity,
+	real *result_ticks,
+	real *result_distance)
+{
+	real_vector3d aim_vector;
+	real distance;
+	real ticks;
+
+	aim_vector.i = target_point->x - origin->x;
+	aim_vector.j = target_point->y - origin->y;
+	aim_vector.k = target_point->z - origin->z;
+	distance = normalize3d(&aim_vector);
+
+	if (base_velocity > 0.0f)
+		ticks = distance / base_velocity;
+	else
+		ticks = 0.0f;
+
+	match_assert(
+		"c:\\halo\\SOURCE\\items\\projectiles.c",
+		921,
+		result_aim_vector);
+	*result_aim_vector = aim_vector;
+
+	if (result_distance)
+		*result_distance = distance;
+	if (result_velocity)
+		*result_velocity = base_velocity;
+	if (result_ticks)
+		*result_ticks = ticks;
+
+	return TRUE;
+}
+
+boolean projectile_aim(
+	struct projectile_definition const *definition,
+	real_point3d const *origin,
+	real_point3d const *target_point,
+	real const *override_velocity_max,
+	real *target_velocity_min,
+	real *target_ballistic_fraction_min,
+	real *forced_velocity,
+	boolean lob,
+	real_vector3d *result_aim_vector,
+	real *result_velocity,
+	real *result_ticks,
+	real *result_distance,
+	boolean *result_linear)
+{
+	real base_velocity;
+	boolean result;
+
+	if (!override_velocity_max)
+		base_velocity = definition->projectile.initial_velocity;
+	else
+		base_velocity = *override_velocity_max;
+
+	if (TEST_FLAG(definition->projectile.flags, _projectile_aim_ballistic_bit) &&
+		definition->projectile.air_gravity_scale > 0.0f)
+	{
+		result = projectile_aim_ballistic(
+			base_velocity,
+			definition->projectile.air_gravity_scale,
+			origin,
+			target_point,
+			target_velocity_min,
+			target_ballistic_fraction_min,
+			forced_velocity,
+			lob,
+			result_aim_vector,
+			result_velocity,
+			result_ticks,
+			result_distance,
+			NULL,
+			NULL);
+
+		if (result_linear)
+			*result_linear = FALSE;
+	}
+	else
+	{
+		result = projectile_aim_linear(
+			base_velocity,
+			origin,
+			target_point,
+			result_aim_vector,
+			result_velocity,
+			result_ticks,
+			result_distance);
+
+		if (result_linear)
+			*result_linear = TRUE;
+	}
+
+	return result;
 }

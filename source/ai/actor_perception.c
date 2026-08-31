@@ -3718,6 +3718,7 @@ void code_000228b0(
 				struct actor_perception_refresh_list *list;
 				struct unit_definition *unit_definition;
 				real_point3d origin;
+				real_vector3d direction;
 				real distance_squared;
 				real suicide_radius;
 				long unit_index;
@@ -3770,28 +3771,24 @@ void code_000228b0(
 						actor->meta.team_index,
 						unit->object.owner_team_index);
 
-				if (!TEST_FLAG(unit->object.damage_flags, _object_dead_bit) ||
-					unit->unit.feign_death_timer != 0)
-				{
-					dead = FALSE;
+				dead =
+					TEST_FLAG(unit->object.damage_flags, _object_dead_bit) &&
+					unit->unit.feign_death_timer == 0;
+				if (!dead)
 					dead_ticks = 0;
-				}
+				else if (unit->unit.time_of_death == NONE)
+					dead_ticks = 0x7FFF;
 				else
-				{
-					dead = TRUE;
-					if (unit->unit.time_of_death == NONE)
-						dead_ticks = 0x7FFF;
-					else
-						dead_ticks =
-							(short)game_time_get() -
-							(short)unit->unit.time_of_death;
-				}
+					dead_ticks =
+						(short)game_time_get() -
+						(short)unit->unit.time_of_death;
 
 				suicide_radius = unit_definition->unit.ai_danger_radius;
-				distance_squared =
-					distance_squared3d(
-						&position.body_position,
-						&origin);
+				vector_from_points3d(
+					&position.body_position,
+					&origin,
+					&direction);
+				distance_squared = magnitude_squared3d(&direction);
 
 				if (suicide_radius > 0.0f &&
 					(dead ||

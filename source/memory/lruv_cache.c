@@ -387,6 +387,7 @@ void lruv_debug_to_file(
 	long block_index;
 	long page_count;
 	long age;
+	long display_age;
 	boolean locked;
 	const char *block_name;
 
@@ -424,7 +425,7 @@ void lruv_debug_to_file(
 		{
 			age = 0;
 			locked = FALSE;
-				if (block_index == NONE)
+			if (block_index == NONE)
 			{
 				page_count = cache->page_count - page_index;
 				page_index = cache->page_count;
@@ -467,14 +468,14 @@ void lruv_debug_to_file(
 
 		output_block:
 
-			age = MIN((unsigned long)age, 9999);
+			display_age = MIN(9999, (unsigned long)age);
 
 			fprintf(
 				stream,
 				"%s % 5d% 5d %s\n",
 				locked ? "L" : " ",
 				page_count,
-				age,
+				display_age,
 				block_name);
 		}
 
@@ -706,8 +707,6 @@ long lruv_block_new(
 						cache->last_block_index==NONE);
 					new_block->previous_block_index = NONE;
 					cache->last_block_index = new_block_index;
-					new_block->next_block_index = cache->first_block_index;
-					cache->first_block_index = new_block_index;
 				}
 				else
 				{
@@ -718,23 +717,23 @@ long lruv_block_new(
 						next_block->previous_block_index==NONE);
 					new_block->previous_block_index = NONE;
 					next_block->previous_block_index = new_block_index;
-					new_block->next_block_index = cache->first_block_index;
-					cache->first_block_index = new_block_index;
 				}
+				new_block->next_block_index = cache->first_block_index;
+				cache->first_block_index = new_block_index;
 			}
 			else
 			{
 				block = datum_get(cache->blocks, best_hole.block_index);
-				if (block->next_block_index == NONE)
-				{
-					new_block->previous_block_index = cache->last_block_index;
-					cache->last_block_index = new_block_index;
-				}
-				else
+				if (block->next_block_index != NONE)
 				{
 					next_block = datum_get(cache->blocks, block->next_block_index);
 					new_block->previous_block_index = next_block->previous_block_index;
 					next_block->previous_block_index = new_block_index;
+				}
+				else
+				{
+					new_block->previous_block_index = cache->last_block_index;
+					cache->last_block_index = new_block_index;
 				}
 				block = datum_get(cache->blocks, best_hole.block_index);
 				new_block->next_block_index = block->next_block_index;

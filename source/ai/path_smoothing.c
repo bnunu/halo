@@ -305,7 +305,7 @@ static boolean code_000516a0(
 	struct collision_bsp const *bsp;
 	byte const *pathfinding_surfaces;
 	byte const *breakable_surface_flags;
-	struct collision_edge const *current_edge;
+	struct collision_edge const *collision_edge;
 	struct collision_vertex const *vertex_a;
 	struct collision_vertex const *vertex_b;
 	real edge_dx;
@@ -340,14 +340,13 @@ static boolean code_000516a0(
 	starting_vertex_index = NONE;
 	loop_reference_vertex_index = NONE;
 #line 511 "c:\\halo\\SOURCE\\ai\\path_smoothing.c"
-	assert(clockwise==TRUE || clockwise==FALSE);
+	match_assert(__FILE__, __LINE__, clockwise==TRUE || clockwise==FALSE);
 
-	negative_radius = -radius;
 	edge_index = first_edge_index;
 
 	while (TRUE)
 	{
-		current_edge = TAG_BLOCK_GET_ELEMENT(
+		collision_edge = TAG_BLOCK_GET_ELEMENT(
 			&bsp->edges,
 			edge_index,
 			struct collision_edge);
@@ -355,22 +354,23 @@ static boolean code_000516a0(
 			pathfinding_surfaces,
 			bsp,
 			breakable_surface_flags,
-			current_edge->surface_indices[0],
+			collision_edge->surface_indices[0],
 			ignore_broken_surfaces);
 
 		vertex_a = TAG_BLOCK_GET_ELEMENT(
 			&bsp->vertices,
-			current_edge->vertex_indices[side_flag],
+			collision_edge->vertex_indices[side_flag],
 			struct collision_vertex);
 		vertex_b = TAG_BLOCK_GET_ELEMENT(
 			&bsp->vertices,
-			current_edge->vertex_indices[!side_flag],
+			collision_edge->vertex_indices[!side_flag],
 			struct collision_vertex);
 
 		valid = FALSE;
 		edge_dx = vertex_b->point.x - vertex_a->point.x;
 		edge_dy = vertex_b->point.y - vertex_a->point.y;
 		edge_direction.i = edge_dy;
+		negative_radius = -radius;
 		edge_direction.j = -edge_dx;
 		NORMALIZE_DIRECTION2D(&edge_direction, magnitude, inverse);
 
@@ -409,7 +409,7 @@ static boolean code_000516a0(
 			valid = TRUE;
 
 		xor_flag = valid != side_flag;
-		next_vertex_index = current_edge->vertex_indices[xor_flag == clockwise];
+		next_vertex_index = collision_edge->vertex_indices[xor_flag == clockwise];
 
 		if (next_vertex_index == loop_reference_vertex_index)
 		{
@@ -431,8 +431,8 @@ static boolean code_000516a0(
 		chain_start_edge_index = edge_index;
 		while (TRUE)
 		{
-			matches_end = next_vertex_index == current_edge->vertex_indices[1];
-			candidate_surface_index = current_edge->surface_indices[!matches_end];
+			matches_end = next_vertex_index == collision_edge->vertex_indices[1];
+			candidate_surface_index = collision_edge->surface_indices[!matches_end];
 			refined_side = code_00051190(
 				pathfinding_surfaces,
 				bsp,
@@ -443,8 +443,8 @@ static boolean code_000516a0(
 			if (refined_side == clockwise)
 				break;
 
-			edge_index = current_edge->edge_indices[!matches_end];
-			current_edge = TAG_BLOCK_GET_ELEMENT(
+			edge_index = collision_edge->edge_indices[!matches_end];
+			collision_edge = TAG_BLOCK_GET_ELEMENT(
 				&bsp->edges,
 				edge_index,
 				struct collision_edge);
@@ -452,7 +452,7 @@ static boolean code_000516a0(
 				return FALSE;
 
 #line 631 "c:\\halo\\SOURCE\\ai\\path_smoothing.c"
-			assert(current_edge->vertex_indices[0] == next_vertex_index || current_edge->vertex_indices[1] == next_vertex_index);
+			assert(collision_edge->vertex_indices[0]==next_vertex_index || collision_edge->vertex_indices[1]==next_vertex_index);
 		}
 
 		loop_reference_vertex_index = next_vertex_index;

@@ -234,16 +234,95 @@ symbols in this file:
 /* ---------- headers */
 
 #include "cseries.h"
+#include "cseries/errors.h"
+#include "game/game.h"
 #include "models/model_animation_definitions.h"
+#include "units/biped_definitions.h"
 #include "units/bipeds.h"
+#include "physics/breakable_surfaces.h"
+#include "physics/collision_bsp.h"
+#include "physics/collision_bsp_definitions.h"
+#include "physics/collisions.h"
+#include "physics/collision_usage.h"
+#include "render/render_debug.h"
+#include "scenario/scenario.h"
 
 /* ---------- constants */
+
+enum
+{
+	/* January's own debug text proves these two: code_00192070 prints
+	"/limping" for bit 5, and the dying/seat-exit paths set bit 0 when the
+	biped leaves the ground.  BIPEDS.H currently names bit 0
+	_biped_limping_bit, which is wrong; the shared header cannot be edited
+	from this lane, so the correct names live here. */
+	_biped_airborne_bit = 0,
+	_biped_limp_body_physics_bit = 5,
+};
+
+enum
+{
+	/* biped definition function-export modes; BIPED_DEFINITIONS.H does not
+	name them yet and the shared header cannot be edited from this lane */
+	_biped_function_none = 0,
+	_biped_function_flying_velocity,
+	NUMBER_OF_BIPED_FUNCTIONS,
+};
 
 /* ---------- macros */
 
 /* ---------- structures */
 
+struct scenario_object_permutation;
+
+struct scenario_biped
+{
+	byte unused0[0x28];
+	byte permutation[0x20];
+	byte unit[0x4];
+};
+
 /* ---------- prototypes */
+
+void unit_place(
+	long unit_index,
+	void *unit);
+void biped_get_autoaim_pill(
+	long biped_index,
+	real_point3d *base,
+	real_vector3d *height,
+	real *width);
+/* NOTE: code_00193cb0 is a file static in January, but it is not
+reconstructed yet.  It is declared here rather than defined so that biped_new
+can call it: January passes its argument on the stack, and a declared-but-
+undefined static would give MSVC a body to inspect and a register convention to
+invent.  The relocation carries the name either way, which is what the
+comparator checks. */
+void code_00193cb0(
+	long biped_index);
+real_point2d *collision_surface_find_closest_point2d(
+	struct collision_bsp const *bsp,
+	long surface_index,
+	short projection,
+	boolean sign,
+	real_point2d const *point,
+	real_point2d *result);
+boolean biped_fix_position(
+	long biped_index,
+	long object_index,
+	real_point3d const *position,
+	long unknown3,
+	real distance,
+	boolean unknown5,
+	boolean unknown6,
+	boolean unknown7);
+long biped_limp_noodle_get_max_relaxation_iterations(
+	long biped_index);
+
+extern real_plane3d depths_of_hell;
+extern boolean debug_objects_biped_physics_pills;
+extern boolean debug_objects_biped_autoaim_pills;
+extern boolean debug_biped_limp_body_disable;
 
 /* ---------- globals */
 
@@ -285,20 +364,31 @@ void bipeds_dispose(
 	return;
 }
 
+void biped_place(
+	long biped_index,
+	struct scenario_biped *biped)
+{
+	unit_place(biped_index, biped->unit);
+	object_add_scenario_permutation(biped_index, (struct scenario_object_permutation *)biped->permutation);
+
+	return;
+}
+
 void biped_delete(
 	long biped_index)
 {
 	return;
 }
 
-void biped_stop_melee_attack(
+void biped_reset(
 	long biped_index)
 {
 	struct biped_datum *biped;
 
-	biped = biped_try_and_get(biped_index);
-	if (biped)
-		biped->biped.player_melee_ticks = 0;
+	biped = biped_get(biped_index);
+	csmemset(&biped->biped, 0, sizeof(biped->biped));
+	biped->biped.ground_plane = depths_of_hell;
+	biped->biped.last_falling_communication_time = NONE;
 
 	return;
 }
@@ -316,4 +406,579 @@ void biped_disconnect_from_structure_bsp(
 	return;
 }
 
+void biped_get_physics_pill(
+	long biped_index,
+	real_point3d *base,
+	real *height,
+	real *width)
+{
+	struct biped_datum *biped = biped_get(biped_index);
+	struct biped_definition *definition = biped_definition_get(biped->definition_index);
+
+	object_get_origin(biped_index, base);
+	if (!TEST_FLAG(definition->biped.flags, _biped_pill_centered_at_origin_bit))
+		base->z += definition->biped.collision_height_standing;
+
+	if (!TEST_FLAG(definition->biped.flags, _biped_spherical_bit) &&
+		(biped->unit.player_index!=NONE ||
+		TEST_FLAG(biped->object.flags, _object_movie_star_bit)))
+	{
+		*height = definition->biped.collision_unused0[0] +
+			(definition->biped.collision_unused0[1] -
+			definition->biped.collision_unused0[0])*biped->biped.crouch -
+			2.f*definition->biped.collision_height_standing;
+	}
+	else
+	{
+		*height = 0.f;
+	}
+	*width = definition->biped.collision_height_standing;
+
+	return;
+}
+
+void biped_stop_melee_attack(
+	long biped_index)
+{
+	struct biped_datum *biped;
+
+	biped = biped_try_and_get(biped_index);
+	if (biped)
+		biped->biped.player_melee_ticks = 0;
+
+	return;
+}
+
+void biped_start_limp_body_physics(
+	long biped_index)
+{
+	struct biped_datum *biped = biped_get(biped_index);
+	boolean uses_limp_body_physics = TEST_FLAG(
+		biped_definition_get(biped->definition_index)->biped.flags,
+		_biped_uses_limp_body_physics_bit);
+
+	if (!debug_biped_limp_body_disable &&
+		uses_limp_body_physics &&
+		TEST_FLAG(biped->object.flags, _object_at_rest_bit) &&
+		!TEST_FLAG(biped->biped.flags, _biped_limping_bit) &&
+		!TEST_FLAG(biped->biped.flags, _biped_limp_body_physics_bit))
+	{
+		biped->biped.limp_body_current_relaxation_iterations = 0;
+		biped->biped.limp_body_max_relaxation_iterations =
+			(byte)biped_limp_noodle_get_max_relaxation_iterations(biped_index);
+		SET_FLAG(biped->object.flags, _object_do_not_recompute_node_matrices_bit, TRUE);
+		SET_FLAG(biped->biped.flags, _biped_limp_body_physics_bit, TRUE);
+	}
+
+	return;
+}
+
+void biped_stop_limp_body_physics(
+	long biped_index)
+{
+	struct biped_datum *biped;
+	struct biped_definition *definition;
+
+	biped = biped_get(biped_index);
+	definition = biped_definition_get(biped->definition_index);
+	if (TEST_FLAG(definition->biped.flags, _biped_uses_limp_body_physics_bit) &&
+		TEST_FLAG(biped->biped.flags, _biped_limp_body_physics_bit))
+	{
+		SET_FLAG(biped->object.flags, _object_do_not_recompute_node_matrices_bit, FALSE);
+		SET_FLAG(biped->biped.flags, _biped_limp_body_physics_bit, FALSE);
+	}
+
+	return;
+}
+
+boolean biped_flying_through_air(
+	long biped_index)
+{
+	struct biped_datum *biped;
+	struct biped_definition *definition;
+
+	biped = biped_get(biped_index);
+	definition = biped_definition_get(biped->definition_index);
+
+	return biped->biped.airborne_ticks>3 &&
+		(!TEST_FLAG(definition->biped.flags, _biped_flying_bit) ||
+		TEST_FLAG(biped->object.damage_flags, _object_dead_bit));
+}
+
+void biped_adjust_placement(
+	long biped_index,
+	struct object_placement_data *data)
+{
+	struct biped_definition *definition;
+	real height;
+
+	definition = biped_definition_get(biped_get(biped_index)->definition_index);
+	if (TEST_FLAG(definition->biped.flags, _biped_pill_centered_at_origin_bit) &&
+		!TEST_FLAG(definition->biped.flags, _biped_flying_bit))
+	{
+		height = definition->biped.collision_height_standing;
+		data->position.x += height*data->up.i;
+		data->position.y += height*data->up.j;
+		data->position.z += height*data->up.k;
+	}
+
+	return;
+}
+
+void biped_export_function_values(
+	long biped_index)
+{
+	struct biped_datum *biped = biped_get(biped_index);
+	struct biped_definition *biped_definition = biped_definition_get(biped->definition_index);
+	real *function_values = biped->object.incoming_function_values;
+	short *function_modes = biped_definition->biped.function_modes;
+	long function_index;
+
+	for (function_index = NUMBER_OF_INCOMING_OBJECT_FUNCTIONS; function_index; --function_index, ++function_modes, ++function_values)
+	{
+		if (*function_modes!=_biped_function_none)
+		{
+			real function_value = 0.0f;
+
+			switch (*function_modes)
+			{
+			case _biped_function_flying_velocity:
+				function_value = magnitude3d(&biped->object.translational_velocity)/(biped_definition->biped.flying_velocity/(real)TICKS_PER_SECOND);
+				function_value = PIN(function_value, 0.0f, 1.0f);
+				break;
+			}
+
+			*function_values = function_value;
+		}
+	}
+
+	return;
+}
+
+void biped_exit_seat_end(
+	long biped_index,
+	long seat_object_index)
+{
+	struct biped_datum *biped = biped_get(biped_index);
+	struct biped_definition *definition = biped_definition_get(biped->definition_index);
+
+	biped->object.forward.k = 0.f;
+	if (normalize3d(&biped->object.forward)==0.f)
+		biped->object.forward = *global_forward3d;
+	biped->object.up = *global_up3d;
+	SET_FLAG(biped->biped.flags, _biped_airborne_bit, TRUE);
+
+	if (!biped_fix_position(biped_index, seat_object_index, NULL, 0, 2.f, TRUE, FALSE, TRUE))
+	{
+		real_point3d center;
+		real radius;
+
+		object_get_bounding_sphere(seat_object_index, &center, &radius);
+		if (!biped_fix_position(biped_index, seat_object_index, &center, 0, radius, TRUE, FALSE, FALSE))
+			error(_error_silent, "couldn't teleport the biped out far enough from the vehicle...");
+	}
+
+	return;
+}
+
+void biped_render_debug(
+	long biped_index)
+{
+	real_point3d base;
+	real_vector3d height_vector;
+	real height;
+	real width;
+
+	if (debug_objects_biped_physics_pills)
+	{
+		biped_get_physics_pill(biped_index, &base, &height, &width);
+		if (height>0.f)
+		{
+			scale_vector3d(global_up3d, height, &height_vector);
+			render_debug_pill(TRUE, &base, &height_vector, width, global_real_argb_white);
+		}
+		else
+		{
+			render_debug_sphere(TRUE, &base, width, global_real_argb_white);
+		}
+	}
+
+	if (debug_objects_biped_autoaim_pills)
+	{
+		biped_get_autoaim_pill(biped_index, &base, &height_vector, &width);
+		if (magnitude_squared3d(&height_vector)>0.f)
+			render_debug_pill(TRUE, &base, &height_vector, width, global_real_argb_red);
+		else
+			render_debug_sphere(TRUE, &base, width, global_real_argb_red);
+	}
+
+	return;
+}
+
+void biped_build_flying_axes(
+	real_vector3d const *forward_vector,
+	real_vector3d *left_vector,
+	real_vector3d *up_vector)
+{
+	match_assert("c:\\halo\\SOURCE\\units\\bipeds.c", 2993, forward_vector && left_vector && up_vector);
+
+	*up_vector = *global_up3d;
+	cross_product3d(up_vector, forward_vector, left_vector);
+	if (normalize3d(left_vector)==0.f)
+	{
+		*up_vector = *global_forward3d;
+		cross_product3d(up_vector, forward_vector, left_vector);
+		normalize3d(left_vector);
+	}
+
+	cross_product3d(forward_vector, left_vector, up_vector);
+	normalize3d(up_vector);
+
+	match_vassert("c:\\halo\\SOURCE\\units\\bipeds.c", 3008,
+		valid_real_vector3d_axes3(forward_vector, left_vector, up_vector),
+		csprintf(
+			temporary,
+			"%s, %s, %s: assert_valid_real_vector3d_axes3(%f, %f, %f / %f, %f, %f / %f, %f, %f)",
+			"forward_vector",
+			"left_vector",
+			"up_vector",
+			forward_vector->i, forward_vector->j, forward_vector->k,
+			up_vector->i, up_vector->j, up_vector->k,
+			left_vector->i, left_vector->j, left_vector->k));
+
+	return;
+}
+
+void biped_get_sight_position(
+	long biped_index,
+	short estimate_mode,
+	real_point3d const *estimated_body_position,
+	real_vector3d *desired_facing,
+	real_vector3d const *desired_gun_offset,
+	real_point3d *sight_position)
+{
+	struct biped_datum *biped = biped_get(biped_index);
+	struct biped_definition *definition = biped_definition_get(biped->definition_index);
+
+	match_assert("c:\\halo\\SOURCE\\units\\bipeds.c", 759, (estimate_mode == _unit_estimate_none) || (estimated_body_position != NULL));
+	match_assert("c:\\halo\\SOURCE\\units\\bipeds.c", 760, (estimate_mode != _unit_estimate_gun_position) || (desired_facing != NULL));
+
+	if (estimate_mode==_unit_estimate_none)
+		object_get_origin(biped_index, sight_position);
+	else
+		*sight_position = *estimated_body_position;
+
+	if (estimate_mode==_unit_estimate_gun_position)
+	{
+		real_vector3d left;
+
+		match_assert("c:\\halo\\SOURCE\\units\\bipeds.c", 775, desired_facing && desired_gun_offset);
+
+		left.i = -desired_facing->j;
+		left.j = desired_facing->i;
+		left.k = 0.f;
+
+		point_from_line3d(sight_position, desired_facing, desired_gun_offset->i, sight_position);
+		point_from_line3d(sight_position, &left, desired_gun_offset->j, sight_position);
+		sight_position->z += desired_gun_offset->k;
+	}
+	else
+	{
+		real crouch;
+
+		switch (estimate_mode)
+		{
+		case _unit_estimate_head_standing:
+			crouch = 0.f;
+			break;
+
+		case _unit_estimate_head_crouching:
+			crouch = 1.f;
+			break;
+
+		default:
+			crouch = biped->biped.crouch;
+			break;
+		}
+
+		sight_position->z +=
+			(1.f-crouch)*definition->biped.standing_camera_height +
+			crouch*definition->biped.crouching_camera_height;
+	}
+
+	return;
+}
+
 /* ---------- private code */
+
+
+static long code_00191280(
+	long object_index,
+	real_vector3d const *direction,
+	real distance,
+	real_point3d *point,
+	real_vector3d *normal)
+{
+	struct biped_datum *biped = biped_get(object_index);
+	struct collision_bsp *collision_bsp = global_collision_bsp_get();
+	long surface_index = NONE;
+	real_vector3d vector;
+	real_point3d origin;
+	struct collision_bsp_test_vector_result result;
+
+	match_assert("c:\\halo\\SOURCE\\units\\bipeds.c", 1146, global_current_collision_user_depth < MAXIMUM_COLLISION_USER_STACK_DEPTH);
+	global_current_collision_users[global_current_collision_user_depth++] = _collision_user_bipeds;
+
+	object_get_origin(object_index, &origin);
+	point_from_line3d(&origin, global_up3d, 0.4f, &origin);
+	scale_vector3d(direction, distance, &vector);
+
+	if (collision_bsp_test_vector(
+		FLAG(_collision_test_front_facing_surfaces_bit),
+		collision_bsp,
+		0,
+		NULL,
+		&origin,
+		&vector,
+		FLT_MAX,
+		&result))
+	{
+		surface_index = result.surface_index;
+		if (point)
+			point_from_line3d(&origin, &vector, result.t, point);
+		if (normal)
+			*normal = result.plane->n;
+	}
+
+	match_assert("c:\\halo\\SOURCE\\units\\bipeds.c", 1168, global_current_collision_user_depth > 1);
+	--global_current_collision_user_depth;
+
+	return surface_index;
+}
+
+short biped_approximate_surface_index(
+	long biped_index,
+	real_point3d *point)
+{
+	return (short)code_00191280(biped_index, global_down3d, 2.f, point, NULL);
+}
+
+long biped_find_pathfinding_surface_index(
+	long biped_index,
+	real_point3d *pathfinding_point)
+{
+	struct biped_datum *biped = biped_get(biped_index);
+	struct biped_definition *definition = biped_definition_get(biped->definition_index);
+
+	if (TEST_FLAG(definition->biped.flags, _biped_flying_bit) &&
+		!TEST_FLAG(biped->object.damage_flags, _object_dead_bit))
+	{
+		biped->biped.pathfinding_surface_index = NONE;
+		object_get_origin(biped_index, pathfinding_point);
+	}
+	else if (biped->biped.pathfinding_surface_index==NONE)
+	{
+		long time = game_time_get();
+
+		if (time>biped->biped.last_pathfinding_attempt_time)
+		{
+			struct collision_bsp *collision_bsp = global_collision_bsp_get();
+			real_point3d point = biped->biped.pathfinding_point;
+
+			biped->biped.last_pathfinding_attempt_time = time;
+			if (biped->biped.support_surface_index!=NONE)
+			{
+				real_point2d closest_point;
+
+				collision_surface_find_closest_point2d(
+					collision_bsp,
+					biped->biped.support_surface_index,
+					2,
+					TRUE,
+					(real_point2d const *)&biped->biped.pathfinding_point,
+					&closest_point);
+				collision_surface_project_point2d(
+					collision_bsp,
+					biped->biped.support_surface_index,
+					2,
+					TRUE,
+					&closest_point,
+					&point);
+				biped->biped.pathfinding_surface_index = biped->biped.support_surface_index;
+			}
+			else if (biped->biped.last_pathfinding_surface_index!=NONE &&
+				collision_surface_test_point2d(
+					collision_bsp,
+					biped->biped.last_pathfinding_surface_index,
+					2,
+					TRUE,
+					(real_point2d const *)&biped->biped.pathfinding_point))
+			{
+				biped->biped.pathfinding_surface_index = biped->biped.last_pathfinding_surface_index;
+				collision_surface_project_point2d(
+					collision_bsp,
+					biped->biped.last_pathfinding_surface_index,
+					2,
+					TRUE,
+					(real_point2d const *)&biped->biped.pathfinding_point,
+					&point);
+				biped->biped.pathfinding_surface_index = biped->biped.last_pathfinding_surface_index;
+			}
+
+			if (biped->biped.pathfinding_surface_index==NONE)
+				biped->biped.pathfinding_surface_index = code_00191280(biped_index, global_down3d, 2.f, &point, NULL);
+
+			if (biped->biped.pathfinding_surface_index!=NONE)
+			{
+				biped->biped.pathfinding_point = point;
+				biped->biped.last_pathfinding_surface_index = biped->biped.pathfinding_surface_index;
+			}
+		}
+	}
+
+	match_assert("c:\\halo\\SOURCE\\units\\bipeds.c", 1255, pathfinding_point);
+	*pathfinding_point = biped->biped.pathfinding_point;
+
+	return biped->biped.pathfinding_surface_index;
+}
+
+
+static void code_00192070(
+	long biped_index,
+	char const *state)
+{
+	struct biped_datum *biped = biped_get(biped_index);
+
+	if (!valid_real_vector3d_axes2(&biped->object.forward, &biped->object.up))
+	{
+		struct biped_definition *definition = biped_definition_get(biped->definition_index);
+
+		match_vassert("c:\\halo\\SOURCE\\units\\bipeds.c", 1373, FALSE,
+			csprintf(
+				temporary,
+				"biped %s (%s%s%s): %s vector failure: (%f, %f, %f) / (%f, %f, %f)",
+				tag_name_strip_path(tag_get_name(biped->definition_index)),
+				TEST_FLAG(definition->biped.flags, _biped_flying_bit)
+					? "flying"
+					: TEST_FLAG(definition->biped.flags, _biped_uses_player_physics_bit)
+						? "player-physics"
+						: TEST_FLAG(definition->biped.flags, _biped_climbs_anything_bit)
+							? "climb"
+							: "normal",
+				TEST_FLAG(biped->object.damage_flags, _object_dead_bit) ? "/dead" : "",
+				TEST_FLAG(biped->biped.flags, _biped_limp_body_physics_bit) ? "/limping" : "",
+				state,
+				biped->object.forward.i, biped->object.forward.j, biped->object.forward.k,
+				biped->object.up.i, biped->object.up.j, biped->object.up.k));
+	}
+
+	return;
+}
+
+void biped_preprocess_node_orientations(
+	long biped_index)
+{
+	code_00192070(biped_index, "preprocess-nodes");
+
+	return;
+}
+
+
+static void code_00191e50(
+	long biped_index)
+{
+	struct biped_datum *biped = biped_get(biped_index);
+	struct collision_bsp *collision_bsp = global_collision_bsp_get();
+	real_point3d base;
+	real height;
+	real width;
+	struct collision_bsp_test_sphere_result result;
+
+	biped_get_physics_pill(biped_index, &base, &height, &width);
+
+	match_assert("c:\\halo\\SOURCE\\units\\bipeds.c", 3999, global_current_collision_user_depth < MAXIMUM_COLLISION_USER_STACK_DEPTH);
+	global_current_collision_users[global_current_collision_user_depth++] = _collision_user_bipeds;
+
+	if (collision_bsp_test_sphere(
+		collision_bsp,
+		MAXIMUM_BREAKABLE_SURFACES_PER_MAP,
+		breakable_surface_flags_get(),
+		&base,
+		width+0.05f,
+		&result))
+	{
+		long support_surface_index = NONE;
+		real closest_distance = FLT_MAX;
+		real_plane3d support_plane;
+		short surface_index;
+
+		for (surface_index = 0; surface_index<result.surface_count; ++surface_index)
+		{
+			long plane_designator = TAG_BLOCK_GET_ELEMENT(
+				&collision_bsp->surfaces,
+				result.surface_indices[surface_index],
+				struct collision_surface)->plane_designator;
+			real_plane3d const *plane = TAG_BLOCK_GET_ELEMENT(
+				&collision_bsp->bsp3d.planes,
+				plane_designator&0x7fffffff,
+				real_plane3d);
+			real_plane3d surface_plane;
+			real distance;
+
+			if (TEST_FLAG(plane_designator, 31))
+			{
+				surface_plane.n.i = -plane->n.i;
+				surface_plane.n.j = -plane->n.j;
+				surface_plane.n.k = -plane->n.k;
+				surface_plane.d = -plane->d;
+			}
+			else
+			{
+				surface_plane = *plane;
+			}
+
+			distance = plane3d_distance_to_point(&surface_plane, &base);
+			if (distance<closest_distance)
+			{
+				closest_distance = distance;
+				support_surface_index = result.surface_indices[surface_index];
+				support_plane = surface_plane;
+			}
+		}
+
+		if (support_surface_index!=NONE)
+		{
+			biped->biped.support_surface_index = support_surface_index;
+			biped->biped.ground_plane = support_plane;
+			biped->object.up = support_plane.n;
+		}
+	}
+
+	match_assert("c:\\halo\\SOURCE\\units\\bipeds.c", 4034, global_current_collision_user_depth > 1);
+	--global_current_collision_user_depth;
+
+	return;
+}
+
+boolean biped_new(
+	long biped_index)
+{
+	struct biped_datum *biped = biped_get(biped_index);
+	struct biped_definition *definition = biped_definition_get(biped->definition_index);
+
+	biped->biped.ground_plane = depths_of_hell;
+	biped->biped.jump_recovery_timer = 127;
+	biped->biped.support_surface_index = NONE;
+	biped->biped.pathfinding_surface_index = NONE;
+	object_get_origin(biped_index, &biped->biped.pathfinding_point);
+	biped->biped.last_pathfinding_surface_index = NONE;
+	biped->biped.last_pathfinding_attempt_time = NONE;
+	biped->biped.impact_target_object_index = NONE;
+	if (TEST_FLAG(definition->biped.flags, _biped_climbs_anything_bit))
+		code_00191e50(biped_index);
+	code_00193cb0(biped_index);
+	biped->biped.elevator_object_index = NONE;
+	biped->biped.elevator_ticks = 0;
+
+	return TRUE;
+}

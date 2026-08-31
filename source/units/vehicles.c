@@ -1591,99 +1591,105 @@ static void code_001a7ac0(
 	real lift;
 	real dot;
 	real yaw;
-	real scale;
+	real throttle_squared;
+	real power;
+	real seat_power;
 
 	if (TEST_FLAG(vehicle->vehicle.flags, 1))
 	{
 		csmemset(mass_points, 0,
 			physics->mass_points.count*sizeof(struct vehicle_mass_point_state));
-		code_001a6710(vehicle_index);
-
-		return;
 	}
-
-	throttle = PIN(vehicle->vehicle.unknown42c, 0.0f, definition->unknown2f8)/
-		definition->unknown2f8;
-
-	if (TEST_FLAG(vehicle->vehicle.flags, 2))
-		factor = 0.25f;
-	else if (TEST_FLAG(vehicle->vehicle.flags, 3))
-		factor = 1.0f;
 	else
-		factor = 0.75f;
-
-	vehicle->vehicle.unknown444 += PIN(factor*(1.0f-throttle*throttle)*
-		vehicle->unit.seat_power[0]-vehicle->vehicle.unknown444, -0.05f, 0.05f);
-
-	facing = vehicle->unit.desired_facing_vector;
-
-	vehicle->vehicle.unknown448 = throttle*throttle*vehicle->unit.seat_power[0];
-
-	ground.i = -(facing.k*facing.i);
-	ground.j = -(facing.k*facing.j);
-	ground.k = 1.0f-facing.k*facing.k;
-
-	if (normalize3d(&ground)==0.0f)
 	{
-		ground.i = 1.0f;
-		ground.j = 0.0f;
-		ground.k = 0.0f;
+		throttle = PIN(vehicle->vehicle.unknown42c, 0.0f, definition->unknown2f8)/
+			definition->unknown2f8;
+		throttle_squared = throttle*throttle;
+
+		if (TEST_FLAG(vehicle->vehicle.flags, 2))
+			factor = 0.25f;
+		else if (TEST_FLAG(vehicle->vehicle.flags, 3))
+			factor = 1.0f;
+		else
+			factor = 0.75f;
+
+		vehicle->vehicle.unknown444 += PIN(factor*(1.0f-throttle_squared)*
+			vehicle->unit.seat_power[0]-vehicle->vehicle.unknown444, -0.05f, 0.05f);
+
+		facing = vehicle->unit.desired_facing_vector;
+
+		power = throttle_squared*vehicle->unit.seat_power[0];
+		vehicle->vehicle.unknown448 = power;
+
+		ground.i = -(facing.k*facing.i);
+		ground.j = -(facing.k*facing.j);
+		ground.k = 1.0f-facing.k*facing.k;
+
+		if (normalize3d(&ground)==0.0f)
+		{
+			ground.i = 1.0f;
+			ground.j = 0.0f;
+			ground.k = 0.0f;
+		}
+
+		dot = dot_product3d(&vehicle->object.translational_velocity, &vehicle->object.forward);
+
+		{
+			real *destination = velocity.n;
+			real const *source = vehicle->object.translational_velocity.n;
+			short component_index;
+
+			for (component_index = 0; component_index<2; component_index++)
+				destination[component_index] = source[component_index];
+		}
+
+		drive = (vehicle->vehicle.unknown42c-dot)*power*physics->mass*0.05f;
+		lift = ((real)fabs(dot/definition->unknown2f8)*1.05f+
+			vehicle->vehicle.unknown444*1.3f)*global_gravity*physics->mass;
+
+		force.i = lift*vehicle->object.up.i+drive*vehicle->object.forward.i;
+		force.j = lift*vehicle->object.up.j+drive*vehicle->object.forward.j;
+		force.k = lift*vehicle->object.up.k+drive*vehicle->object.forward.k;
+
+		yaw = (velocity.j*facing.i-velocity.i*facing.j)*(_pi/2)/
+			(real)fabs(definition->unknown2f8);
+
+		yaw_vectors(&ground, &facing, sine(yaw), cosine(yaw));
+
+		{
+			real angle;
+			real scale;
+
+			matrix4x3_rotation_from_vectors(&vehicle_rotation, &vehicle->object.forward,
+				&vehicle->object.up);
+			matrix4x3_rotation_from_vectors(&desired_rotation, &facing, &ground);
+			matrix4x3_inverse(&desired_rotation, &desired_rotation);
+			matrix4x3_multiply(&vehicle_rotation, &desired_rotation, &rotation);
+			matrix4x3_rotation_to_quaternion(&rotation, &quaternion);
+			quaternion_to_angle_and_vector(&quaternion, &angle, &axis);
+
+			scale_vector3d(&axis, angle*(1.0f/30), &torque);
+
+			scale = physics->radius*physics->radius*physics->mass*0.05f;
+
+			torque.i = (torque.i-vehicle->object.angular_velocity.i)*scale;
+			torque.j = (torque.j-vehicle->object.angular_velocity.j)*scale;
+			torque.k = (torque.k-vehicle->object.angular_velocity.k)*scale;
+		}
+
+		seat_power = vehicle->unit.seat_power[0];
+
+		force.i *= seat_power;
+		force.j *= seat_power;
+		force.k *= seat_power;
+
+		torque.i *= seat_power;
+		torque.j *= seat_power;
+		torque.k *= seat_power;
+
+		physics_update(vehicle_index, NULL, mass_points, &force, &torque);
 	}
 
-	dot = dot_product3d(&vehicle->object.translational_velocity, &vehicle->object.forward);
-
-	{
-		real *destination = velocity.n;
-		real const *source = vehicle->object.translational_velocity.n;
-		short component_index;
-
-		for (component_index = 0; component_index<2; component_index++)
-			destination[component_index] = source[component_index];
-	}
-
-	drive = (vehicle->vehicle.unknown42c-dot)*vehicle->vehicle.unknown448*physics->mass*0.05f;
-	lift = ((real)fabs(dot/definition->unknown2f8)*1.05f+
-		vehicle->vehicle.unknown444*1.3f)*global_gravity*physics->mass;
-
-	force.i = lift*vehicle->object.up.i+drive*vehicle->object.forward.i;
-	force.j = lift*vehicle->object.up.j+drive*vehicle->object.forward.j;
-	force.k = lift*vehicle->object.up.k+drive*vehicle->object.forward.k;
-
-	yaw = (velocity.j*facing.i-velocity.i*facing.j)*(_pi/2)/
-		(real)fabs(definition->unknown2f8);
-
-	yaw_vectors(&ground, &facing, sine(yaw), cosine(yaw));
-
-	{
-		real angle;
-		real_vector3d scaled;
-
-		matrix4x3_rotation_from_vectors(&vehicle_rotation, &vehicle->object.forward,
-			&vehicle->object.up);
-		matrix4x3_rotation_from_vectors(&desired_rotation, &facing, &ground);
-		matrix4x3_inverse(&desired_rotation, &desired_rotation);
-		matrix4x3_multiply(&vehicle_rotation, &desired_rotation, &rotation);
-		matrix4x3_rotation_to_quaternion(&rotation, &quaternion);
-		quaternion_to_angle_and_vector(&quaternion, &angle, &axis);
-
-		scale = physics->radius*physics->radius*physics->mass*0.05f;
-
-		scale_vector3d(&axis, angle*(1.0f/30), &scaled);
-
-		torque.i = (scaled.i-vehicle->object.angular_velocity.i)*scale;
-		torque.j = (scaled.j-vehicle->object.angular_velocity.j)*scale;
-		torque.k = (scaled.k-vehicle->object.angular_velocity.k)*scale;
-	}
-
-	force.i *= vehicle->unit.seat_power[0];
-	force.j *= vehicle->unit.seat_power[0];
-	force.k *= vehicle->unit.seat_power[0];
-
-	torque.i *= vehicle->unit.seat_power[0];
-	torque.j *= vehicle->unit.seat_power[0];
-	torque.k *= vehicle->unit.seat_power[0];
-
-	physics_update(vehicle_index, NULL, mass_points, &force, &torque);
 	code_001a6710(vehicle_index);
 
 	return;
@@ -1988,23 +1994,6 @@ static real_vector3d *vehicle_cross_product3d_target(
 	result->j = j;
 	result->k = k;
 	return result;
-}
-
-static real vehicle_update_upending_velocity(
-	real const *velocity,
-	byte *upending_ticks)
-{
-	real result = *velocity;
-
-	(*upending_ticks)++;
-	return result;
-}
-
-static real vehicle_update_minimum_upending_velocity(
-	struct vehicle_runtime_datum *vehicle)
-{
-	vehicle->vehicle.unknown42a++;
-	return -0.01f;
 }
 
 static real vehicle_dot_product3d_target(
@@ -2591,14 +2580,8 @@ boolean vehicle_update(
 				{
 					if (vehicle_type==_vehicle_type_alien_fighter)
 					{
-						vehicle->object.translational_velocity.k =
-							-0.01f>vehicle->object.translational_velocity.k
-							? vehicle_update_upending_velocity(
-								&vehicle->object.translational_velocity.k,
-								&vehicle->vehicle.unknown42a)
-							: vehicle_update_minimum_upending_velocity(
-								vehicle);
-						goto seek_speed;
+						vehicle->object.translational_velocity.k = MIN(-0.01f,
+							vehicle->object.translational_velocity.k);
 					}
 				}
 				else

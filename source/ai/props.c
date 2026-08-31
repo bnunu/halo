@@ -243,20 +243,20 @@ static void code_000527e0(
 				prop->actor_index = prop_unit->unit.actor_index;
 			}
 
-			if (!prop->player)
+			if (prop->player)
 			{
-				if (prop->actor_index == NONE)
-				{
-					prop->type = NONE;
-				}
-				else
-				{
-					prop->type = actor_get(prop->actor_index)->meta.type;
-				}
+				prop->type = 6;
 			}
 			else
 			{
-				prop->type = 6;
+				if (prop->actor_index != NONE)
+				{
+					prop->type = actor_get(prop->actor_index)->meta.type;
+				}
+				else
+				{
+					prop->type = NONE;
+				}
 			}
 		}
 
@@ -661,9 +661,13 @@ long prop_get_base_by_unit_index(
 	{
 		struct actor_datum *actor = actor_get(actor_index);
 		struct unit_datum *unit = unit_get(unit_index);
-		long target_actor_index = unit->unit.swarm_actor_index;
+		long target_actor_index;
 
-		if (target_actor_index == NONE)
+		if (unit->unit.swarm_actor_index != NONE)
+		{
+			target_actor_index = unit->unit.swarm_actor_index;
+		}
+		else
 		{
 			target_actor_index = unit->unit.actor_index;
 		}

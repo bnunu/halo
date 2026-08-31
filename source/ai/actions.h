@@ -118,7 +118,7 @@ struct fight_state_data
 	word pad;
 };
 
-struct __declspec(align(4)) guard_state_data
+struct guard_state_data
 {
 	short wait_ticks;
 	short look_ticks;

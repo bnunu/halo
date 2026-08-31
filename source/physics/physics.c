@@ -97,6 +97,11 @@ symbols in this file:
 #include "cseries.h"
 #include "physics.h"
 
+#include "collision_features.h"
+#include "objects/object_definitions.h"
+#include "objects/objects.h"
+#include "render/render_debug.h"
+#include "units/vehicles.h"
 #include "physics_definitions.h"
 
 /* ---------- constants */
@@ -105,7 +110,59 @@ symbols in this file:
 
 /* ---------- structures */
 
+/* NOTE: January's physics.c sees the whole vehicle runtime datum.  In this
+   tree units/vehicles.h forward-declares struct vehicle_runtime_datum only
+   and units/vehicles.c keeps the layout private, so the collision force and
+   torque accumulators the physics update consumes are declared here.  These
+   two definitions belong in units/vehicles.h; note also that the region at
+   0x460..0x477 is two real_vector3d, not the real_quaternion + real_point2d
+   that units/vehicles.c currently guesses. */
+
+struct _vehicle_datum
+{
+	word flags;
+	short unknown426;
+	byte unknown428;
+	byte unknown429;
+	byte unknown42a;
+	byte unknown42b;
+	real unknown42c;
+	real unknown430;
+	real unknown434;
+	real unknown438;
+	real unknown43c;
+	real unknown440;
+	real unknown444;
+	real unknown448;
+	byte unknown44c[8];
+	real_point3d hover_position;
+	real_vector3d collision_force;
+	real_vector3d collision_torque;
+	long unknown478;
+};
+
+struct vehicle_runtime_datum
+{
+	long definition_index;
+	struct _object_datum object;
+	struct _unit_datum unit;
+	struct _vehicle_datum vehicle;
+};
+
+struct physics_test_vector_result
+{
+	real t;
+	real_plane3d plane;
+};
+
 /* ---------- prototypes */
+
+void render_debug_vectors(
+	boolean immediate,
+	const real_point3d *point,
+	const real_vector3d *forward,
+	const real_vector3d *up,
+	real size);
 
 /* ---------- globals */
 
@@ -116,6 +173,143 @@ real global_physics_collision_depth = 0.2f;
 long depths_of_hell = 0;
 
 /* ---------- public code */
+
+real pin_fraction(
+	real value,
+	real begin,
+	real end)
+{
+	if (begin < end)
+	{
+		if (value <= begin)
+			return 0.0f;
+		else if (value >= end)
+			return 1.0f;
+		else
+			return (value - begin) / (end - begin);
+	}
+	else
+	{
+		if (value <= end)
+			return 1.0f;
+		else if (value >= begin)
+			return 0.0f;
+		else
+			return (begin - value) / (begin - end);
+	}
+}
+
+
+boolean physics_get_features_in_sphere(
+	struct physics_instance const *instance,
+	real_point3d const *center,
+	real radius,
+	real height,
+	real width,
+	struct collision_feature_list *features)
+{
+	short mass_point_index;
+	real scaled_radius;
+
+	for (mass_point_index = 0;
+		mass_point_index < instance->physics->mass_points.count;
+		mass_point_index++)
+	{
+		struct mass_point_definition const *mass_point = TAG_BLOCK_GET_ELEMENT(
+			&instance->physics->mass_points,
+			mass_point_index,
+			struct mass_point_definition);
+		real_point3d point;
+
+		matrix4x3_transform_point(&instance->world_matrix, &mass_point->position, &point);
+
+		scaled_radius = mass_point->radius * instance->world_matrix.scale;
+
+		collision_features_from_point(
+			&point,
+			height,
+			scaled_radius + width,
+			instance->object_index,
+			NONE,
+			0,
+			NONE,
+			NONE,
+			features);
+	}
+
+	return features->count[_collision_feature_sphere] ||
+		features->count[_collision_feature_cylinder] ||
+		features->count[_collision_feature_prism];
+}
+
+void render_debug_physics(
+	struct physics_instance *instance)
+{
+	struct object_datum *object = object_get(instance->object_index);
+	struct object_definition *definition = object_definition_get(object->definition_index);
+	real_point3d center_of_mass;
+	short mass_point_index;
+
+	matrix4x3_transform_point(&instance->world_matrix, &instance->physics->center_of_mass, &center_of_mass);
+
+	render_debug_vectors(
+		TRUE,
+		&center_of_mass,
+		&instance->world_matrix.forward,
+		&instance->world_matrix.up,
+		definition->object.bounding_radius);
+
+	for (mass_point_index = 0;
+		mass_point_index < instance->physics->mass_points.count;
+		mass_point_index++)
+	{
+		struct mass_point_definition const *mass_point = TAG_BLOCK_GET_ELEMENT(
+			&instance->physics->mass_points,
+			mass_point_index,
+			struct mass_point_definition);
+		real_point3d position;
+		real_vector3d forward;
+		real_vector3d up;
+
+		matrix4x3_transform_point(&instance->world_matrix, &mass_point->position, &position);
+		matrix4x3_transform_normal(&instance->world_matrix, &mass_point->forward, &forward);
+		matrix4x3_transform_normal(&instance->world_matrix, &mass_point->up, &up);
+
+		render_debug_sphere(TRUE, &position, mass_point->radius, global_real_argb_white);
+		render_debug_vectors(TRUE, &position, &forward, &up, mass_point->radius*0.5f);
+	}
+}
+
+boolean physics_instance_new(
+	struct physics_instance *instance,
+	long object_index)
+{
+	struct object_datum *object = object_get(object_index);
+	struct object_definition *definition = object_definition_get(object->definition_index);
+	real_point3d center_of_mass;
+
+	if (definition->object.physics.index != NONE)
+	{
+		instance->object_index = object_index;
+		instance->physics = physics_definition_get(definition->object.physics.index);
+
+		instance->world_matrix.scale = 1.0f;
+		object_get_origin(object_index, &instance->world_matrix.position);
+		object_get_orientation(object_index, &instance->world_matrix.forward, &instance->world_matrix.up);
+		cross_product3d(&instance->world_matrix.up, &instance->world_matrix.forward, &instance->world_matrix.left);
+
+		set_real_point3d(&center_of_mass,
+			-instance->physics->center_of_mass.x,
+			-instance->physics->center_of_mass.y,
+			-instance->physics->center_of_mass.z);
+		matrix4x3_transform_point(&instance->world_matrix, &center_of_mass, &center_of_mass);
+		instance->world_matrix.position = center_of_mass;
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
 
 boolean physics_test_point(
 	struct physics_instance const *instance,
@@ -145,4 +339,166 @@ boolean physics_test_point(
 
 	return FALSE;
 }
+
+boolean physics_test_vector(
+	struct physics_instance const *instance,
+	real_point3d const *point,
+	real_vector3d const *vector,
+	struct physics_test_vector_result *result)
+{
+	boolean hit = FALSE;
+	real_point3d local_point;
+	real_vector3d local_vector;
+	real_vector3d normal;
+	short mass_point_index;
+
+	result->t = REAL_MAX;
+
+	matrix4x3_inverse_transform_point(&instance->world_matrix, point, &local_point);
+	matrix4x3_inverse_transform_vector(&instance->world_matrix, vector, &local_vector);
+
+	for (mass_point_index = 0;
+		mass_point_index < instance->physics->mass_points.count;
+		mass_point_index++)
+	{
+		struct mass_point_definition const *mass_point = TAG_BLOCK_GET_ELEMENT(
+			&instance->physics->mass_points,
+			mass_point_index,
+			struct mass_point_definition);
+		real t;
+
+		if (sphere_test_vector3d(
+				&mass_point->position,
+				mass_point->radius,
+				&local_point,
+				&local_vector,
+				&t,
+				&normal) &&
+			result->t > t)
+		{
+			real_point3d intersection;
+
+			result->t = t;
+			plane3d_from_point_and_normal(
+				&result->plane,
+				point_from_line3d(&local_point, &local_vector, t, &intersection),
+				&normal);
+			hit = TRUE;
+		}
+	}
+
+	if (hit)
+		matrix4x3_transform_plane(&instance->world_matrix, &result->plane, &result->plane);
+
+	return hit;
+}
+
+
+/* NOT YET EXACT: 1168/1168 bytes, 335 of 355 instruction slots identical.
+   The only divergence is which physics_instance parameter the register
+   allocator keeps in ESI across the two object_get_and_verify_type calls:
+   January keeps instance_b (reloading instance_a from [ebp+8]), we keep
+   instance_a.  Every source permutation tried - declaration order, splitting
+   the initialisers into statements, commuting the mass product, caching
+   either physics pointer in a local, const on either parameter - is byte
+   inert.  Do not re-sweep those. */
+boolean code_00141710(
+	struct physics_instance const *instance_a,
+	struct physics_instance const *instance_b)
+{
+	boolean collided = FALSE;
+	struct vehicle_runtime_datum *object_a = vehicle_runtime_get(instance_a->object_index);
+	struct vehicle_runtime_datum *object_b = vehicle_runtime_get(instance_b->object_index);
+	real mass = square_root(instance_a->physics->mass * instance_b->physics->mass);
+	real_vector3d total_force_a;
+	real_vector3d total_force_b;
+	real_vector3d total_torque_a;
+	real_vector3d total_torque_b;
+	short a_index;
+	short b_index;
+
+	set_real_vector3d(&total_force_a, 0.0f, 0.0f, 0.0f);
+	set_real_vector3d(&total_force_b, 0.0f, 0.0f, 0.0f);
+	set_real_vector3d(&total_torque_a, 0.0f, 0.0f, 0.0f);
+	set_real_vector3d(&total_torque_b, 0.0f, 0.0f, 0.0f);
+
+	for (a_index = 0;
+		a_index < instance_a->physics->mass_points.count;
+		a_index++)
+	{
+		struct mass_point_definition const *mass_point_a = TAG_BLOCK_GET_ELEMENT(
+			&instance_a->physics->mass_points,
+			a_index,
+			struct mass_point_definition);
+		real_point3d point_a;
+
+		matrix4x3_transform_point(&instance_a->world_matrix, &mass_point_a->position, &point_a);
+
+		for (b_index = 0;
+			b_index < instance_b->physics->mass_points.count;
+			b_index++)
+		{
+			struct mass_point_definition const *mass_point_b = TAG_BLOCK_GET_ELEMENT(
+				&instance_b->physics->mass_points,
+				b_index,
+				struct mass_point_definition);
+			real radius = mass_point_b->radius + mass_point_a->radius;
+			real_point3d point_b;
+			real_vector3d direction;
+			real distance;
+
+			matrix4x3_transform_point(&instance_b->world_matrix, &mass_point_b->position, &point_b);
+
+			distance = normalize3d(vector_from_points3d(&point_a, &point_b, &direction));
+
+			if (distance < radius && distance > 0.0f)
+			{
+				real depth = (radius - distance)*0.5f;
+				real magnitude = global_gravity/global_physics_collision_depth*depth*mass*2.0f;
+				real_vector3d force_a;
+				real_vector3d force_b;
+				real_vector3d torque_a;
+				real_vector3d torque_b;
+				real_point3d contact_point;
+				real_vector3d offset_a;
+				real_vector3d offset_b;
+
+				scale_vector3d(&direction, -magnitude, &force_a);
+				scale_vector3d(&direction, magnitude, &force_b);
+
+				point_from_line3d(&point_a, &direction, mass_point_a->radius - depth, &contact_point);
+
+				vector_from_points3d(&object_a->object.position, &contact_point, &offset_a);
+				vector_from_points3d(&object_b->object.position, &contact_point, &offset_b);
+
+				cross_product3d(&offset_a, &force_a, &torque_a);
+				cross_product3d(&offset_b, &force_b, &torque_b);
+
+				collided = TRUE;
+
+				add_vectors3d(&force_a, &total_force_a, &total_force_a);
+				add_vectors3d(&force_b, &total_force_b, &total_force_b);
+				add_vectors3d(&torque_a, &total_torque_a, &total_torque_a);
+				add_vectors3d(&torque_b, &total_torque_b, &total_torque_b);
+			}
+		}
+	}
+
+	if (collided)
+	{
+		add_vectors3d(&total_force_a, &object_a->vehicle.collision_force, &object_a->vehicle.collision_force);
+		add_vectors3d(&total_torque_a, &object_a->vehicle.collision_torque, &object_a->vehicle.collision_torque);
+		SET_FLAG(object_a->object.flags, _object_at_rest_bit, FALSE);
+
+		if (!(instance_b->physics->radius > 0.0f))
+		{
+			add_vectors3d(&total_force_b, &object_b->vehicle.collision_force, &object_b->vehicle.collision_force);
+			add_vectors3d(&total_torque_b, &object_b->vehicle.collision_torque, &object_b->vehicle.collision_torque);
+			SET_FLAG(object_b->object.flags, _object_at_rest_bit, FALSE);
+		}
+	}
+
+	return collided;
+}
+
 /* ---------- private code */

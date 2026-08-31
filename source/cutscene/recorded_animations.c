@@ -208,7 +208,7 @@ extern boolean recorded_animation_controlling_unit(
 
 /* ---------- globals */
 
-extern struct animation_thread_debug *animation_threads_debug;
+static struct animation_thread_debug *animation_threads_debug;
 extern struct recorded_animations_globals_prefix bss_00435ca4;
 extern struct recorded_animation_playback_data data_002dd160;
 extern boolean debug_recording;
@@ -694,6 +694,11 @@ static boolean code_000839a0(
 
 				if (thread)
 				{
+					match_assert(
+						"c:\\halo\\SOURCE\\cutscene\\recorded_animations.c",
+						233,
+						animation->version>0&&animation->version<=RECORDED_ANIMATION_VERSION&&playback_codec[animation->version-1]);
+
 					thread->unit_index = unit_index;
 					thread->relative_ticks = 0;
 					thread->ticks_left = animation->length_in_ticks;
@@ -710,11 +715,6 @@ static boolean code_000839a0(
 
 					thread->version = animation->version - 1;
 					thread->flags &= ~(1 << _recording_thread_finished_bit);
-					match_assert(
-						"c:\\halo\\SOURCE\\cutscene\\recorded_animations.c",
-						233,
-						animation->version>0&&animation->version<=RECORDED_ANIMATION_VERSION&&playback_codec[animation->version-1]);
-
 					playback = playback_codec[thread->version];
 					playback->initialize_event_stream(
 						thread->animation_state,

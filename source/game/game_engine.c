@@ -1464,8 +1464,8 @@ static void code_0009d140(
 static void code_000994f0(
 	wchar_t const *string,
 	boolean brighten,
-	long row_index,
-	real_argb_color *color)
+	real_argb_color *color,
+	long row_index)
 {
 	rectangle2d bounds = render.camera.window_bounds;
 	short narrow_tab_stops[3];
@@ -1501,8 +1501,8 @@ static void code_000994f0(
 	if (font_index != NONE)
 	{
 		struct font_header *font = font_definition_get(font_index);
-		long line_height = font->leading_height;
 		long row_offset = 4 * (splitscreen == FALSE) + 4;
+		long line_height = font->leading_height;
 
 		if (!splitscreen)
 			line_height += font->descending_height;
@@ -1858,12 +1858,12 @@ void code_0009e670(
 	color.red = 0.7f;
 	color.green = 0.7f;
 	color.blue = 0.7f;
-	code_000994f0(title_string, FALSE, 0, &color);
+	code_000994f0(title_string, FALSE, &color, 0);
 
-	color.alpha = alpha;
 	color.red = 0.5f;
 	color.green = 0.5f;
 	color.blue = 0.5f;
+	color.alpha = alpha;
 
 	string_list_index = tag_loaded('ustr', "ui\\multiplayer_game_text");
 	if (string_list_index != NONE)
@@ -1879,7 +1879,7 @@ void code_0009e670(
 
 	game_engine->format_score_name(score_string);
 	usprintf(row_string, L"\t%s\t%s\t%s", column_name, score_name, score_string);
-	code_000994f0(row_string, FALSE, 1, &color);
+	code_000994f0(row_string, FALSE, &color, 1);
 
 	entry_index = 0;
 	if (entry_count > 0)
@@ -1896,7 +1896,7 @@ void code_0009e670(
 			long place_index;
 			real_argb_color *row_color;
 
-			is_current_player = entry_player_index == player_index;
+			is_current_player = player_index == entry_player_index;
 			if (player)
 			{
 				color = *hud_get_text_color(&text_color);
@@ -1972,8 +1972,8 @@ void code_0009e670(
 				code_000994f0(
 					row_string,
 					is_current_player,
-					entry_index + 2,
-					row_color);
+					row_color,
+					entry_index + 2);
 			}
 
 			entry_index++;
@@ -2176,10 +2176,10 @@ void game_engine_post_rasterize_post_game(
 				long string_list_index;
 				wchar_t const *place_string;
 
-				draw_string_set_color(
-					player->local_player_index == NONE ?
-						&winner_color :
-						&normal_color);
+				if (player->local_player_index != NONE)
+					draw_string_set_color(&normal_color);
+				else
+					draw_string_set_color(&winner_color);
 				draw_string_set_tab_stops(tab_stops, NUMBEROF(tab_stops));
 				place = PIN(entry->values[6] & 0x7F, 0, 15);
 				string_list_index =
@@ -2195,14 +2195,14 @@ void game_engine_post_rasterize_post_game(
 
 				if (global_variant.has_teams)
 				{
-					team_colors[0].alpha = 1.0f;
 					team_colors[0].red = 0.8f;
 					team_colors[0].green = 0.4f;
 					team_colors[0].blue = 0.4f;
-					team_colors[1].alpha = 1.0f;
+					team_colors[0].alpha = 1.0f;
 					team_colors[1].red = 0.4f;
 					team_colors[1].green = 0.4f;
 					team_colors[1].blue = 0.8f;
+					team_colors[1].alpha = 1.0f;
 					draw_string_set_color(
 						&team_colors[PIN(player->team_index, 0, 1)]);
 				}
@@ -2254,8 +2254,8 @@ void game_engine_post_rasterize_post_game(
 				code_00096ba0(row_string, 0, draw_row);
 				draw_string_set_tab_stops(tab_stops, NUMBEROF(tab_stops));
 
-				entry++;
 				entry_index++;
+				entry++;
 				entry_count--;
 			}
 			while (entry_count != 0);
@@ -2263,14 +2263,13 @@ void game_engine_post_rasterize_post_game(
 	}
 
 	{
-		rectangle2d bounds;
+		rectangle2d bounds = render.camera.window_bounds;
 		real_argb_color prompt_color = winner_color;
 		long string_list_index;
 		wchar_t const *prompt;
 		struct network_game_server *server;
 
 		prompt_color.alpha = game_engine_globals.postgame_progress;
-		bounds = render.camera.window_bounds;
 		bounds.y0 = 410;
 		bounds.x0 = 70;
 		offset_rectangle2d(
