@@ -23080,27 +23080,32 @@
   {
     "file_offset": 1096176,
     "flags": 32,
-    "name": "_code_0010b9f0"
+    "name": "_lra_default_update_proc",
+    "static": true
   },
   {
     "file_offset": 1096192,
     "flags": 32,
-    "name": "_code_0010ba00"
+    "name": "_lra_default_delete_proc",
+    "static": true
   },
   {
     "file_offset": 1096208,
     "flags": 32,
-    "name": "_code_0010ba10"
+    "name": "_lra_delete_block",
+    "static": true
   },
   {
     "file_offset": 1096240,
     "flags": 32,
-    "name": "_code_0010ba30"
+    "name": "_lra_verify_block",
+    "static": true
   },
   {
     "file_offset": 1096368,
     "flags": 32,
-    "name": "_code_0010bab0"
+    "name": "_lra_verify_cache",
+    "static": true
   },
   {
     "file_offset": 1096496,
@@ -23135,7 +23140,8 @@
   {
     "file_offset": 1097200,
     "flags": 32,
-    "name": "_code_0010bdf0"
+    "name": "_lra_block_offset",
+    "static": true
   },
   {
     "file_offset": 1097232,
