@@ -47,7 +47,56 @@ Two details January's bytes pin down:
 `fast_ftol` is kept unit-local rather than in its historical `cseries.h`
 home, so a shared-header `__inline` cannot perturb unrelated units.
 
-## Blocked: `_rasterizer_geometry_get_vertex_size`
+## `_rasterizer_geometry_get_vertex_size`: EXACT (2026-08-30, later)
+
+Now strict exact, 80 bytes, 5 relocations. Closing it required three
+separate corrections, each evidence-backed:
+
+**1. The enum was wrong, not the compiler.** January asserts `type < 12`
+(`cmp si, 0xc`) and the assert string stringizes the macro, so January's
+`NUMBER_OF_RASTERIZER_VERTEX_TYPES` is 12. The repository header carried 18,
+having imported six later-engine types (`..._ff`, `model_processed`,
+`unlit_zsprite`, `widget`). Two independent facts made the trim safe, and
+both were checked before touching a shared header:
+
+- those six names have **zero references anywhere** in the tree outside the
+  enum declaration itself;
+- `rasterizer_xbox_vertex_shaders_runtime.c` does not include this header
+  and defines its own local `NUMBER_OF_RASTERIZER_VERTEX_TYPES = 12`, i.e.
+  another translation unit had already worked around the same discrepancy
+  with January's value.
+
+A whole-board rebuild after the trim moved nothing except this object.
+
+**2. The return type is `long`, not `short`.** January emits
+`movsx eax, word ptr [table + type*2]` — a sign-extending 32-bit load with a
+single exit. A `short` return produces `mov ax, ...` and makes VC7 duplicate
+the load down both assert paths, which also cost an extra relocation.
+
+**3. The size table is now a named global.** csplit called it
+`_rdata_0029e344`; it is renamed in `config/symbols.json` to
+`rasterizer_vertex_type_sizes` and marked `"static": true` so the split
+emits storage class 3 to match our file-scope `static const short`. The
+recovered contents, indexed by vertex type:
+
+```
+56, 32, 20, 8, 68, 32, 24, 36, 20, 16, 16, 8
+```
+
+The prototype now lives in `rasterizer_geometry.h` rather than in any
+consuming `.c`.
+
+### One defect worth recording
+
+After the rename the relocation for the table matched but the function still
+failed on relocation identity, and the cause was **not** the table: the
+assert's file-path literal had been written with single backslashes
+(`"c:\halo\SOURCE\..."` collapsing to `c:haloSOURCE...`), producing a
+different `.rdata` string symbol. This is the same class of defect recorded
+for `unit_weapon_next_index`. Path literals in generated edits must be built
+with explicit character construction, never through a shell heredoc.
+
+## Superseded: earlier note that this function was blocked
 
 Written trivially, but it cannot match while the repository header disagrees
 with January. The target asserts `type < 12` (`cmp si, 0xc`) and indexes a

@@ -147,6 +147,22 @@ static __inline long fast_ftol(
 
 /* ---------- globals */
 
+static short const rasterizer_vertex_type_sizes[NUMBER_OF_RASTERIZER_VERTEX_TYPES]=
+{
+	56,	// environment uncompressed
+	32,	// environment compressed
+	20,	// environment lightmap uncompressed
+	8,	// environment lightmap compressed
+	68,	// model uncompressed
+	32,	// model compressed
+	24,	// dynamic unlit
+	36,	// dynamic lit
+	20,	// dynamic screen
+	16,	// debug
+	16,	// decal
+	8	// detail object
+};
+
 /* ---------- public code */
 
 float uncompress_int8_to_real(
@@ -159,6 +175,14 @@ float uncompress_int16_to_real(
 	short value)
 {
 	return ((float)value * 2.0f + 1.0f) * (1.0f / 65535.0f);
+}
+
+long rasterizer_geometry_get_vertex_size(
+	short type)
+{
+	match_assert("c:\\halo\\SOURCE\\rasterizer\\rasterizer_geometry.c", 170, type>=0 && type<NUMBER_OF_RASTERIZER_VERTEX_TYPES);
+
+	return rasterizer_vertex_type_sizes[type];
 }
 
 void rasterizer_geometry_byte_swap_vertices(
