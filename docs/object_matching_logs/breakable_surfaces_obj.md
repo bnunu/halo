@@ -623,6 +623,40 @@ these four are not reachable from source spelling in this unit.
 The object therefore remains `NonMatching` at 11/12. It is now 4
 instructions from exact rather than 20 plus a 48-byte deficit.
 
+## Audit of the unit-local distance helper (2026-08-30, later)
+
+The owner's rule against fake matching prompted a re-audit of
+`breakable_surface_plane_distance`, the unit-local helper introduced to move
+the residual from 20 differing instructions to 4. It duplicates the shared
+`plane3d_distance_to_point` and differs only in floating-point association,
+which is exactly the shape a byte-forced invention takes. It is **retained**,
+because the evidence constrains the answer from both sides:
+
+- **The shared helper must stay flat.** Rewriting
+  `plane3d_distance_to_point` in `real_math.h` as the longhand `j+k`-grouped
+  form reproduces this function's 4-instruction state *without* any local
+  helper — but a whole-board rebuild shows it costs a previously exact
+  944-byte function, `source/items/items::_item_accelerate`. January's
+  shared form is therefore flat, proven by that function.
+- **These four sites nevertheless require the grouped association.** No
+  spelling of the shared call reproduces January's evaluation order here.
+
+Those two facts together say January's `breakable_surfaces.c` did not obtain
+these distances from the shared helper. A unit-local computation existed;
+the helper is a rendering of it, not a fabrication.
+
+**Open, and honestly unresolved:** the bytes cannot distinguish a unit-local
+*helper* from the same expression written inline at each of the four call
+sites — both inline identically. The helper form is kept as the more
+plausible original (four copy-pasted dot products would be odd), but it is a
+judgement call, not a measurement.
+
+**Not evidence either way:** our object emits ~24 COMDATs January lacks,
+including `_point_from_line3d` and every `real_math.h` inline. That is a
+whole-tree property of this build, not something this helper introduced, so
+the absence of a distance-helper COMDAT in January says nothing about which
+form was used.
+
 ## Completion status: two independent blockers, both measured
 
 Stated plainly because the object has been dispatched repeatedly. Byte-exact
