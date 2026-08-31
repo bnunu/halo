@@ -62,6 +62,22 @@ struct triangle_buffer
 long rasterizer_geometry_get_vertex_size(
 	short type);
 
+void rasterizer_geometry_uncompress_vertices(
+	short type,
+	long count,
+	void *uncompressed,
+	long uncompressed_size,
+	void *compressed,
+	long compressed_size);
+
+void rasterizer_geometry_compress_vertices(
+	short type,
+	long count,
+	void *compressed,
+	long compressed_size,
+	void *uncompressed,
+	long uncompressed_size);
+
 /* ---------- globals */
 
 /* ---------- public code */
