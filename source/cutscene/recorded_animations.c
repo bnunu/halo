@@ -481,7 +481,7 @@ void recorded_animation_verify(
 	byte *stream;
 	byte *playback_stream;
 	long size;
-	long relative_ticks = 0;
+	long relative_ticks;
 	long ticks_left;
 	boolean finished;
 
@@ -489,6 +489,7 @@ void recorded_animation_verify(
 	playback_stream = stream;
 	size = animation->event_stream.size;
 	ticks_left = (word)animation->length_in_ticks;
+	relative_ticks = 0;
 
 	playback_codec[animation->version-1]->initialize_event_stream(
 		animation_state,
@@ -551,85 +552,6 @@ boolean recorded_animation_controlling_unit(
 	return result;
 }
 
-void recorded_animation_kill(
-	long unit_index)
-{
-	struct data_iterator iterator;
-	struct animation_thread *thread;
-
-	data_iterator_new(&iterator, bss_00435ca4.animation_threads);
-	thread = data_iterator_next(&iterator);
-	while (thread)
-	{
-		if (thread->unit_index == unit_index)
-			break;
-
-		thread = data_iterator_next(&iterator);
-	}
-
-	if (thread)
-	{
-		thread->flags |=
-			(1 << _recording_thread_finished_bit) |
-			(1 << _recording_thread_killed_bit);
-	}
-
-	return;
-}
-
-long recorded_animation_get_time_left(
-	long unit_index)
-{
-	long result = 0;
-	struct data_iterator iterator;
-	struct animation_thread *thread;
-
-	data_iterator_new(&iterator, bss_00435ca4.animation_threads);
-	thread = data_iterator_next(&iterator);
-	if (thread)
-	{
-		while (thread->unit_index != unit_index)
-		{
-			thread = data_iterator_next(&iterator);
-			if (!thread)
-				break;
-		}
-	}
-
-	match_assert(
-		"c:\\halo\\SOURCE\\cutscene\\recorded_animations.c",
-		312,
-		!thread||thread->unit_index==unit_index);
-
-	if (thread)
-		result = thread->ticks_left;
-
-	return result;
-}
-
-boolean recorded_animation_play(
-	long unit_index,
-	short animation_index)
-{
-	return code_000839a0(unit_index, animation_index, 0);
-}
-
-boolean recorded_animation_play_and_delete(
-	long unit_index,
-	short animation_index)
-{
-	return code_000839a0(unit_index, animation_index, 1 << 3);
-}
-
-boolean recorded_animation_play_and_hover(
-	long unit_index,
-	short animation_index)
-{
-	return code_000839a0(unit_index, animation_index, 1 << 4);
-}
-
-/* ---------- private code */
-
 static struct animation_thread *code_000836c0(
 	long unit_index,
 	long *thread_index_reference)
@@ -657,6 +579,64 @@ static struct animation_thread *code_000836c0(
 
 	return thread;
 }
+
+void recorded_animation_kill(
+	long unit_index)
+{
+	struct animation_thread *thread;
+
+	thread = code_000836c0(unit_index, NULL);
+	if (thread)
+	{
+		thread->flags |=
+			(1 << _recording_thread_finished_bit) |
+			(1 << _recording_thread_killed_bit);
+	}
+
+	return;
+}
+
+long recorded_animation_get_time_left(
+	long unit_index)
+{
+	long result = 0;
+	struct animation_thread *thread;
+
+	thread = code_000836c0(unit_index, NULL);
+
+	match_assert(
+		"c:\\halo\\SOURCE\\cutscene\\recorded_animations.c",
+		312,
+		!thread||thread->unit_index==unit_index);
+
+	if (thread && thread->unit_index == unit_index)
+		result = thread->ticks_left;
+
+	return result;
+}
+
+boolean recorded_animation_play(
+	long unit_index,
+	short animation_index)
+{
+	return code_000839a0(unit_index, animation_index, 0);
+}
+
+boolean recorded_animation_play_and_delete(
+	long unit_index,
+	short animation_index)
+{
+	return code_000839a0(unit_index, animation_index, 1 << 3);
+}
+
+boolean recorded_animation_play_and_hover(
+	long unit_index,
+	short animation_index)
+{
+	return code_000839a0(unit_index, animation_index, 1 << 4);
+}
+
+/* ---------- private code */
 
 static boolean code_000839a0(
 	long unit_index,
@@ -694,6 +674,11 @@ static boolean code_000839a0(
 
 				if (thread)
 				{
+					match_assert(
+						"c:\\halo\\SOURCE\\cutscene\\recorded_animations.c",
+						233,
+						animation->version>0&&animation->version<=RECORDED_ANIMATION_VERSION&&playback_codec[animation->version-1]);
+
 					thread->unit_index = unit_index;
 					thread->relative_ticks = 0;
 					thread->ticks_left = animation->length_in_ticks;
@@ -710,10 +695,6 @@ static boolean code_000839a0(
 
 					thread->version = animation->version - 1;
 					thread->flags &= ~(1 << _recording_thread_finished_bit);
-					match_assert(
-						"c:\\halo\\SOURCE\\cutscene\\recorded_animations.c",
-						233,
-						animation->version>0&&animation->version<=RECORDED_ANIMATION_VERSION&&playback_codec[animation->version-1]);
 
 					playback = playback_codec[thread->version];
 					playback->initialize_event_stream(

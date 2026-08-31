@@ -507,15 +507,15 @@ void hs_evaluate_wake(
 	long wake_thread_index;
 	struct hs_thread_datum *thread;
 	struct hs_syntax_node *script_name_node;
+	long script_name_node_index;
 
 	thread = datum_get(hs_thread_data, thread_index);
-	script_name_node = datum_get(
+	script_name_node_index = ((struct hs_syntax_node *)datum_get(
 		hs_syntax_data,
 		((struct hs_syntax_node *)datum_get(
 			hs_syntax_data,
-			((struct hs_syntax_node *)datum_get(
-				hs_syntax_data,
-				thread->stack->expression_index))->data))->next_node_index);
+			thread->stack->expression_index))->data))->next_node_index;
+	script_name_node = datum_get(hs_syntax_data, script_name_node_index);
 
 	match_assert("c:\\halo\\source\\hs\\hs_library_internal_runtime.h", 0x22c,
 		function_index==_hs_function_wake);

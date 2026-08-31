@@ -211,9 +211,13 @@ static void code_00051360(
 
 	if (!(fabs(cross) < _real_epsilon))
 	{
+		real_vector2d avoidance;
+
 		scale = radius*radius / cross;
-		avoidance_point[1] = (center_to_tangent[0].i - center_to_tangent[1].i)*scale + center[1];
-		avoidance_point[0] = center[0] - (center_to_tangent[0].j - center_to_tangent[1].j)*scale;
+		avoidance.j = (center_to_tangent[0].i - center_to_tangent[1].i)*scale + center[1];
+		avoidance.i = center[0] - (center_to_tangent[0].j - center_to_tangent[1].j)*scale;
+		avoidance_point[0] = avoidance.i;
+		avoidance_point[1] = avoidance.j;
 
 		direction.i = avoidance_point[0] - center[0];
 		direction.j = avoidance_point[1] - center[1];
@@ -223,7 +227,17 @@ static void code_00051360(
 
 	direction.i = tangent_points[0] - start_point[0];
 	direction.j = tangent_points[1] - start_point[1];
-	NORMALIZE_DIRECTION2D(&direction, magnitude);
+	magnitude = (real)sqrt(direction.i*direction.i + direction.j*direction.j);
+	if (!(_real_epsilon > fabs(magnitude - 0.0f)))
+	{
+		scale = 1.0f / magnitude;
+		direction.i = direction.i*scale;
+		direction.j = direction.j*scale;
+	}
+	else
+	{
+		magnitude = 0.0f;
+	}
 	if (magnitude == 0.0f)
 		direction = *global_left2d;
 
@@ -327,20 +341,19 @@ static boolean code_000516a0(
 	real_point2d positive_point;
 	real_point2d negative_point;
 	real_vector2d vertex_to_positive;
+	real_vector2d vertex_to_negative;
 	boolean side_flag;
 	boolean valid;
 	long side_test;
 	long xor_flag;
-	long matches_end;
+	boolean matches_end;
+	long edge_index;
 	boolean refined_side;
 	long starting_vertex_index;
 	long loop_reference_vertex_index;
-	long vertex_a_index;
-	long vertex_b_index;
 	long next_vertex_index;
 	long chain_start_edge_index;
 	long candidate_surface_index;
-	long next_edge_index;
 
 	bsp = TAG_BLOCK_GET_ELEMENT(
 		&structure->collision_bsp,
@@ -348,19 +361,19 @@ static boolean code_000516a0(
 		struct collision_bsp);
 	pathfinding_surfaces = structure->pathfinding_surfaces.address;
 	breakable_surface_flags = breakable_surface_flags_get();
-	negative_radius = -radius;
+	starting_vertex_index = NONE;
+	loop_reference_vertex_index = NONE;
 #line 511 "c:\\halo\\SOURCE\\ai\\path_smoothing.c"
 	match_assert("c:\\halo\\SOURCE\\ai\\path_smoothing.c", 0x1ff, clockwise==TRUE || clockwise==FALSE);
 
-	starting_vertex_index = NONE;
-	loop_reference_vertex_index = NONE;
-	collision_edge = TAG_BLOCK_GET_ELEMENT(
-		&bsp->edges,
-		first_edge_index,
-		struct collision_edge);
-
+	negative_radius = -radius;
+	edge_index = first_edge_index;
 	while (TRUE)
 	{
+		collision_edge = TAG_BLOCK_GET_ELEMENT(
+			&bsp->edges,
+			edge_index,
+			struct collision_edge);
 		side_flag = code_00051190(
 			pathfinding_surfaces,
 			bsp,
@@ -368,32 +381,43 @@ static boolean code_000516a0(
 			collision_edge->surface_indices[0],
 			ignore_broken_surfaces);
 
-		vertex_a_index = collision_edge->vertex_indices[side_flag];
-		vertex_b_index = collision_edge->vertex_indices[!side_flag];
 		vertex_a = TAG_BLOCK_GET_ELEMENT(
 			&bsp->vertices,
-			vertex_a_index,
+			collision_edge->vertex_indices[side_flag],
 			struct collision_vertex);
 		vertex_b = TAG_BLOCK_GET_ELEMENT(
 			&bsp->vertices,
-			vertex_b_index,
+			collision_edge->vertex_indices[!side_flag],
 			struct collision_vertex);
 
 		edge_dx = vertex_b->point.x - vertex_a->point.x;
 		edge_dy = vertex_b->point.y - vertex_a->point.y;
-		edge_direction.i = -edge_dx;
-		edge_direction.j = edge_dy;
-		NORMALIZE_DIRECTION2D(&edge_direction, magnitude);
+		edge_direction.i = edge_dy;
+		edge_direction.j = -edge_dx;
 
-		positive_point.x = point[0] + edge_direction.j*radius;
-		positive_point.y = point[1] + edge_direction.i*radius;
-		negative_point.x = point[0] + edge_direction.j*negative_radius;
-		negative_point.y = point[1] + edge_direction.i*negative_radius;
+		valid = FALSE;
+		magnitude = (real)sqrt(
+			edge_direction.i*edge_direction.i + edge_direction.j*edge_direction.j);
+		if (!(_real_epsilon > fabs(magnitude - 0.0f)))
+		{
+			edge_direction.i = edge_direction.i*(1.0f / magnitude);
+			edge_direction.j = edge_direction.j*(1.0f / magnitude);
+		}
+		else
+		{
+			magnitude = 0.0f;
+		}
+
+		positive_point.x = point[0] + edge_direction.i*radius;
+		positive_point.y = point[1] + edge_direction.j*radius;
+		negative_point.x = point[0] + edge_direction.i*negative_radius;
+		negative_point.y = point[1] + edge_direction.j*negative_radius;
 
 		vertex_to_positive.i = vertex_a->point.x - positive_point.x;
 		vertex_to_positive.j = vertex_a->point.y - positive_point.y;
+		vertex_to_negative.i = vertex_a->point.x - negative_point.x;
+		vertex_to_negative.j = vertex_a->point.y - negative_point.y;
 
-		valid = FALSE;
 		side_test =
 			vertex_to_positive.j*edge_dy +
 			vertex_to_positive.i*edge_dx < 0.0f;
@@ -406,8 +430,8 @@ static boolean code_000516a0(
 			}
 		}
 
-		if ((vertex_a->point.x - negative_point.x)*edge_dy -
-			(vertex_a->point.y - negative_point.y)*edge_dx < 0.0f)
+		if (vertex_to_negative.i*edge_dy -
+			vertex_to_negative.j*edge_dx < 0.0f)
 		{
 			valid = TRUE;
 		}
@@ -415,11 +439,8 @@ static boolean code_000516a0(
 		if (starting_vertex_index == NONE)
 			valid = TRUE;
 
-		xor_flag = side_flag != valid;
-		next_vertex_index =
-			clockwise == xor_flag ?
-			collision_edge->vertex_indices[1] :
-			collision_edge->vertex_indices[0];
+		xor_flag = valid != side_flag;
+		next_vertex_index = collision_edge->vertex_indices[xor_flag == clockwise];
 
 		if (next_vertex_index == loop_reference_vertex_index)
 		{
@@ -438,7 +459,7 @@ static boolean code_000516a0(
 		if (starting_vertex_index == NONE)
 			starting_vertex_index = next_vertex_index;
 
-		chain_start_edge_index = first_edge_index;
+		chain_start_edge_index = edge_index;
 		while (TRUE)
 		{
 			matches_end = next_vertex_index == collision_edge->vertex_indices[1];
@@ -453,14 +474,14 @@ static boolean code_000516a0(
 			if (refined_side == clockwise)
 				break;
 
-			next_edge_index = collision_edge->edge_indices[!matches_end];
-			if (next_edge_index == chain_start_edge_index)
-				return FALSE;
-
+			edge_index = collision_edge->edge_indices[!matches_end];
 			collision_edge = TAG_BLOCK_GET_ELEMENT(
 				&bsp->edges,
-				next_edge_index,
+				edge_index,
 				struct collision_edge);
+			if (edge_index == chain_start_edge_index)
+				return FALSE;
+
 #line 631 "c:\\halo\\SOURCE\\ai\\path_smoothing.c"
 			match_assert("c:\\halo\\SOURCE\\ai\\path_smoothing.c", 0x277, collision_edge->vertex_indices[0]==next_vertex_index || collision_edge->vertex_indices[1]==next_vertex_index);
 		}
@@ -493,7 +514,7 @@ void path_smooth(
 	boolean smoothed_path_finishes;
 	short i;
 	struct path_collision_result collision_result;
-	struct path_step const *collision_step;
+	struct path_step *smoothed_step;
 	real_point2d clockwise_turning_point;
 	real_point2d counterclockwise_turning_point;
 	real_point2d chosen_center;
@@ -573,13 +594,12 @@ void path_smooth(
 			if (!found_counterclockwise || !found_clockwise)
 				goto bail_out;
 
-			collision_step = &raw_steps[collision_step_index];
 			chose_clockwise = code_00051480(
 				current_position.n,
 				clockwise_turning_point.n,
 				counterclockwise_turning_point.n,
-				collision_step[-1].point.n,
-				collision_step->point.n,
+				raw_steps[collision_step_index - 1].point.n,
+				raw_steps[collision_step_index].point.n,
 				chosen_center.n);
 
 			code_00051210(
@@ -589,7 +609,7 @@ void path_smooth(
 				chose_clockwise,
 				tangent_points[0].n);
 			code_00051210(
-				collision_step->point.n,
+				raw_steps[collision_step_index].point.n,
 				chosen_center.n,
 				0.35f,
 				!chose_clockwise,
@@ -610,6 +630,8 @@ void path_smooth(
 				current_surface_index,
 				&current_position);
 
+			smoothed_step = &smoothed_steps[smoothed_count];
+			smoothed_count++;
 			collision_surface_project_point2d(
 				TAG_BLOCK_GET_ELEMENT(
 					&state->structure->collision_bsp,
@@ -619,9 +641,8 @@ void path_smooth(
 				_z,
 				TRUE,
 				&current_position,
-				&smoothed_steps[smoothed_count].point);
-			smoothed_steps[smoothed_count].surface_index = current_surface_index;
-			smoothed_count++;
+				&smoothed_step->point);
+			smoothed_step->surface_index = current_surface_index;
 
 			if (smoothed_count >= 4)
 				goto bail_out;

@@ -151,7 +151,17 @@ const real_rgb_color blip_colors[] =
 
 real scale = 1.f;
 
-static struct motion_sensor_globals_definition *motion_sensor_globals;
+/* January's .data chunk for this file is 0x18 bytes: `scale` at +0 followed by five
+more floats (0.f, -.75f, 1.f, 1.f, 1.1f) that only the unwritten drawing code names.
+The leading 0.f proves they belong to an aggregate - a lone zero-initialised real
+would land in .bss - so carry them as one address-named array until the users of
+these values are reconstructed. */
+static real data_002e4c70[5] = { 0.f, -.75f, 1.f, 1.f, 1.1f };
+
+static long next_vertex_index = 0;
+static struct motion_sensor_globals_definition *motion_sensor_globals = NULL;
+static long bss_00453ad0 = 0;
+static boolean debug_motion_sensor_draw_all_units = FALSE;
 
 /* ---------- public code */
 

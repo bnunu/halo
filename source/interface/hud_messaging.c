@@ -272,7 +272,7 @@ typedef char hud_globals_messaging_offset_assert[
 
 /* ---------- globals */
 
-extern struct hud_messaging_globals_definition *bss_00453ab8;
+static struct hud_messaging_globals_definition *bss_00453ab8;
 extern struct hud_globals_definition *hud_globals;
 extern struct hud_messaging_parameters_definition *hud_msg_def;
 extern struct hud_scripted_globals_definition *hud_scripted_globals;
@@ -335,14 +335,12 @@ void scripted_hud_set_flashing_state(
 	boolean flash)
 {
 	long time;
-	struct hud_messaging_globals_definition *globals;
 
 	if (flash && !bss_00453ab8->use_flash)
 	{
 		time = game_time_get();
-		globals = bss_00453ab8;
-		globals->flash_start_time = time;
-		globals->use_flash = flash;
+		bss_00453ab8->flash_start_time = time;
+		bss_00453ab8->use_flash = flash;
 		return;
 	}
 	bss_00453ab8->use_flash = flash;
@@ -380,10 +378,7 @@ void scripted_hud_set_timer_position(
 
 	globals->timer.position[0] = x;
 	globals->timer.position[1] = y;
-	if (corner >= 0)
-		globals->timer.corner = corner > 4 ? 4 : corner;
-	else
-		globals->timer.corner = 0;
+	globals->timer.corner = PIN(corner, 0, 4);
 
 	return;
 }

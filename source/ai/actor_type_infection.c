@@ -974,14 +974,10 @@ void infection_swarm_aim_jump(
 
 					if (normalize2d(&aim_direction.horizontal) == 0.f)
 					{
-						aim_direction.horizontal.i = actor->input.facing_vector.i;
-						aim_direction.horizontal.j = actor->input.facing_vector.j;
-						aim_direction.vertical = actor->input.facing_vector.k;
+						*(real_vector3d *)&aim_direction = actor->input.facing_vector;
 						if (normalize2d(&aim_direction.horizontal) == 0.f)
 						{
-							aim_direction.horizontal.i = global_forward3d->i;
-							aim_direction.horizontal.j = global_forward3d->j;
-							aim_direction.vertical = global_forward3d->k;
+							*(real_vector3d *)&aim_direction = *global_forward3d;
 						}
 					}
 

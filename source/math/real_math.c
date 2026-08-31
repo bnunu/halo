@@ -1457,25 +1457,26 @@ return_true:
 	cross_product3d(&edge20, &offset, &cross);
 	if (dot_product3d(&cross, &normal) < 0.0f)
 	{
-		if ((boolean)vector_intersects_pill3d(
+		if (!(boolean)vector_intersects_pill3d(
 			triangle2,
 			&edge20,
 			pill_base,
 			pill_height,
 			pill_width))
 		{
-			goto return_true;
+			goto return_false;
 		}
-		return FALSE;
+		goto return_true;
 	}
 
 	if (outside)
 	{
+return_false:
 		return FALSE;
 	}
 	if (t > 0.0f && t < 1.0f)
 	{
-		goto return_true;
+		return TRUE;
 	}
 	plane_distance = dot_product3d(&normal, &offset);
 	return plane_distance * plane_distance <=

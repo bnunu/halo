@@ -683,6 +683,7 @@ boolean item_update(
 			{
 				struct collision_result *collision;
 				real impact_scale;
+				long collision_sound_index;
 
 				collision = &storage.scratch.collision.result;
 				vectors.candidate.x += collision->plane.n.i * 0.05f;
@@ -691,16 +692,13 @@ boolean item_update(
 
 				impact_scale = magnitude3d(&vectors.velocity);
 				impact_scale /= rdata_00278fb0;
-				if (impact_scale >= 0.f)
-				{
-					if (impact_scale > 1.f)
-					{
-						impact_scale = 1.f;
-					}
-				}
-				else
+				if (impact_scale < 0.f)
 				{
 					impact_scale = 0.f;
+				}
+				else if (impact_scale > 1.f)
+				{
+					impact_scale = 1.f;
 				}
 
 				if (definition->item.material_effects.index != NONE &&
@@ -716,7 +714,8 @@ boolean item_update(
 						impact_scale);
 				}
 
-				if (definition->item.collision_sound.index != NONE)
+				collision_sound_index = definition->item.collision_sound.index;
+				if (collision_sound_index != NONE)
 				{
 					storage.work.sound.location.position = vectors.candidate;
 					storage.work.sound.location.forward = collision->plane.n;
@@ -724,7 +723,7 @@ boolean item_update(
 						*global_zero_vector3d;
 					storage.work.sound.location.game_location = item->object.location;
 					unattached_impulse_sound_new(
-						definition->item.collision_sound.index,
+						collision_sound_index,
 						&storage.work.sound.location,
 						impact_scale);
 				}
@@ -747,9 +746,7 @@ boolean item_update(
 						&collision->plane.n,
 						&collision->point,
 						&vectors.candidate);
-					vectors.velocity.i = 0.f;
-					vectors.velocity.j = 0.f;
-					vectors.velocity.k = 0.f;
+					vectors.velocity.i = vectors.velocity.j = vectors.velocity.k = 0.f;
 					angular_dot =
 						item->object.angular_velocity.i * collision->plane.n.i +
 						(collision->plane.n.j * item->object.angular_velocity.j +

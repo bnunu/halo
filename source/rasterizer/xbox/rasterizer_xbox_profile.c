@@ -173,6 +173,13 @@ static struct rasterizer_profile_elapsed_state rasterizer_profile_elapsed_state;
 static volatile __int64 rasterizer_profile_callback_end_times[MAXIMUM_RASTERIZER_PROFILE_CALLBACKS];
 static volatile __int64 rasterizer_profile_callback_elapsed_times[MAXIMUM_RASTERIZER_PROFILE_CALLBACKS];
 
+/* January's .bss for this file is 0x462 bytes; the four arrays above account for the
+first 0x438 (their offsets 0/128/256/848 already match).  The remaining 42 bytes are
+file-scope state belonging to the profile begin/end/frame/query code that is still
+unwritten here.  The bytes are provably zero, so carry them as an address-named blob
+until those functions are reconstructed and can name their own variables. */
+static byte bss_00466260[42] = { 0 };
+
 extern struct rasterizer_profile_globals data_0030cf00;
 extern struct rasterizer_window_parameters global_window_parameters;
 

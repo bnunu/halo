@@ -98,9 +98,6 @@ struct bungie_ima_adpcm_byte_swap_globals data_00316a7c =
 
 /* ---------- public code */
 
-/* NonMatching: target and candidate are both 0x160 bytes with both relocations
-   exact. The sole remaining divergence is a three-instruction independent-
-   assignment schedule when the second reconstruction pass is initialized. */
 long compress_ima_adpcm_audio_data(
 	short *input_samples,
 	long input_sample_count,
@@ -158,9 +155,8 @@ long compress_ima_adpcm_audio_data(
 			}
 			while (mask);
 
-			sample_difference = step_size;
-			sample_difference >>= 3;
-			temporary_step_size = step_size;
+			temporary_step_size = step_size_table[step_size_index];
+			sample_difference = temporary_step_size >> 3;
 			mask = 4;
 			do
 			{

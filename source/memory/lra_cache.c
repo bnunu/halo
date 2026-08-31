@@ -372,7 +372,18 @@ void *lra_allocate(
 			}
 		}
 
-		if (write_offset+size<=cache->size)
+		if (write_offset+size>cache->size)
+		{
+			next_block = (struct lra_block *)cache->base_address;
+			last_block = NULL;
+			first_deleted_block = NULL;
+
+			if ((short)(number_of_passes++))
+			{
+				break;
+			}
+		}
+		else
 		{
 			struct lra_block *block;
 
@@ -395,17 +406,6 @@ void *lra_allocate(
 				last_block->next = block;
 			}
 			cache->last_block = block;
-		}
-		else
-		{
-			next_block = (struct lra_block *)cache->base_address;
-			last_block = NULL;
-			first_deleted_block = NULL;
-
-			if ((short)(number_of_passes++))
-			{
-				break;
-			}
 		}
 	}
 	while (!result);

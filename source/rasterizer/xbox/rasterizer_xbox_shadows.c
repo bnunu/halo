@@ -95,6 +95,11 @@ void rasterizer_profile_end(
 
 struct rasterizer_environment_shadows_globals bss_0046628c = { 0 };
 
+/* January's .bss for this file is 0x4a bytes; the struct above accounts for the first
+0x48.  The trailing 2 bytes belong to the shadow begin/draw/end code that is still
+unwritten here, and are provably zero. */
+static byte bss_004662d4[2] = { 0 };
+
 #define rasterizer_environment_shadows_globals bss_0046628c
 
 /* ---------- public code */

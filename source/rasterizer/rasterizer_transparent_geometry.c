@@ -159,6 +159,13 @@ struct rasterizer_transparent_geometry_window_parameters
 	short window_index;
 };
 
+struct rasterizer_transparent_geometry_pending
+{
+	short group_index;
+	short pad02;
+	unsigned long group_pending_flags[12];
+};
+
 typedef char rasterizer_transparent_geometry_globals_size_assert[
 	sizeof(struct rasterizer_transparent_geometry_globals) == 0x4A ? 1 : -1];
 typedef char rasterizer_transparent_geometry_groups_offset_assert[
@@ -206,19 +213,24 @@ void rasterizer_set_frustum_z(
 
 /* ---------- globals */
 
-struct rasterizer_transparent_geometry_globals bss_004b8ad8;
+struct rasterizer_transparent_geometry_pending bss_004b8ad8 = { 0 };
+static struct transparent_geometry_group *transparent_geometry_groups = NULL;
+static struct transparent_geometry_group *transparent_geometry_groups2 = NULL;
+static long transparent_geometry_group_count = 0;
+static long transparent_geometry_group_count2 = 0;
+static short *transparent_geometry_group_sorted_indices = NULL;
+static short transparent_geometry_next_group_sorted_index = 0;
 
 extern struct rasterizer_transparent_geometry_debug_options rasterizer_debug_options;
 extern struct rasterizer_transparent_geometry_window_parameters global_window_parameters;
 
 /* January reached these as individual file-scope variables; its assert strings
-name them. We pin the .bss layout with a struct because MSVC's allocation order
-for separate statics does not reproduce it, so alias the attested spellings. */
-#define transparent_geometry_groups bss_004b8ad8.groups
-#define transparent_geometry_group_count bss_004b8ad8.group_count
-#define transparent_geometry_group_sorted_indices bss_004b8ad8.group_sorted_indices
-#define transparent_geometry_groups2 bss_004b8ad8.groups2
-#define transparent_geometry_group_count2 bss_004b8ad8.group_count2
+name them, and VC7 only CSEs a load of a standalone scalar static across a store
+made through a pointer - it never does so for a struct member, which is what
+`rasterizer_profile`-style aliasing macros would cost us here.  `bss_004b8ad8`
+keeps the leading pending-flag block so the split object still has one external
+anchor at .bss+0; every scalar below is a zero-initialised static, which is what
+pins MSVC's .bss emission to declaration order. */
 #define transparent_geometry_group_index bss_004b8ad8.group_index
 
 /* ---------- public code */
@@ -226,10 +238,10 @@ for separate statics does not reproduce it, so alias the attested spellings. */
 void rasterizer_transparent_geometry_begin(
 	void)
 {
-	bss_004b8ad8.group_count = 0;
-	bss_004b8ad8.next_group_sorted_index = 0;
+	transparent_geometry_group_count = 0;
+	transparent_geometry_next_group_sorted_index = 0;
 	memset(bss_004b8ad8.group_pending_flags, 0, sizeof(bss_004b8ad8.group_pending_flags));
-	bss_004b8ad8.group_count2 = 0;
+	transparent_geometry_group_count2 = 0;
 
 	return;
 }
@@ -312,16 +324,16 @@ void *rasterizer_transparent_geometry_get_group_from_presorted_index(
 	match_assert("c:\\halo\\SOURCE\\rasterizer\\rasterizer_transparent_geometry.c", 0xBC,
 		group_presorted_index>=0 && group_presorted_index<transparent_geometry_group_count);
 
-	return (byte *)bss_004b8ad8.groups + group_presorted_index*0xA0;
+	return (byte *)transparent_geometry_groups + group_presorted_index*0xA0;
 }
 
 void *rasterizer_transparent_geometry_get_groups2(
 	short *group_count)
 {
 	if (group_count)
-		*group_count = (short)bss_004b8ad8.group_count2;
+		*group_count = (short)transparent_geometry_group_count2;
 
-	return bss_004b8ad8.groups2;
+	return transparent_geometry_groups2;
 }
 
 struct transparent_geometry_group *rasterizer_transparent_geometry_next_group(
@@ -343,12 +355,16 @@ struct transparent_geometry_group *rasterizer_transparent_geometry_next_group(
 			match_assert("c:\\halo\\SOURCE\\rasterizer\\rasterizer_transparent_geometry.c", 0x8D,
 				next_group_sorted_index>=0);
 
-			return transparent_geometry_groups +
+			group = transparent_geometry_groups +
 				transparent_geometry_group_sorted_indices[next_group_sorted_index];
+		}
+		else
+		{
+			group = NULL;
 		}
 	}
 
-	return NULL;
+	return group;
 }
 
 void *rasterizer_transparent_geometry_get_groups(
@@ -540,22 +556,11 @@ void code_00174120(
 		sizeof(*transparent_geometry_group_sorted_indices),
 		code_00173fa0);
 
+	for (group_index = 0; group_index<transparent_geometry_group_count; group_index++)
 	{
-		long group_count = transparent_geometry_group_count;
-
-		if (group_count>0)
-		{
-			short *group_sorted_indices = transparent_geometry_group_sorted_indices;
-
-			group = transparent_geometry_groups;
-			group_index = 0;
-			do
-			{
-				group[group_sorted_indices[group_index]].sorted_index = group_index;
-				group_index++;
-			}
-			while (group_index<group_count);
-		}
+		group = transparent_geometry_groups +
+			transparent_geometry_group_sorted_indices[group_index];
+		group->sorted_index = group_index;
 	}
 
 	return;

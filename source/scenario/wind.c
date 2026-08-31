@@ -143,11 +143,20 @@ static void code_0017f750(
 	axis_index = 0;
 	do
 	{
-		real sample_key = (real)fabs(
+		union
+		{
+			real value;
+			long bits;
+			byte bytes[4];
+		} sample_key;
+		long sample_index;
+
+		sample_key.value =
 			((axis_scale[axis_index] * wind_globals.time * local_variation_rate)
-				+ position->n[axis_index]) * 8.f) + 8388608.f;
-		byte const *sample_key_bytes = (byte const *)&sample_key;
-		long sample_index = sample_key_bytes[0];
+				+ position->n[axis_index]) * 8.f;
+		sample_key.bits &= 0x7FFFFFFF;
+		sample_key.value += 8388608.f;
+		sample_index = sample_key.bytes[0];
 
 		sample_index &= 0x3F;
 		wind->i += wind_globals.variance[axis_index][(short)sample_index].i;

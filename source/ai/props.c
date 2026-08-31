@@ -423,9 +423,13 @@ long prop_new_unacknowledged(
 		}
 	}
 
-	prop_index = worst_prop_index;
-	if (prop_index == NONE)
+	if (worst_prop_index != NONE)
 	{
+		prop_index = worst_prop_index;
+	}
+	else
+	{
+		prop_index = NONE;
 		required_prop_maximum = enemy ? 6 : 4;
 		if (worst_required_prop_index != NONE &&
 			required_prop_count >= required_prop_maximum)

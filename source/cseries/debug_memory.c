@@ -589,7 +589,7 @@ void *debug_realloc(
 		}
 	}
 
-	if (size != 0)
+	if (result != NULL || size == 0)
 	{
 		data_002dcd0c.total_pointer_size += size - old_size;
 		if (data_002dcd0c.maximum_pointer_size < data_002dcd0c.total_pointer_size)
@@ -728,23 +728,20 @@ static void code_0007cf50(
 	void *pointer,
 	unsigned long size)
 {
-	byte *current = pointer;
-	byte *end;
+	byte *current;
 
 	match_assert(
 		"c:\\halo\\SOURCE\\cseries\\debug_memory.c",
 		269,
 		pointer);
 
-	end = current + size - 1;
-	while (current < end)
+	for (current = pointer; current < (byte *)pointer + size - 1; current += sizeof(unsigned short))
 	{
 		*(unsigned short *)current = local_random();
-		current += sizeof(unsigned short);
 	}
 	if (size & 1)
 	{
-		*end = (byte)local_random();
+		((byte *)pointer)[size-1] = (byte)local_random();
 	}
 
 	return;

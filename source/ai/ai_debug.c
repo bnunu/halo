@@ -77,6 +77,7 @@ struct ai_debug_state ai_debug;
 
 struct actor_debug_info *actor_debug_array = NULL;
 struct path_debug_storage *actor_path_debug_array = NULL;
+static short global_ai_debug_path_render_stamp = 0;
 
 real_point3d global_ai_debug_drawstack_next_position;
 real_point3d global_ai_debug_drawstack_last_position;

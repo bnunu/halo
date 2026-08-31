@@ -155,6 +155,11 @@ void rasterizer_profile_end(
 
 struct rasterizer_environment_fog_screen_globals bss_00465ad0 = { 0 };
 
+/* January's .bss for this file is 0x295 bytes; the struct above accounts for the first
+0x288.  The trailing 13 bytes belong to the fog begin/draw/screen code that is still
+unwritten here, and are provably zero. */
+static byte bss_00465d58[13] = { 0 };
+
 #define rasterizer_environment_fog_screen_globals bss_00465ad0
 
 /* ---------- public code */
