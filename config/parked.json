@@ -252,7 +252,7 @@
 			"unit": "source/structures/structure_lens_flares",
 			"function": "_build_structure_lens_flares",
 			"class": "instruction-scheduling",
-			"evidence": "Reclassified 2026-08-30: the vendored-assembly park is superseded. With the owner-admitted unit-local fast_ftol helper (January cseries.h, HCEX-attested) and eight recovered source shapes (real_plane3d s_plane/t_plane factoring with plane3d_distance_to_point, a total-aggregate coalescing copy, the rotated pair-do-while search idiom, and a decl/init-split definition-position lever), the reconstruction now reproduces 1327 of 1327 instructions at exact padded size and exact relocation identities/sequence, with all 348 frame-slot references matching. The residual is TWO int-vs-x87 emission-order tie-breaks (a s_count home store at 0x0e28 and a project_point3d argument push at 0x0e6a), decoded with dbg32b inside C2.Dll: the emit list is walked in node-creation order by a pure serializer, the two nodes carry no order-priority field, and the order follows the right-to-left argument-evaluation DAG. No source lever moves them (~15000 measured variants, corpus sweeps of 4186 pairs and 7500 triples/quads, plus loop-nest, call-region and whole-body rewrites).",
+			"evidence": "PARKED FUZZY 2026-08-30 pending a later byte-match pass. House rule applied: the point_from_line3d COMDAT is no longer emitted (January's object has none), so the cluster-search advance is written out at the call site. COST, and the exact lever to restore when byte-matching resumes: CALLING the real_math.h __inline point_from_line3d(&test_point, &direction, offset, &test_point) reproduces January's schedule exactly (lcsd 8, 1327/1327 instructions, exact padded size and relocation identities/sequence, 348/348 frame-slot references) but emits a 48-byte COMDAT January lacks; every hand-written spelling of the same arithmetic canonicalises to one different schedule (lcsd 72, still 1327/1327 instructions). static __inline and __forceinline both still emit the COMDAT. NOTE this is systemic, not local: 121 objects emit 736 inline-helper symbols January lacks, which is consistent with linker COMDAT folding plus csplit attributing the single surviving copy to one owner object (action_charge owns point_from_line3d in January). Residual beyond the COMDAT question: two int-vs-x87 emission-order tie-breaks decoded with dbg32b (node-creation order, no order field).",
 			"measurements": {
 				"target": {
 					"size": 4336,
@@ -262,9 +262,9 @@
 				"base": {
 					"size": 4336,
 					"relocation_count": 156,
-					"normalized_sha256": "eb9e1864cf913c53c14033a970aeb94a2d389f0bcc23ccaae6290c0fdfa4642a"
+					"normalized_sha256": "57d6f033f379373528ec40ed132b8af7db73b6f1a087be9ddc3ad2f30d55fc46"
 				},
-				"objdiff_percent": 99.697426
+				"objdiff_percent": 99.29274
 			}
 		}
 	]

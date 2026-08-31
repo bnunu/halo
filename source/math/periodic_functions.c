@@ -144,7 +144,7 @@ static void code_000fa150(byte *table, short function_type);
 void code_000fa280(short function_type, byte *table);
 
 __inline long fast_ftol(
-	float d)
+	real d)
 {
 	long result;
 

@@ -60,7 +60,7 @@ symbols in this file:
 /* ---------- constants */
 
 __inline long fast_ftol(
-	float d)
+	real d)
 {
 	long result;
 
@@ -664,7 +664,9 @@ boolean build_structure_lens_flares(
 			do
 			{
 				temp_markers[marker_index].cluster_index = cluster_index_from_point(structure_bsp, &test_point);
-				point_from_line3d(&test_point, &direction, offset, &test_point);
+				test_point.x = direction.i * offset + test_point.x;
+				test_point.y = direction.j * offset + test_point.y;
+				test_point.z = direction.k * offset + test_point.z;
 				offset += offset;
 			}
 			while (temp_markers[marker_index].cluster_index == NONE && offset < 1.f);

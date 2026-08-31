@@ -1604,14 +1604,19 @@ static void code_001a7ac0(
 	throttle = PIN(vehicle->vehicle.unknown42c, 0.0f, definition->unknown2f8)/
 		definition->unknown2f8;
 
-	if (TEST_FLAG(vehicle->vehicle.flags, 2))
-		factor = 0.25f;
-	else if (TEST_FLAG(vehicle->vehicle.flags, 3))
-		factor = 1.0f;
+	if (!TEST_FLAG(vehicle->vehicle.flags, 2))
+	{
+		if (TEST_FLAG(vehicle->vehicle.flags, 3))
+			factor = 1.0f;
+		else
+			factor = 0.75f;
+	}
 	else
-		factor = 0.75f;
+	{
+		factor = 0.25f;
+	}
 
-	vehicle->vehicle.unknown444 += PIN(factor*(1.0f-throttle*throttle)*
+	vehicle->vehicle.unknown444 += PIN((factor*(1.0f-throttle*throttle))*
 		vehicle->unit.seat_power[0]-vehicle->vehicle.unknown444, -0.05f, 0.05f);
 
 	facing = vehicle->unit.desired_facing_vector;

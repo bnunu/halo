@@ -1747,31 +1747,23 @@ static long code_0009a490(
 	{
 		local_player_count = 0;
 
-		if (maximum_count < player_count)
+		for (entry_index = maximum_count;
+			entry_index < player_count;
+			entry_index++)
 		{
-			source = &entries[maximum_count];
-			destination = local_entries;
-			remaining_count = player_count - maximum_count;
-			do
+			player = player_get(entries[entry_index].values[0]);
+			if (player && player->local_player_index != NONE)
 			{
-				player = player_get(source->values[0]);
-				if (player && player->local_player_index != NONE)
+				if (debug)
 				{
-					if (debug)
-					{
-						terminal_printf(
-							global_real_argb_white,
-							"found local player");
-					}
-
-					*destination = *source;
-					local_player_count++;
-					destination++;
+					terminal_printf(
+						global_real_argb_white,
+						"found local player");
 				}
-				source++;
-				remaining_count--;
+
+				local_entries[local_player_count] = entries[entry_index];
+				local_player_count++;
 			}
-			while (remaining_count != 0);
 		}
 
 		if (local_player_count > 0)
@@ -1896,7 +1888,7 @@ void code_0009e670(
 			long place_index;
 			real_argb_color *row_color;
 
-			is_current_player = entry_player_index == player_index;
+			is_current_player = player_index == entry_player_index;
 			if (player)
 			{
 				color = *hud_get_text_color(&text_color);
@@ -3687,7 +3679,6 @@ static void code_0009bdf0(
 
 		{
 			struct collision_feature_list features;
-			struct collision_plane point_test_result;
 			struct player_datum *unit_player;
 			real_point3d position;
 			real height;
@@ -3702,62 +3693,66 @@ static void code_0009bdf0(
 				&height,
 				&radius);
 			position = destination_flag->position;
-			if (collision_get_features_in_sphere(
-					0x200380,
-					&position,
-					height + radius * 2.0f,
-					height,
-					radius,
-					NONE,
-					&features) &&
-				collision_features_test_point(
-					&features,
-					&position,
-					&point_test_result))
 			{
-				if (point_test_result.object_index != NONE)
+				struct collision_plane point_test_result;
+
+				if (collision_get_features_in_sphere(
+						0x200380,
+						&position,
+						height + radius * 2.0f,
+						height,
+						radius,
+						NONE,
+						&features) &&
+					collision_features_test_point(
+						&features,
+						&position,
+						&point_test_result))
 				{
-					if (TEST_FLAG(
-							_object_mask_unit,
-							object_get(
-								point_test_result.object_index)
-								->object.type))
+					if (point_test_result.object_index != NONE)
 					{
-						struct unit_datum *blocking_unit = unit_get(
-							point_test_result.object_index);
-						if (blocking_unit->unit.player_index != NONE)
+						if (TEST_FLAG(
+								_object_mask_unit,
+								object_get(
+									point_test_result.object_index)
+									->object.type))
 						{
-							struct player_datum *blocking_player =
-								player_get(blocking_unit->unit.player_index);
-							blocking_player->unknown_d0 = TRUE;
-							blocking_player->unknown_c8++;
+							struct unit_datum *blocking_unit = unit_get(
+								point_test_result.object_index);
+							if (blocking_unit->unit.player_index != NONE)
+							{
+								struct player_datum *blocking_player =
+									player_get(blocking_unit->unit.player_index);
+								blocking_player->unknown_d0 = TRUE;
+								blocking_player->unknown_c8++;
+							}
 						}
 					}
-				}
 
-				if (game_engine_teleport_message_ticks > 0)
-				{
-					game_engine_teleport_message_ticks--;
+					if (game_engine_teleport_message_ticks > 0)
+					{
+						game_engine_teleport_message_ticks--;
+						return;
+					}
+
+					game_engine_teleport_message_ticks = 120;
+					{
+						long string_list_index =
+							tag_loaded('ustr', "ui\\multiplayer_game_text");
+						wchar_t const *message;
+
+						if (string_list_index != NONE)
+							message = unicode_string_list_get_string(
+								string_list_index,
+								0x65);
+						else
+							message = L"";
+						hud_print_message(
+							unit_get_local_player_index(unit_player->unit_index),
+							message);
+					}
 					return;
 				}
-
-				game_engine_teleport_message_ticks = 120;
-				{
-					long string_list_index =
-						tag_loaded('ustr', "ui\\multiplayer_game_text");
-					wchar_t const *message;
-
-					if (string_list_index != NONE)
-						message = unicode_string_list_get_string(
-							string_list_index,
-							0x65);
-					else
-						message = L"";
-					hud_print_message(
-						unit_get_local_player_index(unit_player->unit_index),
-						message);
-				}
-				return;
 			}
 		}
 

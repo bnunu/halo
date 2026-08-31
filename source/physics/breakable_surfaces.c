@@ -250,7 +250,7 @@ void breakable_surface_damage_area_of_effect(
 /* ---------- private code */
 
 __inline long fast_ftol(
-	float d)
+	real d)
 {
 	long result;
 

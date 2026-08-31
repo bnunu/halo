@@ -169,7 +169,7 @@ struct animation_playback
 
 struct recorded_animation_playback_data
 {
-	void *unused[4];
+	struct animation_playback playback[2];
 	struct animation_playback *playback_codec[RECORDED_ANIMATION_VERSION];
 };
 
@@ -206,13 +206,59 @@ void vehicle_hover(
 extern boolean recorded_animation_controlling_unit(
 	long unit_index);
 
+void recorded_animation_initialize_event_stream(
+	void *animation_state,
+	void *controller,
+	byte **event_stream,
+	byte unit_control_data_version);
+boolean recorded_animation_apply_event_stream(
+	void *animation_state,
+	struct unit_control_data *controller,
+	long *relative_ticks,
+	byte **event_stream);
+void recorded_animation_initialize_event_stream_v1(
+	void *animation_state,
+	void *controller,
+	byte **event_stream,
+	byte unit_control_data_version);
+boolean recorded_animation_apply_event_stream_v1(
+	void *animation_state,
+	struct unit_control_data *controller,
+	long *relative_ticks,
+	byte **event_stream);
+
 /* ---------- globals */
 
-extern struct animation_thread_debug *animation_threads_debug;
-extern struct recorded_animations_globals_prefix bss_00435ca4;
-extern struct recorded_animation_playback_data data_002dd160;
-extern boolean debug_recording;
-extern short debug_recording_newlines;
+/* January lays these three out contiguously in one 12-byte .bss group
+ * (bss_00435ca4 @0, debug_recording @4, animation_threads_debug @8), which
+ * VC7 only produces when all three have internal linkage; the internal
+ * linkage of animation_threads_debug is also what lets the compiler hoist
+ * its load above the store to thread->event_stream in code_000839a0. */
+static struct recorded_animations_globals_prefix bss_00435ca4;
+static boolean debug_recording;
+static struct animation_thread_debug *animation_threads_debug;
+
+struct recorded_animation_playback_data data_002dd160 =
+{
+	{
+		{
+			recorded_animation_initialize_event_stream,
+			recorded_animation_apply_event_stream
+		},
+		{
+			recorded_animation_initialize_event_stream_v1,
+			recorded_animation_apply_event_stream_v1
+		}
+	},
+	{
+		&data_002dd160.playback[1],
+		&data_002dd160.playback[1],
+		&data_002dd160.playback[1],
+		&data_002dd160.playback[0]
+	}
+};
+
+short debug_recording_newlines = 10;
 
 /* ---------- public code */
 

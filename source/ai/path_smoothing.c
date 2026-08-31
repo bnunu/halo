@@ -154,12 +154,15 @@ static void code_00051210(
 
 	center_to_point.i = point[0] - center[0];
 	center_to_point.j = point[1] - center[1];
-	distance_squared = center_to_point.i*center_to_point.i + center_to_point.j*center_to_point.j;
+	distance_squared = center_to_point.i*center_to_point.i;
+	distance_squared += center_to_point.j*center_to_point.j;
 	inverse_distance_squared = radius / distance_squared;
 	tangent_length = distance_squared - radius*radius;
 
 	if (tangent_length > 0.0f)
 	{
+		real_vector2d point_to_tangent[2];
+
 		tangent_length = (real)sqrt(tangent_length);
 
 		tangent_points[0].x =
@@ -171,15 +174,23 @@ static void code_00051210(
 		tangent_points[1].y =
 			(center_to_point.i*tangent_length + center_to_point.j*radius)*inverse_distance_squared + center[1];
 
+		point_to_tangent[0].i = tangent_points[0].x - point[0];
+		point_to_tangent[0].j = tangent_points[0].y - point[1];
+		point_to_tangent[1].i = tangent_points[1].x - point[0];
+		point_to_tangent[1].j = tangent_points[1].y - point[1];
 		cross_positive =
-			(tangent_points[1].y - point[1])*(tangent_points[0].x - point[0]) -
-			(tangent_points[1].x - point[0])*(tangent_points[0].y - point[1]) > 0.0f;
+			point_to_tangent[1].j*point_to_tangent[0].i -
+			point_to_tangent[1].i*point_to_tangent[0].j > 0.0f;
 		tangent_point_index = cross_positive != clockwise;
-		tangent_point[0] = tangent_points[tangent_point_index].x;
-		tangent_point[1] = tangent_points[tangent_point_index].y;
+		*(real_point2d *)tangent_point = tangent_points[tangent_point_index];
 	}
 	else
 	{
+		vector_from_points2d(
+			(real_point2d const *)center,
+			(real_point2d const *)point,
+			&center_to_point);
+
 		if (normalize2d(&center_to_point) == 0.0f)
 			center_to_point = *global_left2d;
 

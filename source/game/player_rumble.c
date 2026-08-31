@@ -369,7 +369,7 @@ void rumble_update(
 /* ---------- private code */
 
 __inline long fast_ftol(
-	float d)
+	real d)
 {
 	long result;
 

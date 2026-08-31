@@ -129,7 +129,7 @@ static	TIFFLinkDirectory();
 	dir++;							\
 }
 
-long bss_0031be50 = 0;
+static long bss_0031be50 = 0;
 #define dataoff bss_0031be50
 /*
  * Write the contents of the current directory

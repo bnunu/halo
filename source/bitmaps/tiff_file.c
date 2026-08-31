@@ -160,7 +160,7 @@ tiff_export(
 	{
 		{
 			long row_bits = bitmap_format_get_bits_per_pixel((short)tiff_format) * bitmap->width;
-			row_size = (short)((row_bits + ((row_bits >> 31) & 7)) >> 3);
+			row_size = (short)(row_bits / 8);
 		}
 		row_buffer = debug_malloc(row_size, FALSE, "c:\\halo\\SOURCE\\bitmaps\\tiff_file.c", 107);
 		if (row_buffer)
@@ -383,7 +383,7 @@ tiff_import(
 								unsigned long *destination = bitmap_2d_address(bitmap, 0, (short)(y - bounds.y0), 0);
 								for (x = bounds.x0; x < bounds.x1; x++)
 								{
-									long source_x = x < 0 ? 0 : (x > image_width - 1 ? image_width - 1 : x);
+									short source_x = x < 0 ? 0 : (x > image_width - 1 ? image_width - 1 : x);
 									byte value = scanline[source_x];
 									destination[x - bounds.x0] =
 										(value << 24) | (value << 16) | (value << 8) | value;
@@ -395,7 +395,7 @@ tiff_import(
 								unsigned long *destination = bitmap_2d_address(bitmap, 0, (short)(y - bounds.y0), 0);
 								for (x = bounds.x0; x < bounds.x1; x++)
 								{
-									long source_x = x < 0 ? 0 : (x > image_width - 1 ? image_width - 1 : x);
+									short source_x = x < 0 ? 0 : (x > image_width - 1 ? image_width - 1 : x);
 									byte *pixel = scanline + source_x * 2;
 									destination[x - bounds.x0] =
 										(pixel[1] << 24) | (pixel[0] << 16) | (pixel[0] << 8) | pixel[0];
@@ -407,7 +407,7 @@ tiff_import(
 								unsigned long *destination = bitmap_2d_address(bitmap, 0, (short)(y - bounds.y0), 0);
 								for (x = bounds.x0; x < bounds.x1; x++)
 								{
-									long source_x = x < 0 ? 0 : (x > image_width - 1 ? image_width - 1 : x);
+									short source_x = x < 0 ? 0 : (x > image_width - 1 ? image_width - 1 : x);
 									byte *pixel = scanline + source_x * 3;
 									destination[x - bounds.x0] =
 										0xFF000000 | (pixel[0] << 16) | (pixel[1] << 8) | pixel[2];
@@ -419,7 +419,7 @@ tiff_import(
 								unsigned long *destination = bitmap_2d_address(bitmap, 0, (short)(y - bounds.y0), 0);
 								for (x = bounds.x0; x < bounds.x1; x++)
 								{
-									long source_x = x < 0 ? 0 : (x > image_width - 1 ? image_width - 1 : x);
+									short source_x = x < 0 ? 0 : (x > image_width - 1 ? image_width - 1 : x);
 									byte *pixel = scanline + source_x * 4;
 									destination[x - bounds.x0] =
 										(pixel[3] << 24) | (pixel[0] << 16) | (pixel[1] << 8) | pixel[2];

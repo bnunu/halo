@@ -365,8 +365,12 @@ void lruv_resize(
 }
 
 /* NonMatching: target and candidate are both 0x1D0 padded bytes with all 20
- * semantic relocations present. The remaining difference is VC7 control-flow
- * scheduling and callee-saved register allocation in the block-report loop. */
+ * semantic relocations present, and the instruction count now matches exactly
+ * (173/173). The remaining difference is a cyclic recolour of the three
+ * callee-saved registers -- January assigns (stream, cache, page_index) to
+ * (esi, edi, ebx) and we assign them (edi, ebx, esi) -- plus the one
+ * output_hole/output_block join shape that recolour drags with it.
+ * Seventeen declaration-order permutations are measured inert. */
 void lruv_debug_to_file(
 	const char *path,
 	const char *allocation_name,
@@ -385,6 +389,7 @@ void lruv_debug_to_file(
 	long age;
 	boolean locked;
 	const char *block_name;
+	unsigned long display_age;
 
 	code_0010cd70(cache, TRUE);
 	stream = fopen(path, "w+");
@@ -463,14 +468,14 @@ void lruv_debug_to_file(
 
 		output_block:
 
-			age = MIN((unsigned long)age, 9999);
+			display_age = MIN(9999, (unsigned long)age);
 
 			fprintf(
 				stream,
 				"%s % 5d% 5d %s\n",
 				locked ? "L" : " ",
 				page_count,
-				age,
+				display_age,
 				block_name);
 		}
 

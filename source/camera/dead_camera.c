@@ -208,12 +208,10 @@ void dead_camera_update(
 		{
 			next_unit_index = player_get(next_player_index)->unit_index;
 		}
-		else
-		{
-			next_unit_index = (long)result;
-		}
-		/* January preserves the command pointer as the fallback object index
-		 * when no player is found. This is a bug; a corrected build should
+		/* January's source has no else arm here: next_unit_index is read
+		 * uninitialized on this path.  VC7 homes the local in the (by now
+		 * dead) third-parameter slot [ebp+0x10], so the value observed is
+		 * the command pointer.  This is a bug; a corrected build should
 		 * initialize next_unit_index to NONE instead. */
 
 		if (next_unit_index != camera->unit_index && next_unit_index != NONE)

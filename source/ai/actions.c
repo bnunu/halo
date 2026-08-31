@@ -4014,8 +4014,7 @@ boolean actor_action_try_to_dive(
 		&actor_debug_array[DATUM_INDEX_TO_ABSOLUTE_INDEX(local_actor_index)];
 	boolean is_ledge = FALSE;
 	byte collision_result[0x1C];
-	real alignment_j;
-	real alignment_i;
+	real_vector2d alignment;
 	real scores[4];
 	short best_animation;
 	real best_score;
@@ -4042,23 +4041,23 @@ boolean actor_action_try_to_dive(
 	switch (evade_direction)
 	{
 	case 0:
-		alignment_j = direction->i;
-		alignment_i = -direction->j;
+		alignment.j = direction->i;
+		alignment.i = -direction->j;
 		break;
 
 	case 1:
-		alignment_i = direction->j;
-		alignment_j = -direction->i;
+		alignment.i = direction->j;
+		alignment.j = -direction->i;
 		break;
 
 	case 2:
-		alignment_i = direction->i;
-		alignment_j = direction->j;
+		alignment.j = direction->j;
+		alignment.i = direction->i;
 		break;
 
 	case 3:
-		alignment_i = direction->i;
-		alignment_j = direction->j;
+		alignment.j = direction->j;
+		alignment.i = direction->i;
 		break;
 
 	default:
@@ -4073,10 +4072,10 @@ boolean actor_action_try_to_dive(
 	best_animation = NONE;
 	best_animation_direction = NONE;
 	best_score = -0.5f;
-	scores[2] = actor->input.facing_vector.j * alignment_j +
-		actor->input.facing_vector.i * alignment_i;
-	scores[0] = actor->input.facing_vector.i * alignment_j -
-		actor->input.facing_vector.j * alignment_i;
+	scores[2] = actor->input.facing_vector.j * alignment.j +
+		actor->input.facing_vector.i * alignment.i;
+	scores[0] = actor->input.facing_vector.i * alignment.j -
+		actor->input.facing_vector.j * alignment.i;
 	scores[3] = -scores[2];
 	scores[1] = -scores[0];
 
@@ -4120,29 +4119,29 @@ boolean actor_action_try_to_dive(
 		case 0:
 			set_real_vector2d(
 				&output_direction,
-				alignment_j,
-				-alignment_i);
+				alignment.j,
+				-alignment.i);
 			break;
 
 		case 1:
 			set_real_vector2d(
 				&output_direction,
-				-alignment_j,
-				alignment_i);
+				-alignment.j,
+				alignment.i);
 			break;
 
 		case 2:
 			set_real_vector2d(
 				&output_direction,
-				alignment_i,
-				alignment_j);
+				alignment.i,
+				alignment.j);
 			break;
 
 		case 3:
 			set_real_vector2d(
 				&output_direction,
-				alignment_i,
-				alignment_j);
+				alignment.i,
+				alignment.j);
 			break;
 
 		default:
