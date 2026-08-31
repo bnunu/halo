@@ -37,7 +37,7 @@ struct breakable_surface_globals
 
 /* ---------- prototypes */
 
-/* Bungie's own float-to-long conversion helper, recovered verbatim from
+/* Bungie's own real-to-long conversion helper, recovered verbatim from
    the historical cseries.h.  January inlines it at the four grid-bound
    conversions below; this compiler lowers every ordinary C conversion
    through a 64-bit fistp instead, so the helper is the only way to
@@ -46,7 +46,7 @@ struct breakable_surface_globals
    adding an __inline to a shared header cannot perturb unrelated
    translation units. */
 static __inline long fast_ftol(
-	float d)
+	real d)
 {
 	long result;
 
